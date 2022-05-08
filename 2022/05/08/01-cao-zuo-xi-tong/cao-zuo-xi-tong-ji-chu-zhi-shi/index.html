@@ -383,6 +383,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
 
@@ -650,19 +653,98 @@
 <blockquote>
 <p>原语:若干个机器指令构成的完成某种特定功能的一段程序，具有不可分割性·即原语的执行必须是连续的，在执行过程中不允许被中断。</p>
 </blockquote>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> semaphore;</span><br><span class="line">semaphore mutex = <span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">P1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">    <span class="comment">// 临界区</span></span><br><span class="line">    <span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">P2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">    <span class="comment">// 临界区</span></span><br><span class="line">    <span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">typedef int semaphore;
+semaphore mutex &#x3D; 1;
+void P1() &#123;
+    down(&amp;mutex);
+    &#x2F;&#x2F; 临界区
+    up(&amp;mutex);
+&#125;
+
+void P2() &#123;
+    down(&amp;mutex);
+    &#x2F;&#x2F; 临界区
+    up(&amp;mutex);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="使用信号量实现生产者-消费者问题"><a href="#使用信号量实现生产者-消费者问题" class="headerlink" title="使用信号量实现生产者 - 消费者问题"></a>使用信号量实现生产者 - 消费者问题</h3><p>问题描述：使用一个缓冲区来保存物品，只有缓冲区没有满，生产者才可以放入物品；只有缓冲区不为空，消费者才可以拿走物品。</p>
 <ul>
 <li>为了同步生产者和消费者的行为，需要记录缓冲区中物品的数量。数量可以使用信号量来进行统计，这里需要使用两个信号量：empty 记录空缓冲区的数量，full 记录满缓冲区的数量。其中，empty 信号量是在生产者进程中使用，当 empty 不为 0 时，生产者才可以放入物品；full 信号量是在消费者进程中使用，当 full 信号量不为 0 时，消费者才可以取走物品。</li>
-<li>注意，不能先对缓冲区进行加锁，再测试信号量。也就是说，不能先执行 down(mutex) 再执行 down(empty)。如果这么做了，那么可能会出现这种情况：生产者对缓冲区加锁后，执行 down(empty) 操作，发现 empty &#x3D; 0，此时生产者睡眠。消费者不能进入临界区，因为生产者对缓冲区加锁了，消费者就无法执行 up(empty) 操作，empty 永远都为 0，导致生产者永远等待下，不会释放锁，消费者因此也会永远等待下去。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> N 100</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> semaphore;</span><br><span class="line">semaphore mutex = <span class="number">1</span>;</span><br><span class="line">semaphore empty = N;</span><br><span class="line">semaphore full = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">producer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(TRUE) &#123;</span><br><span class="line">        <span class="type">int</span> item = <span class="built_in">produce_item</span>();</span><br><span class="line">        <span class="built_in">down</span>(&amp;empty);</span><br><span class="line">        <span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">        <span class="built_in">insert_item</span>(item);</span><br><span class="line">        <span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">        <span class="built_in">up</span>(&amp;full);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">consumer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(TRUE) &#123;</span><br><span class="line">        <span class="built_in">down</span>(&amp;full);</span><br><span class="line">        <span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">        <span class="type">int</span> item = <span class="built_in">remove_item</span>();</span><br><span class="line">        <span class="built_in">consume_item</span>(item);</span><br><span class="line">        <span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">        <span class="built_in">up</span>(&amp;empty);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>注意，不能先对缓冲区进行加锁，再测试信号量。也就是说，不能先执行 down(mutex) 再执行 down(empty)。如果这么做了，那么可能会出现这种情况：生产者对缓冲区加锁后，执行 down(empty) 操作，发现 empty &#x3D; 0，此时生产者睡眠。消费者不能进入临界区，因为生产者对缓冲区加锁了，消费者就无法执行 up(empty) 操作，empty 永远都为 0，导致生产者永远等待下，不会释放锁，消费者因此也会永远等待下去。<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#define N 100
+typedef int semaphore;
+semaphore mutex &#x3D; 1;
+semaphore empty &#x3D; N;
+semaphore full &#x3D; 0;
+
+void producer() &#123;
+    while(TRUE) &#123;
+        int item &#x3D; produce_item();
+        down(&amp;empty);
+        down(&amp;mutex);
+        insert_item(item);
+        up(&amp;mutex);
+        up(&amp;full);
+    &#125;
+&#125;
+
+void consumer() &#123;
+    while(TRUE) &#123;
+        down(&amp;full);
+        down(&amp;mutex);
+        int item &#x3D; remove_item();
+        consume_item(item);
+        up(&amp;mutex);
+        up(&amp;empty);
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="管程"><a href="#管程" class="headerlink" title="管程"></a>管程</h3></li>
 <li>使用信号量机制实现的生产者消费者问题需要客户端代码做很多控制，而管程把控制的代码独立出来，不仅不容易出错，也使得客户端代码调用更容易。</li>
-<li>c 语言不支持管程，下面的示例代码使用了类 Pascal 语言来描述管程。示例代码的管程提供了 insert() 和 remove() 方法，客户端代码通过调用这两个方法来解决生产者-消费者问题。<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    monitor ProducerConsumer</span><br><span class="line">    integer i;</span><br><span class="line">    condition c;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">procedure</span> <span class="title">insert</span><span class="params">()</span>;</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">procedure</span> <span class="title">remove</span><span class="params">()</span>;</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">end</span> monitor;</span><br></pre></td></tr></table></figure>
+<li>c 语言不支持管程，下面的示例代码使用了类 Pascal 语言来描述管程。示例代码的管程提供了 insert() 和 remove() 方法，客户端代码通过调用这两个方法来解决生产者-消费者问题。<pre class="line-numbers language-Pascal" data-language="Pascal"><code class="language-Pascal">    monitor ProducerConsumer
+    integer i;
+    condition c;
+
+    procedure insert();
+    begin
+        &#x2F;&#x2F; ...
+    end;
+
+    procedure remove();
+    begin
+        &#x2F;&#x2F; ...
+    end;
+end monitor;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="经典同步问题"><a href="#经典同步问题" class="headerlink" title="经典同步问题"></a>经典同步问题</h2></li>
 <li>读者-写者问题<br>  允许多个进程同时对数据进行读操作，但是不允许读和写以及写和写操作同时发生。</li>
 <li>一个整型变量 count 记录在对数据进行读操作的进程数量，一个互斥量 count_mutex 用于对 count 加锁，一个互斥量 data_mutex 用于对读写的数据加锁。</li>
 </ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> semaphore;</span><br><span class="line"><span class="comment">//互斥量,对count加锁</span></span><br><span class="line">semaphore count_mutex = <span class="number">1</span>;</span><br><span class="line"><span class="comment">//互斥量,对读写的数据加锁</span></span><br><span class="line">semaphore data_mutex = <span class="number">1</span>;</span><br><span class="line"><span class="comment">//进行读操作的进程数量</span></span><br><span class="line"><span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">reader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(TRUE) &#123;</span><br><span class="line">        <span class="built_in">down</span>(&amp;count_mutex);</span><br><span class="line">        count++;</span><br><span class="line">        <span class="keyword">if</span>(count == <span class="number">1</span>) <span class="built_in">down</span>(&amp;data_mutex); <span class="comment">// 第一个读者需要对数据进行加锁，防止写进程访问</span></span><br><span class="line">        <span class="built_in">up</span>(&amp;count_mutex);</span><br><span class="line">        <span class="built_in">read</span>();</span><br><span class="line">        <span class="built_in">down</span>(&amp;count_mutex);</span><br><span class="line">        count--;</span><br><span class="line">        <span class="keyword">if</span>(count == <span class="number">0</span>) <span class="built_in">up</span>(&amp;data_mutex);</span><br><span class="line">        <span class="built_in">up</span>(&amp;count_mutex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">writer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(TRUE) &#123;</span><br><span class="line">        <span class="built_in">down</span>(&amp;data_mutex);</span><br><span class="line">        <span class="built_in">write</span>();</span><br><span class="line">        <span class="built_in">up</span>(&amp;data_mutex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">typedef int semaphore;
+&#x2F;&#x2F;互斥量,对count加锁
+semaphore count_mutex &#x3D; 1;
+&#x2F;&#x2F;互斥量,对读写的数据加锁
+semaphore data_mutex &#x3D; 1;
+&#x2F;&#x2F;进行读操作的进程数量
+int count &#x3D; 0;
+
+void reader() &#123;
+    while(TRUE) &#123;
+        down(&amp;count_mutex);
+        count++;
+        if(count &#x3D;&#x3D; 1) down(&amp;data_mutex); &#x2F;&#x2F; 第一个读者需要对数据进行加锁，防止写进程访问
+        up(&amp;count_mutex);
+        read();
+        down(&amp;count_mutex);
+        count--;
+        if(count &#x3D;&#x3D; 0) up(&amp;data_mutex);
+        up(&amp;count_mutex);
+    &#125;
+&#125;
+
+void writer() &#123;
+    while(TRUE) &#123;
+        down(&amp;data_mutex);
+        write();
+        up(&amp;data_mutex);
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h2><ul>
 <li>进程同步与进程通信很容易混淆，它们的区别在于：<ol>
 <li>进程同步：控制多个进程按一定顺序执行；</li>
@@ -680,7 +762,8 @@
 ### 2.FIFO</li>
 </ul>
 </li>
-<li>也成为命名管道,去除了管道只能在父子线程中使用的限制<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span>int mkfifo(const char *path, mode_t mode);</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">mkfifoat</span><span class="params">(<span class="type">int</span> fd, <span class="type">const</span> <span class="type">char</span> *path, <span class="type">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>也成为命名管道,去除了管道只能在父子线程中使用的限制<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;sys&#x2F;stat.h&gt;int mkfifo(const char *path, mode_t mode);
+int mkfifoat(int fd, const char *path, mode_t mode);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li>FIFO常用于客户-服务器应用程序中,FIFO用作汇聚点,在客户进程和服务器进程之间传递数据<img src="../pic/FIFO.png" style="zoom:75%;" />
 ### 3.消息队列</li>
 <li>相比于FIFO,消息队列具有以下特点<ul>
@@ -946,7 +1029,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://x-leonidas.github.io/2022/05/08/01%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">https://x-leonidas.github.io/2022/05/08/01%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</a>
+                    <a href="https://x-leonidas.github.io/2022/05/08/01-cao-zuo-xi-tong/cao-zuo-xi-tong-ji-chu-zhi-shi/">https://x-leonidas.github.io/2022/05/08/01-cao-zuo-xi-tong/cao-zuo-xi-tong-ji-chu-zhi-shi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1030,7 +1113,7 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2022/05/08/01%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+                <a href="/2022/05/08/01-cao-zuo-xi-tong/cao-zuo-xi-tong-ji-chu-zhi-shi/">
                     <div class="card-image">
                         
                         
@@ -1072,7 +1155,7 @@
                 本篇&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/2022/05/08/01%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+                <a href="/2022/05/08/01-cao-zuo-xi-tong/cao-zuo-xi-tong-ji-chu-zhi-shi/">
                     <div class="card-image">
                         
                         
@@ -1157,8 +1240,6 @@
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
-
 
 <!-- 代码块复制 -->
 
@@ -1166,8 +1247,6 @@
 
 
 <!-- 代码块收缩 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
@@ -1195,7 +1274,7 @@
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('3'),
+            collapseDepth: Number('2'),
             headingSelector: 'h2, h3, h4'
         });
 
