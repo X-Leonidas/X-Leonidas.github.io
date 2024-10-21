@@ -19,12 +19,12 @@
   <meta name="author" content="XY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="概述   名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线">
+    <meta name="description" content="概述   名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线程，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统基础知识">
 <meta property="og:url" content="https://x-leonidas.github.io/2024/10/11/01%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
 <meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="概述   名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线">
+<meta property="og:description" content="概述   名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线程，">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/%E5%86%AF%E8%AF%BA%E4%BC%8A%E6%9B%BC%E7%BB%93%E6%9E%84.png">
@@ -46,7 +46,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/sendfile%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/sendfile%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B2.png">
 <meta property="article:published_time" content="2024-10-10T16:10:17.802Z">
-<meta property="article:modified_time" content="2024-10-21T15:55:43.835Z">
+<meta property="article:modified_time" content="2024-10-21T16:14:54.205Z">
 <meta property="article:author" content="夜坐听风">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png">
@@ -286,9 +286,7 @@
             
               <div class="markdown-body">
                 
-                <meta name="referrer" content="same-origin" />
-
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
+                <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png" srcset="/img/loading.gif" lazyload alt="img"></li>
 </ul>
 <h2 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h2><ul>
