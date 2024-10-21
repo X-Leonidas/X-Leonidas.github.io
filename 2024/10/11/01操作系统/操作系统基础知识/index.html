@@ -19,13 +19,14 @@
   <meta name="author" content="XY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="概述名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线程，使得程">
+    <meta name="description" content="概述   名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线程，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统基础知识">
-<meta property="og:url" content="https://x-leonidas.github.io/2022/05/08/01%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:url" content="https://x-leonidas.github.io/2024/10/11/01%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
 <meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="概述名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线程，使得程">
+<meta property="og:description" content="概述   名词  冯诺依曼结构  VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 并行和并发 基本概念并发：宏观上在一段时间内能同时运行多个程序 并行：同一时刻能运行多个指令  区别两者的关键：是否同时 并行需要硬件支持，多l流水线、分布式计算机，在计算机上的体现就是增加cpu的数量可以提高并行 操作系统引入进程和线程，">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/%E5%86%AF%E8%AF%BA%E4%BC%8A%E6%9B%BC%E7%BB%93%E6%9E%84.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E7%9A%84%E5%88%87%E6%8D%A2.png">
@@ -44,11 +45,11 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/mmap%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/sendfile%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/sendfile%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B2.png">
-<meta property="article:published_time" content="2022-05-08T13:53:39.795Z">
-<meta property="article:modified_time" content="2022-05-10T14:24:36.760Z">
-<meta property="article:author" content="XY">
+<meta property="article:published_time" content="2024-10-10T16:10:17.802Z">
+<meta property="article:modified_time" content="2024-10-21T15:23:06.412Z">
+<meta property="article:author" content="夜坐听风">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/%E5%86%AF%E8%AF%BA%E4%BC%8A%E6%9B%BC%E7%BB%93%E6%9E%84.png">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png">
   
   
   
@@ -220,8 +221,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-05-08 21:53" pubdate>
-          2022年5月8日 晚上
+        <time datetime="2024-10-11 00:10" pubdate>
+          2024年10月11日 凌晨
         </time>
       </span>
     
@@ -285,7 +286,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h2><ul>
+                <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png" srcset="/img/loading.gif" lazyload alt="img"></li>
+</ul>
+<h2 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h2><ul>
 <li><p><img src="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/%E5%86%AF%E8%AF%BA%E4%BC%8A%E6%9B%BC%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>冯诺依曼结构</p>
 </li>
@@ -553,105 +557,26 @@
 <blockquote>
 <p>原语:若干个机器指令构成的完成某种特定功能的一段程序，具有不可分割性·即原语的执行必须是连续的，在执行过程中不允许被中断。</p>
 </blockquote>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">int</span> semaphore<span class="token punctuation">;</span>
-semaphore mutex <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token keyword">void</span> <span class="token function">P1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment">// 临界区</span>
-    <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">void</span> <span class="token function">P2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment">// 临界区</span>
-    <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> semaphore;<br>semaphore mutex = <span class="hljs-number">1</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">P1</span><span class="hljs-params">()</span> &#123;<br>    down(&amp;mutex);<br>    <span class="hljs-comment">// 临界区</span><br>    up(&amp;mutex);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">P2</span><span class="hljs-params">()</span> &#123;<br>    down(&amp;mutex);<br>    <span class="hljs-comment">// 临界区</span><br>    up(&amp;mutex);<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h3 id="使用信号量实现生产者-消费者问题"><a href="#使用信号量实现生产者-消费者问题" class="headerlink" title="使用信号量实现生产者 - 消费者问题"></a>使用信号量实现生产者 - 消费者问题</h3><p>问题描述：使用一个缓冲区来保存物品，只有缓冲区没有满，生产者才可以放入物品；只有缓冲区不为空，消费者才可以拿走物品。</p>
 <ul>
 <li>为了同步生产者和消费者的行为，需要记录缓冲区中物品的数量。数量可以使用信号量来进行统计，这里需要使用两个信号量：empty 记录空缓冲区的数量，full 记录满缓冲区的数量。其中，empty 信号量是在生产者进程中使用，当 empty 不为 0 时，生产者才可以放入物品；full 信号量是在消费者进程中使用，当 full 信号量不为 0 时，消费者才可以取走物品。</li>
 <li>注意，不能先对缓冲区进行加锁，再测试信号量。也就是说，不能先执行 down(mutex) 再执行 down(empty)。如果这么做了，那么可能会出现这种情况：生产者对缓冲区加锁后，执行 down(empty) 操作，发现 empty &#x3D; 0，此时生产者睡眠。消费者不能进入临界区，因为生产者对缓冲区加锁了，消费者就无法执行 up(empty) 操作，empty 永远都为 0，导致生产者永远等待下，不会释放锁，消费者因此也会永远等待下去。</li>
 </ul>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">N</span> <span class="token expression"><span class="token number">100</span></span></span>
-<span class="token keyword">typedef</span> <span class="token keyword">int</span> semaphore<span class="token punctuation">;</span>
-semaphore mutex <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-semaphore empty <span class="token operator">=</span> N<span class="token punctuation">;</span>
-semaphore full <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-
-<span class="token keyword">void</span> <span class="token function">producer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>TRUE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">int</span> item <span class="token operator">=</span> <span class="token function">produce_item</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>empty<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">insert_item</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>full<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">void</span> <span class="token function">consumer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>TRUE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>full<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">int</span> item <span class="token operator">=</span> <span class="token function">remove_item</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">consume_item</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>empty<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 100</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> semaphore;<br>semaphore mutex = <span class="hljs-number">1</span>;<br>semaphore empty = N;<br>semaphore full = <span class="hljs-number">0</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">producer</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        <span class="hljs-type">int</span> item = produce_item();<br>        down(&amp;empty);<br>        down(&amp;mutex);<br>        insert_item(item);<br>        up(&amp;mutex);<br>        up(&amp;full);<br>    &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">consumer</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        down(&amp;full);<br>        down(&amp;mutex);<br>        <span class="hljs-type">int</span> item = remove_item();<br>        consume_item(item);<br>        up(&amp;mutex);<br>        up(&amp;empty);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h3 id="管程"><a href="#管程" class="headerlink" title="管程"></a>管程</h3><ul>
 <li>使用信号量机制实现的生产者消费者问题需要客户端代码做很多控制，而管程把控制的代码独立出来，不仅不容易出错，也使得客户端代码调用更容易。</li>
 <li>c 语言不支持管程，下面的示例代码使用了类 Pascal 语言来描述管程。示例代码的管程提供了 insert() 和 remove() 方法，客户端代码通过调用这两个方法来解决生产者-消费者问题。</li>
 </ul>
-<pre class="line-numbers language-Pascal" data-language="Pascal"><code class="language-Pascal">    monitor ProducerConsumer
-    integer i;
-    condition c;
-
-    procedure insert();
-    begin
-        &#x2F;&#x2F; ...
-    end;
-
-    procedure remove();
-    begin
-        &#x2F;&#x2F; ...
-    end;
-end monitor;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Pascal">    monitor ProducerConsumer<br>    integer i;<br>    condition c;<br><br>    <span class="hljs-function"><span class="hljs-keyword">procedure</span> <span class="hljs-title">insert</span><span class="hljs-params">()</span>;</span><br>    <span class="hljs-keyword">begin</span><br>        <span class="hljs-comment">// ...</span><br>    <span class="hljs-keyword">end</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">procedure</span> <span class="hljs-title">remove</span><span class="hljs-params">()</span>;</span><br>    <span class="hljs-keyword">begin</span><br>        <span class="hljs-comment">// ...</span><br>    <span class="hljs-keyword">end</span>;<br><span class="hljs-keyword">end</span> monitor;<br></code></pre></td></tr></table></figure>
 
 <h2 id="经典同步问题"><a href="#经典同步问题" class="headerlink" title="经典同步问题"></a>经典同步问题</h2><ul>
 <li>读者-写者问题<br>允许多个进程同时对数据进行读操作，但是不允许读和写以及写和写操作同时发生。</li>
 <li>一个整型变量 count 记录在对数据进行读操作的进程数量，一个互斥量 count_mutex 用于对 count 加锁，一个互斥量 data_mutex 用于对读写的数据加锁。</li>
 </ul>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">int</span> semaphore<span class="token punctuation">;</span>
-<span class="token comment">//互斥量,对count加锁</span>
-semaphore count_mutex <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token comment">//互斥量,对读写的数据加锁</span>
-semaphore data_mutex <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token comment">//进行读操作的进程数量</span>
-<span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-
-<span class="token keyword">void</span> <span class="token function">reader</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>TRUE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>count_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        count<span class="token operator">++</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>count <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>data_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 第一个读者需要对数据进行加锁，防止写进程访问</span>
-        <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>count_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>count_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        count<span class="token operator">--</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>count <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>data_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>count_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">void</span> <span class="token function">writer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>TRUE<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">down</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>data_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">write</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">up</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>data_mutex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> semaphore;<br><span class="hljs-comment">//互斥量,对count加锁</span><br>semaphore count_mutex = <span class="hljs-number">1</span>;<br><span class="hljs-comment">//互斥量,对读写的数据加锁</span><br>semaphore data_mutex = <span class="hljs-number">1</span>;<br><span class="hljs-comment">//进行读操作的进程数量</span><br><span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">reader</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        down(&amp;count_mutex);<br>        count++;<br>        <span class="hljs-keyword">if</span>(count == <span class="hljs-number">1</span>) down(&amp;data_mutex); <span class="hljs-comment">// 第一个读者需要对数据进行加锁，防止写进程访问</span><br>        up(&amp;count_mutex);<br>        read();<br>        down(&amp;count_mutex);<br>        count--;<br>        <span class="hljs-keyword">if</span>(count == <span class="hljs-number">0</span>) up(&amp;data_mutex);<br>        up(&amp;count_mutex);<br>    &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">writer</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        down(&amp;data_mutex);<br>        write();<br>        up(&amp;data_mutex);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h2><ul>
 <li>进程同步与进程通信很容易混淆，它们的区别在于：<ol>
@@ -675,8 +600,7 @@ semaphore data_mutex <span class="token operator">=</span> <span class="token nu
 <h3 id="2-FIFO"><a href="#2-FIFO" class="headerlink" title="2.FIFO"></a>2.FIFO</h3><ul>
 <li>也成为命名管道,去除了管道只能在父子线程中使用的限制</li>
 </ul>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">mkfifo</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>path<span class="token punctuation">,</span> <span class="token class-name">mode_t</span> mode<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token function">mkfifoat</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>path<span class="token punctuation">,</span> <span class="token class-name">mode_t</span> mode<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">mkfifo</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *path, <span class="hljs-type">mode_t</span> mode)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">mkfifoat</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *path, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>FIFO常用于客户-服务器应用程序中,FIFO用作汇聚点,在客户进程和服务器进程之间传递数据<img src="https://raw.githubusercontent.com/X-Leonidas/picRepository/main/img/FIFO.png" srcset="/img/loading.gif" lazyload style="zoom:75%;" /></li>
@@ -963,7 +887,7 @@ semaphore data_mutex <span class="token operator">=</span> <span class="token nu
   <div class="license-box my-3">
     <div class="license-title">
       <div>操作系统基础知识</div>
-      <div>https://x-leonidas.github.io/2022/05/08/01操作系统/操作系统基础知识/</div>
+      <div>https://x-leonidas.github.io/2024/10/11/01操作系统/操作系统基础知识/</div>
     </div>
     <div class="license-meta">
       
@@ -975,7 +899,7 @@ semaphore data_mutex <span class="token operator">=</span> <span class="token nu
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年5月8日</div>
+          <div>2024年10月11日</div>
         </div>
       
       
@@ -1007,15 +931,15 @@ semaphore data_mutex <span class="token operator">=</span> <span class="token nu
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/05/13/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E9%93%BE%E8%A1%A8/" title="链表">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">链表</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2022/05/13/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%93%88%E5%B8%8C/" title="哈希">
+                        <span class="hidden-mobile">哈希</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
