@@ -29,7 +29,7 @@
 <meta property="og:description" content="分布式锁 为何需要分布式锁 避免不同节点重复相同的工作：比如用户执行了某个操作有可能不同节点会发送多封邮件； 避免破坏数据的正确性：如果两个节点在同一条数据上同时进行操作，可能会造成数据错误或不一致的情况出现；    基于数据库实现 它的基本原理和 Redis 的 SETNX 类似，其实就是创建一个分布式锁表，加锁后，我们就在表增加一条记录，释放锁即把该数据删掉  问题 没有失效时间，容易导致死锁">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-10-27T16:49:42.223Z">
-<meta property="article:modified_time" content="2024-10-27T16:52:15.282Z">
+<meta property="article:modified_time" content="2024-10-27T16:55:19.668Z">
 <meta property="article:author" content="夜坐听风">
 <meta name="twitter:card" content="summary_large_image">
   
