@@ -1,0 +1,1135 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Active MQ 07集群配置官方文档http:&#x2F;&#x2F;activemq.apache.org&#x2F;clustering 主备集群http:&#x2F;&#x2F;activemq.apache.org&#x2F;masterslave.html    Master Slave Type Requirements Pros Cons    Shared File System Master Slave A shared file s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03-ActiveMQ集群">
+<meta property="og:url" content="https://x-leonidas.github.io/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/03-ActiveMQ%E9%9B%86%E7%BE%A4/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="Active MQ 07集群配置官方文档http:&#x2F;&#x2F;activemq.apache.org&#x2F;clustering 主备集群http:&#x2F;&#x2F;activemq.apache.org&#x2F;masterslave.html    Master Slave Type Requirements Pros Cons    Shared File System Master Slave A shared file s">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/Startup.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/MasterFailed.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212193653842.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212144259602.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/10190bfe-30d7-3021-8bbe-9d7882530083.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212165236443.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212165658958.png">
+<meta property="article:published_time" content="2024-10-27T16:49:42.185Z">
+<meta property="article:modified_time" content="2024-10-27T16:52:12.127Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/Startup.png">
+  
+  
+  
+  <title>03-ActiveMQ集群 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="03-ActiveMQ集群"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-28 00:49" pubdate>
+          2024年10月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">03-ActiveMQ集群</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Active-MQ-07"><a href="#Active-MQ-07" class="headerlink" title="Active MQ 07"></a>Active MQ 07</h1><h2 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h2><p><strong>官方文档</strong><br><a target="_blank" rel="noopener" href="http://activemq.apache.org/clustering">http://activemq.apache.org/clustering</a></p>
+<h3 id="主备集群"><a href="#主备集群" class="headerlink" title="主备集群"></a>主备集群</h3><p><a target="_blank" rel="noopener" href="http://activemq.apache.org/masterslave.html">http://activemq.apache.org/masterslave.html</a></p>
+<table>
+<thead>
+<tr>
+<th>Master Slave Type</th>
+<th>Requirements</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="http://activemq.apache.org/shared-file-system-master-slave">Shared File System Master Slave</a></td>
+<td>A shared file system such as a SAN</td>
+<td>Run as many slaves as required. Automatic recovery of old masters</td>
+<td>Requires shared file system</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://activemq.apache.org/jdbc-master-slave">JDBC Master Slave</a></td>
+<td>A Shared database</td>
+<td>Run as many slaves as required. Automatic recovery of old masters</td>
+<td>Requires a shared database. Also relatively slow as it cannot use the high performance journal</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://activemq.apache.org/replicated-Features/PersistenceFeatures/Persistence/Features/Persistence/leveldb-store">Replicated LevelDB Store</a></td>
+<td>ZooKeeper Server</td>
+<td>Run as many slaves as required. Automatic recovery of old masters. Very fast.</td>
+<td>Requires a ZooKeeper server.</td>
+</tr>
+</tbody></table>
+<h4 id="Shared-File-System-Master-Slave"><a href="#Shared-File-System-Master-Slave" class="headerlink" title="Shared File System Master Slave"></a>Shared File System Master Slave</h4><p>基于共享存储的Master-Slave；多个broker共用同一数据源，谁拿到锁谁就是master,其他处于待启动状态，如果master挂掉了，某个抢到文件锁的slave变成master<br><strong>启动后</strong></p>
+<p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/Startup.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>Master宕机</strong></p>
+<p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/MasterFailed.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>Master重启</strong></p>
+<p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212193653842.png" srcset="/img/loading.gif" lazyload alt="image-20200212193653842"></p>
+<p><strong>JDBC Master Slave</strong><br>基于JDBC的Master-Slave:使用同一个数据库，拿到LOCK表的写锁的broker成为master.<br>性能较低，不能使用高性能日志<br><strong>Replicated LeveDB Store</strong><br>基于zookeeper复制LeveDB存储的Master-Slave机制<br><strong>配置步骤</strong></p>
+<ol>
+<li>修改broker名称</li>
+<li>修改数据源<ol>
+<li>如果使用kahadb，配置相同路径</li>
+<li>如果使用mysql 使用同一数据源（同一数据库和表）<br><strong>尝试</strong></li>
+</ol>
+</li>
+</ol>
+<p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212144259602.png" srcset="/img/loading.gif" lazyload alt="image-20200212144259602"></p>
+<p><a target="_blank" rel="noopener" href="http://activemq.apache.org/failover-transport-reference.html">http://activemq.apache.org/failover-transport-reference.html</a></p>
+<h4 id="failover-故障转移协议"><a href="#failover-故障转移协议" class="headerlink" title="failover 故障转移协议"></a>failover 故障转移协议</h4><p>断线重连机制是ActiveMQ的高可用性具体体现之一。ActiveMQ提供failover机制去实现断线重连的高可用性，可以使得连接断开之后，不断的重试连接到一个或多个brokerURL。<br>默认情况下，如果client与broker直接的connection断开，则client会新起一个线程，不断的从url参数中获取一个url来重试连接。<br>配置语法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ActiveMQConnectionFactory</span> <span class="hljs-variable">connectionFactory</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ActiveMQConnectionFactory</span>(<br>		<span class="hljs-string">&quot;admin&quot;</span>,<br>		<span class="hljs-string">&quot;admin&quot;</span>,<br>		<span class="hljs-string">&quot;failover:(nio://localhost:5671,nio://localhost:5672)&quot;</span><br>		);<br></code></pre></td></tr></table></figure>
+<p><strong>可配置选项</strong></p>
+<h4 id="Transport-Options"><a href="#Transport-Options" class="headerlink" title="Transport Options"></a>Transport Options</h4><table>
+<thead>
+<tr>
+<th>Option Name</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>backup</code></td>
+<td><code>false</code></td>
+<td>Initialize and hold a second transport connection - to enable fast failover.</td>
+</tr>
+<tr>
+<td><code>initialReconnectDelay</code></td>
+<td><code>10</code></td>
+<td>The delay (in ms) before the <em>first</em> reconnect attempt.</td>
+</tr>
+<tr>
+<td><code>maxCacheSize</code></td>
+<td><code>131072</code></td>
+<td>Size in bytes for the cache of tracked messages. Applicable only if <code>trackMessages</code> is <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>maxReconnectAttempts</code></td>
+<td>&#96;-1</td>
+<td>0&#96;</td>
+</tr>
+<tr>
+<td><code>maxReconnectDelay</code></td>
+<td><code>30000</code></td>
+<td>The maximum delay (in ms) between the <em>second and subsequent</em> reconnect attempts.</td>
+</tr>
+<tr>
+<td><code>nested.*</code></td>
+<td><code>null</code></td>
+<td><strong>From ActiveMQ 5.9:</strong> common URI options that will be applied to each URI in the list**.**</td>
+</tr>
+<tr>
+<td><code>randomize</code></td>
+<td><code>true</code></td>
+<td>If <code>true</code>, choose a URI at random from the list to use for reconnect.</td>
+</tr>
+<tr>
+<td><code>reconnectDelayExponent</code></td>
+<td><code>2.0</code></td>
+<td>The exponent used during exponential back-off attempts.</td>
+</tr>
+<tr>
+<td><code>reconnectSupported</code></td>
+<td><code>true</code></td>
+<td>Determines whether the client should respond to broker <code>ConnectionControl</code> events with a reconnect (see: <code>rebalanceClusterClients</code>).</td>
+</tr>
+<tr>
+<td><code>startupMaxReconnectAttempts</code></td>
+<td><code>-1</code></td>
+<td>A value of <code>-1</code> denotes that the number of connection attempts at startup should be unlimited. A value of <code>&gt;=0</code> denotes the number of reconnect attempts at startup that will be made after which an error is sent back to the client when the client makes a subsequent reconnect attempt. <strong>Note</strong>: once successfully connected the <code>maxReconnectAttempts</code> option prevails.</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td><code>-1</code></td>
+<td><strong>From ActiveMQ 5.3</strong>: set the timeout on send operations (in ms) without interruption of re-connection process.</td>
+</tr>
+<tr>
+<td><code>trackMessages</code></td>
+<td><code>false</code></td>
+<td>Keep a cache of in-flight messages that will flushed to a broker on reconnect.</td>
+</tr>
+<tr>
+<td><code>updateURIsSupported</code></td>
+<td><code>true</code></td>
+<td><strong>From</strong> <strong>ActiveMQ 5.4:</strong> determines whether the client should accept updates from the broker to its list of known URIs.</td>
+</tr>
+<tr>
+<td><code>updateURIsURL</code></td>
+<td><code>null</code></td>
+<td><strong>From ActiveMQ 5.4:</strong> a URL (or path to a local file) to a text file containing a comma separated list of URIs to use for reconnect in the case of failure.</td>
+</tr>
+<tr>
+<td><code>useExponentialBackOff</code></td>
+<td><code>true</code></td>
+<td>If <code>true</code> an exponential back-off is used between reconnect attempts.</td>
+</tr>
+<tr>
+<td><code>warnAfterReconnectAttempts</code></td>
+<td><code>10</code></td>
+<td><strong>From ActiveMQ 5.10:</strong> a value <code>&gt;0</code> specifies the number of reconnect attempts before a warning is logged. A logged warning indicates that there is no current connection but re-connection is being attempted. A value of <code>&lt;=0</code> disables the logging of warnings about reconnect attempts.</td>
+</tr>
+<tr>
+<td><strong>backup</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>初始化的时候创建第二个连接，快速故障转移</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>initialReconnectDelay</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>第一次重试延迟</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>trackMessages</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>设置是否缓存（故障发生时）尚未传送完成的消息，当broker一旦重新连接成功，便将这些缓存中的消息刷新到新连接的代理中，使得消息可以在broker切换前后顺利传送。默认false</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>maxCacheSize</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>当trackMessage启动时，缓存的最大子字节数</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>maxReconnectAttempts</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>默认1</td>
+<td>0，自5.6版本开始，-1为默认值，代表不限重试次数，0标识从不重试（只尝试连接一次，并不重连），5.6以前的版本，0为默认值，代表不重试，如果设置大于0的数，则代表最大重试次数。</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>maxReconnectDelay</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>最长重试间隔</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>randomize</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>使用随机连接，以达到负载均衡的目的，默认true</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>只配主备的情况下最好关闭</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>startupMaxReconnectAttempts</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>初始化时的最大重试次</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>“-1”表示在启动时连接尝试的次数是无限的。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>‘ &gt;&#x3D;0 ‘的值表示在启动时重新连接尝试的次数</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>一旦成功连接后续将使用“maxReconnectAttempts”选项</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>timeout</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>连接超时</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>updateURIsSupported</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>是否可以动态修改broker uri</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>updateURIsURL</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>指定动态修改地址的路径</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>useExponentialBackOff</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>重连时间间隔是否以指数形式增长</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>reconnectDelayExponent</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>指数增长时的指数</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>warnAfterReconnectAttempts</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>重连日志记录</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p><strong>官方文档</strong><br><a target="_blank" rel="noopener" href="http://activemq.apache.org/networks-of-brokers.html">http://activemq.apache.org/networks-of-brokers.html</a></p>
+<h4 id="静态网络配置"><a href="#静态网络配置" class="headerlink" title="静态网络配置"></a>静态网络配置</h4><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/10190bfe-30d7-3021-8bbe-9d7882530083.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>在broker节点下配置networkConnectors</p>
+<ul>
+<li>networkConnectors（网络连接器）主要用来配置ActiveMQ服务端与服务端之间的通信</li>
+<li>TransportConnector（传输连接器）主要用于配置ActiveMQ服务端和客户端之间的通信方式<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&lt;networkConnectors&gt;<br>  &lt;networkConnector duplex<span class="hljs-operator">=</span><span class="hljs-string">&quot;true&quot;</span> name<span class="hljs-operator">=</span><span class="hljs-string">&quot;amq-cluster&quot;</span> uri<span class="hljs-operator">=</span><span class="hljs-string">&quot;static:failover://(nio://localhost:5671,nio://localhost:5672)&quot;</span>  /&gt;<br>&lt;/networkConnectors&gt;<br></code></pre></td></tr></table></figure>
+参与的节点都需要修改<br>注意如果单机启动多个节点，记得修改端口避免冲突<br>启动成功后<code>Connections</code>中会有其他节点</li>
+</ul>
+<p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212165236443.png" srcset="/img/loading.gif" lazyload alt="image-20200212165236443"></p>
+<p><code>Network</code>中也会显示桥接连接</p>
+<p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20200212165658958.png" srcset="/img/loading.gif" lazyload alt="image-20200212165658958"></p>
+<p>负载均衡的环境下，broker上的消息优先给在本地连接的consumer<br>当networkerConnector与remote Broker建立链接之后，那么remote Broker将会向local Broker交付订阅信息，包括remote broker持有的destinations、Consumers、持久订阅者列表等；那么此后local Broker将把remote Broker做一个消息“订阅者”<br><strong>Advisory</strong><br>ActiveMQ提供了“Advisory”机制，通常ActiveMQ内部将某些事件作为“advisory”在全局广播，比如destination的创建、consumer的加入、DLQ的产生等，这将额外的消耗极小的性能；我们可以在ActiveMQ的监控页面上看到影响的消息，开发者也可以View这些消息(通道名称以“ActiveMQ.Advisory.”开头)。对于分布式网络中的broker，将严重依赖“Advisory”，特别是“dynamic network”，默认已开启<br>在一个broker上发生事件，都会以“通知”的方式发送给配置文件中指定的所有networkConnector<br><strong>Dynamic networks</strong><br>“动态网络”表明当remote Broker持有通道的消费者时，local Broker才会转发相应的消息；此时我们需要开启advisorySupport。当remote broker上有Consumer创建时，Advisory中将会广播消息，消息为ConsumerInfo类型，它将包括consumer所在的broker path，如果local broker与此path建立了networkConnector，那么此后local Broker将会启动响应的消息转发。<br><strong>Static networks</strong><br>  相对于“动态网络”而言，“静态网络”将不依赖Advisory，在任何时候，即使remote Broker中没有相应的consumer，消息也将转发给remote Broker<br>将brokers作为简单代理并转发消息到远端而不管是否有消费者</p>
+<h4 id="可配置属性"><a href="#可配置属性" class="headerlink" title="可配置属性"></a>可配置属性</h4><h5 id="URI的几个属性"><a href="#URI的几个属性" class="headerlink" title="URI的几个属性"></a>URI的几个属性</h5><table>
+<thead>
+<tr>
+<th>property</th>
+<th>default</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>initialReconnectDelay</td>
+<td>1000</td>
+<td>time(ms) to wait before attempting a reconnect (if useExponentialBackOff is false)</td>
+</tr>
+<tr>
+<td>maxReconnectDelay</td>
+<td>30000</td>
+<td>time(ms) to wait before attempting to re-connect</td>
+</tr>
+<tr>
+<td>useExponentialBackOff</td>
+<td>true</td>
+<td>increases time between reconnect for every failure in a reconnect sequence</td>
+</tr>
+<tr>
+<td>backOffMultiplier</td>
+<td>2</td>
+<td>multipler used to increase the wait time if using exponential back off</td>
+</tr>
+</tbody></table>
+<h5 id="NetworkConnector-Properties"><a href="#NetworkConnector-Properties" class="headerlink" title="NetworkConnector Properties"></a>NetworkConnector Properties</h5><table>
+<thead>
+<tr>
+<th>property</th>
+<th>default</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>name</td>
+<td>bridge</td>
+<td>name of the network - for more than one network connector between the same two brokers - use different names</td>
+</tr>
+<tr>
+<td>dynamicOnly</td>
+<td>false</td>
+<td>if true, only activate a networked durable subscription when a corresponding durable subscription reactivates, by default they are activated on startup.</td>
+</tr>
+<tr>
+<td>decreaseNetworkConsumerPriority</td>
+<td>false</td>
+<td>if true, starting at priority -5, decrease the priority for dispatching to a network Queue consumer the further away it is (in network hops) from the producer. When false all network consumers use same default priority(0) as local consumers</td>
+</tr>
+<tr>
+<td>networkTTL</td>
+<td>1</td>
+<td>the number of brokers in the network that messages and subscriptions can pass through (sets both message&amp;consumer -TTL)</td>
+</tr>
+<tr>
+<td>messageTTL</td>
+<td>1</td>
+<td>(version 5.9) the number of brokers in the network that messages can pass through</td>
+</tr>
+<tr>
+<td>consumerTTL</td>
+<td>1</td>
+<td>(version 5.9) the number of brokers in the network that subscriptions can pass through (keep to 1 in a mesh)</td>
+</tr>
+<tr>
+<td>conduitSubscriptions</td>
+<td>true</td>
+<td>multiple consumers subscribing to the same destination are treated as one consumer by the network</td>
+</tr>
+<tr>
+<td>excludedDestinations</td>
+<td>empty</td>
+<td>destinations matching this list won’t be forwarded across the network (this only applies to dynamicallyIncludedDestinations)</td>
+</tr>
+<tr>
+<td>dynamicallyIncludedDestinations</td>
+<td>empty</td>
+<td>destinations that match this list <strong>will</strong> be forwarded across the network <strong>n.b.</strong> an empty list means all destinations not in the exluded list will be forwarded</td>
+</tr>
+<tr>
+<td>useVirtualDestSubs</td>
+<td>false</td>
+<td>if true, the network connection will listen to advisory messages for virtual destination consumers</td>
+</tr>
+<tr>
+<td>staticallyIncludedDestinations</td>
+<td>empty</td>
+<td>destinations that match will always be passed across the network - even if no consumers have ever registered an interest</td>
+</tr>
+<tr>
+<td>duplex</td>
+<td>false</td>
+<td>if true, a network connection will be used to both produce *<strong>AND*</strong> Consume messages. This is useful for hub and spoke scenarios when the hub is behind a firewall etc.</td>
+</tr>
+<tr>
+<td>prefetchSize</td>
+<td>1000</td>
+<td>Sets the <a target="_blank" rel="noopener" href="http://activemq.apache.org/what-is-the-prefetch-limit-for">prefetch size</a> on the network connector’s consumer. It must be &gt; 0 because network consumers do not poll for messages</td>
+</tr>
+<tr>
+<td>suppressDuplicateQueueSubscriptions</td>
+<td>false</td>
+<td>(from 5.3) if true, duplicate subscriptions in the network that arise from network intermediaries will be suppressed. For example, given brokers A,B and C, networked via multicast discovery. A consumer on A will give rise to a networked consumer on B and C. In addition, C will network to B (based on the network consumer from A) and B will network to C. When true, the network bridges between C and B (being duplicates of their existing network subscriptions to A) will be suppressed. Reducing the routing choices in this way provides determinism when producers or consumers migrate across the network as the potential for dead routes (stuck messages) are eliminated. networkTTL needs to match or exceed the broker count to require this intervention.</td>
+</tr>
+<tr>
+<td>bridgeTempDestinations</td>
+<td>true</td>
+<td>Whether to broadcast advisory messages for created temp destinations in the network of brokers or not. Temp destinations are typically created for request-reply messages. Broadcasting the information about temp destinations is turned on by default so that consumers of a request-reply message can be connected to another broker in the network and still send back the reply on the temporary destination specified in the JMSReplyTo header. In an application scenario where most&#x2F;all messages use request-reply pattern, this will generate additional traffic on the broker network as every message typically sets a unique JMSReplyTo address (which causes a new temp destination to be created and broadcasted via an advisory message in the network of brokers). When disabling this feature such network traffic can be reduced but then producer and consumers of a request-reply message need to be connected to the same broker. Remote consumers (i.e. connected via another broker in your network) won’t be able to send the reply message but instead raise a “temp destination does not exist” exception.</td>
+</tr>
+<tr>
+<td>alwaysSyncSend</td>
+<td>false</td>
+<td>(version 5.6) When true, non persistent messages are sent to the remote broker using request&#x2F;reply in place of a oneway. This setting treats both persistent and non-persistent messages the same.</td>
+</tr>
+<tr>
+<td>staticBridge</td>
+<td>false</td>
+<td>(version 5.6) If set to true, broker will not dynamically respond to new consumers. It will only use <code>staticallyIncludedDestinations</code> to create demand subscriptions</td>
+</tr>
+<tr>
+<td>userName</td>
+<td>null</td>
+<td>The username to authenticate against the remote broker</td>
+</tr>
+<tr>
+<td>password</td>
+<td>null</td>
+<td>The password for the username to authenticate against the remote broker</td>
+</tr>
+<tr>
+<td><strong>name</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>相同的名称会被添加到同一集群中</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>dynamicOnly</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>是否直接转发，设置成true的话 broker会在没有消费者的时候不去转发消息</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>decreaseNetworkConsumerPriority</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>如果为true，网络的消费者优先级降低为-5。如果为false，则默认跟本地消费者一样为0.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>networkTTL</strong> <strong>messageTTL</strong> <strong>consumerTTL</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>消息和订阅在网络中被broker转发（穿过）的最大次数，消息在网络中每转发一次，都会将TTL-1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>conduitSubscriptions</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>多个消费者消费消息被当作一个消费者</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>excludedDestinations</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>在这个名单中的Destination不会在网络中被转发</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">excludedDestinaitons</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">queue</span> <span class="hljs-attr">physicalName</span>=<span class="hljs-string">&quot;include.test.foo&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">topic</span> <span class="hljs-attr">physicalName</span>=<span class="hljs-string">&quot;include.test.bar&quot;</span>/&gt;</span><br>　<span class="hljs-tag">&lt;/<span class="hljs-name">excludedDestinaitons</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><strong>dynamicallyIncludedDestinations</strong><br>通过网络转发的destinations，注意空列表代表所有的都转发。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml">　<span class="hljs-tag">&lt;<span class="hljs-name">dynamicallyIncludeDestinaitons</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">queue</span> <span class="hljs-attr">physicalName</span>=<span class="hljs-string">&quot;include.test.foo&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">topic</span> <span class="hljs-attr">physicalName</span>=<span class="hljs-string">&quot;include.test.bar&quot;</span>/&gt;</span><br>　<span class="hljs-tag">&lt;/<span class="hljs-name">dynamicallyIncludeDestinaitons</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><strong>useVirtualDestSubs</strong><br>开启此选项会在转发消息时<br><strong>staticallyIncludedDestinations</strong><br>匹配的目的地将始终通过网络传递——即使没有消费者对此感兴趣 对应静态networks</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">staticallyIncludeDestinaitons</span>&gt;</span><br>       <span class="hljs-tag">&lt;<span class="hljs-name">queue</span> <span class="hljs-attr">physicalName</span>=<span class="hljs-string">&quot;aways.include.queue&quot;</span>/&gt;</span><br>　<span class="hljs-tag">&lt;/<span class="hljs-name">staticallyIncludeDestinaitons</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><strong>duplex</strong><br>是否允许双向连接<strong>如果该属性为true，当这个节点使用Network Bridge连接到其它目标节点后，将强制目标也建立Network Bridge进行反向连接</strong><br><strong>prefetchSize</strong><br>缓冲消息大小，必须大于0，不会主动拉取消息<br><strong>suppressDuplicateQueueSubscriptions</strong><br>如果为true, 重复的订阅关系一产生即被阻止。<br><strong>bridgeTempDestinations</strong><br>是否转发临时destination，禁用后再使用request&#x2F;reply模型的时候客户端需要连接到同一broker，不然会找不到destination<br><strong>alwaysSyncSend</strong><br>开启后转发非持久化消息会使用request&#x2F;reply模型<br><strong>staticBridge</strong><br>如果设置为true，则代理将不会动态响应新的consumer，只能使用staticallyIncludedDestinations中的destination<br><strong>userName</strong> <strong>password</strong><br>连接broker时的用户名和密码</p>
+<h4 id="动态网络配置"><a href="#动态网络配置" class="headerlink" title="动态网络配置"></a>动态网络配置</h4><p><strong>官方文档</strong><br><a target="_blank" rel="noopener" href="http://activemq.apache.org/multicast-transport-reference">http://activemq.apache.org/multicast-transport-reference</a><br>使用multicast协议，可以指定组播地址或使用<code>multicast://default</code>（239.255.2.3）<br>配置<code>networkConnectors</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">networkConnectors</span>&gt;</span><br> <span class="hljs-tag">&lt;<span class="hljs-name">networkConnector</span> <span class="hljs-attr">uri</span>=<span class="hljs-string">&quot;multicast://239.0.0.5&quot;</span> <span class="hljs-attr">duplex</span>=<span class="hljs-string">&quot;false&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">networkConnectors</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>broker启动后会使用udp协议向组播地址发送数据报文以便让其他在这个组播地址的节点感知到自己的存在<br>每个UDP数据报中，包含的主要信息包括本节点ActiveMQ的版本信息，以及连接到自己所需要使用的host名字、协议名和端口信息。<br>配置<code>transportConnector</code>指明将哪一个连接通过UDP数据报向其他ActiveMQ节点进行公布，就需要在transportConnector标签上使用discoveryUri属性进行标识</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;transportConnector <span class="hljs-attribute">name</span>=<span class="hljs-string">&quot;auto+nio&quot;</span> <span class="hljs-attribute">uri</span>=<span class="hljs-string">&quot;auto+nio://localhost:5672&quot;</span> <span class="hljs-attribute">discoveryUri</span>=<span class="hljs-string">&quot;multicast://239.0.0.5&quot;</span>/&gt;<br></code></pre></td></tr></table></figure>
+<h3 id="消息回流"><a href="#消息回流" class="headerlink" title="消息回流"></a>消息回流</h3><p>在消息转发的时候，remote broker转发Local broker的消息会消费掉LocalBroker的消息<br>那么在转发的过程中，消息在被拉取后和发送给consumer的过程中重启的话会造成消息丢失<br><code>replayWhenNoConsumers</code> 选项可以使remote broke上有需要转发的消息但是没有被消费时，把消息回流到它原始的broker.同时把enableAudit设置为false,为了防止消息回流后被当作重复消息而不被分发</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs xml">　　　　 <span class="hljs-tag">&lt;<span class="hljs-name">destinationPolicy</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">policyMap</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">policyEntries</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">policyEntry</span> <span class="hljs-attr">queue</span>=<span class="hljs-string">&quot;&gt;&quot;</span> <span class="hljs-attr">enableAudit</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">networkBridgeFilterFactory</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">conditionalNetworkBridgeFilterFactory</span> <span class="hljs-attr">replayWhenNoConsumers</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">networkBridgeFilterFactory</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">policyEntry</span>&gt;</span><br>      <span class="hljs-tag">&lt;/<span class="hljs-name">policyEntries</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">policyMap</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">destinationPolicy</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h3 id="消息副本"><a href="#消息副本" class="headerlink" title="消息副本"></a>消息副本</h3><p><a target="_blank" rel="noopener" href="http://activemq.apache.org/replicated-message-store">http://activemq.apache.org/replicated-message-store</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>03-ActiveMQ集群</div>
+      <div>https://x-leonidas.github.io/2024/10/28/11技术栈/MQ/03-ActiveMQ集群/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/10-RocketMQ%E5%AE%89%E8%A3%85/" title="10-RocketMQ安装">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">10-RocketMQ安装</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/02-ActiveLinux&amp;Artemis/" title="02-ActiveLinux&amp;Artemis">
+                        <span class="hidden-mobile">02-ActiveLinux&amp;Artemis</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis集群Redis Sentinel哨兵机制简介 Sentinel(哨兵)进程是用于监控redis集群中Master主服务器工作的状态 在Master主服务器发生故障的时候，可以实现Master和Slave服务器的切换，保证系统的高可用（HA）  哨兵进程的作用 监控(Monitoring): 哨兵(sentinel) 会不断地检查你的Master和Slave是否运作正常。 提醒(Notif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3redis集群">
+<meta property="og:url" content="https://x-leonidas.github.io/2024/10/28/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/3redis%E9%9B%86%E7%BE%A4/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="Redis集群Redis Sentinel哨兵机制简介 Sentinel(哨兵)进程是用于监控redis集群中Master主服务器工作的状态 在Master主服务器发生故障的时候，可以实现Master和Slave服务器的切换，保证系统的高可用（HA）  哨兵进程的作用 监控(Monitoring): 哨兵(sentinel) 会不断地检查你的Master和Slave是否运作正常。 提醒(Notif">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E6%B6%88%E6%81%AF%E6%A8%A1%E5%BC%8F.png">
+<meta property="article:published_time" content="2024-10-27T16:49:42.132Z">
+<meta property="article:modified_time" content="2024-10-27T16:52:10.580Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%9B%BE.png">
+  
+  
+  
+  <title>3redis集群 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="3redis集群"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-28 00:49" pubdate>
+          2024年10月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">3redis集群</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="Redis集群"><a href="#Redis集群" class="headerlink" title="Redis集群"></a>Redis集群</h3><h4 id="Redis-Sentinel哨兵机制"><a href="#Redis-Sentinel哨兵机制" class="headerlink" title="Redis Sentinel哨兵机制"></a>Redis Sentinel哨兵机制</h4><h5 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h5><ul>
+<li>Sentinel(哨兵)进程是用于监控redis集群中Master主服务器工作的状态</li>
+<li>在Master主服务器发生故障的时候，可以实现Master和Slave服务器的切换，保证系统的高可用（HA）</li>
+</ul>
+<h5 id="哨兵进程的作用"><a href="#哨兵进程的作用" class="headerlink" title="哨兵进程的作用"></a>哨兵进程的作用</h5><ul>
+<li><strong>监控(Monitoring)</strong>: 哨兵(sentinel) 会不断地检查你的Master和Slave是否运作正常。</li>
+<li>提醒(<strong>Notification</strong>) ： 当被监控的某个Redis节点出现问题时, 哨兵(sentinel) 可以通过 API 向管理员或者其他应用程序发送通知。</li>
+<li>自动故障迁移(<strong>Automatic failover</strong>) ：当一个Master不能正常工作时，哨兵(sentinel) 会开始一次自动故障迁移操作。<ul>
+<li>它会将失效Master的其中一个Slave升级为新的Master, 并让失效Master的其他Slave改为复制新的Master</li>
+<li>当客户端试图连接失效的Master时，集群也会向客户端返回新Master的地址，使得集群可以使用现在的Master替换失效Master</li>
+<li>Master和Slave服务器切换后，Master的redis.conf、Slave的redis.conf和sentinel.conf的配置文件的内容都会发生相应的改变，即，Master主服务器的redis.conf配置文件中会多一行slaveof的配置，sentinel.conf的监控目标会随之调换。</li>
+</ul>
+</li>
+</ul>
+<h5 id="哨兵进程的配置"><a href="#哨兵进程的配置" class="headerlink" title="哨兵进程的配置"></a>哨兵进程的配置</h5><ul>
+<li>启动<ul>
+<li>直接使用redis-server  .&#x2F;sentinel.conf   –sentinel  来启动哨兵 </li>
+<li>redis-sentinel   .&#x2F;sentinel.conf 来启动哨兵</li>
+</ul>
+</li>
+<li>sentinel  monitor mymaster ip  port  member  : 一套哨兵可以监控多套，member 为当前哨兵的权重值</li>
+<li>port 哨兵的端口号</li>
+</ul>
+<h5 id="哨兵进程的工作方式"><a href="#哨兵进程的工作方式" class="headerlink" title="哨兵进程的工作方式"></a>哨兵进程的工作方式</h5><ul>
+<li>每个Sentinel（哨兵）进程以每秒钟一次的频率向整 个集群中的Master主服务器，Slave从服务器以及其他Sentinel（哨兵）进程发送一个 PING 命令</li>
+<li>如果一个实例（instance）距离最后一次有效回复 PING 命令的时间超过 down-after-milliseconds 选项所指定的值， 则这个实例会被 Sentinel（哨兵）进程标记为<strong>主观下线（SDOWN）</strong></li>
+<li>如果一个Master主服务器被  标记为主观下线（SDOWN），则正在监视这个Master主服务器的所有 Sentinel（哨兵）进程要以每秒一次的频率确认Master主服务器的确进入了主观下线状态。</li>
+<li>当有足够数量的 Sentinel（哨兵）进程（大于等于配置文件指定的值）在指定的时间范围内确认Master主服务器进入了主观下线状态（SDOWN）， 则Master主服务器会被标记为<strong>客观下线（ODOWN）</strong></li>
+<li>在一般情况下， 每个 Sentinel（哨兵）进程会以每 10 秒一次的频率向集群中的所有Master主服务器、Slave从服务器发送 <strong>INFO 命令</strong></li>
+<li>当Ma ster主服务器被 Sentinel（哨兵）进程标记为客观下线（ODOWN）时，Sentinel（哨兵）进程向下线的 Master主服务器的所有 Slave从服务器发送 INFO 命令的频率会从 10 秒一次改为每秒一次</li>
+<li>若没有足够数量的 Sentinel（哨兵）进程同意 Master主服务器下线， Master主服务器的客观下线状态就会被移除。若Master主服务器重新向 Sentinel（哨兵）进程发送 PING 命令返回有效回复，Master主服务器的主观下线状态就会被移除</li>
+</ul>
+<h4 id="Redis-Cluster集群"><a href="#Redis-Cluster集群" class="headerlink" title="Redis Cluster集群"></a>Redis Cluster集群</h4><ul>
+<li>集群的使用<ul>
+<li>脚本位置： REDISHOME&#x2F;utils&#x2F;create-cluster&#x2F;</li>
+<li>redis-cli  -c  -p   任一主机</li>
+<li>执行redis-cli –cluster  start  启动一个集群  &#x2F;&#x2F; create 去创建一个redis集群</li>
+<li>set  {XX}k1  手动设置key将某一个key设置到一个节点中。</li>
+</ul>
+</li>
+<li>create-cluster脚本说明<ul>
+<li>NODES ：实例数量</li>
+<li>REPLICAS ：从机数量</li>
+</ul>
+</li>
+</ul>
+<h5 id="分区原理"><a href="#分区原理" class="headerlink" title="分区原理"></a>分区原理</h5><ul>
+<li><strong>带有虚拟节点的一致性哈希分区</strong></li>
+</ul>
+<h5 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h5><ul>
+<li>优点<ul>
+<li>1、不再需要额外的Sentinel集群，为使用者提供了一致的方案，减少了学习成本。</li>
+<li>2、去中心架构，节点对等，集群可支持上千个节点。</li>
+<li>3、抽象出了slot概念，针对slot进行运维操作。</li>
+<li>4、副本功能能够实现自动故障转移，大部分情况下无需人工介入。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>1、客户端要缓存部分数据，实现Cluster协议，相对复杂。</li>
+<li>2、数据是通过异步复制的，不能保证<strong>数据的强一致性</strong>。</li>
+<li>3、资源隔离困难，经常流量不均衡，尤其是多个业务共用集群的时候。数据不知道在哪里，针对热点数据，也无法通过专项优化完成。 </li>
+<li>4、从库是完全的冷备，无法分担读操作，真是太太浪费了。需要做额外工作。</li>
+<li>5、MultiOp和Pipeline支持有限，老代码要是进行架构升级，要小心了。</li>
+<li>6、数据迁移是基于key而不是基于slot的，过程较慢。</li>
+</ul>
+</li>
+<li>3.0后推出的集群架构</li>
+<li>架构图</li>
+</ul>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%9B%BE.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" />
+
+<ul>
+<li>结构细节<ul>
+<li>所有的redisj节点彼此互联(PING-PONG机制)，内部使用二进制协议优化传输速度和带宽</li>
+<li>某个节点的fail是通过集群超过半数的节点检测失效时才失效</li>
+<li>客户端与redis节点直连，不需要中间代理层，客户端不需要连接所有节点，连接集群中任何一个可用节点即可</li>
+<li>redis-cluster把所有的物理节点映射到[0-16383]slot上,cluster 负责维护</li>
+<li>Redis 集群中内置了 16384 个哈希槽，当需要在 Redis 集群中放置一个 key-value 时，redis 先对 key 使用 crc16 算法算出一个结果，然后把结果对 16384 求余数，这样每个 key 都会对应一个编号在 0-16383 之间的哈希槽，redis 会根据节点数量大致均等的将哈希槽映射到不同的节点</li>
+</ul>
+</li>
+</ul>
+<h5 id="Redis-Cluster投票-容错"><a href="#Redis-Cluster投票-容错" class="headerlink" title="Redis Cluster投票:容错"></a>Redis Cluster投票:容错</h5><ul>
+<li>最小节点数：3台</li>
+<li>节点失效判断：集群中所有master参与投票,如果半数以上master节点与其中一个master节点通信超时(<strong>cluster-node-timeout</strong>),认为该master节点挂掉.</li>
+<li><strong>集群失效判断</strong>:什么时候整个集群不可用(cluster_state:fail)?<ul>
+<li>如果集群任意master挂掉,且当前master没有slave，则集群进入fail状态。也可以理解成集群的[0-16383]slot映射不完全时进入fail状态。</li>
+<li>如果集群超过半数以上master挂掉，无论是否有slave，集群进入fail状态</li>
+</ul>
+</li>
+</ul>
+<h5 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h5><ul>
+<li>redis集群需要使用集群管理脚本redis-trib.rb，它的执行相应依赖ruby环境</li>
+</ul>
+<h4 id="Redis消息模式"><a href="#Redis消息模式" class="headerlink" title="Redis消息模式"></a>Redis消息模式</h4><h5 id="队列模式"><a href="#队列模式" class="headerlink" title="队列模式"></a>队列模式</h5><ul>
+<li><p>使用list类型的lpush和rpop实现消息队列</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E6%B6%88%E6%81%AF%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+</li>
+<li><p>注意事项</p>
+<ul>
+<li>消息接收方如果不知道队列中是否有消息，会一直发送rpop命令，如果这样的话，会每一次都建立一次连接，这样显然不好，可以使用brpop命令，它如果从队列中取不出来数据，会一直阻塞，在一定范围内没有取出则返回null</li>
+</ul>
+</li>
+</ul>
+<h5 id="发布订阅模式"><a href="#发布订阅模式" class="headerlink" title="发布订阅模式"></a>发布订阅模式</h5><ul>
+<li>发布消息</li>
+<li></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-2非关系型数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/" class="category-chain-item">redis</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>3redis集群</div>
+      <div>https://x-leonidas.github.io/2024/10/28/05数据库/05-2非关系型数据库/redis/3redis集群/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/28/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/4RedisF&amp;Q/" title="4RedisF&amp;Q">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4RedisF&amp;Q</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/28/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/2redis%E8%BF%9B%E9%98%B6/" title="2redis进阶">
+                        <span class="hidden-mobile">2redis进阶</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

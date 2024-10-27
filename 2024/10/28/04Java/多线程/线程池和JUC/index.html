@@ -1,0 +1,1219 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="线程池概念 线程池就是首先创建一些线程，它们的集合称为线程池。使用线程池可以很好地提高性能，线程池在系统启动时即创建大量空闲的线程，程序将一个任务传给线程池，线程池就会启动一条线程来执行这个任务，执行结束以后，该线程并不会死亡，而是再次返回线程池中成为空闲状态，等待执行下一个任务。  工作机制 在线程池的编程模式下，任务是提交给整个线程池，而不是直接提交给某个线程，线程池在拿到任务后，就在内部寻找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池和JUC">
+<meta property="og:url" content="https://x-leonidas.github.io/2024/10/28/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="线程池概念 线程池就是首先创建一些线程，它们的集合称为线程池。使用线程池可以很好地提高性能，线程池在系统启动时即创建大量空闲的线程，程序将一个任务传给线程池，线程池就会启动一条线程来执行这个任务，执行结束以后，该线程并不会死亡，而是再次返回线程池中成为空闲状态，等待执行下一个任务。  工作机制 在线程池的编程模式下，任务是提交给整个线程池，而不是直接提交给某个线程，线程池在拿到任务后，就在内部寻找">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ReentrantLock%20%E7%9A%84%E7%9F%A5%E8%AF%86%E9%93%BE.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015153937706.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154201686.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154540836.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154904690.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015155439466.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015155908167.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015160044273.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015165058215.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015165746663.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170011091.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170332399.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170434875.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%9F%BA%E4%BA%8EAQS%E5%AE%9E%E7%8E%B0%E7%9A%84%E9%94%81.png">
+<meta property="article:published_time" content="2024-10-27T16:49:42.099Z">
+<meta property="article:modified_time" content="2024-10-27T16:52:08.981Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0.png">
+  
+  
+  
+  <title>线程池和JUC - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="线程池和JUC"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-28 00:49" pubdate>
+          2024年10月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          112 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">线程池和JUC</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>线程池就是首先创建一些线程，它们的集合称为线程池。使用线程池可以很好地提高性能，线程池在系统启动时即创建大量空闲的线程，程序将一个任务传给线程池，线程池就会启动一条线程来执行这个任务，执行结束以后，该线程并不会死亡，而是再次返回线程池中成为空闲状态，等待执行下一个任务。</li>
+</ul>
+<h3 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h3><ul>
+<li>在线程池的编程模式下，任务是提交给整个线程池，而不是直接提交给某个线程，线程池在拿到任务后，就在内部寻找是否有空闲的线程，如果有，则将任务交给某个空闲的线程。</li>
+<li>一个线程同时只能执行一个任务，但可以同时向一个线程池提交多个任务。</li>
+</ul>
+<h3 id="线程池的主要参数"><a href="#线程池的主要参数" class="headerlink" title="线程池的主要参数"></a>线程池的主要参数</h3><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0.png" srcset="/img/loading.gif" lazyload style="zoom:70%;" />
+</li>
+<li><p>corePoolSize（线程池基本大小)</p>
+<ul>
+<li>当向线程池提交一个任务时，若线程池已创建的线程数小于corePoolSize，即便此时存在空闲线程，也会通过创建一个新线程来执行该任务，直到已创建的线程数大于或等于corePoolSize时，（除了利用提交新任务来创建和启动线程（按需构造），也可以通过 prestartCoreThread() 或 prestartAllCoreThreads() 方法来提前启动线程池中的基本线程）</li>
+</ul>
+</li>
+<li><p>maximumPoolSize（线程池最大个数）</p>
+<ul>
+<li>线程池所允许的最大线程个数。当队列满了，且已创建的线程数小于maximumPoolSize，则线程池会创建新的线程来执行任务。另外，对于无界队列，可忽略该参数。</li>
+</ul>
+</li>
+<li><p>keepAliveTime（线程存活保持时间）+ 生存时间单位</p>
+<ul>
+<li>当线程池中线程数大于核心线程数时，线程的空闲时间如果超过线程存活时间，那么这个线程就会被销毁，直到线程池中的线程数小于等于核心线程数。</li>
+<li>在 ThreadPoolExecutor 中的方法 allowCoreThreadTimeOut(boolean value) 设置为 true时，也作用于核心线程。</li>
+</ul>
+</li>
+<li><p>workQueue（任务队列）</p>
+<ul>
+<li><p>用于传输和保存等待执行任务的阻塞队列</p>
+</li>
+<li><p>通过线程池的 execute(Runnable command) 方法会将任务 Runnable 存储在队列中。</p>
+</li>
+<li><p>常用的几个阻塞队列：</p>
+<ol>
+<li><p><strong>LinkedBlockingQueue</strong></p>
+<p>链式阻塞队列，底层数据结构是链表，默认大小是<code>Integer.MAX_VALUE</code>，也可以指定大小。</p>
+</li>
+<li><p><strong>ArrayBlockingQueue</strong></p>
+<p>数组阻塞队列，底层数据结构是数组，需要指定队列的大小。</p>
+</li>
+<li><p><strong>SynchronousQueue</strong></p>
+<p>同步队列，内部容量为0，每个put操作必须等待一个take操作，反之亦然。</p>
+</li>
+<li><p><strong>DelayQueue</strong></p>
+<p>延迟队列，该队列中的元素只有当其指定的延迟时间到了，才能够从队列中获取到该元素。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>threadFactory（线程工厂 非必须参数）</p>
+<ul>
+<li>用于创建新线程。threadFactory创建的线程也是采用new Thread()方式，threadFactory创建的线程名都具有统一的风格：pool-m-thread-n（m为线程池的编号，n为线程池内的线程编号）</li>
+</ul>
+</li>
+<li><p>handler（线程饱和策略 非必须参数）</p>
+<ul>
+<li>当线程池和队列都满了，再加入线程会执行此策略。 JDK默认提供了四种<ul>
+<li>Abort:<strong>默认拒绝处理策略</strong>，直接抛出RejectedExecutionException异常</li>
+<li>Discard:扔掉，丢弃任务且不抛异常</li>
+<li>DiscardOldest：丢弃队列头部（最旧的）的任务，然后重新尝试执行程序（如果再次失败，重复此过程）</li>
+<li>CallerRuns：由调用线程处理该任务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="调度线程"><a href="#调度线程" class="headerlink" title="调度线程"></a>调度线程</h3><ul>
+<li>线程池本身有一个调度线程，这个线程就是用于管理布控整个线程池里的各种任务和事务，例如创建线程、销毁线程、任务队列管理、线程队列管理等等。<br>故线程池也有自己的状态。<code>ThreadPoolExecutor</code>类中使用了一些<code>final int</code>常量变量来表示线程池的状态 ，分别为RUNNING、SHUTDOWN、STOP、TIDYING 、TERMINATED。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// runState is stored in the high-order bits</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">RUNNING</span>    <span class="hljs-operator">=</span> -<span class="hljs-number">1</span> &lt;&lt; COUNT_BITS;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">SHUTDOWN</span>   <span class="hljs-operator">=</span>  <span class="hljs-number">0</span> &lt;&lt; COUNT_BITS;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">STOP</span>       <span class="hljs-operator">=</span>  <span class="hljs-number">1</span> &lt;&lt; COUNT_BITS;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">TIDYING</span>    <span class="hljs-operator">=</span>  <span class="hljs-number">2</span> &lt;&lt; COUNT_BITS;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">TERMINATED</span> <span class="hljs-operator">=</span>  <span class="hljs-number">3</span> &lt;&lt; COUNT_BITS;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>线程池创建后处于<strong>RUNNING</strong>状态。</li>
+<li>调用shutdown()方法后处于<strong>SHUTDOWN</strong>状态，线程池不能接受新的任务，清除一些空闲worker,不会等待阻塞队列的任务完成。</li>
+<li>调用shutdownNow()方法后处于<strong>STOP</strong>状态，线程池不能接受新的任务，中断所有线程，阻塞队列中没有被执行的任务全部丢弃。此时，poolsize&#x3D;0,阻塞队列的size也为0。</li>
+<li>当所有的任务已终止，ctl记录的”任务数量”为0，线程池会变为<strong>TIDYING</strong>状态。接着会执行terminated()函数。<blockquote>
+<p>ThreadPoolExecutor中有一个控制状态的属性叫<code>ctl</code>，它是一个AtomicInteger类型的变量。线程池状态就是通过AtomicInteger类型的成员变量<code>ctl</code>来获取的。</p>
+<p>获取的<code>ctl</code>值传入<code>runStateOf</code>方法，与<code>~CAPACITY</code>位与运算(<code>CAPACITY</code>是低29位全1的int变量)。</p>
+<p><code>~CAPACITY</code>在这里相当于掩码，用来获取ctl的高3位，表示线程池状态；而另外的低29位用于表示工作线程数</p>
+</blockquote>
+</li>
+<li>线程池处在TIDYING状态时，<strong>执行完terminated()方法之后</strong>，就会由 <strong>TIDYING -&gt; TERMINATED</strong>， 线程池被设置为TERMINATED状态。</li>
+</ul>
+</li>
+</ul>
+<h3 id="线程池流程"><a href="#线程池流程" class="headerlink" title="线程池流程"></a>线程池流程</h3><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload style="zoom:70%;" />
+
+<ul>
+<li>当调用 execute() 方法添加一个任务时，线程池会做如下判断：<br>a)   如果正在运行的线程数量小于 corePoolSize，那么马上创建线程运行这个任务；<br>b)   如果正在运行的线程数量大于或等于 corePoolSize，那么将这个任务放入队列；<br>c)   如果这时候队列满了，而且正在运行的线程数量小于 maximumPoolSize，那么还是要创建非核心线程立刻运行这个任务；<br>d)   如果队列满了，而且正在运行的线程数量大于或等于 maximumPoolSize，那么线程池会抛出异常 RejectExecutionException。</li>
+</ul>
+<h3 id="线程复用"><a href="#线程复用" class="headerlink" title="线程复用"></a>线程复用</h3><ul>
+<li>ThreadPoolExecutor在创建线程时，会将线程封装成<strong>工作线程worker</strong>,并放入<strong>工作线程组</strong>中，然后这个worker反复从阻塞队列中拿任务去执行</li>
+</ul>
+<h3 id="四种常见的线程池"><a href="#四种常见的线程池" class="headerlink" title="四种常见的线程池"></a>四种常见的线程池</h3><h4 id="newCachedThreadPool"><a href="#newCachedThreadPool" class="headerlink" title="newCachedThreadPool"></a>newCachedThreadPool</h4><ul>
+<li>用的是<strong>SynchronousQueue</strong>队列</li>
+<li>用来创建一个可以无限扩大的线程池，适用于负载较轻的场景，执行短期异步任务。（可以使得任务快速得到执行，因为任务时间执行短，可以很快结束，也不会造成cpu过度切换）</li>
+<li>是一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。对于执行很多短期异步任务的程序而言，这些线程池通常可提高程序性能。调用 execute() 将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。因此，长时间保持空闲的线程池不会使用任何资源。注意，可以使用 ThreadPoolExecutor 构造方法创建具有类似属性但细节不同（例如超时参数）的线程池。</li>
+</ul>
+<h4 id="newFixedThreadPool"><a href="#newFixedThreadPool" class="headerlink" title="newFixedThreadPool"></a>newFixedThreadPool</h4><ul>
+<li>创建一个固定大小的线程池，因为采用无界的阻塞队列，所以实际线程数量永远不会变化，适用于负载较重的场景，对当前线程数量进行限制。（保证线程数可控，不会造成线程过多，导致系统负载更为严重）</li>
+<li>线程池的大小一旦达到最大值就会保持不变，如果某个线程因为执行异常而结束，那么线程池会补充一个新线程。</li>
+</ul>
+<h4 id="newSingleThreadExecutor"><a href="#newSingleThreadExecutor" class="headerlink" title="newSingleThreadExecutor"></a>newSingleThreadExecutor</h4><ul>
+<li>创建一个单线程的线程池，适用于需要保证顺序执行各个任务。所有的任务都是串行执行的。</li>
+<li>如果这个唯一的线程因为异常结束，那么会有一个新的线程来替代它，此线程池保证所有任务的执行顺序按照任务的提交顺序执行。</li>
+</ul>
+<h4 id="newScheduledThreadPool"><a href="#newScheduledThreadPool" class="headerlink" title="newScheduledThreadPool"></a>newScheduledThreadPool</h4><ul>
+<li>创建一个大小无限的线程池，此线程池支持定时以及周期性执行任务的需求。 适用于执行延时或者周期性任务</li>
+<li>指定了核心线程数量的线程池，但是它能容纳近乎无限（Integer.MaxValue）的普通线程数量</li>
+</ul>
+<h3 id="WorkStealingPool"><a href="#WorkStealingPool" class="headerlink" title="WorkStealingPool"></a>WorkStealingPool</h3><ul>
+<li>一种特殊类型的ForkJoinPool，使用当前系统的可用线程，默认的线程工厂，没有拒绝处理器的同步线程池</li>
+</ul>
+<h3 id="execute-和submit-方法"><a href="#execute-和submit-方法" class="headerlink" title="execute()和submit()方法"></a>execute()和submit()方法</h3><ul>
+<li>execute()，执行一个任务，没有返回值。</li>
+<li>submit()，提交一个线程任务，有返回值。</li>
+<li>submit(Callable<T> task)能获取到它的返回值，通过future.get()获取（阻塞直到任务执行完）。一般使用FutureTask+Callable配合使用（IntentService中有体现）。</li>
+<li>submit(Runnable task, T result)能通过传入的载体result间接获得线程的返回值。</li>
+<li>submit(Runnable task)则是没有返回值的，就算获取它的返回值也是null。Future.get方法会使取结果的线程进入阻塞状态，知道线程执行完成之后，唤醒获取结果的线程，然后返回结果。</li>
+</ul>
+<h3 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h3><ul>
+<li>守护线程是程序运行时在后台提供服务的线程，不属于程序中不可或缺的部分。</li>
+<li>当所有非守护线程结束时，程序也就终止，同时会杀死所有守护线程。main() 属于非守护线程。</li>
+<li>在线程启动之前使用 setDaemon() 方法可以将一个线程设置为守护线程。</li>
+<li><pre><code class="java">public static void main(String[] args) &#123;
+    Thread thread = new Thread(new MyRunnable());
+    thread.setDaemon(true);
+&#125;
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs processing">### 线程池的关闭<br>+ <span class="hljs-title function_">shutdown</span>()：不会立即的终止线程池，而是要等所有任务缓存队列中的任务都执行完后才终止，但再也不会接受新的任务。<br>+ <span class="hljs-title function_">shutdownNow</span>()：立即终止线程池，并尝试打断正在执行的任务，并且清空任务缓存队列，返回尚未执行的任务。相当于调用每个线程的 <span class="hljs-title function_">interrupt</span>() 方法。<br>### 如何配置线程池<br>+ CPU密集型任务<br>    + 尽量使用较小的线程池，一般为CPU核心数+<span class="hljs-number">1</span>。 因为CPU密集型任务使得CPU使用率很高，若开过多的线程数，会造成CPU过度切换。<br>+ IO密集型任务<br>    + 可以使用稍大的线程池，一般为<span class="hljs-number">2</span>\*CPU核心数。 IO密集型任务CPU使用率并不高，因此可以让CPU在等待IO的时候有其他线程去处理别的任务，充分利用CPU时间。<br>+ 混合型任务<br>    + 可以将任务分成IO密集型和CPU密集型任务，然后分别用不同的线程池去处理。 只要分完之后两个任务的执行时间相差不大，那么就会比串行执行来的高效。<br>    + 因为如果划分之后两个任务执行时间有数据级的差距，那么拆分没有意义。因为先执行完的任务就要等后执行完的任务，最终的时间仍然取决于后执行完的任务，而且还要加上任务拆分与合并的开销，得不偿失。<br>## JUC<br>### Future接口<br>+ `Future` 是异步计算结果的容器接口，它提供了在等待异步计算完成时检查计算是否完成的状态，并在异步计算完成后获取计算结果而且只能通过 `<span class="hljs-built_in">get</span>` 方法获取结果，如果异步计算没有完成则阻塞，当然你可以在异步计算完成前通过 `cancel` 方法取消，如果异步计算被取消则标记一个取消的状态。如果希望异步计算可以被取消而且不提供可用的计算结果，如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 `Future&lt;?&gt;` 形式类型、并返回 `<span class="hljs-literal">null</span>` 作为底层任务的结果。<br>+ <span class="hljs-type">boolean</span> <span class="hljs-title function_">cancel</span>(<span class="hljs-type">boolean</span> mayInterruptIfRunning)：试图取消对此任务的执行。如果任务已完成、或已取消，或者由于某些其他原因而无法取消，则此尝试将失败。当调用 <span class="hljs-title function_">cancel</span>() 时，如果调用成功，而此任务尚未启动，则此任务将永不运行。如果任务已经启动，则 mayInterruptIfRunning 参数确定是否应该以试图停止任务的方式来中断执行此任务的线程。此方法返回后，对 <span class="hljs-title function_">isDone</span>() 的后续调用将始终返回 <span class="hljs-literal">true</span>。如果此方法返回 <span class="hljs-literal">true</span>，则对 <span class="hljs-title function_">isCancelled</span>() 的后续调用将始终返回 <span class="hljs-literal">true</span>。<br>+ <span class="hljs-type">boolean</span> <span class="hljs-title function_">isCancelled</span>()：如果在任务正常完成前将其取消，则返回 <span class="hljs-literal">true</span>。<br>+ <span class="hljs-type">boolean</span> <span class="hljs-title function_">isDone</span>()：如果任务已完成，则返回 <span class="hljs-literal">true</span>。 可能由于正常终止、异常或取消而完成，在所有这些情况中，此方法都将返回 <span class="hljs-literal">true</span>。<br>+ V <span class="hljs-built_in">get</span>()<span class="hljs-keyword">throws</span> InterruptedException,ExecutionException：如有必要，等待计算完成，然后获取其结果。<br>+ V <span class="hljs-built_in">get</span>(<span class="hljs-type">long</span> timeout,TimeUnit unit) <span class="hljs-keyword">throws</span> InterruptedException, ExecutionException, TimeoutException： 如有必要，最多等待为使计算完成所给定的时间之后，获取其结果（如果结果可用）。<br>### FutureTask<br>+ FutureTask 实现了 Runnable 和 Future，所以兼顾两者优点，既可以在 Thread 中使用，又可以在 ExecutorService 中使用。<br>```JAVA<br>Callable&lt;<span class="hljs-built_in">String</span>&gt; callable = <span class="hljs-keyword">new </span><span class="hljs-class title_">Callable</span>&lt;<span class="hljs-built_in">String</span>&gt;() &#123;<br>    @Override<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">String</span> <span class="hljs-title function_">call</span>() <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;someThing&quot;</span>;<br>    &#125;&#125;;<br>FutureTask&lt;<span class="hljs-built_in">String</span>&gt; task = <span class="hljs-keyword">new </span><span class="hljs-class title_">FutureTask</span>&lt;<span class="hljs-built_in">String</span>&gt;(callable);<br>Thread t = <span class="hljs-keyword">new </span><span class="hljs-class title_">Thread</span>(task);<br>t.<span class="hljs-property">start</span>(); <span class="hljs-comment">// 启动线程</span><br>task.<span class="hljs-property">cancel</span>(<span class="hljs-literal">true</span>); <span class="hljs-comment">// 取消线程</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li></li>
+</ul>
+<h2 id="LOCK"><a href="#LOCK" class="headerlink" title="LOCK"></a>LOCK</h2><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ReentrantLock%20%E7%9A%84%E7%9F%A5%E8%AF%86%E9%93%BE.png" srcset="/img/loading.gif" lazyload alt="ReentrantLock 的知识链"></p>
+</li>
+<li><p>API</p>
+<ul>
+<li><pre><code class="java">void lock() // 如果锁可用就获得锁，如果锁不可用就阻塞直到锁释放
+void lockInterruptibly() // 和 lock()方法相似, 但阻塞的线程可中断，抛出   		java.lang.InterruptedException异常
+boolean tryLock() // 非阻塞获取锁;尝试获取锁，如果成功返回true
+boolean tryLock(long timeout, TimeUnit timeUnit) //带有超时时间的获取锁方法
+void unlock() // 释放锁
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><span class="hljs-comment">### 锁的分类</span><br><span class="hljs-comment">#### 可重入锁和非可重入锁</span><br>+ 所谓重入锁，顾名思义。就是支持重新进入的锁，也就是说这个锁支持一个<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>线程对资源重复加锁<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>。<br>  synchronized关键字就是使用的重入锁。比如说，你在一个synchronized实例方法里面调用另一个本实例的synchronized实例方法，它可以重新进入这个锁，不会出现任何异常。<br>  如果我们自己在继承AQS实现同步器的时候，没有考虑到占有锁的线程再次获取锁的场景，可能就会导致线程阻塞，那这个就是一个“非可重入锁”。<br>  `ReentrantLock`的中文意思就是可重入锁。也是本文后续要介绍的重点类。<br><span class="hljs-comment">#### 公平锁和非公平锁</span><br>+ 这里的“公平”，其实通俗意义来说就是“先来后到”，也就是FIFO。如果对一个锁来说，先对锁获取请求的线程一定会先被满足，后对锁获取请求的线程后被满足，那这个锁就是公平的。反之，那就是不公平的。<br>  一般情况下，<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>非公平锁能提升一定的效率。但是非公平锁可能会发生线程饥饿（有一些线程长时间得不到锁）的情况<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>。所以要根据实际的需求来选择非公平锁和公平锁。<br>  ReentrantLock支持非公平锁和公平锁两种。<br><span class="hljs-comment">#### 读写锁和排他锁</span><br>+ 我们前面讲到的synchronized用的锁和ReentrantLock，其实都是“排它锁”。也就是说，这些锁在同一时刻只允许一个线程进行访问。<br>  而读写锁可以在同一时刻允许多个读线程访问。Java提供了ReentrantReadWriteLock类作为读写锁的默认实现，内部维护了两个锁：一个读锁，一个写锁。通过分离读锁和写锁，使得在“读多写少”的环境下，大大地提高了性能。<br>  &gt; 注意，即使用读写锁，在写线程访问时，所有的读线程和其它写线程均被阻塞。<br>  <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>可见，只是synchronized是远远不能满足多样化的业务对锁的要求的<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br><span class="hljs-comment">### 接口Condition/Lock/ReadWriteLock</span><br><span class="hljs-comment">#### Condition (等待队列)</span><br>+ 本质为不同的等待队列，await后，放入不同的等待队列，使用signalAll()唤醒所有的等待队列<br>  + 通过可重入锁来获取不同的等待队列，将等待线程放入不同的等待队列中去等待<br><span class="hljs-comment">##### Objec监视器和condition对比</span><br>+ 每个对象都可以用继承自`Object`的<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>wait/notify<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>方法来实现<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>等待/通知机制<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>。而Condition接口也提供了类似Object监视器的方法，通过与<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Lock<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>配合来实现等待/通知模式。<br>+ |<span class="hljs-string"> 对比项                                         </span>|<span class="hljs-string"> Object监视器                  </span>|<span class="hljs-string"> Condition                                                   </span>|<br>  |<span class="hljs-string"> ---------------------------------------------- </span>|<span class="hljs-string"> ----------------------------- </span>|<span class="hljs-string"> ----------------------------------------------------------- </span>|<br>  |<span class="hljs-string"> 前置条件                                       </span>|<span class="hljs-string"> 获取对象的锁                  </span>|<span class="hljs-string"> 调用Lock.lock获取锁，调用Lock.newCondition获取Condition对象 </span>|<br>  |<span class="hljs-string"> 调用方式                                       </span>|<span class="hljs-string"> 直接调用，比如object.notify() </span>|<span class="hljs-string"> 直接调用，比如condition.await()                             </span>|<br>  |<span class="hljs-string"> 等待队列的个数                                 </span>|<span class="hljs-string"> 一个                          </span>|<span class="hljs-string"> 多个                                                        </span>|<br>  |<span class="hljs-string"> 当前线程释放锁进入等待状态                     </span>|<span class="hljs-string"> 支持                          </span>|<span class="hljs-string"> 支持                                                        </span>|<br>  |<span class="hljs-string"> 当前线程释放锁进入等待状态，在等待状态中不中断 </span>|<span class="hljs-string"> 不支持                        </span>|<span class="hljs-string"> 支持                                                        </span>|<br>  |<span class="hljs-string"> 当前线程释放锁并进入超时等待状态               </span>|<span class="hljs-string"> 支持                          </span>|<span class="hljs-string"> 支持                                                        </span>|<br>  |<span class="hljs-string"> 当前线程释放锁并进入等待状态直到将来的某个时间 </span>|<span class="hljs-string"> 不支持                        </span>|<span class="hljs-string"> 支持                                                        </span>|<br>  |<span class="hljs-string"> 唤醒等待队列中的一个线程                       </span>|<span class="hljs-string"> 支持                          </span>|<span class="hljs-string"> 支持                                                        </span>|<br>  |<span class="hljs-string"> 唤醒等待队列中的全部线程                       </span>|<span class="hljs-string"> 支持                          </span>|<span class="hljs-string"> 支持                                                        </span>|<br>+ Condtion中的方法<br>  + |<span class="hljs-string"> 方法名称               </span>|<span class="hljs-string"> 描述                                                         </span>|<br>    |<span class="hljs-string"> ---------------------- </span>|<span class="hljs-string"> ------------------------------------------------------------ </span>|<br>    |<span class="hljs-string"> await()                </span>|<span class="hljs-string"> 当前线程进入等待状态直到被通知（signal）或者中断；当前线程进入运行状态并从await()方法返回的场景包括：（1）其他线程调用相同Condition对象的signal/signalAll方法，并且当前线程被唤醒；（2）其他线程调用interrupt方法中断当前线程； </span>|<br>    |<span class="hljs-string"> awaitUninterruptibly() </span>|<span class="hljs-string"> 当前线程进入等待状态直到被通知，在此过程中对中断信号不敏感，不支持中断当前线程 </span>|<br>    |<span class="hljs-string"> awaitNanos(long)       </span>|<span class="hljs-string"> 当前线程进入等待状态，直到被通知、中断或者超时。如果返回值小于等于0，可以认定就是超时了 </span>|<br>    |<span class="hljs-string"> awaitUntil(Date)       </span>|<span class="hljs-string"> 当前线程进入等待状态，直到被通知、中断或者超时。如果没到指定时间被通知，则返回true，否则返回false </span>|<br>    |<span class="hljs-string"> signal()               </span>|<span class="hljs-string"> 唤醒一个等待在Condition上的线程，被唤醒的线程在方法返回前必须获得与Condition对象关联的锁 </span>|<br>    |<span class="hljs-string"> signalAll()            </span>|<span class="hljs-string"> 唤醒所有等待在Condition上的线程，能够从await()等方法返回的线程必须先获得与Condition对象关联的锁 </span>|<br><span class="hljs-comment">#### ReadWriteLock(读写锁)</span><br>+ ReadWriteLock支持锁降级，可以加上写锁在加读锁但不允许锁升级，即读锁后不能加写锁<br>+ ReetrantReadWriteLock读写锁的效率明显高于synchronized关键字<br>+ 可重入实现：ReentranLockReadWriteLock（可重入读写锁）<br>+ 读写锁。读锁是共享锁、写锁是独占锁<br><span class="hljs-comment">#### LOCK</span><br>+ Lock接口里面有一些获取锁和释放锁的方法声明<br><span class="hljs-comment">###  ReentrantLock(可重入锁)</span><br><br>+ ![ReentrantLock 的知识链](https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ReentrantLock%20%E7%9A%84%E7%9F%A5%E8%AF%86%E9%93%BE.png)<br><br>+ ReentrantLock是一个非抽象类，它是<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>Lock<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>接口的JDK默认实现<br>+ ReentrantLock 使用起来更加灵活，可操作性也更大，但一定要在finally 中释放锁，目的是保证在获取锁之后，最终能够被释放。同时不要将获取锁的过程写在try 里面。<br>+ 可以指定为公平锁 ，new ReentrantLock(true)，默认为非公平的<br>  + 非公平锁：如果当前没有线程占有锁，当前线程直接通过cas指令占有锁<br>  + 公平锁：公平锁获取锁的方式为如果当前线程是等待队列的第一个或者等待队列为空或为当前占有线程，则通过cas指令设置state为1或增加。公平锁加锁的线程全部是按照先来后到的顺序，依次进入等待队列中排队的，不会盲目的胡乱抢占加锁。<br>+ CAS原理实现<br>+ ReentrantLock 是基于 Lock 实现的<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>可重入锁<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>，所有的 Lock 都是基于 AQS 实现的，AQS 和 Condition 各自维护不同的对象，在使用 Lock 和 Condition 时，其实就是两个队列的互相移动。它所提供的共享锁、互斥锁都是基于对 state 的操作。而它的可重入是因为实现了同步器 Sync，在 Sync 的两个实现类中，包括了公平锁和非公平锁，ReentrantLock的锁是”独占“的，也就是说，它的锁都是”排他锁“，不能共享。<br>+ 当通过lockInterruptibly()方法获取某个锁时，如果不能获取到，只有进行等待的情况下，是可以响应中断的。<br><span class="hljs-comment">#### ReentrantLock与synchronized的区别</span><br>+ ReentrantLock等待时可中断，当持有锁的线程长时间不释放锁的时候，等待中的线程可以选择放弃等待，转而处理其他的任务。<br>+ ReentranLock需要显式的加锁和解锁<br>+ ReentranLock中有多个condition队列，而synchronized只有一个等待队列<br>+ 公平锁：synchronized和ReentrantLock默认都是非公平锁，但是ReentrantLock可以通过构造函数传参改变。只不过使用公平锁的话会导致性能急剧下降。<br>+ 另一种说法<br>  + <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>锁的实现<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>    + synchronized 是 JVM 实现的，而 ReentrantLock 是 JDK 实现的。<br>  + <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>等待可中断<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>    + 当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。ReentrantLock 可中断，而 synchronized 不行<br>  + <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>公平锁<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>    + 公平锁是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。synchronized 中的锁是非公平的，ReentrantLock 默认情况下也是非公平的，但是也可以是公平的。<br>  + <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>锁绑定多个条件<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>    + 一个 ReentrantLock 可以同时绑定多个 Condition 对象。<br><span class="hljs-comment">### ReentrantReadWriteLock</span><br>+ 它是<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>ReadWriteLock<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>接口的JDK默认实现。它与ReentrantLock的功能类似，同样是可重入的，支持非公平锁和公平锁。不同的是，它还支持”读写锁“。<br>+ 在“写”操作的时候，其它线程不能写也不能读。我们称这种现象为“写饥饿”, 具体情况一种是虽然很早申请写锁，但要等到所有读线程都执行后才能获取到写锁<br><span class="hljs-comment">### StampedLock(读写增强锁)</span><br>+ `StampedLock`和`ReadWriteLock`相比，改进之处在于：读的过程中也允许获取写锁后写入！这样一来，我们读的数据就可能不一致，所以，需要一点额外的代码来判断读的过程中是否有写入，这种读锁是一种乐观锁。<br>+ 怎么避免的写饥饿问题（乐观读锁）<br>  + <span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>在读的时候如果发生了写，应该通过重试的方式来获取新的值，而不应该阻塞写操作。这种模式也就是典型的无锁编程思想，和CAS自旋的思想一样<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>  + 乐观读锁的意思就是先假定在这个锁获取期间，共享变量不会被改变，既然假定不会被改变，那就不需要上锁。在获取乐观读锁之后进行了一些操作，然后又调用了validate方法，这个方法就是用来验证tryOptimisticRead之后，是否有写操作执行过，如果有，则获取一个悲观读锁，这里的悲观读锁和ReentrantReadWriteLock中的读锁类似，也是个共享锁。<br>+ StampedLock还把读锁分为了“乐观读锁”和“悲观读锁”两种。<br>+ 不可重入锁,不支持wait/notify机制<br>+ ```java<br>  public double distanceFromOrigin() &#123;<br>      // 获得一个乐观读锁<br>      long stamp = stampedLock.tryOptimisticRead();<br>      // 注意下面两行代码不是原子操作<br>      // 假设x,y = (100,200)<br>      double currentX = x;<br>      // 此处已读取到x=100，但x,y可能被写线程修改为(300,400)<br>      double currentY = y;<br>      // 此处已读取到y，如果没有写入，读取是正确的(100,200)<br>      // 如果有写入，读取是错误的(100,400)<br>      // 检查乐观读锁后是否有其他写锁发生<br>      if (!stampedLock.validate(stamp)) &#123;<br>          // 获取一个悲观读锁<br>          stamp = stampedLock.readLock();<br>          try &#123;<br>              currentX = x;<br>              currentY = y;<br>          &#125; finally &#123;<br>              // 释放悲观读锁<br>              stampedLock.unlockRead(stamp);<br>          &#125;<br>      &#125;<br>      return Math.sqrt(currentX <span class="hljs-symbol">*</span> currentX + currentY <span class="hljs-symbol">*</span> currentY);<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="CLH"><a href="#CLH" class="headerlink" title="CLH"></a>CLH</h3><ul>
+<li>CLH 是一种基于单向链表的高性能、公平的自旋锁。AQS 中的队列是 CLH 变体的虚拟双向队列（FIFO），AQS 是通过将每条请求共享资源的线程封装成一个节点来实现锁的分配。</li>
+<li><pre><code class="java">public class CLHLock implements Lock &#123;
+
+    private final ThreadLocal&lt;CLHLock.Node&gt; prev;
+    private final ThreadLocal&lt;CLHLock.Node&gt; node;
+    private final AtomicReference&lt;CLHLock.Node&gt; tail = new AtomicReference&lt;&gt;(new CLHLock.Node());
+
+    private static class Node &#123;
+        private volatile boolean locked;
+    &#125;
+
+    public CLHLock() &#123;
+        this.prev = ThreadLocal.withInitial(() -&gt; null);
+        this.node = ThreadLocal.withInitial(CLHLock.Node::new);
+    &#125;
+
+
+    @Override
+    public void lock() &#123;
+
+        // Thread local 拿到节点
+        final Node node = this.node.get();
+        node.locked = true;
+         // 拿到以前的tail 节点
+        Node pred_node = this.tail.getAndSet(node);
+        this.prev.set(pred_node);
+        // 自旋
+        while (pred_node.locked) &#123;
+        &#125;
+    &#125;
+
+    @Override
+    public void unlock() &#123;
+        final Node node = this.node.get();
+        node.locked = false;
+        // 是否会有两个重复的node在链表中
+        this.node.set(this.prev.get());
+    &#125;
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException &#123;
+    &#125;
+
+    @Override
+    public boolean tryLock() &#123;
+        return false;
+    &#125;
+
+    @Override
+    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException &#123;
+        return false;
+    &#125;
+
+    @Override
+    public Condition newCondition() &#123;
+        return null;
+    &#125;
+
+&#125;
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><code class="hljs gradle">  <br>### MCS LOCK<br>+ 它也是一种基于链表的可扩展、高性能、公平的自旋锁，但与 CLH 不同。它是真的有下一个节点 <span class="hljs-keyword">next</span>，添加这个真实节点后，它就可以只在本地变量上自旋，而 CLH 是前驱节点的属性上自旋<br>+ ```java<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> MCSLock <span class="hljs-keyword">implements</span> Lock &#123;<br>  <br>      <span class="hljs-keyword">private</span> AtomicReference&lt;MCSLock.Node&gt; tail = <span class="hljs-keyword">new</span> AtomicReference&lt;&gt;(<span class="hljs-keyword">null</span>);<br>      ;<br>      <span class="hljs-keyword">private</span> ThreadLocal&lt;MCSLock.Node&gt; node;<br>  <br>      <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> Node &#123;<br>          <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">boolean</span> locked = <span class="hljs-keyword">false</span>;<br>          <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> Node <span class="hljs-keyword">next</span> = <span class="hljs-keyword">null</span>;<br>      &#125;<br>  <br>      <span class="hljs-keyword">public</span> MCSLock() &#123;<br>          node = ThreadLocal.withInitial(Node::<span class="hljs-keyword">new</span>);<br>      &#125;<br>  <br>      @Override<br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> lock() &#123;<br>          Node node = <span class="hljs-keyword">this</span>.node.get();<br>          Node preNode = tail.getAndSet(node);<br>          <span class="hljs-keyword">if</span> (<span class="hljs-keyword">null</span> == preNode) &#123;<br>              node.locked = <span class="hljs-keyword">true</span>;<br>              <span class="hljs-keyword">return</span>;<br>          &#125;<br>          node.locked = <span class="hljs-keyword">false</span>;<br>          preNode.<span class="hljs-keyword">next</span> = node;<br>          <span class="hljs-keyword">while</span> (!node.locked) &#123;<br>              <span class="hljs-comment">// 自旋</span><br>              ;<br>          &#125;<br>      &#125;<br>  <br>      @Override<br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> unlock() &#123;<br>          Node node = <span class="hljs-keyword">this</span>.node.get();<br>          <span class="hljs-keyword">if</span> (<span class="hljs-keyword">null</span> != node.<span class="hljs-keyword">next</span>) &#123;<br>              node.<span class="hljs-keyword">next</span>.locked = <span class="hljs-keyword">true</span>;<br>              node.<span class="hljs-keyword">next</span> = <span class="hljs-keyword">null</span>;<br>              <span class="hljs-keyword">return</span>;<br>          &#125;<br>          <span class="hljs-keyword">if</span> (tail.compareAndSet(node, <span class="hljs-keyword">null</span>)) &#123;<br>              <span class="hljs-keyword">return</span>;<br>          &#125;<br>          <span class="hljs-keyword">while</span> (node.<span class="hljs-keyword">next</span> == <span class="hljs-keyword">null</span>) &#123;<br>              ;<br>          &#125;<br>      &#125;<br>  <br>      @Override<br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> lockInterruptibly() <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>      &#125;<br>  <br>      @Override<br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> tryLock() &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>      &#125;<br>  <br>      @Override<br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> tryLock(<span class="hljs-keyword">long</span> time, TimeUnit unit) <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>      &#125;<br>  <br>  <br>      @Override<br>      <span class="hljs-keyword">public</span> Condition newCondition() &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>      &#125;<br>  &#125;<br>  <br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h3 id="TicketLock"><a href="#TicketLock" class="headerlink" title="TicketLock"></a>TicketLock</h3><ul>
+<li>TicketLock 就像你去银行、呷哺给你的一个排号卡一样，叫到你号你才能进去。属于严格的公平性实现，但是多处理器系统上，每个进程&#x2F;线程占用的处理器都在读写同一个变量，每次读写操作都需要进行多处理间的缓存同步，非常消耗系统性能。</li>
+<li><pre><code class="java">public class TicketLock implements Lock &#123;
+
+    private AtomicInteger serviceCount = new AtomicInteger(0);
+    private AtomicInteger ticketCount = new AtomicInteger(0);
+    private final ThreadLocal&lt;Integer&gt; owner = new ThreadLocal&lt;&gt;();
+
+    @Override
+    public void lock() &#123;
+        owner.set(ticketCount.getAndIncrement());
+        // 等待unlock，否则会一直在这里自旋
+        while (serviceCount.get() != owner.get()) &#123;
+            ;
+        &#125;
+    &#125;
+
+    @Override
+    public void unlock() &#123;
+        serviceCount.compareAndSet(owner.get(), owner.get() + 1);
+        owner.remove();
+    &#125;
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException &#123;
+    &#125;
+
+    @Override
+    public boolean tryLock() &#123;
+        return false;
+    &#125;
+
+    @Override
+    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException &#123;
+        return false;
+    &#125;
+
+    @Override
+    public Condition newCondition() &#123;
+        return null;
+    &#125;
+&#125;
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta">### LockSupport(较为底层)</span><br>+ park和wait的区别<br>  + `park`不需要获取某个对象的锁<br>  + 因为中断的时候`park`不会抛出`InterruptedException`异常，所以需要在`park`之后自行判断中断状态，然后做额外的处理<br>+ ```<span class="hljs-function">java</span><br><span class="hljs-function">  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">park</span>(<span class="hljs-params">Object blocker</span>)</span>; <span class="hljs-comment">// 暂停当前线程，blocker的作用是在dump线程的时候看到阻塞对象的信息</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">parkNanos</span>(<span class="hljs-params">Object blocker, <span class="hljs-built_in">long</span> nanos</span>)</span>; <span class="hljs-comment">// 暂停当前线程，不过有超时时间的限制</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">parkUntil</span>(<span class="hljs-params">Object blocker, <span class="hljs-built_in">long</span> deadline</span>)</span>; <span class="hljs-comment">// 暂停当前线程，直到某个时间</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">park</span>()</span>; <span class="hljs-comment">// 无期限暂停当前线程</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">parkNanos</span>(<span class="hljs-params"><span class="hljs-built_in">long</span> nanos</span>)</span>; <span class="hljs-comment">// 暂停当前线程，不过有超时时间的限制</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">parkUntil</span>(<span class="hljs-params"><span class="hljs-built_in">long</span> deadline</span>)</span>; <span class="hljs-comment">// 暂停当前线程，直到某个时间</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">unpark</span>(<span class="hljs-params">Thread thread</span>)</span>; <span class="hljs-comment">// 恢复指定线程，如果调用时当前线程的还未进入park，则下一次park该线程不会受阻塞，所以顺序不对时，不会造成死锁</span><br>  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Object <span class="hljs-title">getBlocker</span>(<span class="hljs-params">Thread t</span>)</span>;<br>  <span class="hljs-comment">//调用方式</span><br>  LockSupport.park();<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<h2 id="AQS（AbstractQueuedSynchronizer）"><a href="#AQS（AbstractQueuedSynchronizer）" class="headerlink" title="AQS（AbstractQueuedSynchronizer）"></a>AQS（AbstractQueuedSynchronizer）</h2><ul>
+<li>抽象队列同步器<ul>
+<li>使用FIFO队列</li>
+</ul>
+</li>
+<li>ALQS<ul>
+<li>AQS里面的“资源”是用一个<code>int</code>类型的数据来表示的，有时候我们的业务需求资源的数量超出了<code>int</code>的范围，所以在JDK 1.6 中，多了一个<strong>AQLS</strong>（AbstractQueuedLongSynchronizer）。它的代码跟AQS几乎一样，只是把资源的类型变成了<code>long</code>类型。</li>
+</ul>
+</li>
+<li>AQS是一个用来构建锁和同步器的框架，使用AQS能简单且高效地构造出应用广泛的同步器，比如我们提到的ReentrantLock，Semaphore，ReentrantReadWriteLock，SynchronousQueue，FutureTask等等皆是基于AQS的。</li>
+<li>AQS的设计是基于<strong>模板方法模式</strong><ul>
+<li>isHeldExclusively()：该线程是否正在独占资源。只有用到condition才需要去实现它。</li>
+<li>tryAcquire(int)：独占方式。尝试获取资源，成功则返回true，失败则返回false。</li>
+<li>tryRelease(int)：独占方式。尝试释放资源，成功则返回true，失败则返回false。</li>
+<li>tryAcquireShared(int)：共享方式。尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。</li>
+<li>tryReleaseShared(int)：共享方式。尝试释放资源，如果释放后允许唤醒后续等待结点返回true，否则返回false。</li>
+<li>注意：<ul>
+<li>这些方法虽然都是<code>protected</code>方法，但是它们并没有在AQS具体实现，而是直接抛出异常（这里不使用抽象方法的目的是：避免强迫子类中把所有的抽象方法都实现一遍，减少无用功，这样子类只需要实现自己关心的抽象方法即可，比如 Semaphore 只需要实现 tryAcquire 方法而不用实现其余不需要用到的模版方法）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="AQS的数据结构"><a href="#AQS的数据结构" class="headerlink" title="AQS的数据结构"></a>AQS的数据结构</h3><ul>
+<li>AQS内部使用了一个volatile的变量state来作为资源的标识。<ul>
+<li><pre><code class="java">getState()
+setState()
+compareAndSetState() /** compareAndSetState的实现依赖于Unsafe的compareAndSwapInt()方法。**/
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><code class="hljs arduino">+ AQS类本身实现的是一些排队和阻塞的机制，比如具体线程等待队列的维护（如获取资源失败入队/唤醒出队等）。它内部使用了一个先进先出（FIFO）的双端队列，并使用了两个指针head和tail用于标识队列的头部和尾部。其数据结构如图：<br><br>  + ![img](https:<span class="hljs-comment">//xy-note-pic.oss-cn-beijing.aliyuncs.com/AQS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png)</span><br><br>  + 但它并不是直接储存线程，而是储存拥有线程的Node节点。<br>### 同步队列<br>+ **同步等待队列**。它的作用是保存等待在这个锁上的线程(由于<span class="hljs-built_in">lock</span>()操作引起的等待）。此外，为了维护等待在条件变量上的等待线程，AbstractQueuedSynchronizer又需要再维护一个**条件变量等待队列**，也就是那些由Condition.<span class="hljs-built_in">await</span>()引起阻塞的线程。<br><br>+ &lt;img src=<span class="hljs-string">&quot;https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AQS%E9%98%9F%E5%88%97%E7%BB%93%E6%9E%84.png&quot;</span> alt=<span class="hljs-string">&quot;AQS队列结构&quot;</span> style=<span class="hljs-string">&quot;zoom:80%;&quot;</span> /&gt;<br><br>+ 同步队列<br><br>  &lt;img src=<span class="hljs-string">&quot;https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AQS-1.png&quot;</span> alt=<span class="hljs-string">&quot;img&quot;</span> style=<span class="hljs-string">&quot;zoom:80%;&quot;</span> /&gt;<br><br>+ 设计模式为模板模式（回调函数）<br>+ 关键在于被<span class="hljs-keyword">volatile</span>修饰的state变量。state变量的具体含义由实现类定义解释 。更新同步队列时，使用的CAS的方式 替换锁整个链表的操作<br>+ 提供了一个FIFO队列，可以用于构建锁或者其他相关同步装置的基础框架。使用<span class="hljs-type">int</span>来表示状态，使用方式为继承并实现其方法来管理其状态。对于状态的操作提供了三个原子性的方法<br>  + <span class="hljs-built_in">getState</span>()：获取锁的标志state值<br>  + <span class="hljs-built_in">setState</span>()<br>  + <span class="hljs-built_in">compareAndSetState</span>(<span class="hljs-type">int</span>,<span class="hljs-type">int</span>)<br>+ 继承AQS实现自定义同步器主要实现以下方法<br>  + <span class="hljs-built_in">isHeldExclusively</span>()：该线程是否正在独占资源。只有用到condition才需要去实现它。<br>  + <span class="hljs-built_in">tryAcquire</span>(<span class="hljs-type">int</span>)：独占方式。尝试获取资源，成功则返回<span class="hljs-literal">true</span>，失败则返回<span class="hljs-literal">false</span>。<br>  + <span class="hljs-built_in">tryRelease</span>(<span class="hljs-type">int</span>)：独占方式。尝试释放资源，成功则返回<span class="hljs-literal">true</span>，失败则返回<span class="hljs-literal">false</span>。<br>  + <span class="hljs-built_in">tryAcquireShared</span>(<span class="hljs-type">int</span>)：共享方式。尝试获取资源。负数表示失败；<span class="hljs-number">0</span>表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。<br>  + <span class="hljs-built_in">tryReleaseShared</span>(<span class="hljs-type">int</span>)：共享方式。尝试释放资源，如果释放后允许唤醒后续等待结点返回<span class="hljs-literal">true</span>，否则返回<span class="hljs-literal">false</span>。<br>+ AQS中，<span class="hljs-number">1.9</span>以后有VarHandle，它的作用：<span class="hljs-number">1.</span>普通属性的原子操作 <span class="hljs-number">2.</span>比反射快，直接操纵二进制码 <br>### FIFO队列中的Node<br>+ node的数据结构为双向链表，队列中的元素为Node,Node为保存线程引用和线程状态的容器。每个线程对同步器的访问都可以看作是队列中的一个节点。<br>+ ```java<br>  Node &#123;<br>      <span class="hljs-comment">// 标记一个结点（对应的线程）在共享模式下等待</span><br>      <span class="hljs-type">static</span> <span class="hljs-keyword">final</span> Node SHARED = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>();<br>      <span class="hljs-comment">// 标记一个结点（对应的线程）在独占模式下等待</span><br>      <span class="hljs-type">static</span> <span class="hljs-keyword">final</span> Node EXCLUSIVE = null; <br>  <br>      <span class="hljs-comment">// waitStatus的值，表示该结点（对应的线程）已被取消</span><br>      <span class="hljs-type">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> CANCELLED = <span class="hljs-number">1</span>; <br>      <span class="hljs-comment">// waitStatus的值，表示后继结点（对应的线程）需要被唤醒</span><br>      <span class="hljs-type">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> SIGNAL = <span class="hljs-number">-1</span>;<br>      <span class="hljs-comment">// waitStatus的值，表示该结点（对应的线程）在等待某一条件</span><br>      <span class="hljs-type">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> CONDITION = <span class="hljs-number">-2</span>;<br>      <span class="hljs-comment">/*waitStatus的值，表示有资源可用，新head结点需要继续唤醒后继结点（共享模式下，多线程并发释放资源，而head唤醒其后继结点后，需要把多出来的资源留给后面的结点；设置新的head结点时，会继续唤醒其后继结点）*/</span><br>      <span class="hljs-type">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> PROPAGATE = <span class="hljs-number">-3</span>;<br>  <br>      <span class="hljs-comment">// 等待状态，取值范围，-3，-2，-1，0，1</span><br>      <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> waitStatus;<br>      <span class="hljs-keyword">volatile</span> Node prev; <span class="hljs-comment">// 前驱结点</span><br>      <span class="hljs-keyword">volatile</span> Node next; <span class="hljs-comment">// 后继结点</span><br>      <span class="hljs-keyword">volatile</span> Thread thread; <span class="hljs-comment">// 结点对应的线程</span><br>      Node nextWaiter; <span class="hljs-comment">// 等待队列里下一个等待条件的结点</span><br>  <br>  <br>      <span class="hljs-comment">// 判断共享模式的方法</span><br>      <span class="hljs-keyword">final</span> <span class="hljs-type">boolean</span> <span class="hljs-built_in">isShared</span>() &#123;<br>          <span class="hljs-keyword">return</span> nextWaiter == SHARED;<br>      &#125;<br>  <br>      <span class="hljs-built_in">Node</span>(Thread thread, Node mode) &#123;     <span class="hljs-comment">// Used by addWaiter</span><br>          <span class="hljs-keyword">this</span>.nextWaiter = mode;<br>          <span class="hljs-keyword">this</span>.thread = thread;<br>      &#125;<br>  <br>      <span class="hljs-comment">// 其它方法忽略，可以参考具体的源码</span><br>  &#125;<br>  <span class="hljs-keyword">private</span> Node <span class="hljs-built_in">addWaiter</span>(Node mode) &#123;<br>      <span class="hljs-comment">// 使用了Node的这个构造函数</span><br>      Node node = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(Thread.<span class="hljs-built_in">currentThread</span>(), mode);<br>      <span class="hljs-comment">// 其它代码省略</span><br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p><strong>waitStatus</strong>表示节点的状态</p>
+<ul>
+<li>CANCELLED，值为1，表示当前结点已取消调度，当timeout或者被中断(响应中断)，会触发变更此状态，进入该状态后的节点不会再变化。</li>
+<li>SIGNAL，值为-1，表示当前节点的后继节点在等待唤醒，当后继节点入队时，会将前继节点的状态更新为SIGNAL</li>
+<li>CONDITION，值为-2，线程等待在条件变量队列中。当其他线程调用了Condition的signal()方法后，CONDITION状态的结点将<strong>从等待队列转移到同步队列中</strong>，等待获取同步锁。</li>
+<li>PROPAGATE，值为-3，共享模式，表示当前场景下后续的acquireShared(获得共享)能够得以执行。共享模式下，前继结点不仅会唤醒其后继结点，同时也可能会唤醒后继的后继结点。</li>
+<li>值为0，表示当前节点在sync队列中，等待着获取锁。新节点入队时的默认状态</li>
+<li><strong>可以简单的通过waitStatus释放小于等于0，来判断是否是CANCELLED状态</strong></li>
+</ul>
+</li>
+<li><p><strong>prev</strong>：前驱节点，比如当前节点被取消，那就需要前驱节点和后继节点来完成连接。</p>
+</li>
+<li><p><strong>next</strong> : 后继调用</p>
+</li>
+<li><p><strong>nextWaiter</strong>：存储condition队列中的后继节点。</p>
+</li>
+<li><p>通过Node我们可以实现两个队列，一是通过prev和next实现CLH队列(线程同步队列,双向队列)，二是nextWaiter实现Condition条件上的等待线程队列(单向队列)，这个Condition主要用在ReentrantLock类中。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="获取资源"><a href="#获取资源" class="headerlink" title="获取资源"></a>获取资源</h3><ul>
+<li>入口是acquire(int arg)方法。arg是要获取的资源的个数，在独占模式下始终为1<ul>
+<li><pre><code class="java">public final void acquire(int arg) &#123;
+    if (!tryAcquire(arg) &amp;&amp;
+        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        selfInterrupt();
+&#125;
+// 首先用tryAcquire(arg)尝试去获取资源
+//如果获取资源失败，就通过addWaiter(Node.EXCLUSIVE)方法把这个线程插入到等待队列中。其中传入的参数代表要插入的Node是独占式的
+private Node addWaiter(Node mode) &#123;
+    // 生成该线程对应的Node节点
+    Node node = new Node(Thread.currentThread(), mode);
+    // 将Node插入队列中
+    Node pred = tail;
+    if (pred != null) &#123;
+        node.prev = pred;
+        // 使用CAS尝试，如果成功就返回
+        if (compareAndSetTail(pred, node)) &#123;
+            pred.next = node;
+            return node;
+        &#125;
+    &#125;
+    // 如果等待队列为空或者上述CAS失败，再自旋CAS插入
+    enq(node);
+    return node;
+&#125;
+// 自旋CAS插入等待队列
+private Node enq(final Node node) &#123;
+    for (;;) &#123;
+        Node t = tail;
+        if (t == null) &#123; // Must initialize
+            if (compareAndSetHead(new Node()))
+                tail = head;
+        &#125; else &#123;
+            node.prev = t;
+            if (compareAndSetTail(t, node)) &#123;
+                t.next = node;
+                return t;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+// 现在通过addWaiter方法，已经把一个Node放到等待队列尾部了。而处于等待队列的结点是从头结点一个一个去获取资源的
+final boolean acquireQueued(final Node node, int arg) &#123;
+    boolean failed = true;
+    try &#123;
+        boolean interrupted = false;
+        // 自旋
+        for (;;) &#123;
+            final Node p = node.predecessor();
+            // 如果node的前驱结点p是head，表示node是第二个结点，就可以尝试去获取资源了
+            if (p == head &amp;&amp; tryAcquire(arg)) &#123;
+                // 拿到资源后，将head指向该结点。
+                // 所以head所指的结点，就是当前获取到资源的那个结点或null。
+                setHead(node); 
+                p.next = null; // help GC
+                failed = false;
+                return interrupted;
+            &#125;
+            // 如果自己可以休息了，就进入waiting状态，直到被unpark()
+            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp; parkAndCheckInterrupt())
+                interrupted = true;
+        &#125;
+    &#125; finally &#123;
+        if (failed)
+            cancelAcquire(node);
+    &#125;
+&#125;
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs axapta">+ 获取资源的方法除了acquire外，还有以下三个：<br>  + acquireInterruptibly：申请可中断的资源（独占模式）<br>  + acquireShared：申请共享模式的资源<br>  + acquireSharedInterruptibly：申请可中断的资源（共享模式）<br><span class="hljs-meta">### 释放资源</span><br>+ <br>+ ```java<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-built_in">boolean</span> release(<span class="hljs-built_in">int</span> arg) &#123;<br>      <span class="hljs-keyword">if</span> (tryRelease(arg)) &#123;<br>          Node h = head;<br>          <span class="hljs-keyword">if</span> (h != <span class="hljs-literal">null</span> &amp;&amp; h.waitStatus != <span class="hljs-number">0</span>)<br>              unparkSuccessor(h);<br>          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>      &#125;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>  &#125;<br>  <br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> unparkSuccessor(Node node) &#123;<br>      <span class="hljs-comment">// 如果状态是负数，尝试把它设置为0</span><br>      <span class="hljs-built_in">int</span> ws = node.waitStatus;<br>      <span class="hljs-keyword">if</span> (ws &lt; <span class="hljs-number">0</span>)<br>          compareAndSetWaitStatus(node, ws, <span class="hljs-number">0</span>);<br>      <span class="hljs-comment">// 得到头结点的后继结点head.next</span><br>      Node s = node.<span class="hljs-keyword">next</span>;<br>      <span class="hljs-comment">// 如果这个后继结点为空或者状态大于0</span><br>      <span class="hljs-comment">// 通过前面的定义我们知道，大于0只有一种可能，就是这个结点已被取消</span><br>      <span class="hljs-keyword">if</span> (s == <span class="hljs-literal">null</span> || s.waitStatus &gt; <span class="hljs-number">0</span>) &#123;<br>          s = <span class="hljs-literal">null</span>;<br>          <span class="hljs-comment">// 等待队列中所有还有用的结点，都向前移动</span><br>          <span class="hljs-keyword">for</span> (Node t = tail; t != <span class="hljs-literal">null</span> &amp;&amp; t != node; t = t.prev)<br>              <span class="hljs-keyword">if</span> (t.waitStatus &lt;= <span class="hljs-number">0</span>)<br>                  s = t;<br>      &#125;<br>      <span class="hljs-comment">// 如果后继结点不为空，</span><br>      <span class="hljs-keyword">if</span> (s != <span class="hljs-literal">null</span>)<br>          LockSupport.unpark(s.thread);<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="AQS的两种模式"><a href="#AQS的两种模式" class="headerlink" title="AQS的两种模式"></a>AQS的两种模式</h3><ul>
+<li>独占模式（Exclusive）：资源是独占的，一次只能一个线程获取。如ReentrantLock。</li>
+<li>共享模式（Share）：同时可以被多个线程获取，具体的资源个数可以通过参数指定。如Semaphore&#x2F;CountDownLatch。</li>
+<li>子类只需要根据需求实现其中一种模式，当然也有同时实现两种模式的同步类，如<code>ReadWriteLock</code></li>
+</ul>
+<h4 id="独占模式"><a href="#独占模式" class="headerlink" title="独占模式"></a>独占模式</h4><ul>
+<li><p>独占模式：同一时刻只允许一个线程获取同步状态</p>
+</li>
+<li><p>获取同步状态：</p>
+<ul>
+<li><p>多线程并发获取（修改）同步状态, 修改同步状态成功的线程标记为拥有同步状态</p>
+</li>
+<li><p>获取同步状态失败的线程，加入到同步队列的队尾；加入到队列中后，如果当前节点的前驱节点为头节点再次尝试获取同步状态</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015153937706.png" srcset="/img/loading.gif" lazyload alt="image-20201015153937706" style="zoom:80%;" />
+</li>
+<li><p>如果头节点的下一个节点尝试获取同步状态失败后，会进入等待状态；其他节点则继续自旋。</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154201686.png" srcset="/img/loading.gif" lazyload alt="image-20201015154201686" style="zoom:80%;" />
+
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154540836.png" srcset="/img/loading.gif" lazyload alt="image-20201015154540836" style="zoom:60%;" /></li>
+</ul>
+</li>
+<li><p>释放同步状态</p>
+<ul>
+<li><p>当线程执行完相应逻辑后，需要释放同步状态，使后继节点有机会同步状态（让出资源，让排队的线程使用）。这时就需要调用release(int arg)方法。调用该方法后，会唤醒后继节点。释放同步状态，唤醒后继节点</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154904690.png" srcset="/img/loading.gif" lazyload alt="image-20201015154904690" style="zoom:80%;" />
+</li>
+<li><p>后继节点获取同步状态成功，头节点出队。需要注意的事，出队操作是间接的，有节点获取到同步状态时，会将当前节点设置为head，而原本的head设置为null。</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015155439466.png" srcset="/img/loading.gif" lazyload alt="image-20201015155439466" style="zoom:80%;" /></li>
+</ul>
+</li>
+<li><p>其他竞争状态</p>
+<ul>
+<li><p>当同步队列中头节点唤醒后继节点时，此时可能有其他线程尝试获取同步状态。</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015155908167.png" srcset="/img/loading.gif" lazyload alt="image-20201015155908167" style="zoom:80%;" />
+</li>
+<li><p>假设获取成功，将会被设置为头节点。</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015160044273.png" srcset="/img/loading.gif" lazyload alt="image-20201015160044273" style="zoom:80%;" />
+</li>
+<li><p>头节点后续节点获取同步状态失败。</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015165058215.png" srcset="/img/loading.gif" lazyload alt="image-20201015165058215" style="zoom:80%;" /></li>
+</ul>
+</li>
+</ul>
+<h4 id="共享模式"><a href="#共享模式" class="headerlink" title="共享模式"></a>共享模式</h4><ul>
+<li><p>共享模式和独占模式最主要的区别是<strong>是否支持同一时刻有多个线程同时获取同步状态</strong></p>
+</li>
+<li><p>共享模式下的共享队列</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015165746663.png" srcset="/img/loading.gif" lazyload alt="image-20201015165746663"></li>
+</ul>
+</li>
+<li><p>获取同步状态</p>
+<ul>
+<li><p>首先至少要调用一次tryAcquireShared(arg)方法，如果返回值大于等于0表示获取成功。</p>
+</li>
+<li><p>当获取锁失败时，则创建一个共享类型的节点并进入一个同步队列，然后进入队列中进入自旋状态（阻塞，唤醒两种状态来回切换，直到获取到同步状态为止）</p>
+</li>
+<li><p>当队列中的等待线程被唤醒以后就重新尝试获取锁资源，如果成功则<strong>唤醒后面还在等待的共享节点并把该唤醒事件传递下去，即会依次唤醒在该节点后面的所有共享节点</strong>，否则继续挂起等待。</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170011091.png" srcset="/img/loading.gif" lazyload alt="image-20201015170011091" style="zoom:80%;" />
+</li>
+<li><p>当一个同享节点获取到同步状态，并唤醒后面等待的共享状态的结果如下图所示：</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170332399.png" srcset="/img/loading.gif" lazyload alt="image-20201015170332399" style="zoom:80%;" />
+</li>
+<li><p>最后，获取到同步状态的线程执行完毕，同步队列中只有一个独占节点：</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170434875.png" srcset="/img/loading.gif" lazyload alt="image-20201015170434875" style="zoom:80%;" /></li>
+</ul>
+</li>
+<li><p>释放同步状态</p>
+<ul>
+<li>释放同步状态后，同步队列的变化过程和共享节点获取到同步状态后的变化过程一致</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="AQS实现"><a href="#AQS实现" class="headerlink" title="AQS实现"></a>AQS实现</h3><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%9F%BA%E4%BA%8EAQS%E5%AE%9E%E7%8E%B0%E7%9A%84%E9%94%81.png" srcset="/img/loading.gif" lazyload alt="基于 AQS 实现的锁"></p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Semaphore</td>
+<td>限制线程的数量</td>
+</tr>
+<tr>
+<td>Exchanger</td>
+<td>两个线程交换数据</td>
+</tr>
+<tr>
+<td>CountDownLatch</td>
+<td>线程等待直到计数器减为0时开始工作</td>
+</tr>
+<tr>
+<td>CyclicBarrier</td>
+<td>作用跟CountDownLatch类似，但是可以重复使用</td>
+</tr>
+<tr>
+<td>Phaser</td>
+<td>增强的CyclicBarrier</td>
+</tr>
+</tbody></table>
+<h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><ul>
+<li>使一个线程等待其他线程各自执行完毕后再执行。</li>
+<li>通过一个计数器来实现的，计数器的初始值是线程的数量。每当一个线程执行完毕后，计数器的值就-1，当计数器的值为0时，表示所有线程都执行完毕，然后在闭锁上等待的线程就可以恢复工作了。</li>
+<li>主要方法<ul>
+<li><pre><code class="java">//调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
+public void await() throws InterruptedException &#123; &#125;;   
+//和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
+public boolean await(long timeout, TimeUnit unit) throws InterruptedException &#123; &#125;;  
+//将count值减1
+public void countDown() &#123; &#125;;  
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta">#### CyclicBarrier(循环屏障)</span><br>+ 让所有线程都等待完成后才会继续下一步行动。在CyclicBarrier类的内部有一个计数器，每个线程在到达屏障点的时候都会调用<span class="hljs-keyword">await</span>方法将自己阻塞，此时计数器会减<span class="hljs-number">1</span>，当计数器减为<span class="hljs-number">0</span>的时候所有因调用<span class="hljs-keyword">await</span>方法而被阻塞的线程将被唤醒<br>+ **CountDownLatch和CyclicBarrier区别：**<br>  <span class="hljs-number">1.</span>countDownLatch是一个计数器，线程完成一个记录一个，计数器递减，只能只用一次<br>  <span class="hljs-number">2.</span>CyclicBarrier的计数器更像一个阀门，需要所有线程都到达，然后继续执行，计数器递增，提供reset功能，可以多次使用<br>+ 实现方式<br>  + ```java<br>    CyclicBarrier cyclicBarrier = <span class="hljs-keyword">new</span> CyclicBarrier(<span class="hljs-number">20</span>, <span class="hljs-keyword">new</span> Runnable() &#123;<br>        @Override<br>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span>()</span> &#123;<br>            System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;栅栏阻塞满20后，执行该run方法&quot;</span>);<br>        &#125;<br>    &#125;);<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>如果参与者（线程）在等待的过程中，Barrier被破坏，就会抛出BrokenBarrierException。可以用<code>isBroken()</code>方法检测Barrier是否被破坏。<ol>
+<li>如果有线程已经处于等待状态，调用reset方法会导致已经在等待的线程出现BrokenBarrierException异常。并且由于出现了BrokenBarrierException，将会导致始终无法等待。</li>
+<li>如果在等待的过程中，线程被中断，会抛出InterruptedException异常，并且这个异常会传播到其他所有的线程。</li>
+<li>如果在执行屏障操作过程中发生异常，则该异常将传播到当前线程中，其他线程会抛出BrokenBarrierException，屏障被损坏。</li>
+<li>如果超出指定的等待时间，当前线程会抛出 TimeoutException 异常，其他线程会抛出BrokenBarrierException异常。</li>
+</ol>
+</li>
+</ul>
+<h4 id="phaser-阶段控制"><a href="#phaser-阶段控制" class="headerlink" title="phaser(阶段控制)"></a>phaser(阶段控制)</h4><ul>
+<li>用来解决控制多个线程分阶段共同完成任务的情景问题</li>
+<li>关键方法<ul>
+<li><pre><code class="java">onAdvance() //每个阶段完成后回调的方法
+arriveAndAwaitAdvance() //阶段性完成等待
+arriveAndDeregister() //完成当前阶段终止线程
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs java">  <br>+ <br><br>+ ```java<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PhaserDemo</span> &#123;<br>      <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PreTaskThread</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Runnable</span> &#123;<br>  <br>          <span class="hljs-keyword">private</span> String task;<br>          <span class="hljs-keyword">private</span> Phaser phaser;<br>  <br>          <span class="hljs-keyword">public</span> <span class="hljs-title function_">PreTaskThread</span><span class="hljs-params">(String task, Phaser phaser)</span> &#123;<br>              <span class="hljs-built_in">this</span>.task = task;<br>              <span class="hljs-built_in">this</span>.phaser = phaser;<br>          &#125;<br>  <br>          <span class="hljs-meta">@Override</span><br>          <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>              <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt; <span class="hljs-number">4</span>; i++) &#123;<br>                  <span class="hljs-keyword">try</span> &#123;<br>                      <span class="hljs-comment">// 第二次关卡起不加载NPC，跳过</span><br>                      <span class="hljs-keyword">if</span> (i &gt;= <span class="hljs-number">2</span> &amp;&amp; <span class="hljs-string">&quot;加载新手教程&quot;</span>.equals(task)) &#123;<br>                          <span class="hljs-keyword">continue</span>;<br>                      &#125;<br>                      <span class="hljs-type">Random</span> <span class="hljs-variable">random</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();<br>                      Thread.sleep(random.nextInt(<span class="hljs-number">1000</span>));<br>                      System.out.println(String.format(<span class="hljs-string">&quot;关卡%d，需要加载%d个模块，当前模块【%s】&quot;</span>,<br>                              i, phaser.getRegisteredParties(), task));<br>  <br>                      <span class="hljs-comment">// 从第二个关卡起，不加载NPC</span><br>                      <span class="hljs-keyword">if</span> (i == <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-string">&quot;加载新手教程&quot;</span>.equals(task)) &#123;<br>                          System.out.println(<span class="hljs-string">&quot;下次关卡移除加载【新手教程】模块&quot;</span>);<br>                          phaser.arriveAndDeregister(); <span class="hljs-comment">// 移除一个模块</span><br>                      &#125; <span class="hljs-keyword">else</span> &#123;<br>                          phaser.arriveAndAwaitAdvance();<br>                      &#125;<br>                  &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                      e.printStackTrace();<br>                  &#125;<br>              &#125;<br>          &#125;<br>      &#125;<br>  <br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>          <span class="hljs-type">Phaser</span> <span class="hljs-variable">phaser</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Phaser</span>(<span class="hljs-number">4</span>) &#123;<br>              <span class="hljs-meta">@Override</span><br>              <span class="hljs-keyword">protected</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">onAdvance</span><span class="hljs-params">(<span class="hljs-type">int</span> phase, <span class="hljs-type">int</span> registeredParties)</span> &#123;<br>                  System.out.println(String.format(<span class="hljs-string">&quot;第%d次关卡准备完成&quot;</span>, phase + <span class="hljs-number">1</span>));<br>                  <span class="hljs-keyword">return</span> phase == <span class="hljs-number">3</span> || registeredParties == <span class="hljs-number">0</span>;<br>              &#125;<br>          &#125;;<br>  <br>          <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PreTaskThread</span>(<span class="hljs-string">&quot;加载地图数据&quot;</span>, phaser)).start();<br>          <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PreTaskThread</span>(<span class="hljs-string">&quot;加载人物模型&quot;</span>, phaser)).start();<br>          <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PreTaskThread</span>(<span class="hljs-string">&quot;加载背景音乐&quot;</span>, phaser)).start();<br>          <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PreTaskThread</span>(<span class="hljs-string">&quot;加载新手教程&quot;</span>, phaser)).start();<br>      &#125;<br>  &#125;<br>  <br>  <span class="hljs-comment">//输出：</span><br>  <span class="hljs-comment">//关卡1，需要加载4个模块，当前模块【加载背景音乐】</span><br>  <span class="hljs-comment">//关卡1，需要加载4个模块，当前模块【加载新手教程】</span><br>  <span class="hljs-comment">//下次关卡移除加载【新手教程】模块</span><br>  <span class="hljs-comment">//关卡1，需要加载3个模块，当前模块【加载地图数据】</span><br>  <span class="hljs-comment">//关卡1，需要加载3个模块，当前模块【加载人物模型】</span><br>  <span class="hljs-comment">//第1次关卡准备完成</span><br>  <span class="hljs-comment">//关卡2，需要加载3个模块，当前模块【加载地图数据】</span><br>  <span class="hljs-comment">//关卡2，需要加载3个模块，当前模块【加载背景音乐】</span><br>  <span class="hljs-comment">//关卡2，需要加载3个模块，当前模块【加载人物模型】</span><br>  <span class="hljs-comment">//第2次关卡准备完成</span><br>  <span class="hljs-comment">//关卡3，需要加载3个模块，当前模块【加载人物模型】</span><br>  <span class="hljs-comment">//关卡3，需要加载3个模块，当前模块【加载地图数据】</span><br>  <span class="hljs-comment">//关卡3，需要加载3个模块，当前模块【加载背景音乐】</span><br>  <span class="hljs-comment">//第3次关卡准备完成</span><br>  <span class="hljs-comment">//这里要注意关卡1的输出，在“加载新手教程”线程中调用了arriveAndDeregister()减少一个party之后，后面的线程使用getRegisteredParties()得到的是已经被修改后的parties了。但是当前这个阶段(phase)，仍然是需要4个parties都arrive才触发屏障的。从下一个阶段开始，才需要3个parties都arrive就触发屏障。</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="semaphore（限流）"><a href="#semaphore（限流）" class="headerlink" title="semaphore（限流）"></a>semaphore（限流）</h4><ul>
+<li>用于线程的流量控制，Semaphore 类似于操作系统中的信号量，可以控制对互斥资源的访问线程数。</li>
+<li>默认使用的是非公平锁</li>
+<li><pre><code class="java">public void acquire(); //获取许可,也可以获取指定数量的许可
+public void release()；//释放许可，也可以释放指定数量的许可
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta">#### exchanger</span><br>+ 用于两个线程之间交换信息,可简单地将Exchanger对象理解为一个包含两个格子的容器，通过exchanger方法可以向两个格子中填充信息。当两个格子中的均被填充时(如果只有一个格子被填充，回阻塞直到另一个格子填充)，该对象会自动将两个格子的信息交换，然后返回给线程，从而实现两个线程的信息交换。<br>+ <br>+ ```java<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ExchangerDemo</span> &#123;<br>      <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span>(<span class="hljs-params">String[] args</span>) throws InterruptedException</span> &#123;<br>          Exchanger&lt;String&gt; exchanger = <span class="hljs-keyword">new</span> Exchanger&lt;&gt;();<br>          <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>              <span class="hljs-keyword">try</span> &#123;<br>                  System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;这是线程A，得到了另一个线程的数据：&quot;</span><br>                          + exchanger.exchange(<span class="hljs-string">&quot;这是来自线程A的数据&quot;</span>));<br>              &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                  e.printStackTrace();<br>              &#125;<br>          &#125;).start();<br>  <br>          System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;这个时候线程A是阻塞的，在等待线程B的数据&quot;</span>);<br>          Thread.sleep(<span class="hljs-number">1000</span>);<br>  <br>          <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>              <span class="hljs-keyword">try</span> &#123;<br>                  System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;这是线程B，得到了另一个线程的数据：&quot;</span><br>                          + exchanger.exchange(<span class="hljs-string">&quot;这是来自线程B的数据&quot;</span>));<br>              &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                  e.printStackTrace();<br>              &#125;<br>          &#125;).start();<br>      &#125;<br>  &#125;<br>  <span class="hljs-comment">//输出：</span><br>  <span class="hljs-comment">//这个时候线程A是阻塞的，在等待线程B的数据</span><br>  <span class="hljs-comment">//这是线程B，得到了另一个线程的数据：这是来自线程A的数据</span><br>  <span class="hljs-comment">//这是线程A，得到了另一个线程的数据：这是来自线程B的数据</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h2 id="ForkJoin框架"><a href="#ForkJoin框架" class="headerlink" title="ForkJoin框架"></a>ForkJoin框架</h2><ul>
+<li>Fork&#x2F;Join框架是一个实现了ExecutorService接口的多线程处理器，它专为那些可以通过递归分解成更细小的任务而设计，最大化的利用多核处理器来提高应用程序的性能。</li>
+<li>分解汇总的任务，用很少的线程可以执行很多的任务(子任务)TPE做不到先执行子任务，CPU密集型</li>
+<li>工作窃取（work-stealing）算法是指某个线程从其他队列里窃取任务来执行。每个线程都维护了一个双端队列，用来存储需要执行的任务。工作窃取算法允许空闲的线程从其它线程的双端队列中窃取一个任务来执行。窃取的任务必须是最晚的任务，避免和队列所属线程发生竞争。例如下图中，Thread2 从 Thread1 的队列中拿出最晚的 Task1 任务，Thread1 会拿出 Task2 来执行，这样就避免发生竞争。但是如果队列中只有一个任务时还是会发生竞争。</li>
+<li>初始时可以设置最大工作线程数、工作线程工厂、拒绝任务的Handler和同步模式</li>
+</ul>
+<h3 id="工作窃取算法"><a href="#工作窃取算法" class="headerlink" title="工作窃取算法"></a>工作窃取算法</h3><ul>
+<li>工作窃取算法指的是在多线程执行不同任务队列的过程中，某个线程执行完自己队列的任务后从其他线程的任务队列里窃取任务来执行。</li>
+<li>当一个线程窃取另一个线程的时候，为了减少两个任务线程之间的竞争，我们通常使用<strong>双端队列</strong>来存储任务。被窃取的任务线程都从双端队列的<strong>头部</strong>拿任务执行，而窃取其他任务的线程从双端队列的<strong>尾部</strong>执行任务。</li>
+</ul>
+<h3 id="Fork-Join的具体实现"><a href="#Fork-Join的具体实现" class="headerlink" title="Fork&#x2F;Join的具体实现"></a>Fork&#x2F;Join的具体实现</h3><h4 id="ForkJoinTask"><a href="#ForkJoinTask" class="headerlink" title="ForkJoinTask"></a>ForkJoinTask</h4><ul>
+<li>ForkJoinTask是一个类似普通线程的实体，但是比普通线程轻量得多。</li>
+</ul>
+<h2 id="Disruptor"><a href="#Disruptor" class="headerlink" title="Disruptor"></a>Disruptor</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
+<li>Disruptor是英国外汇交易公司LMAX开发的一个高性能队列，研发的初衷是解决内存队列的延迟问题（在性能测试中发现竟然与I&#x2F;O操作处于同样的数量级）。基于Disruptor开发的系统单线程能支撑每秒600万订单，2010年在QCon演讲后，获得了业界关注。2011年，企业应用软件专家Martin Fowler专门撰写长文介绍。同年它还获得了Oracle官方的Duke大奖。<br>目前，包括Apache Storm、Camel、Log4j 2在内的很多知名项目都应用了Disruptor以获取高性能。在美团技术团队它也有不少应用，有的项目架构借鉴了它的设计机制。本文从实战角度剖析了Disruptor的实现原理。<br><strong>需要特别指出的是，这里所说的队列是系统内部的内存队列，而不是Kafka这样的分布式队列。</strong></li>
+<li>特点<ul>
+<li>对比ConcurrentLinkedQueue : 链表实现</li>
+<li>JDK中没有ConcurrentArrayQueue</li>
+<li>Disruptor是数组实现的</li>
+<li>无锁，cas,高并发，环形buffer，直接覆盖旧的数据，降低gc频率，</li>
+<li>实现了基于事件的生产者消费者模式(观察者模式)</li>
+</ul>
+</li>
+<li>主页：<a target="_blank" rel="noopener" href="http://lmax-exchange.github.io/disruptor/">http://lmax-exchange.github.io/disruptor/</a></li>
+<li>源码：<a target="_blank" rel="noopener" href="https://github.com/LMAX-Exchange/disruptor">https://github.com/LMAX-Exchange/disruptor</a></li>
+<li>GettingStarted: <a target="_blank" rel="noopener" href="https://github.com/LMAX-Exchange/disruptor/wiki/Getting-Started">https://github.com/LMAX-Exchange/disruptor/wiki/Getting-Started</a></li>
+<li>api: <a target="_blank" rel="noopener" href="http://lmax-exchange.github.io/disruptor/docs/index.html">http://lmax-exchange.github.io/disruptor/docs/index.html</a></li>
+<li>maven: <a target="_blank" rel="noopener" href="https://mvnrepository.com/artifact/com.lmax/disruptor">https://mvnrepository.com/artifact/com.lmax/disruptor</a></li>
+</ul>
+<h3 id="RingBuffer"><a href="#RingBuffer" class="headerlink" title="RingBuffer"></a>RingBuffer</h3><p>环形队列<br>RingBuffer的序号，指向下一个可用的元素<br>采用数组实现，没有首尾指针<br>对比ConcurrentLinkedQueue，用数组实现的速度更快</p>
+<blockquote>
+<p>假如长度为8，当添加到第12个元素的时候在哪个序号上呢？用12%8决定</p>
+<p>当Buffer被填满的时候到底是覆盖还是等待，由Producer决定</p>
+<p>长度设为2的n次幂，利于二进制计算，例如：12%8 &#x3D; 12 &amp; (8 - 1)  pos &#x3D; num &amp; (size -1)</p>
+</blockquote>
+<h3 id="Disruptor开发步骤"><a href="#Disruptor开发步骤" class="headerlink" title="Disruptor开发步骤"></a>Disruptor开发步骤</h3><ol>
+<li>定义Event - 队列中需要处理的元素</li>
+<li>定义Event工厂，用于填充队列<blockquote>
+<p>这里牵扯到效率问题：disruptor初始化的时候，会调用Event工厂，对ringBuffer进行内存的提前分配</p>
+<p>GC产频率会降低</p>
+</blockquote>
+</li>
+<li>定义EventHandler（消费者），处理容器中的元素</li>
+</ol>
+<h3 id="事件发布模板"><a href="#事件发布模板" class="headerlink" title="事件发布模板"></a>事件发布模板</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">long</span> <span class="hljs-variable">sequence</span> <span class="hljs-operator">=</span> ringBuffer.next();  <span class="hljs-comment">// Grab the next sequence</span><br><span class="hljs-keyword">try</span> &#123;<br>    <span class="hljs-type">LongEvent</span> <span class="hljs-variable">event</span> <span class="hljs-operator">=</span> ringBuffer.get(sequence); <span class="hljs-comment">// Get the entry in the Disruptor</span><br>    <span class="hljs-comment">// for the sequence</span><br>    event.set(<span class="hljs-number">8888L</span>);  <span class="hljs-comment">// Fill with data</span><br>&#125; <span class="hljs-keyword">finally</span> &#123;<br>    ringBuffer.publish(sequence);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="使用EventTranslator发布事件"><a href="#使用EventTranslator发布事件" class="headerlink" title="使用EventTranslator发布事件"></a>使用EventTranslator发布事件</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//===============================================================</span><br>        EventTranslator&lt;LongEvent&gt; translator1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventTranslator</span>&lt;LongEvent&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">translateTo</span><span class="hljs-params">(LongEvent event, <span class="hljs-type">long</span> sequence)</span> &#123;<br>                event.set(<span class="hljs-number">8888L</span>);<br>            &#125;<br>        &#125;;<br>        ringBuffer.publishEvent(translator1);<br>        <span class="hljs-comment">//===============================================================</span><br>        EventTranslatorOneArg&lt;LongEvent, Long&gt; translator2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventTranslatorOneArg</span>&lt;LongEvent, Long&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">translateTo</span><span class="hljs-params">(LongEvent event, <span class="hljs-type">long</span> sequence, Long l)</span> &#123;<br>                event.set(l);<br>            &#125;<br>        &#125;;<br>        ringBuffer.publishEvent(translator2, <span class="hljs-number">7777L</span>);<br>        <span class="hljs-comment">//===============================================================</span><br>        EventTranslatorTwoArg&lt;LongEvent, Long, Long&gt; translator3 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventTranslatorTwoArg</span>&lt;LongEvent, Long, Long&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">translateTo</span><span class="hljs-params">(LongEvent event, <span class="hljs-type">long</span> sequence, Long l1, Long l2)</span> &#123;<br>                event.set(l1 + l2);<br>            &#125;<br>        &#125;;<br>        ringBuffer.publishEvent(translator3, <span class="hljs-number">10000L</span>, <span class="hljs-number">10000L</span>);<br>        <span class="hljs-comment">//===============================================================</span><br>        EventTranslatorThreeArg&lt;LongEvent, Long, Long, Long&gt; translator4 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventTranslatorThreeArg</span>&lt;LongEvent, Long, Long, Long&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">translateTo</span><span class="hljs-params">(LongEvent event, <span class="hljs-type">long</span> sequence, Long l1, Long l2, Long l3)</span> &#123;<br>                event.set(l1 + l2 + l3);<br>            &#125;<br>        &#125;;<br>        ringBuffer.publishEvent(translator4, <span class="hljs-number">10000L</span>, <span class="hljs-number">10000L</span>, <span class="hljs-number">1000L</span>);<br>        <span class="hljs-comment">//===============================================================</span><br>        EventTranslatorVararg&lt;LongEvent&gt; translator5 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventTranslatorVararg</span>&lt;LongEvent&gt;() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">translateTo</span><span class="hljs-params">(LongEvent event, <span class="hljs-type">long</span> sequence, Object... objects)</span> &#123;<br>                <span class="hljs-type">long</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>                <span class="hljs-keyword">for</span>(Object o : objects) &#123;<br>                    <span class="hljs-type">long</span> <span class="hljs-variable">l</span> <span class="hljs-operator">=</span> (Long)o;<br>                    result += l;<br>                &#125;<br>                event.set(result);<br>            &#125;<br>        &#125;;<br>        ringBuffer.publishEvent(translator5, <span class="hljs-number">10000L</span>, <span class="hljs-number">10000L</span>, <span class="hljs-number">10000L</span>, <span class="hljs-number">10000L</span>);<br></code></pre></td></tr></table></figure>
+<h3 id="使用Lamda表达式"><a href="#使用Lamda表达式" class="headerlink" title="使用Lamda表达式"></a>使用Lamda表达式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.mashibing.disruptor;<br><span class="hljs-keyword">import</span> com.lmax.disruptor.RingBuffer;<br><span class="hljs-keyword">import</span> com.lmax.disruptor.dsl.Disruptor;<br><span class="hljs-keyword">import</span> com.lmax.disruptor.util.DaemonThreadFactory;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Main03</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception<br>    &#123;<br>        <span class="hljs-comment">// Specify the size of the ring buffer, must be power of 2.</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">bufferSize</span> <span class="hljs-operator">=</span> <span class="hljs-number">1024</span>;<br>        <span class="hljs-comment">// Construct the Disruptor</span><br>        Disruptor&lt;LongEvent&gt; disruptor = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Disruptor</span>&lt;&gt;(LongEvent::<span class="hljs-keyword">new</span>, bufferSize, DaemonThreadFactory.INSTANCE);<br>        <span class="hljs-comment">// Connect the handler</span><br>        disruptor.handleEventsWith((event, sequence, endOfBatch) -&gt; System.out.println(<span class="hljs-string">&quot;Event: &quot;</span> + event));<br>        <span class="hljs-comment">// Start the Disruptor, starts all threads running</span><br>        disruptor.start();<br>        <span class="hljs-comment">// Get the ring buffer from the Disruptor to be used for publishing.</span><br>        RingBuffer&lt;LongEvent&gt; ringBuffer = disruptor.getRingBuffer();<br>        ringBuffer.publishEvent((event, sequence) -&gt; event.set(<span class="hljs-number">10000L</span>));<br>        System.in.read();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="ProducerType生产者线程模式"><a href="#ProducerType生产者线程模式" class="headerlink" title="ProducerType生产者线程模式"></a>ProducerType生产者线程模式</h3><blockquote>
+<p>ProducerType有两种模式 Producer.MULTI和Producer.SINGLE</p>
+<p>默认是MULTI，表示在多线程模式下产生sequence</p>
+<p>如果确认是单线程生产者，那么可以指定SINGLE，效率会提升</p>
+<p>如果是多个生产者（多线程），但模式指定为SINGLE，会出什么问题呢？</p>
+</blockquote>
+<h3 id="等待策略"><a href="#等待策略" class="headerlink" title="等待策略"></a>等待策略</h3><p>1，(常用）BlockingWaitStrategy：通过线程阻塞的方式，等待生产者唤醒，被唤醒后，再循环检查依赖的sequence是否已经消费。<br>2，BusySpinWaitStrategy：线程一直自旋等待，可能比较耗cpu<br>3，LiteBlockingWaitStrategy：线程阻塞等待生产者唤醒，与BlockingWaitStrategy相比，区别在signalNeeded.getAndSet,如果两个线程同时访问一个访问waitfor,一个访问signalAll时，可以减少lock加锁次数.<br>4，LiteTimeoutBlockingWaitStrategy：与LiteBlockingWaitStrategy相比，设置了阻塞时间，超过时间后抛异常。<br>5，PhasedBackoffWaitStrategy：根据时间参数和传入的等待策略来决定使用哪种等待策略<br>6，TimeoutBlockingWaitStrategy：相对于BlockingWaitStrategy来说，设置了等待时间，超过后抛异常<br>7，（常用）YieldingWaitStrategy：尝试100次，然后Thread.yield()让出cpu<br>8. （常用）SleepingWaitStrategy : sleep</p>
+<h3 id="消费者异常处理"><a href="#消费者异常处理" class="headerlink" title="消费者异常处理"></a>消费者异常处理</h3><p>默认：disruptor.setDefaultExceptionHandler()<br>覆盖：disruptor.handleExceptionFor().with()</p>
+<h3 id="依赖处理"><a href="#依赖处理" class="headerlink" title="依赖处理"></a>依赖处理</h3>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>线程池和JUC</div>
+      <div>https://x-leonidas.github.io/2024/10/28/04Java/多线程/线程池和JUC/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/28/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/0.MySql%E8%AF%AD%E5%8F%A5/" title="0.MySql语句">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">0.MySql语句</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/28/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/" title="多线程基础">
+                        <span class="hidden-mobile">多线程基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
