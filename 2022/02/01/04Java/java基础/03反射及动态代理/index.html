@@ -1,0 +1,735 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="反射与动态代理反射 反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义   Java9中引入了所谓 Open 的概念，只有当被反射操作的模块和指定的包对反射调用者模块 Open，才能使用 setAccessib">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03反射及动态代理">
+<meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/04Java/java%E5%9F%BA%E7%A1%80/03%E5%8F%8D%E5%B0%84%E5%8F%8A%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="反射与动态代理反射 反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义   Java9中引入了所谓 Open 的概念，只有当被反射操作的模块和指定的包对反射调用者模块 Open，才能使用 setAccessib">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-01T12:00:08.000Z">
+<meta property="article:modified_time" content="2022-05-05T15:52:18.000Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>03反射及动态代理 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="03反射及动态代理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:08
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">03反射及动态代理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="反射与动态代理"><a href="#反射与动态代理" class="headerlink" title="反射与动态代理"></a>反射与动态代理</h1><h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><ul>
+<li>反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义  </li>
+<li>Java9中引入了所谓 Open 的概念，只有当被反射操作的模块和指定的包对反射调用者模块 Open，才能使用 setAccessible</li>
+</ul>
+<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><p>+ </p>
+<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><ul>
+<li>动态代理是一种方便运行时动态构建代理、动态处理代理方法调用的机制，很多场景都是利用类似机制做到的，比如用来包装 RPC 调用、面向切面的编程（AOP）</li>
+</ul>
+<h3 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h3><ul>
+<li>动态代码生成发生在newProxyInstance 生成代理类实例的时候  </li>
+<li>为什么只能对接口进行动态代理？因为代理类继承了Proxy类</li>
+<li>在newProxyInstance的过程中生成的代理类，需要调用的方法里直接调用了InvocationHandler的invoke方法。</li>
+<li>具体步骤<ul>
+<li>获取 RealSubject 上的所有接口列表；</li>
+<li>确定要生成的代理类的类名，默认为：com.sun.proxy.$ProxyXXXX；</li>
+<li>根据需要实现的接口信息，在代码中动态创建 该 Proxy 类的字节码；</li>
+<li>将对应的字节码转换为对应的 class 对象；</li>
+<li>创建 InvocationHandler 实例 handler，用来处理 Proxy 所有方法调用；</li>
+<li>Proxy 的 class 对象 以创建的 handler 对象为参数，实例化一个 proxy 对象。</li>
+</ul>
+</li>
+</ul>
+<h3 id="CGlib"><a href="#CGlib" class="headerlink" title="CGlib"></a>CGlib</h3><ul>
+<li>主要没有JDK动态代理必须依赖接口的性质</li>
+<li>创建目标类的子类的方式，因为是子类化，我们可以达到近似使用被调用者本身的效果  </li>
+<li>实现MethodInterceptor接口</li>
+<li>简单使用<ul>
+<li><pre><code class="java"> public static void main(String[] args) &#123;
+         // 实现了MethodInterceptor的类
+        ServiceProxy serviceProxy = new ServiceProxy();
+        Enhancer enhancer = new Enhancer();
+        // 设置要代理的类
+        enhancer.setSuperclass(UserService.class);
+        enhancer.setCallback(new NoOp() &#123;
+            @Override
+            public int hashCode() &#123;
+                // 生成的代理类使用原来的hashCode，确保不是同一个对象才初始化
+                return super.hashCode();
+            &#125;
+        &#125;);
+        enhancer.setCallback(serviceProxy);
+        enhancer.setCallbackFilter(new CallbackFilter() &#123;
+            @Override
+            public int accept(Method method) &#123;
+                return 0;
+            &#125;
+        &#125;);
+        UserService userService = (UserService) enhancer.create();
+&#125;
+
+public class ServiceProxy implements MethodInterceptor &#123;
+    @Override
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable &#123;
+
+        System.out.println(&quot;here is interceptor1&quot;);
+
+        return proxy.invokeSuper(obj,args);
+    &#125;
+&#125;
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section">#### callback</span><br><span class="hljs-bullet">+</span> 这里的callback可以认为是cglib用于生成字节码的实现手段，cglib一共实现了6种callback，用于对代理类目标进行不同手段的代理，非常灵活，分别为：<br><span class="hljs-bullet">  +</span> FixedValue<br><span class="hljs-bullet">  +</span> InvocationHandler<br><span class="hljs-bullet">  +</span> LazyLoader<br><span class="hljs-bullet">  +</span> MethodInterceptor<br><span class="hljs-bullet">  +</span> Dispatcher<br><span class="hljs-bullet">  +</span> NoOp<br><span class="hljs-bullet">  +</span> <br><span class="hljs-section">##### Dispatcher</span><br><span class="hljs-bullet">+</span> 实现Dispatcher接口，要求实现loadObject方法，返回期望的代理类。值的一提的是，loadobject方法在每次调用被拦截方法的时候都会被调用一次<br><span class="hljs-bullet">+</span> <span class="hljs-code">```java</span><br><span class="hljs-code">  /****</span><br><span class="hljs-code">   * 与lazy不同的是，每一次调用代理方法的时候，都会调用一次Dispatcher的loadObject获取对象</span><br><span class="hljs-code">   * 而lazy则会缓存下来。</span><br><span class="hljs-code">   */</span><br><span class="hljs-code">  public class DispatcherCallBack implements Dispatcher &#123;</span><br><span class="hljs-code">      public Object loadObject() throws Exception &#123;</span><br><span class="hljs-code">          CallbackBean callbackBean = new CallbackBean();</span><br><span class="hljs-code">          return callbackBean;</span><br><span class="hljs-code">      &#125;</span><br><span class="hljs-code">  &#125;</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="LazyLoader"><a href="#LazyLoader" class="headerlink" title="LazyLoader"></a>LazyLoader</h5><ul>
+<li>实现LazyLoader的loadObject方法，返回对象实例，该实例只有第一次调用的时候进行初始化，之后不再重新调用，proxy类初始化时进行了成员的赋值，之后使用该成员进行调用父类方法<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * 延迟加载初始化</span><br><span class="hljs-comment"> * 类似于spring prototype的singleton ，在第一次调用的时候进行初始化，并且将此实例存储起来，之后都将返回改实例</span><br><span class="hljs-comment"> * 可参考资料：</span><br><span class="hljs-comment"> * https://shensy.iteye.com/blog/1881277</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LazyLoaderCallback</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">LazyLoader</span> &#123;<br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">loadObject</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">CallbackBean</span> <span class="hljs-variable">callbackBean</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CallbackBean</span>();<br>        <span class="hljs-keyword">return</span> callbackBean;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="FixedValue"><a href="#FixedValue" class="headerlink" title="FixedValue"></a>FixedValue</h5><ul>
+<li>实现FixedValue接口，该callback同样要求实现一个loadobject方法，只不过需要注意的是该loadobject方法相同与重写了被代理类的相应方法，因为在被代理之后，FixedValue callback只会调用loadobject，而不会再调用代理目标类的相应方法！</li>
+<li><pre><code class="java">/**
+ * 该callback相当于重写了相应的函数实现。并不会调用原函数
+ */
+public class FixValueCallback implements FixedValue &#123;
+    /**
+     * 被代理方法的指定函数将会无条件的返回改object，动态的变更返回值
+     * @return
+     * @throws Exception
+     */
+    public Object loadObject() throws Exception &#123;
+        System.out.println(&quot;this is fixvalue callback .....    overwrite the code....&quot;);
+        return true;
+    &#125;
+&#125;
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">##### InvocationHandler<br>+ 需要实现InvocationHandler接口，实现invoke对象，该拦截传入了proxy对象，用于自定义实现，与MethodInterceptor相似，慎用<span class="hljs-keyword">method</span>的invoke方法。切忌不要造成循环调用<br>+ ```java<br>  <span class="hljs-built_in">public</span> <span class="hljs-keyword">class</span> InvocationHandlerCallback implements InvocationHandler &#123;<br>      <span class="hljs-comment">/**</span><br><span class="hljs-comment">       * invocationHandler的invoke方法传入的method和proxy都是代理本身对象</span><br><span class="hljs-comment">       * 切忌重复调用，会循环调用</span><br><span class="hljs-comment">       * @param proxy 代理类本身</span><br><span class="hljs-comment">       * @param method 代理类内部的方法</span><br><span class="hljs-comment">       * @param args  参数</span><br><span class="hljs-comment">       * @return</span><br><span class="hljs-comment">       * @throws Throwable</span><br><span class="hljs-comment">       */</span><br>      <span class="hljs-built_in">public</span> <span class="hljs-keyword">Object</span> invoke(<span class="hljs-keyword">Object</span> proxy, <span class="hljs-keyword">Method</span> <span class="hljs-keyword">method</span>, <span class="hljs-keyword">Object</span>[] args) throws Throwable &#123;<br>          <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(&quot;invocationHandlerCallback Before....&quot;);<br>          <span class="hljs-keyword">method</span>.invoke(proxy.getClass().getSuperclass().newInstance(),args);<br>          //会无限循环<br>          //<span class="hljs-keyword">method</span>.invoke(proxy,args);<br>          <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(&quot;invocationHandlerCallback after....&quot;);<br>          <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>      &#125;<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h5 id="MethodInterceptor"><a href="#MethodInterceptor" class="headerlink" title="MethodInterceptor"></a>MethodInterceptor</h5><ul>
+<li>实现MethodInterceptor的intercept，实现被代理对象的逻辑植入。也是最常用的callback</li>
+<li><pre><code class="java">/**
+ * 生成代理类字节码。对方法进行拦截调用
+ */
+public class MethodInterceptorCallback implements MethodInterceptor &#123;
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable &#123;
+        System.out.println(&quot;before invoke........&quot;);
+        proxy.invokeSuper(obj,args);
+        System.out.println(&quot;after invoke.........&quot;);
+        return null;
+    &#125;
+&#125;
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-meta">##### NoOp</span><br>+ 通过接口声明了一个单例对象，该代理不对被代理类执行任何操作<br>+ ```java<br>  <span class="hljs-comment">/**</span><br><span class="hljs-comment">   * Methods using this &#123;@link Enhancer&#125; callback will delegate directly to the</span><br><span class="hljs-comment">   * default (super) implementation in the base class.</span><br><span class="hljs-comment">   */</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">interface</span> <span class="hljs-title">NoOp</span> <span class="hljs-keyword"><span class="hljs-keyword">extends</span> <span class="hljs-type">Callback</span></span></span><br><span class="hljs-title class_">  </span>&#123;<br>      <span class="hljs-comment">/**</span><br><span class="hljs-comment">       * A thread-safe singleton instance of the &lt;code&gt;NoOp&lt;/code&gt; callback.</span><br><span class="hljs-comment">       */</span><br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> NoOp INSTANCE = <span class="hljs-keyword">new</span><span class="hljs-type"></span> NoOp() &#123; &#125;;<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h4 id="callBackFilter"><a href="#callBackFilter" class="headerlink" title="callBackFilter"></a>callBackFilter</h4><ul>
+<li>当传入多个callback类时，可以通过callBackFilter来选择使用哪个callback，当多个符合时，使用首个匹配的callback</li>
+</ul>
+<h3 id="AspectJ"><a href="#AspectJ" class="headerlink" title="AspectJ"></a>AspectJ</h3><ul>
+<li>Aspect Oriented Programming，可以插入字节码的位置<ul>
+<li>在方法（包括构造方法）被调用的位置。</li>
+<li>在方法体（包括构造方法）的内部。</li>
+<li>在读写变量的位置。</li>
+<li>在静态代码块内部。</li>
+<li>在异常处理的位置的前后</li>
+<li>此外，它也可以直接将原位置的代码替换为自定义的代码。</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>切入点固定</li>
+<li>正则表达式的局限性</li>
+<li>性能比较低</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/04Java/java%E5%9F%BA%E7%A1%80/" class="category-chain-item">java基础</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>03反射及动态代理</div>
+      <div>https://x-leonidas.github.io/2022/02/01/04Java/java基础/03反射及动态代理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/04Java/java%E5%9F%BA%E7%A1%80/02Java%E9%9B%86%E5%90%88/" title="02Java集合">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">02Java集合</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" title="同步容器">
+                        <span class="hidden-mobile">同步容器</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

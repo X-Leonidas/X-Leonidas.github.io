@@ -1,0 +1,1055 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Eureka 分为server和client 对于服务发现而言，可用性比数据一致性更加重要——AP 胜过 CP。而 Spring Cloud Netflix 在设计 Eureka 时遵守的就是 AP 原则。 注解@EnableEurekaServer  server 服务的注册中心，负责维护注册的服务列表,同其他服务注册中心一样，支持高可用配置。 配置 register-with-eureka:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02SpringCloud">
+<meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/02SpringCloud/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="Eureka 分为server和client 对于服务发现而言，可用性比数据一致性更加重要——AP 胜过 CP。而 Spring Cloud Netflix 在设计 Eureka 时遵守的就是 AP 原则。 注解@EnableEurekaServer  server 服务的注册中心，负责维护注册的服务列表,同其他服务注册中心一样，支持高可用配置。 配置 register-with-eureka:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ZuulFilter%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/SprngCloudGateWay%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/SpringCloudConfigWebhook.jpg">
+<meta property="article:published_time" content="2022-02-01T12:00:09.000Z">
+<meta property="article:modified_time" content="2023-10-24T14:10:45.000Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ZuulFilter%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg">
+  
+  
+  
+  <title>02SpringCloud - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="02SpringCloud"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:09
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          64 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">02SpringCloud</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h1><ul>
+<li>分为server和client</li>
+<li><strong>对于服务发现而言，可用性比数据一致性更加重要——AP 胜过 CP</strong>。而 Spring Cloud Netflix 在设计 Eureka 时遵守的就是 AP 原则。</li>
+<li>注解@EnableEurekaServer</li>
+</ul>
+<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><ul>
+<li>服务的注册中心，负责维护注册的服务列表,同其他服务注册中心一样，支持高可用配置。</li>
+<li>配置<ul>
+<li>register-with-eureka: false   #false表示不向注册中心注册自己。<br>fetch-registry: false   #false表示自己端就是注册中心，我的职责就是维护服务实例，并不需要去检索服务</li>
+</ul>
+</li>
+</ul>
+<h3 id="Eureka的高可用"><a href="#Eureka的高可用" class="headerlink" title="Eureka的高可用"></a>Eureka的高可用</h3><ul>
+<li>Eureka Server 可以运行多个实例来构建集群，解决单点问题，但不同于 ZooKeeper 的选举 leader 的过程，Eureka Server 采用的是 Peer to Peer 对等通信。这是一种去中心化的架构，无 master&#x2F;slave 区分，每一个 Peer 都是对等的。在这种架构中，节点通过彼此互相注册来提高可用性，每个节点需要添加一个或多个有效的 serviceUrl 指向其他节点。每个节点都可被视为其他节点的副本。</li>
+<li>如果某台 Eureka Server 宕机，Eureka Client 的请求会自动切换到新的 Eureka Server 节点，当宕机的服务器重新恢复后，Eureka 会再次将其纳入到服务器集群管理之中。当节点开始接受客户端请求时，所有的操作都会进行<code>replicateToPeer</code>（节点间复制）操作，将请求复制到其他 Eureka Server 当前所知的所有节点中。</li>
+<li>一个新的 Eureka Server 节点启动后，会首先尝试从邻近节点获取所有实例注册表信息，完成初始化。Eureka Server 通过<code>getEurekaServiceUrls()</code>方法获取所有的节点，并且会通过心跳续约的方式定期更新。默认配置下，如果 Eureka Server 在一定时间内没有接收到某个服务实例的心跳，Eureka Server 将会注销该实例（默认为 90 秒，通过<code>eureka.instance.lease-expiration-duration-in-seconds</code>配置）。当 Eureka Server 节点在短时间内丢失过多的心跳时（比如发生了网络分区故障），那么这个节点就会进入自我保护模式。</li>
+</ul>
+<h3 id="自我保护模式"><a href="#自我保护模式" class="headerlink" title="自我保护模式"></a>自我保护模式</h3><ul>
+<li>默认配置下，如果 Eureka Server 每分钟收到心跳续约的数量低于一个阈值，并且持续 15 分钟，就会触发自我保护。<ul>
+<li>阈值&#x3D;instance的数量 × (60 &#x2F; instance的心跳间隔秒数) × 自我保护系数</li>
+</ul>
+</li>
+<li>在自我保护模式中，Eureka Server 会保护服务注册表中的信息，不再注销任何服务实例。当它收到的心跳数重新恢复到阈值以上时，该 Eureka Server 节点就会自动退出自我保护模式。它的设计哲学前面提到过，那就是宁可保留错误的服务注册信息，也不盲目注销任何可能健康的服务实例。这样做会使客户端很容易拿到实际已经不存在的服务实例，会出现调用失败的情况。因此客户端要有容错机制，比如请求重试、断路器。该模式可以通过<code>eureka.server.enable-self-preservation = false</code>来禁用，</li>
+</ul>
+<h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><h3 id="服务提供者"><a href="#服务提供者" class="headerlink" title="服务提供者"></a>服务提供者</h3><ul>
+<li>服务提供方，作为一个 Eureka Client，向 Eureka Server 做服务注册、续约和下线等操作，注册的主要数据包括服务名、机器 ip、端口号、域名等等。</li>
+<li>Eureka Server 会维护一个已注册服务的列表，这个列表为一个嵌套的 HashMap：<ul>
+<li><pre><code class="java">private final ConcurrentHashMap&lt;String, Map&lt;String, Lease&lt;InstanceInfo&gt;&gt;&gt; registry
+        = new ConcurrentHashMap&lt;String, Map&lt;String, Lease&lt;InstanceInfo&gt;&gt;&gt;();
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs yaml">  <span class="hljs-string">+</span> <span class="hljs-string">第一层，application</span> <span class="hljs-string">name</span> <span class="hljs-string">和对应的服务实例。</span><br>  <span class="hljs-string">+</span> <span class="hljs-string">第二层，服务实例及其对应的注册信息，包括</span> <span class="hljs-string">IP，端口号等。</span><br><span class="hljs-comment">#### 续约与剔除</span><br><span class="hljs-string">+</span> <span class="hljs-string">服务实例启动后，会周期性地向</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Server</span> <span class="hljs-string">发送心跳以续约自己的信息，避免自己的注册信息被剔除。续约的方式与服务注册基本一致：首先更新自身状态，再同步到其它</span> <span class="hljs-string">Peer。</span><br><span class="hljs-comment">### 服务消费者</span><br><span class="hljs-string">+</span> <span class="hljs-string">服务消费方，作为一个</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Client，向</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Server</span> <span class="hljs-string">获取</span> <span class="hljs-string">Service</span> <span class="hljs-string">Provider</span> <span class="hljs-string">的注册信息，并通过远程调用与</span> <span class="hljs-string">Service</span> <span class="hljs-string">Provider</span> <span class="hljs-string">进行通信。</span><br><span class="hljs-string">+</span> <span class="hljs-string">它启动后，会从</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Server</span> <span class="hljs-string">上获取所有实例的注册信息，包括</span> <span class="hljs-string">IP</span> <span class="hljs-string">地址、端口等，并缓存到本地。这些信息默认每</span> <span class="hljs-number">30</span> <span class="hljs-string">秒更新一次。前文提到过，如果与</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Server</span> <span class="hljs-string">通信中断，Service</span> <span class="hljs-string">Consumer</span> <span class="hljs-string">仍然可以通过本地缓存与</span> <span class="hljs-string">Service</span> <span class="hljs-string">Provider</span> <span class="hljs-string">通信。</span><br><span class="hljs-string">+</span> <span class="hljs-string">，服务端的更改可能需要</span> <span class="hljs-number">2</span> <span class="hljs-string">分钟才能传播到所有客户端。这是因为</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">有三处缓存和一处延迟造成的。</span><br>  <span class="hljs-string">+</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Server</span> <span class="hljs-string">对注册列表进行缓存，默认时间为</span> <span class="hljs-string">30s。</span><br>  <span class="hljs-string">+</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Client</span> <span class="hljs-string">对获取到的注册信息进行缓存，默认时间为</span> <span class="hljs-string">30s。</span><br>  <span class="hljs-string">+</span> <span class="hljs-string">Ribbon</span> <span class="hljs-string">会从上面提到的</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">Client</span> <span class="hljs-string">获取服务列表，将负载均衡后的结果缓存</span> <span class="hljs-string">30s</span><br>  <span class="hljs-string">+</span> <span class="hljs-string">如果不是在</span> <span class="hljs-string">Spring</span> <span class="hljs-string">Cloud</span> <span class="hljs-string">环境下使用这些组件</span> <span class="hljs-string">(Eureka,</span> <span class="hljs-string">Ribbon)，服务启动后并不会马上向</span> <span class="hljs-string">Eureka</span> <span class="hljs-string">注册，而是需要等到第一次发送心跳请求时才会注册。心跳请求的发送间隔默认是</span> <span class="hljs-string">30s。Spring</span> <span class="hljs-string">Cloud</span> <span class="hljs-string">对此做了修改，服务启动后会马上注册。</span><br><span class="hljs-comment">## Eureka配置</span><br><span class="hljs-string">+</span> <span class="hljs-string">```yaml</span><br>  <span class="hljs-attr">spring:</span><br>    <span class="hljs-attr">application:</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">eureka-server</span><br>  <span class="hljs-attr">server:</span><br>    <span class="hljs-attr">port:</span> <span class="hljs-number">7000</span><br>  <span class="hljs-attr">eureka:</span><br>    <span class="hljs-attr">instance:</span><br>      <span class="hljs-attr">hostname:</span> <span class="hljs-string">localhost</span><br>    <span class="hljs-attr">client:</span><br>      <span class="hljs-attr">register-with-eureka:</span> <span class="hljs-literal">false</span><br>      <span class="hljs-attr">fetch-registry:</span> <span class="hljs-literal">false</span><br>      <span class="hljs-attr">service-url:</span><br>        <span class="hljs-attr">defaultZone:</span> <span class="hljs-string">http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><code>eureka.client.fetch-registry</code>：表示是否从 Eureka Server 获取注册信息，默认为 true。</li>
+<li><code>eureka.client.register-with-eureka</code>：表示是否将自己注册到 Eureka Server，默认为 true。</li>
+<li><code>eureka.client.service-url.defaultZone</code>：设置与 Eureka Server 交互的地址，查询服务和注册服务都需要依赖这个地址。默认是 <a target="_blank" rel="noopener" href="http://localhost:8761/eureka">http://localhost:8761/eureka</a> ；多个地址可使用英文逗号（,）分隔</li>
+</ul>
+<h3 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h3><p>+ </p>
+<h1 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h1><p>+ </p>
+<h1 id="Ribbon"><a href="#Ribbon" class="headerlink" title="Ribbon"></a>Ribbon</h1><ul>
+<li>为 REST 客户端实现负载均衡。它主要包括六个组件</li>
+<li>使用@LoadBalanced注解RestTemplate@Bean方法,直接用RestTemplate调用服务</li>
+</ul>
+<h2 id="六大组件"><a href="#六大组件" class="headerlink" title="六大组件"></a>六大组件</h2><h3 id="ServerList"><a href="#ServerList" class="headerlink" title="ServerList"></a>ServerList</h3><ul>
+<li>负载均衡使用的服务器列表。这个列表会缓存在负载均衡器中，并定期更新。当 Ribbon 与 Eureka 结合使用时，ServerList 的实现类就是 DiscoveryEnabledNIWSServerList，它会保存 Eureka Server 中注册的服务实例表。</li>
+</ul>
+<h3 id="ServerListFilter"><a href="#ServerListFilter" class="headerlink" title="ServerListFilter"></a>ServerListFilter</h3><ul>
+<li>服务器列表过滤器。这是一个接口，主要用于对 Service Consumer 获取到的服务器列表进行预过滤，过滤的结果也是 ServerList。Ribbon 提供了多种过滤器的实现。</li>
+</ul>
+<h3 id="IPing"><a href="#IPing" class="headerlink" title="IPing"></a>IPing</h3><ul>
+<li>探测服务实例是否存活的策略</li>
+</ul>
+<h3 id="IRule"><a href="#IRule" class="headerlink" title="IRule"></a>IRule</h3><ul>
+<li>负载均衡策略，其实现类表述的策略包括：轮询、随机、根据响应时间加权等</li>
+</ul>
+<h3 id="ILoadBalancer"><a href="#ILoadBalancer" class="headerlink" title="ILoadBalancer"></a>ILoadBalancer</h3><ul>
+<li>负载均衡器。这也是一个接口，Ribbon 为其提供了多个实现，比如 ZoneAwareLoadBalancer。而上层代码通过调用其 API 进行服务调用的负载均衡选择。一般 ILoadBalancer 的实现类中会引用一个 IRule</li>
+<li>需要注入RestTemplate和LoadBalancerClient</li>
+<li><pre><code class="java"> ServiceInstance instance = client.choose(&quot;eureka-producer&quot;);
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section">### RestClient</span><br><span class="hljs-bullet">+</span> 服务调用器。顾名思义，这就是负载均衡后，Ribbon 向 Service Provider 发起 REST 请求的工具。<br><span class="hljs-section">## 工作流程</span><br><span class="hljs-bullet">+</span> 优先选择在同一个 Zone 且负载较少的 Eureka Server；<br><span class="hljs-bullet">+</span> 定期从 Eureka 更新并过滤服务实例列表；<br><span class="hljs-bullet">+</span> 根据用户指定的策略，在从 Server 取到的服务注册列表中选择一个实例的地址；<br><span class="hljs-bullet">+</span> 通过 RestClient 进行服务调用。<br><span class="hljs-section"># Hystrix  </span><br><span class="hljs-section">## 雪崩效应</span><br><span class="hljs-bullet">+</span> 在微服务架构中通常会有多个服务层调用，基础服务的故障可能会导致级联故障，进而造成整个系统不可用的情况，这种现象被称为服务雪崩效应。服务雪崩效应是一种因 “服务提供者” 的不可用导致 “服务消费者” 的不可用, 并将不可用逐渐放大的过程。<br><span class="hljs-section">### 雪崩的可能原因</span><br><span class="hljs-bullet">+</span> 服务提供者不可用<br><span class="hljs-bullet">  +</span> 硬件故障<br><span class="hljs-bullet">  +</span> 程序bug<br><span class="hljs-bullet">  +</span> 缓存击穿<br><span class="hljs-bullet">  +</span> 用户大量请求<br><span class="hljs-bullet">+</span> 重试夹大流量<br><span class="hljs-bullet">  +</span> 用户重试<br><span class="hljs-bullet">  +</span> 代码逻辑重试<br><span class="hljs-bullet">+</span> 服务调用者不可用<br><span class="hljs-bullet">  +</span> 同时等待造成的资源耗尽<br><span class="hljs-section">### 应对策略</span><br><span class="hljs-bullet">+</span> 流量控制<br><span class="hljs-bullet">  +</span> 网关限流<br><span class="hljs-bullet">    +</span> 因为 Nginx 的高性能，目前一线互联网公司大量采用 Nginx+Lua 的网关进行流量控制，由此而来的 OpenResty 也越来越热门。<br><span class="hljs-bullet">  +</span> 用户交互限流<br><span class="hljs-bullet">    +</span> 用户交互限流的具体措施有: 1. 采用加载动画，提高用户的忍耐等待时间。2. 提交按钮添加强制等待时间机制。<br><span class="hljs-bullet">  +</span> 关闭重试<br><span class="hljs-bullet">+</span> 改进缓存模式<br><span class="hljs-bullet">  +</span> 缓存预加载<br><span class="hljs-bullet">  +</span> 同步改为异步刷新<br><span class="hljs-bullet">+</span> 服务自动扩容<br><span class="hljs-bullet">+</span> 服务调用者降级服务<br><span class="hljs-bullet">  +</span> 资源隔离<br><span class="hljs-bullet">    +</span> 对调用服务的线程池进行隔离<br><span class="hljs-bullet">  +</span> 对依赖服务进行分类<br><span class="hljs-bullet">    +</span> 强依赖和若依赖。强依赖服务不可用会导致当前业务中止，而弱依赖服务的不可用不会导致当前业务的中止。<br><span class="hljs-bullet">  +</span> 不可用服务调用快速失败<br><span class="hljs-bullet">    +</span> 一般通过 <span class="hljs-strong">**超时机制**</span>, <span class="hljs-strong">**熔断器**</span> 和熔断后的 <span class="hljs-strong">**降级方法**</span> 来实现<br><span class="hljs-section">## 使用Hystirx预防雪崩</span><br><span class="hljs-section">### 服务降级(FallBack)</span><br><span class="hljs-bullet">+</span> 对于查询操作，我们可以实现一个 fallback 方法，当请求后端服务出现异常的时候，可以使用 fallback 方法返回的值。fallback 方法的返回值一般是设置的默认值或者来自缓存。<br><span class="hljs-section">### 资源隔离</span><br><span class="hljs-bullet">+</span> 在 Hystrix 中，主要通过线程池来实现资源隔离。通常在使用的时候我们会根据调用的远程服务划分出多个线程池。例如调用产品服务的 Command 放入 A 线程池，调用账户服务的 Command 放入 B 线程池。这样做的主要优点是运行环境被隔离开了。这样就算调用服务的代码存在 bug 或者由于其他原因导致自己所在线程池被耗尽时，不会对系统的其他服务造成影响。<br><span class="hljs-bullet">+</span> 优势<br><span class="hljs-bullet">  +</span> 应用自身得到完全的保护，不会受不可控的依赖服务影响。即便给依赖服务分配的线程池被填满，也不会影响应用自身的额其余部分。<br><span class="hljs-bullet">  +</span> 可以有效的降低接入新服务的风险。如果新服务接入后运行不稳定或存在问题，完全不会影响到应用其他的请求。<br><span class="hljs-bullet">  +</span> 当依赖的服务从失效恢复正常后，它的线程池会被清理并且能够马上恢复健康的服务，相比之下容器级别的清理恢复速度要慢得多。<br><span class="hljs-bullet">  +</span> 当依赖的服务出现配置错误的时候，线程池会快速的反应出此问题（通过失败次数、延迟、超时、拒绝等指标的增加情况）。同时，我们可以在不影响应用功能的情况下通过实时的动态属性刷新（后续会通过 Spring Cloud Config 与 Spring Cloud Bus 的联合使用来介绍）来处理它。<br><span class="hljs-bullet">  +</span> 当依赖的服务因实现机制调整等原因造成其性能出现很大变化的时候，此时线程池的监控指标信息会反映出这样的变化。同时，我们也可以通过实时动态刷新自身应用对依赖服务的阈值进行调整以适应依赖方的改变。<br><span class="hljs-bullet">  +</span> 除了上面通过线程池隔离服务发挥的优点之外，每个专有线程池都提供了内置的并发实现，可以利用它为同步的依赖服务构建异步的访问。<br><span class="hljs-section">#### 信号量</span><br><span class="hljs-bullet">+</span> Hystrix 中除了使用线程池之外，还可以使用信号量来控制单个依赖服务的并发度，信号量的开销要远比线程池的开销小得多，但是它不能设置超时和实现异步访问。所以，只有在依赖服务是足够可靠的情况下才使用信号量。在 HystrixCommand 和 HystrixObservableCommand 中 2 处支持信号量的使用：<br><span class="hljs-bullet">  +</span> 命令执行：如果隔离策略参数 execution.isolation.strategy 设置为 SEMAPHORE，Hystrix 会使用信号量替代线程池来控制依赖服务的并发控制。<br><span class="hljs-bullet">  +</span> 降级逻辑：当 Hystrix 尝试降级逻辑时候，它会在调用线程中使用信号量。<br><span class="hljs-bullet">+</span> 信号量的默认值为 10，我们也可以通过动态刷新配置的方式来控制并发线程的数量。对于信号量大小的估算方法与线程池并发度的估算类似。仅访问内存数据的请求一般耗时在 1ms 以内，性能可以达到 5000rps，这样级别的请求我们可以将信号量设置为 1 或者 2，我们可以按此标准并根据实际请求耗时来设置信号量。<br><span class="hljs-section">### 断路器模式</span><br><span class="hljs-bullet">+</span> 当某个服务单元发生故障（类似用电器发生短路）之后，通过断路器的故障监控（类似熔断保险丝），直接切断原来的主逻辑调用。但是，在 Hystrix 中的断路器除了切断主逻辑的功能之外，还有更复杂的逻辑，<br><span class="hljs-bullet">+</span> 当 Hystrix Command 请求后端服务失败数量超过一定阈值，断路器会切换到开路状态 (Open)。这时所有请求会直接失败而不会发送到后端服务。<br><span class="hljs-bullet">+</span> 阈值的参数<br><span class="hljs-bullet">  +</span> 快照时间窗<br><span class="hljs-bullet">    +</span> 断路器确定是否打开需要统计一些请求和错误数据，而统计的时间范围就是快照时间窗，默认为最近的 10 秒。<br><span class="hljs-bullet">  +</span> 请求总数下限<br><span class="hljs-bullet">    +</span> 在快照时间窗内，必须满足请求总数下限才有资格进行熔断。默认为 20，意味着在 10 秒内，如果该 Hystrix Command 的调用此时不足 20 次，即时所有的请求都超时或其他原因失败，断路器都不会打开<br><span class="hljs-bullet">  +</span> 错误百分比下限<br><span class="hljs-bullet">    +</span> 当请求总数在快照时间窗内超过了下限，比如发生了 30 次调用，如果在这 30 次调用中，有 16 次发生了超时异常，也就是超过 50% 的错误百分比，在默认设定 50% 下限情况下，这时候就会将断路器打开<br><span class="hljs-bullet">+</span> 断路器保持在开路状态一段时间后 (默认 5 秒)，自动切换到半开路状态 (HALF-OPEN)。这时会判断下一次请求的返回情况，如果请求成功，断路器切回闭路状态 (CLOSED)，否则重新切换到开路状态 (OPEN)。<br><span class="hljs-section">## 监控</span><br><span class="hljs-bullet">+</span> 在 Spring Boot 的启动类上面引入注解<span class="hljs-code">`@EnableHystrixDashboard`</span>，启用 Hystrix Dashboard 功能<br><br><span class="hljs-bullet">+</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://xy-note-pic.oss-cn-beijing.aliyuncs.com/hystrix.jpg&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;hystrix&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;zoom:80%;&quot;</span> /&gt;</span></span><br><br><span class="hljs-bullet">+</span> Delay：控制服务器上轮询监控信息的延迟时间，默认为 2000 毫秒，可以通过配置该属性来降低客户端的网络和 CPU 消耗。<br><span class="hljs-bullet">+</span> Title：该参数可以展示合适的标题。<br><span class="hljs-section">### 三种监控方式</span><br><span class="hljs-bullet">+</span> 默认的集群监控：通过 URL：<span class="hljs-code">`http://turbine-hostname:port/turbine.stream`</span> 开启，实现对默认集群的监控<br><span class="hljs-bullet">+</span> 指定的集群监控：通过 URL：<span class="hljs-code">`http://turbine-hostname:port/turbine.stream?cluster=[clusterName]`</span> 开启，实现对 clusterName 集群的监控。<br><span class="hljs-bullet">+</span> 单体应用的监控： ~~通过 URL：<span class="hljs-code">`http://hystrix-app:port/hystrix.stream`</span> 开启~~ ，实现对具体某个服务实例的监控。<span class="hljs-strong">**（现在这里的 URL 应该为 `http://hystrix-app:port/actuator/hystrix.stream`，Actuator 2.x 以后 endpoints 全部在`/actuator`下，可以通过`management.endpoints.web.base-path`修改）**</span><br><span class="hljs-bullet">+</span> <span class="hljs-strong">**注意：**</span>前两者都对集群的监控，需要整合 Turbine 才能实现<br><span class="hljs-section">## Hystrix使用</span><br><span class="hljs-bullet">+</span> <span class="hljs-code">```yaml</span><br><span class="hljs-code">  //配置中加入此项，表示开始使用hystrix</span><br><span class="hljs-code">  feign:</span><br><span class="hljs-code">    hystrix:</span><br><span class="hljs-code">      enabled: true</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li>被监控实例中为启动类添加<code>@EnableCircuitBreaker</code>或<code>@EnableHystrix</code>注解，开启断路器功能</li>
+<li>被监控实例的配置文件<ul>
+<li><pre><code class="yaml">management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-meta">### 监控界面解读</span><br>+ https:<span class="hljs-type"></span>//www.haoyizebo.com/posts/<span class="hljs-number">7</span>f8b5ef9/<br>+ https:<span class="hljs-type"></span>//www.haoyizebo.com/posts/<span class="hljs-number">56139</span>c3d/<br><span class="hljs-meta">### 创建回调类</span><br>+ ```java<br>  <span class="hljs-meta">@Component</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloRemoteHystrix</span> <span class="hljs-keyword"><span class="hljs-keyword">implements</span> <span class="hljs-type">HelloRemote</span></span> </span>&#123;<br>  <br>      <span class="hljs-meta">@Override</span><br>      <span class="hljs-keyword">public</span> <span class="hljs-keyword">String</span> hello(<span class="hljs-meta">@RequestParam</span>(value = <span class="hljs-string">&quot;name&quot;</span>) <span class="hljs-keyword">String</span> name) &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Hello World!&quot;</span>;<br>      &#125;<br>  <br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="添加fallback属性"><a href="#添加fallback属性" class="headerlink" title="添加fallback属性"></a>添加fallback属性</h3><ul>
+<li>在<code>HelloRemote</code>类添加指定 fallback 类，在服务熔断的时候返回 fallback 类中的内容</li>
+<li><pre><code class="java">@FeignClient(name = &quot;eureka-producer&quot;, fallback = HelloRemoteHystrix.class)
+public interface HelloRemote &#123;
+
+    @GetMapping(&quot;/hello/&quot;)
+    String hello(@RequestParam(value = &quot;name&quot;) String name);
+
+&#125;
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs less"># <span class="hljs-selector-tag">Feign</span><br>+ <span class="hljs-selector-tag">Feign</span> 是一个声明式的 <span class="hljs-selector-tag">Web</span> <span class="hljs-selector-tag">Service</span> 客户端，它的目的就是让 <span class="hljs-selector-tag">Web</span> <span class="hljs-selector-tag">Service</span> 调用更加简单。它整合了 <span class="hljs-selector-tag">Ribbon</span> 和 <span class="hljs-selector-tag">Hystrix</span>，从而让我们不再需要显式地使用这两个组件。<span class="hljs-selector-tag">Feign</span> 还提供了 <span class="hljs-selector-tag">HTTP</span> 请求的模板，通过编写简单的接口和插入注解，我们就可以定义好 <span class="hljs-selector-tag">HTTP</span> 请求的参数、格式、地址等信息。接下来，<span class="hljs-selector-tag">Feign</span> 会完全代理 <span class="hljs-selector-tag">HTTP</span> 的请求，我们只需要像调用方法一样调用它就可以完成服务请求。<br>## 应用<br>+ 启动类加上@<span class="hljs-selector-tag">EnableFeignClients</span><br>+ 创建接口类<br>  + ```<span class="hljs-selector-tag">java</span><br>    @<span class="hljs-selector-tag">FeignClient</span>(name = <span class="hljs-string">&quot;eureka-producer&quot;</span>)  <span class="hljs-comment">//调用的服务名称</span><br>    <span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">interface</span> <span class="hljs-selector-tag">HelloRemote</span> &#123;<br>    <br>        <span class="hljs-variable">@GetMapping</span>(<span class="hljs-string">&quot;/hello/&quot;</span>)<br>        String <span class="hljs-built_in">hello</span>(<span class="hljs-variable">@RequestParam</span>(value = <span class="hljs-string">&quot;name&quot;</span>) String name);<br>    <br>    &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li>在Controller注入HelloRrmote 接口直接调用方法</li>
+</ul>
+<h1 id="Gateway"><a href="#Gateway" class="headerlink" title="Gateway"></a>Gateway</h1><ul>
+<li>为什么需要网关<ul>
+<li><strong>简化客户端调用复杂度</strong><ul>
+<li>在微服务架构模式下后端服务的实例数一般是动态的，对于客户端而言很难发现动态改变的服务实例的访问地址信息。因此在基于微服务的项目中为了简化前端的调用逻辑，通常会引入 API Gateway 作为轻量级网关，同时 API Gateway 中也会实现相关的认证逻辑从而简化内部服务之间相互调用的复杂度。</li>
+</ul>
+</li>
+<li><strong>数据裁剪以及聚合</strong><ul>
+<li>通常而言不同的客户端对于显示时对于数据的需求是不一致的，比如手机端或者 Web 端又或者在低延迟的网络环境或者高延迟的网络环境。<br>因此为了优化客户端的使用体验，API Gateway 可以对通用性的响应数据进行裁剪以适应不同客户端的使用需求。同时还可以将多个 API 调用逻辑进行聚合，从而减少客户端的请求数，优化客户端用户体验</li>
+</ul>
+</li>
+<li><strong>多渠道支持</strong><ul>
+<li>当然我们还可以针对不同的渠道和客户端提供不同的 API Gateway, 对于该模式的使用由另外一个大家熟知的方式叫 Backend for front-end, 在 Backend for front-end 模式当中，我们可以针对不同的客户端分别创建其 BFF</li>
+</ul>
+</li>
+<li><strong>遗留系统的微服务化改造</strong><ul>
+<li>对于系统而言进行微服务改造通常是由于原有的系统存在或多或少的问题，比如技术债务，代码质量，可维护性，可扩展性等等。API Gateway 的模式同样适用于这一类遗留系统的改造，通过微服务化的改造逐步实现对原有系统中的问题的修复，从而提升对于原有业务响应力的提升。通过引入抽象层，逐步使用新的实现替换旧<br>的实现。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Spring-Cloud-Zuul"><a href="#Spring-Cloud-Zuul" class="headerlink" title="Spring Cloud Zuul"></a>Spring Cloud Zuul</h2><ul>
+<li>Zuul 是 Netflix 出品的一个基于 JVM 路由和服务端的负载均衡器。</li>
+<li>使用@EnableZuulProxy注解开启Zuul功能</li>
+</ul>
+<h2 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h2><ul>
+<li>当我们这里构建的<code>api-gateway</code>应用启动并注册到 Eureka 之后，服务网关会发现上面我们启动的两个服务<code>producer</code>和<code>consumer</code>，这时候 Zuul 就会创建两个路由规则。每个路由规则都包含两部分，一部分是外部请求的匹配规则，另一部分是路由的服务 ID。针对当前示例的情况，Zuul 会创建下面的两个路由规则：<ul>
+<li>转发到<code>producer</code>服务的请求规则为：<code>/producer/**</code></li>
+<li>转发到<code>consumer</code>服务的请求规则为：<code>/consumer/**</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h2><h3 id="Filter的生命周期"><a href="#Filter的生命周期" class="headerlink" title="Filter的生命周期"></a>Filter的生命周期</h3><ul>
+<li><p>Filter 的生命周期有 4 个，分别是“PRE”、“ROUTING”、“POST”和“ERROR”，整个生命周期可以用下图来表示</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ZuulFilter%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg" srcset="/img/loading.gif" lazyload alt="ZuulFilter的生命周期" style="zoom:67%;" />
+</li>
+<li><p><strong>PRE：</strong>这种过滤器在请求被路由之前调用。我们可利用这种过滤器实现身份验证、在集群中选择请求的微服务、记录调试信息等。</p>
+</li>
+<li><p><strong>ROUTING：</strong>这种过滤器将请求路由到微服务。这种过滤器用于构建发送给微服务的请求，并使用 Apache HttpClient 或 Netfilx Ribbon 请求微服务。</p>
+</li>
+<li><p><strong>POST：</strong>这种过滤器在路由到微服务以后执行。这种过滤器可用来为响应添加标准的 HTTP Header、收集统计信息和指标、将响应从微服务发送给客户端等。</p>
+</li>
+<li><p><strong>ERROR：</strong>在其他阶段发生错误时执行该过滤器。 除了默认的过滤器类型，Zuul 还允许我们创建自定义的过滤器类型。例如，我们可以定制一种 STATIC 类型的过滤器，直接在 Zuul 中生成响应，而不将请求转发到后端的微服务。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Zuul中默认实现的Filter"><a href="#Zuul中默认实现的Filter" class="headerlink" title="Zuul中默认实现的Filter"></a>Zuul中默认实现的Filter</h3><ul>
+<li><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>顺序</th>
+<th>过滤器</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pre</td>
+<td>-3</td>
+<td>ServletDetectionFilter</td>
+<td>标记处理 Servlet 的类型</td>
+</tr>
+<tr>
+<td>pre</td>
+<td>-2</td>
+<td>Servlet30WrapperFilter</td>
+<td>包装 HttpServletRequest 请求</td>
+</tr>
+<tr>
+<td>pre</td>
+<td>-1</td>
+<td>FormBodyWrapperFilter</td>
+<td>包装请求体</td>
+</tr>
+<tr>
+<td>route</td>
+<td>1</td>
+<td>DebugFilter</td>
+<td>标记调试标志</td>
+</tr>
+<tr>
+<td>route</td>
+<td>5</td>
+<td>PreDecorationFilter</td>
+<td>处理请求上下文供后续使用</td>
+</tr>
+<tr>
+<td>route</td>
+<td>10</td>
+<td>RibbonRoutingFilter</td>
+<td>serviceId 请求转发</td>
+</tr>
+<tr>
+<td>route</td>
+<td>100</td>
+<td>SimpleHostRoutingFilter</td>
+<td>url 请求转发</td>
+</tr>
+<tr>
+<td>route</td>
+<td>500</td>
+<td>SendForwardFilter</td>
+<td>forward 请求转发</td>
+</tr>
+<tr>
+<td>post</td>
+<td>0</td>
+<td>SendErrorFilter</td>
+<td>处理有错误的请求响应</td>
+</tr>
+<tr>
+<td>post</td>
+<td>1000</td>
+<td>SendResponseFilter</td>
+<td>处理正常的请求响应</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="禁用指定的Filter"><a href="#禁用指定的Filter" class="headerlink" title="禁用指定的Filter"></a>禁用指定的Filter</h3><ul>
+<li>可以在 application.yml 中配置需要禁用的 filter，格式为<code>zuul.&lt;SimpleClassName&gt;.&lt;filterType&gt;.disable=true</code>。<br>比如要禁用<code>org.springframework.cloud.netflix.zuul.filters.post.SendResponseFilter</code>就设置</li>
+<li><pre><code class="yaml">zuul:
+  SendResponseFilter:
+    post:
+      disable: true
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta">### 自定义Filter</span><br>+ ```java<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">TokenFilter</span> <span class="hljs-title">extends</span> <span class="hljs-title">ZuulFilter</span> &#123;<br>  <br>      <span class="hljs-comment">/**</span><br><span class="hljs-comment">       * 过滤器的类型，它决定过滤器在请求的哪个生命周期中执行。</span><br><span class="hljs-comment">       * 这里定义为pre，代表会在请求被路由之前执行。</span><br><span class="hljs-comment">       *</span><br><span class="hljs-comment">       * @return</span><br><span class="hljs-comment">       */</span><br>      @Override<br>      <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">filterType</span>()</span> &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;pre&quot;</span>;<br>      &#125;<br>  <br>      <span class="hljs-comment">/**</span><br><span class="hljs-comment">       * filter执行顺序，通过数字指定。</span><br><span class="hljs-comment">       * 数字越大，优先级越低。</span><br><span class="hljs-comment">       *</span><br><span class="hljs-comment">       * @return</span><br><span class="hljs-comment">       */</span><br>      @Override<br>      <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">filterOrder</span>()</span> &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>      &#125;<br>  <br>      <span class="hljs-comment">/**</span><br><span class="hljs-comment">       * 判断该过滤器是否需要被执行。这里我们直接返回了true，因此该过滤器对所有请求都会生效。</span><br><span class="hljs-comment">       * 实际运用中我们可以利用该函数来指定过滤器的有效范围。</span><br><span class="hljs-comment">       *</span><br><span class="hljs-comment">       * @return</span><br><span class="hljs-comment">       */</span><br>      @Override<br>      <span class="hljs-function"><span class="hljs-keyword">public</span> boolean <span class="hljs-title">shouldFilter</span>()</span> &#123;<br>          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>      &#125;<br>  <br>      <span class="hljs-comment">/**</span><br><span class="hljs-comment">       * 过滤器的具体逻辑</span><br><span class="hljs-comment">       *</span><br><span class="hljs-comment">       * @return</span><br><span class="hljs-comment">       */</span><br>      @Override<br>      <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">run</span>()</span> &#123;<br>          RequestContext ctx = RequestContext.getCurrentContext();<br>          HttpServletRequest request = ctx.getRequest();<br>  <br>          String token = request.getParameter(<span class="hljs-string">&quot;token&quot;</span>);<br>          <span class="hljs-keyword">if</span> (token == <span class="hljs-literal">null</span> || token.isEmpty()) &#123;<br>              ctx.setSendZuulResponse(<span class="hljs-literal">false</span>);<br>              ctx.setResponseStatusCode(<span class="hljs-number">401</span>);<br>              ctx.setResponseBody(<span class="hljs-string">&quot;token is empty&quot;</span>);<br>          &#125;<br>          <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>      &#125;<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li>我们通过继承<code>ZuulFilter</code>抽象类并重写了下面的四个方法来实现自定义的过滤器，这四个方法分别定义了：<ul>
+<li><code>filterType()</code>：过滤器的类型，它决定过滤器在请求的哪个生命周期中执行。这里定义为<code>pre</code>，代表会在请求被路由之前执行。</li>
+<li><code>filterOrder()</code>：过滤器的执行顺序。当请求在一个阶段中存在多个过滤器时，需要根据该方法返回的值来依次执行。通过数字指定，数字越大，优先级越低。</li>
+<li><code>shouldFilter()</code>：判断该过滤器是否需要被执行。这里我们直接返回了<code>true</code>，因此该过滤器对所有请求都会生效。实际运用中我们可以利用该函数来指定过滤器的有效范围。</li>
+<li><code>run()</code>：过滤器的具体逻辑。这里我们通过<code>ctx.setSendZuulResponse(false)</code>令 Zuul 过滤该请求，不对其进行路由，然后通过<code>ctx.setResponseStatusCode(401)</code>设置了其返回的错误码，当然我们也可以进一步优化我们的返回，比如，通过<code>ctx.setResponseBody(body)</code>对返回 body 内容进行编辑等。</li>
+</ul>
+</li>
+<li>在实现了自定义过滤器之后，它并不会直接生效，我们还需要为其创建具体的 Bean 才能启动该过滤器。</li>
+</ul>
+<h2 id="Spring-Cloud-Gateway"><a href="#Spring-Cloud-Gateway" class="headerlink" title="Spring Cloud Gateway"></a>Spring Cloud Gateway</h2><ul>
+<li>基于 Spring 5.0，Spring Boot 2.0 和 Project Reactor 等技术开发的网关，它旨在为微服务架构提供一种简单有效的统一的 API 路由管理方式。</li>
+<li>特征<ul>
+<li>基于 Spring Framework 5，Project Reactor 和 Spring Boot 2.0</li>
+<li>动态路由</li>
+<li>Predicates 和 Filters 作用于特定路由</li>
+<li>集成 Hystrix 断路器</li>
+<li>集成 Spring Cloud DiscoveryClient</li>
+<li>易于编写的 Predicates 和 Filters</li>
+<li>限流</li>
+<li>路径重写</li>
+</ul>
+</li>
+</ul>
+<h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><ul>
+<li>**Route(路由)**：这是网关的基本构建块。它由一个 ID，一个目标 URI，一组断言和一组过滤器定义。如果断言为真，则路由匹配。</li>
+<li><strong>Predicate（断言）</strong>：这是一个 <a target="_blank" rel="noopener" href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html">Java 8 的 Predicate</a>。输入类型是一个<a target="_blank" rel="noopener" href="https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/server/ServerWebExchange.html"><code>ServerWebExchange</code></a>TTP 请求的任何内容，例如 headers 或参数。</li>
+<li><strong>Filter（过滤器）</strong>：这是<code>org.springframework.cloud.gateway.filter.GatewayFilter</code>的实例，我们可以使用它修改请求和响应。</li>
+</ul>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/SprngCloudGateWay%E6%B5%81%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload alt="SprngCloudGateWay流程" style="zoom:77%;" />
+</li>
+<li><p>配置</p>
+<ul>
+<li><pre><code class="yaml">spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+#      routes:
+#        - id: default_path_to_http
+#          uri: https://haoyizebo.com
+#          order: 10000
+#          predicates:
+#            - Path=/**
+#          filters:
+#            - SetPath=/
+#			 添加head头
+#            - AddResponseHeader=X-Response-Default-Foo, Default-Bar
+server:
+  port: 10000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7000/eureka/
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">+</span> 配置说明<br><span class="hljs-bullet">  +</span> <span class="hljs-code">`spring.cloud.gateway.discovery.locator.enabled`</span>：是否与服务注册于发现组件进行结合，通过 serviceId 转发到具体的服务实例。默认为<span class="hljs-code">`false`</span>，设为<span class="hljs-code">`true`</span>便开启通过服务中心的自动根据 serviceId 创建路由的功能。<br><span class="hljs-bullet">  +</span> <span class="hljs-code">`spring.cloud.gateway.routes`</span>用于配合具体的路由规则，是一个数组。这里我创建了一个 id 为<span class="hljs-code">`default_path_to_http`</span>的路由，其中的配置是将未匹配的请求转发到<span class="hljs-code">`https://haoyizebo.com`</span>。实际上开启了服务发现后，如果只使用默认创建的路由规则，这个 routes 不配置也是可以的，所以我就先注释掉了不用它了。<br><span class="hljs-section"># Config</span><br><span class="hljs-bullet">+</span> Spring Cloud Config用来为分布式系统中的基础设施和微服务应用提供集中化的外部配置支持，它分为<span class="hljs-strong">**服务端**</span>与<span class="hljs-strong">**客户端**</span>两个部分。其中服务端也称为分布式配置中心，它是一个独立的微服务应用，用来连接配置仓库并为客户端提供获取配置信息、加密 / 解密信息等访问接口；而客户端则是微服务架构中的各个微服务应用或基础设施，它们通过指定的配置中心来管理应用资源与业务相关的配置内容，并在启动的时候从配置中心获取和加载配置信息。<br><span class="hljs-bullet">+</span> Spring Cloud Config 实现了对服务端和客户端中环境变量和属性配置的抽象映射，所以它除了适用于 Spring 构建的应用程序之外，也可以在任何其他语言运行的应用程序中使用。由于 Spring Cloud Config 实现的配置中心默认采用 Git 来存储配置信息，所以使用 Spring Cloud Config 构建的配置服务器，天然就支持对微服务应用配置信息的版本管理，并且可以通过 Git 客户端工具来方便的管理和访问配置内容。当然它也提供了对其他存储方式的支持，比如：SVN 仓库、本地化文件系统<br><span class="hljs-section">## 基于git</span><br><span class="hljs-section">### 准备工作</span><br><span class="hljs-bullet">+</span> 准备一个 Git 仓库，在 Github 上面创建了一个文件夹 config-repo 用来存放配置文件，为了模拟生产环境，我们创建以下三个配置文件：<br>  <span class="hljs-code">```sh</span><br><span class="hljs-code">  // 开发环境</span><br><span class="hljs-code">  config-client-dev.yml</span><br><span class="hljs-code">  // 测试环境</span><br><span class="hljs-code">  config-client-test.yml</span><br><span class="hljs-code">  // 生产环境</span><br><span class="hljs-code">  config-client-prod.yml</span><br></code></pre></td></tr></table></figure>
+每个配置文件中都写一个属性 neo.hello, 属性值分别是 dev/test/prod。下面我们开始配置 Server 端。
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Server端"><a href="#Server端" class="headerlink" title="Server端"></a>Server端</h3><ul>
+<li><p>创建一个基础的 Spring Boot 工程，命名为：config-server-git</p>
+</li>
+<li><p>添加依赖</p>
+<ul>
+<li><pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;
+&lt;/dependency&gt;
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs dts">+ 配置文件：在 application.yml 中添加配置服务的基本信息以及 Git 仓库的相关信息<br>  + ```yaml<br><span class="hljs-symbol">    spring:</span><br><span class="hljs-symbol">      application:</span><br><span class="hljs-symbol">        name:</span> config-server<br><span class="hljs-symbol">      cloud:</span><br><span class="hljs-symbol">        config:</span><br><span class="hljs-symbol">          server:</span><br><span class="hljs-symbol">            git:</span><br><span class="hljs-symbol">              uri:</span> https:<span class="hljs-comment">//github.com/X-coder/spring-cloud-study # 配置git仓库的地址</span><br>              search-paths: config-repo <span class="hljs-meta"># git仓库地址下的相对地址，可以配置多个，用,分割。</span><br><span class="hljs-symbol">              username:</span>git帐号<br><span class="hljs-symbol">              passowrd:</span>git密码<br><span class="hljs-symbol">    server:</span><br><span class="hljs-symbol">      port:</span> <span class="hljs-number">12000</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>启动类</p>
+<ul>
+<li>启动类添加<code>@EnableConfigServer</code>，激活对配置中心的支持</li>
+</ul>
+</li>
+</ul>
+<h3 id="Client端"><a href="#Client端" class="headerlink" title="Client端"></a>Client端</h3><ul>
+<li>与 Spring Cloud Config 相关的属性必须配置在 bootstrap.yml 中，config 部分内容才能被正确加载。因为 config 的相关配置会先于 application.yml，而 bootstrap.yml 的加载也是先于 application.yml。</li>
+<li>bootstrap.yml<ul>
+<li><pre><code class="yaml">spring:
+  cloud:
+    config:
+      uri: http://localhost:12000 # 配置中心的具体地址，即 config-server
+      name: config-client # 对应 &#123;application&#125; 部分
+      profile: dev # 对应 &#123;profile&#125; 部分
+      label: master # 对应 &#123;label&#125; 部分，即 Git 的分支。如果配置中心使用的是本地存储，则该参数无用
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><span class="hljs-comment">### Refresh</span><br>+ 客户端可以从服务端 REST 接口获取配置。但客户端并不能主动感知到配置的变化，从而主动去获取新的配置。客户端如何去主动获取新的配置信息呢，Spring Cloud 已经给我们提供了解决方案，每个客户端通过 POST 方法触发各自的 `/actuator/refresh`<br>+ 添加依赖<br>  + ```xml<br>    <span class="hljs-variable">&lt;dependency&gt;</span><br>        <span class="hljs-variable">&lt;groupId&gt;</span>org.springframework.boot<span class="hljs-variable">&lt;/groupId&gt;</span><br>        <span class="hljs-variable">&lt;artifactId&gt;</span>spring-boot-starter-actuator<span class="hljs-variable">&lt;/artifactId&gt;</span><br>    <span class="hljs-variable">&lt;/dependency&gt;</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>需要给加载变量的类上面加载<code>@RefreshScope</code>，在客户端执行<code>/actuator/refresh</code>的时候就会更新此类下面的变量值<ul>
+<li><pre><code class="java">@RestController
+@RefreshScope
+public class HelloController &#123;
+
+    @Value(&quot;$&#123;info.profile:error&#125;&quot;)
+    private String profile;
+
+    @GetMapping(&quot;/info&quot;)
+    public Mono&lt;String&gt; hello() &#123;
+        return Mono.justOrEmpty(profile);
+    &#125;
+&#125;
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs dts">+ 在 application.yml 中添加配置暴露Endpoint <br>  + ```yaml<br><span class="hljs-symbol">    management:</span><br><span class="hljs-symbol">      endpoints:</span><br><span class="hljs-symbol">        web:</span><br><span class="hljs-symbol">          exposure:</span><br><span class="hljs-symbol">            include:</span> refresh<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Webhook"><a href="#Webhook" class="headerlink" title="Webhook"></a>Webhook</h3><ul>
+<li><p>只要提交代码就自动调用客户端来更新,Webhook 是当某个事件发生时，通过发送 HTTP POST 请求的方式来通知信息接收方。Webhook 来监测你在 Github.com 上的各种事件，最常见的莫过于 push 事件。如果你设置了一个监测 push 事件的 Webhook，那么每当你的这个项目有了任何提交，这个 Webhook 都会被触发，这时 Github 就会发送一个 HTTP POST 请求到你配置好的地址</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/SpringCloudConfigWebhook.jpg" srcset="/img/loading.gif" lazyload alt="SpringCloudConfigWebhook"></p>
+</li>
+<li><p><code>Payload URL</code> ：触发后回调的 URL</p>
+</li>
+<li><p><code>Content type</code> ：数据格式，两种一般使用 json</p>
+</li>
+<li><p><code>Secret</code> ：用作给 POST 的 body 加密的字符串。采用 HMAC 算法</p>
+</li>
+<li><p><code>events</code> ：触发的事件列表。</p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th>events 事件类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>push</td>
+<td>仓库有 push 时触发。默认事件</td>
+</tr>
+<tr>
+<td>create</td>
+<td>当有分支或标签被创建时触发</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>当有分支或标签被删除时触发</td>
+</tr>
+<tr>
+<td>这样我们就可以利用 hook 的机制去触发客户端的更新，但是当客户端越来越多的时候，hook 机制也不够优雅了，另外每次增加客户端都需要改动 hook 也是不现实的。其实，Spring Cloud 给了我们更好解决方案——Spring Cloud Bus。后续我们将继续学习如何通过 Spring Cloud Bus 来实现以消息总线的方式进行通知配置信息的变化，完成集群上的自动化更新</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h3><ul>
+<li>将所有的 Config Server 都指向同一个 Git 仓库，这样所有的配置内容就通过统一的共享文件系统来维护，而客户端在指定 Config Server 位置时，只要配置 Config Server 外的均衡负载即可</li>
+<li>注册为服务<ul>
+<li>把 config-server 也注册为服务，这样所有客户端就能以服务的方式进行访问。通过这种方法，只需要启动多个指向同一 Git 仓库位置的 config-server 就能实现高可用了。</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://www.haoyizebo.com/posts/6cea3e14/">https://www.haoyizebo.com/posts/6cea3e14/</a></li>
+</ul>
+<h2 id="Spring-Cloud-Bus"><a href="#Spring-Cloud-Bus" class="headerlink" title="Spring Cloud Bus"></a>Spring Cloud Bus</h2><ul>
+<li>Spring Cloud Bus 通过轻量消息代理连接各个分布的节点。这会用在广播状态的变化（例如配置变化）或者其他的消息指令</li>
+<li><a target="_blank" rel="noopener" href="https://www.haoyizebo.com/posts/b9c0f0eb/">https://www.haoyizebo.com/posts/b9c0f0eb/</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/" class="category-chain-item">spring</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>02SpringCloud</div>
+      <div>https://x-leonidas.github.io/2022/02/01/11技术栈/spring/02SpringCloud/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/21-KafkaF&amp;Q/" title="21-KafkaF&amp;Q">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">21-KafkaF&amp;Q</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/01SpringBoot/" title="01SpringBoot">
+                        <span class="hidden-mobile">01SpringBoot</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

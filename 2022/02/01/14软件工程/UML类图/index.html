@@ -1,0 +1,777 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="概念 UML是统一建模语言，是一种可视化的面向对象建模语言，是一种用来对真实世界物理进行建模的标准标记，用图形方式表现典型的面向对象系统的整个结构。它的作用域不局限于支持面向对象的分析与设计，还支持从需求分析开始的软件开发的全过程。 UML的概念包括了UML语义（Semantics）和UML表示符（Notation）两个部分。UML语义定义了静态模型和动态模型。结构模型强调系统的对象结构，入对象的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UML类图">
+<meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/UML%E7%B1%BB%E5%9B%BE/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="概念 UML是统一建模语言，是一种可视化的面向对象建模语言，是一种用来对真实世界物理进行建模的标准标记，用图形方式表现典型的面向对象系统的整个结构。它的作用域不局限于支持面向对象的分析与设计，还支持从需求分析开始的软件开发的全过程。 UML的概念包括了UML语义（Semantics）和UML表示符（Notation）两个部分。UML语义定义了静态模型和动态模型。结构模型强调系统的对象结构，入对象的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-d05e8edc42eb1469.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/UML%E7%B1%BB%E5%9B%BE%E6%8E%A5%E5%8F%A3.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-985132f6977c5d33.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-dc3ac9dd64968b59.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-2941b3300988ffe9.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-ad59831e8065522a.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-823083d2d77916ae.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-0b5f0d7612a7ca17.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-e63191f4e23f2ad9.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-dfb604bd1c4408d5.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E6%97%B6%E5%BA%8F%E5%9B%BE%E5%AE%9E%E4%BE%8B.png">
+<meta property="article:published_time" content="2022-02-01T11:59:32.000Z">
+<meta property="article:modified_time" content="2024-10-27T13:02:43.000Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-d05e8edc42eb1469.png">
+  
+  
+  
+  <title>UML类图 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="UML类图"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 19:59" pubdate>
+          2022-02-01 19:59:32
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">UML类图</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>UML是统一建模语言，是一种可视化的面向对象建模语言，是一种用来对真实世界物理进行建模的标准标记，用图形方式表现典型的面向对象系统的整个结构。它的作用域不局限于支持面向对象的分析与设计，还支持从需求分析开始的软件开发的全过程。</li>
+<li>UML的概念包括了UML语义（Semantics）和UML表示符（Notation）两个部分。UML语义定义了静态模型和动态模型。结构模型强调系统的对象结构，入对象的类、接口、属性和关系；行为模型关注的是系统对象的行为动作，如对象的方法、交互、协作和状态。UML表示符为开发者或开发工具使用这些图形符号和文本语法为系统建模提供了标准。重要内容由9种图来定义，包括用例图、类图、对象图、状态图、构件图、部署图、协作图、交互序列图、活动图。</li>
+</ul>
+<h2 id="UML类图"><a href="#UML类图" class="headerlink" title="UML类图"></a>UML类图</h2><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-d05e8edc42eb1469.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:50%;" />
+
+<ul>
+<li>+标识public</li>
+<li>-表示private </li>
+<li>#表示protected </li>
+<li>~表示default,也就是包权限 </li>
+<li>_下划线表示static </li>
+<li>斜体表示抽象</li>
+</ul>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><ul>
+<li><p><strong>接口是一种特殊的类，具有类的结构但不可被实例化，只可以被实现（继承）。在UML中，接口使用一个带有名称的小圆圈来进行表示。</strong></p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/UML%E7%B1%BB%E5%9B%BE%E6%8E%A5%E5%8F%A3.png" srcset="/img/loading.gif" lazyload alt="UML类图接口"></p>
+</li>
+</ul>
+<h3 id="类与类之间的关系"><a href="#类与类之间的关系" class="headerlink" title="类与类之间的关系"></a>类与类之间的关系</h3><ul>
+<li><p>泛化（Generalization）, 实现（Realization），关联（Association)，聚合（Aggregation），组合(Composition)，依赖(Dependency)</p>
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-985132f6977c5d33.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></li>
+</ul>
+<h4 id="泛化"><a href="#泛化" class="headerlink" title="泛化"></a>泛化</h4><ul>
+<li>泛化(Generalization)表示类与类之间的继承关系，接口与接口之间的继承关系，或类对接口的实现关系</li>
+</ul>
+<h5 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h5><ul>
+<li><p>继承表示是一个类（称为子类、子接口）继承另外的一个类（称为父类、父接口）的功能，并可以增加它自己的新功能的能力</p>
+</li>
+<li><p>表示方法：继承使用<strong>空心三角形+实线</strong>表示，箭头指向父类</p>
+</li>
+<li><p>实例：鸟类继承抽象类动物</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-dc3ac9dd64968b59.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><ul>
+<li>实现表示一个class类实现interface接口（可以是多个）的功能。是一种类与接口的关系，表示类是接口所有特征和行为的实现.</li>
+</ul>
+<h6 id="矩形表示法"><a href="#矩形表示法" class="headerlink" title="矩形表示法"></a>矩形表示法</h6><ul>
+<li><p>使用<strong>空心三角形+虚线</strong>表示，箭头指向接口</p>
+</li>
+<li><p>比如：大雁需要飞行，就要实现飞()接口</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-2941b3300988ffe9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h6 id="棒棒糖表示法"><a href="#棒棒糖表示法" class="headerlink" title="棒棒糖表示法"></a>棒棒糖表示法</h6><ul>
+<li><p>使用<strong>实线</strong>表示</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-ad59831e8065522a.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h4 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h4><ul>
+<li><p>对于两个相对独立的对象，当一个对象负责构造另一个对象的实例，或者依赖另一个对象的服务时，这两个对象之间主要体现为依赖关系。</p>
+</li>
+<li><p>依赖关系用<strong>虚线箭头</strong>表示。</p>
+</li>
+<li><p>代码表现：局部变量、方法的参数或者对静态方法的调用</p>
+</li>
+<li><p>例如：动物依赖氧气和水。调用新陈代谢方法需要氧气类与水类的实例作为参数</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-823083d2d77916ae.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h4 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h4><ul>
+<li><p>对于两个相对独立的对象，当一个对象的实例与另一个对象的一些特定实例存在固定的对应关系时，这两个对象之间为关联关系。</p>
+</li>
+<li><p>关联关系用<strong>实线箭头</strong>表示，可以是双向的，也可以是单向的</p>
+</li>
+<li><p>代码体现：成员变量</p>
+</li>
+<li><p>例如：企鹅需要‘知道’气候的变化，需要‘了解’气候规律。当一个类‘知道’另一个类时，可以用关联。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-0b5f0d7612a7ca17.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h4 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h4><ul>
+<li><p>表示一种弱的‘拥有’关系，即has-a的关系，体现的是A对象可以包含B对象，但B对象不是A对象的一部分。 <strong>两个对象具有各自的生命周期</strong>。是整体与部分的关系，且部分可以离开整体而单独存在。</p>
+</li>
+<li><p><strong>表示方法：</strong>聚合关系用<strong>空心的菱形+实线箭头</strong>表示。菱形指向整体</p>
+</li>
+<li><p>代码体现：成员变量</p>
+</li>
+<li><p>每一只大雁都属于一个大雁群，一个大雁群可以有多只大雁。当大雁死去后大雁群并不会消失，两个对象生命周期不同。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-e63191f4e23f2ad9.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h4 id="组合"><a href="#组合" class="headerlink" title="组合"></a>组合</h4><ul>
+<li><p>组合是一种强的‘拥有’关系，是一种contains-a的关系，体现了严格的部分和整体关系，<strong>部分和整体的生命周期一样</strong>。</p>
+</li>
+<li><p><strong>表示方法：</strong>组合关系用<strong>实心的菱形+实线箭头</strong>表示，还可以使用连线两端的数字表示某一端有几个实例。</p>
+</li>
+<li><p>代码表现：成员变量</p>
+</li>
+<li><p>鸟和翅膀就是组合关系，因为它们是部分和整体的关系，并且翅膀和鸟的生命周期是相同的。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/5336514-dfb604bd1c4408d5.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><ul>
+<li>时序图（Sequence Diagram），又名序列图、循序图，是一种UML交互图。它通过描述对象之间发送消息的时间顺序显示多个对象之间的动态协作。它可以表示用例的行为顺序，当执行一个用例行为时，其中的每条消息对应一个类操作或状态机中引起转换的触发事件。</li>
+<li>主要用来标识对象之间的通信和交互过程</li>
+</ul>
+<h3 id="画法"><a href="#画法" class="headerlink" title="画法"></a>画法</h3><ul>
+<li>时序图中包括如下元素：角色，对象，生命线，控制焦点和消息。</li>
+</ul>
+<h4 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h4><ul>
+<li>系统角色，可以是人或者其他系统，子系统的用户，角色通常是可以发起行为的。</li>
+</ul>
+<h4 id="对象（Object）"><a href="#对象（Object）" class="headerlink" title="对象（Object）"></a>对象（Object）</h4><ul>
+<li>对象代表时序图中的对象在交互中所扮演的角色，位于时序图顶部和对象代表类角色。</li>
+<li>对象的符号 : 时序图中的对象与对象图中的表示方法一样, 使用矩形将对象名称包含起来, 并且对象名称下有下划线;</li>
+<li>对象的创建时机<ul>
+<li>对象可以在交互开始的时候创建, 也可以在交互过程中进行创建;<ul>
+<li>处于顶部 : 如果对象的位置在时序图顶部, 说明在交互开始的时候对象就已经存在了</li>
+<li>不在顶部 : 如果对象的位置不在顶部, 那么对象在交互过程中创建的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对象的命名方式<ul>
+<li>第一种方式包含对象名和类名。（对象名：类名）</li>
+<li>第二种方式只显示类名不显示对象名，即为一个匿名对象。（：类名）</li>
+<li>第三种方式只显示对象名不显示类名。（对象）</li>
+</ul>
+</li>
+<li>基本原则<ul>
+<li>交互频繁的对象尽可能的靠拢</li>
+<li>把初始化整个交互活动的对象放在最左边</li>
+</ul>
+</li>
+</ul>
+<h4 id="生命线"><a href="#生命线" class="headerlink" title="生命线"></a>生命线</h4><ul>
+<li>生命线代表时序图中的对象在一段时期内的存在。时序图中每个对象和底部中心都有一条垂直的虚线，这就是对象的生命线，对象间的消息存在于两条虚线间。</li>
+<li>生命线的作用<ul>
+<li>生命线是一个时间线，从时序图顶部一致到底部都存在，其长度取决于交互的时间</li>
+</ul>
+</li>
+<li>对象的生命线<ul>
+<li>对象与生命线结合在一起就是对象的生命线, 这个概念包含对象图标 以及 对象下面的生命线图标</li>
+</ul>
+</li>
+</ul>
+<h4 id="激活"><a href="#激活" class="headerlink" title="激活"></a>激活</h4><ul>
+<li>控制焦点代表时序图中的对象执行一项操作的时期，在时序图中每条生命线上的窄的矩形代表活动期。</li>
+<li>在生命线上当会话激活阶段，使用小矩形表示。</li>
+</ul>
+<h4 id="消息"><a href="#消息" class="headerlink" title="消息"></a>消息</h4><ul>
+<li>消息是定义交互和协作中交换信息的类，用于对实体间的通信内容建模，消息用于在实体间传递信息。允许实体请求其他的服务，类角色通过发送和接受信息进行通信</li>
+</ul>
+<h4 id="绘画步骤"><a href="#绘画步骤" class="headerlink" title="绘画步骤"></a>绘画步骤</h4><ul>
+<li>参与交互的对象在时序图顶端水平排列, 每个对象的底端绘制了一条垂直虚线, 对象A像对象B发送消息, 用一条带箭头的实线表示, 该实线起始于对象A底部的虚线, 终止于对象B底部的虚线; 实线箭头水平放置, 越靠近顶端越早被发送.</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><ul>
+<li><p>客户填写买车订单，工作人员检查订单，没有问题然后填写记录，客户付款，然后工作人员取车</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E6%97%B6%E5%BA%8F%E5%9B%BE%E5%AE%9E%E4%BE%8B.png" srcset="/img/loading.gif" lazyload alt="时序图实例"></p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>UML类图</div>
+      <div>https://x-leonidas.github.io/2022/02/01/14软件工程/UML类图/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/13Linux/%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/" title="问题排查步骤">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">问题排查步骤</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/VO,DTO,DO,PO/" title="VO,DTO,DO,PO">
+                        <span class="hidden-mobile">VO,DTO,DO,PO</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1093 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="多线程基础进程和线程 进程是指一个内存中正在运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程。进程也是程序的一次执行过程，是系统运行程序的基本单位；系统运行一个程序即是一个进程从创建、运行到消亡的过程。 线程是进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程。一个进程 中是可以有多个线程的，这个应用程序也可以称之为多线程程序 线程可以创建和撤">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多线程基础">
+<meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="多线程基础进程和线程 进程是指一个内存中正在运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程。进程也是程序的一次执行过程，是系统运行程序的基本单位；系统运行一个程序即是一个进程从创建、运行到消亡的过程。 线程是进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程。一个进程 中是可以有多个线程的，这个应用程序也可以称之为多线程程序 线程可以创建和撤">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%AF%E5%8A%A8.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/volatile%E5%86%99%E6%93%8D%E4%BD%9C.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/volatile%E8%AF%BB%E6%93%8D%E4%BD%9C.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/syn%E5%8E%9F%E7%90%86.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201012224941478.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/synchronized%E5%8E%9F%E7%90%86%E5%9B%BE.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E9%94%81%E4%BC%98%E5%8C%96%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%81%8F%E5%90%91%E9%94%81%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B.jpg">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E8%8E%B7%E5%BE%97%E5%92%8C%E6%92%A4%E9%94%80%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="article:published_time" content="2022-02-01T12:00:08.000Z">
+<meta property="article:modified_time" content="2024-01-25T15:30:44.000Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png">
+  
+  
+  
+  <title>多线程基础 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="多线程基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:08
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          108 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">多线程基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="多线程基础"><a href="#多线程基础" class="headerlink" title="多线程基础"></a>多线程基础</h1><h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><ul>
+<li>进程是指一个内存中正在运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程。进程也是程序的一次执行过程，是系统运行程序的基本单位；系统运行一个程序即是一个进程从创建、运行到消亡的过程。</li>
+<li>线程是进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程。一个进程 中是可以有多个线程的，这个应用程序也可以称之为多线程程序</li>
+<li>线程可以创建和撤销另一个线程;同一个进程中的多个线程之间可以并发执行.本质的区别是<strong>是否单独占有内存地址空间及其它系统资源（比如I&#x2F;O）</strong>：</li>
+<li>CPU采用时间片轮转的方式运行进程：CPU为每个进程分配一个时间段，称作它的时间片。如果在时间片结束时进程还在运行，则暂停这个进程的运行，并且CPU分配给另一个进程（这个过程叫做上下文切换）。如果进程在时间片结束前阻塞或结束，则CPU立即进行切换，不用等待时间片用完。</li>
+<li><strong>进程是操作系统进行资源分配的基本单位，而线程是操作系统进行调度的基本单位</strong>，即CPU分配时间的单位</li>
+</ul>
+<h2 id="线程组"><a href="#线程组" class="headerlink" title="线程组"></a>线程组</h2><ul>
+<li>Java中用ThreadGroup来表示线程组，我们可以使用线程组对线程进行批量控制。</li>
+<li>ThreadGroup和Thread的关系就如同他们的字面意思一样简单粗暴，每个Thread必然存在于一个ThreadGroup中，Thread不能独立于ThreadGroup存在。执行main()方法线程的名字是main，如果在new Thread时没有显式指定，那么默认将父线程（当前执行new Thread的线程）线程组设置为自己的线程组。</li>
+<li>ThreadGroup管理着它下面的Thread，ThreadGroup是一个标准的<strong>向下引用</strong>的树状结构，这样设计的原因是<strong>防止”上级”线程被”下级”线程引用而无法有效地被GC回收</strong>。</li>
+</ul>
+<h2 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h2><ul>
+<li><strong>Java程序中对线程所设置的优先级只是给操作系统一个建议，操作系统不一定会采纳。而真正的调用顺序，是由操作系统的线程调度算法决定的</strong>。</li>
+<li></li>
+</ul>
+<h2 id="进程间的通信方式-IPC"><a href="#进程间的通信方式-IPC" class="headerlink" title="进程间的通信方式(IPC)"></a>进程间的通信方式(IPC)</h2><ul>
+<li>管道<ul>
+<li>匿名管道：在内核中申请一块固定大小的缓冲区，程序拥有写入和读取的权利，一般使用fork函数实现父子进程的通信。</li>
+<li>命名管道FIFO：在内核中申请一块固定大小的缓冲区，程序拥有写入和读取的权利，没有血缘关系的进程也可以进程间通信。 mkfifo</li>
+<li>特点<ul>
+<li>面向字节流，</li>
+<li><strong>匿名管道只能用于具有亲缘关系的进程间通信</strong></li>
+<li>生命周期随内核</li>
+<li>自带同步互斥机制。</li>
+<li>半双工，单向通信，两个管道实现双向通信。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>消息队列<ul>
+<li>在内核中创建一个队列，队列中每个元素是一个数据报，不同的进程可以通过句柄去访问这个队列。</li>
+<li>消息队列提供了一个从一个进程向另外⼀个进程发送⼀块数据的⽅法。每个数据块都被认为是由一个类型，接收者进程接收的数据块可以有不同的类型值。</li>
+<li>消息队列也有管道⼀样的不⾜，就是每个消息的最⼤⻓度是有上限的（MSGMAX）,每个消息队 列的总的字节数是有上限的（MSGMNB），系统上消息队列的总数也有⼀个上限（MSGMNI）</li>
+<li>特点<ul>
+<li>消息队列可以认为是一个全局的一个链表，链表节点中存放着数据包的类型和内容用消息队列的标识符进行标记。</li>
+<li>消息队列允许一个或多个进程写入或者读取消息。</li>
+<li>消息队列的生命周期随内核。</li>
+<li>消息队列可实现双向通信。</li>
+</ul>
+</li>
+<li><strong>消息队列不适合比较大数据的传输</strong></li>
+<li><strong>消息队列通信过程中，存在用户态与内核态之间的数据拷贝开销</strong></li>
+</ul>
+</li>
+<li>共享内存<ul>
+<li>将同一块物理内存一块映射到不同的进程的虚拟地址空间中，实现不同进程间对同一资源的共享。</li>
+<li>共享内存可以说是最有用的<strong>进程间</strong>通信方式，也是最快的IPC形式。</li>
+<li>特点<ul>
+<li>不用从用户态到内核态的频繁切换和拷贝数据，直接从内存中读取就可以。</li>
+<li>共享内存是临界资源，所以需要操作时必须要保证原子性。使用信号量或者互斥锁都可以。</li>
+<li>生命周期随内核。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>信号量<ul>
+<li>在内核中创建一个信号量集合（本质是个数组），数组的元素（信号量）都是1，使用P操作进行-1，使用V操作+1.</li>
+<li>P(sv)：如果sv的值⼤于零，就给它减1；如果sv的值为零，就挂起该进程的执⾏ 。</li>
+<li>V(sv)：如果有其他进程因等待sv而被挂起，就让它恢复运⾏，如果没有进程因等待sv⽽挂起，就给它加1。</li>
+<li>PV操作用于同一进程，实现互斥。 PV操作用于不同进程(一个用V操作发送消息，一个用P操作测试消息是否到达)，实现同步。</li>
+</ul>
+</li>
+<li>信号<ul>
+<li>信号是一种比较复杂的通信方式，用于通知接收进程某个事件已经发生。</li>
+<li>信号的产生<ul>
+<li>由硬件产生，如从键盘输入Ctrl+C可以终止当前进程</li>
+<li>由其他进程发送，例如，在shell进程下，使用命令kill  -信号值 PID</li>
+<li>异常，当进程异常时发送信号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Socket<ul>
+<li><strong>跨网络与不同主机上的进程之间通信，就需要 Socket 通信了。</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><ul>
+<li>死锁的四个条件<ul>
+<li>互斥条件：一个资源每次只能被一个进程使用，即在一段时间内某资源仅为一个进程所占有。此时若有其他进程请求该资源，则请求进程只能等待。</li>
+<li>请求与保持条件：进程已经保持了至少一个资源，但又提出了新的资源请求，而该资源已被其他进程占有，此时请求进程被阻塞，但对自己已获得的资源保持不放。</li>
+<li>不可剥夺条件:进程所获得的资源在未使用完毕之前，不能被其他进程强行夺走，即只能 由获得该资源的进程自己来释放（只能是主动释放)。</li>
+<li>循环等待条件: 若干进程间形成首尾相接循环等待资源的关系</li>
+</ul>
+</li>
+</ul>
+<h2 id="活锁"><a href="#活锁" class="headerlink" title="活锁"></a>活锁</h2><ul>
+<li>现在假想有一对并行的线程用到了两个资源。它们分别尝试获取另一个锁失败后，两个线程都会释放自己持有的锁，再次进行尝试，这个过程会一直进行重复。很明显，这个过程中没有线程阻塞，但是线程仍然不会向下执行，这种状况我们称之为 活锁(live lock)。</li>
+<li></li>
+</ul>
+<h2 id="线程的实现"><a href="#线程的实现" class="headerlink" title="线程的实现"></a>线程的实现</h2><h3 id="Runnable和Callable区别"><a href="#Runnable和Callable区别" class="headerlink" title="Runnable和Callable区别"></a>Runnable和Callable区别</h3><ul>
+<li>Callable在JDK1.5加入，一般配合ExecutorService使用</li>
+<li>两个接口需要实现的方法名不一样，Runnable需要实现的方法为run()，Callable需要实现的方法为call()。</li>
+<li>实现的方法返回值不一样，Runnable任务执行后无返回值，Callable任务执行后可以得到异步计算的结果。</li>
+<li>抛出异常不一样，Runnable不可以抛出异常，Callable可以抛出异常。</li>
+</ul>
+<h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><ul>
+<li><p>join(): 使当前线程等待调用join()方法的线程结束后才能继续执行，会<strong>释放运行join()方法的线程的锁资源</strong></p>
+</li>
+<li><p>sleep():它可以让当前正在执行的线程在指定的时间内暂停执行，进入阻塞状态，<strong>该方法既可以让其他同优先级或者高优先级的线程得到执行的机会，也可以让低优先级的线程得到执行机会</strong>。但是sleep()方法不会释放“锁标志”，也就是说如果有synchronized同步块，其他线程仍然不能访问共享数据。</p>
+</li>
+<li><p>yield():yield()方法和sleep()方法类似，也不会释放“锁标志”，区别在于，它没有参数，即yield()方法只是使当前线程重新回到可执行状态，所以执行yield()的线程有可能在进入到可执行状态后马上又被执行，另外yield()方法只能使<strong>同优先级或者高优先级的线程</strong>得到执行机会，这也和sleep()方法不同。</p>
+</li>
+<li><p>wait():</p>
+<ul>
+<li>需要和<strong>notify()<strong>及</strong>notifyAll()<strong>两个方法一起介绍，这三个方法用于协调多个线程对共享数据的存取，所以必须在synchronized语句块内使用，也就是说，调用wait()，notify()和notifyAll()的任务在调用这些方法前必须拥有对象的锁。</strong>注意，它们都是Object类的方法，而不是Thread类的方法</strong>。</li>
+<li>wait()方法与sleep()方法的不同之处在于，<strong>wait()方法会释放对象的“锁标志”</strong>。当调用某一对象的wait()方法后，会使当前线程暂停执行，并将当前线程放入对象等待池中，直到调用了notify()方法后，将从对象等待池中移出任意一个线程并放入锁标志等待池中，只有锁标志等待池中的线程可以获取锁标志，它们随时准备争夺锁的拥有权。当调用了某个对象的notifyAll()方法，会将对象等待池中的所有线程都移动到该对象的锁标志等待池。</li>
+<li>除了使用notify()和notifyAll()方法，还可以使用带毫秒参数的wait(long timeout)方法，效果是在延迟timeout毫秒后，被暂停的线程将被恢复到锁标志等待池。</li>
+<li><strong>wait()，notify()及notifyAll()只能在synchronized语句中使用</strong>，但是如果使用的是ReenTrantLock实现同步，该如何达到这三个方法的效果呢？解决方法是使用ReenTrantLock.newCondition()获取一个Condition类对象，然后Condition的await()，signal()以及signalAll()分别对应上面的三个方法。<ul>
+<li>为什么要在同步块调用<ul>
+<li><strong>线程安全性</strong>：<code>wait</code>和<code>notify</code>方法是用于控制线程之间的同步和通信的机制。在多线程中要确保这些方法的调用不会导致竞态条件(notify在wait之前调用)或线程安全问题。</li>
+<li><strong>共享锁</strong>：<code>wait</code>和<code>notify</code>方法与对象的监视锁相关联。如果不在同步块中调用它们，将无法获取或释放监视锁，从而导致线程出现问题。抛出IllegalMonitorStateException异常</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>**notify()或者notifyAll()调用时并不会真正释放对象锁, 必须等到synchronized方法或者语法块执行完才真正释放锁.**，hotspot对notofy()的实现并不是我们以为的随机唤醒, 而是“先进先出”的顺序唤醒</li>
+</ul>
+</li>
+<li><p>await()</p>
+<ul>
+<li>await是ConditionObject类里面的方法，ConditionObject实现了Condition接口；而ReentrantLock里面默认有实现newCondition()方法，新建一个条件对象。该方法就是用在ReentrantLock中根据条件来设置等待。唤醒方法也是由专门的<strong>Signal()<strong>或者Signal()来执行。另外await会导致当前线程被阻塞，会</strong>放弃锁</strong>，这点和wait是一样的。</li>
+<li>wait一般用于Synchronized中，而await只能用于ReentrantLock锁中</li>
+</ul>
+</li>
+<li><p>interrupt()</p>
+<ul>
+<li>线程中断：线程的thread.interrupt()方法是中断线程，将会设置该线程的中断状态位，即设置为true，中断的结果线程是死亡、还是等待新的任务或是继续运行至下一步，就取决于这个程序本身。线程会不时地检测这个中断标示位，以判断线程是否应该被中断（中断标示值是否为true）。它并不像stop方法那样会中断一个正在运行的线程。</li>
+<li>判断某个线程是否已被发送过中断请求，请使用Thread.currentThread().isInterrupted()方法（因为它将线程中断标示位设置为true后，不会立刻清除中断标示位，即不会将中断标设置为false）,而不要使用**thread.interrupted()**（该方法调用后会将中断标示位清除，即重新设置为false）方法来判断，下面是线程在循环中时的中断方式：</li>
+<li>对于InterruptedException异常如何处理<ul>
+<li><p>在catch子句中，调用Thread.currentThread.interrupt()来设置中断状态（因为抛出异常后中断标示会被清除），让外界通过判断Thread.currentThread().isInterrupted()标示来决定是否终止线程还是继续下去，应该这样做：</p>
+  <figure class="highlight plaintext"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs +">void mySubTask() &#123;<br>    ...<br>    try &#123;<br>        sleep(delay);<br>    &#125; catch (InterruptedException e) &#123;<br>        Thread.currentThread().isInterrupted();<br>    &#125;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>更好的做法就是，不使用try来捕获这样的异常，让方法直接抛出</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="线程中断"><a href="#线程中断" class="headerlink" title="线程中断"></a>线程中断</h2><h3 id="使用中断信号量中断非阻塞状态的线程"><a href="#使用中断信号量中断非阻塞状态的线程" class="headerlink" title="使用中断信号量中断非阻塞状态的线程"></a>使用中断信号量中断非阻塞状态的线程</h3><ul>
+<li>中断线程最好的，最受推荐的方式是，使用共享变量（shared variable）发出信号，告诉线程必须停止正在运行的任务。线程必须周期性的核查这一变量，然后有秩序地中止任务。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Example2</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br>    <span class="hljs-keyword">volatile</span> <span class="hljs-type">boolean</span> <span class="hljs-variable">stop</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<span class="hljs-comment">// 线程中断信号量</span><br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">Example2</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Example2</span>();<br>        System.out.println(<span class="hljs-string">&quot;Starting thread...&quot;</span>);<br>        thread.start();<br>        Thread.sleep(<span class="hljs-number">3000</span>);<br>        System.out.println(<span class="hljs-string">&quot;Asking thread to stop...&quot;</span>);<br>        <span class="hljs-comment">// 设置中断信号量</span><br>        thread.stop = <span class="hljs-literal">true</span>;<br>        Thread.sleep(<span class="hljs-number">3000</span>);<br>        System.out.println(<span class="hljs-string">&quot;Stopping application...&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 每隔一秒检测一下中断信号量</span><br>        <span class="hljs-keyword">while</span> (!stop) &#123;<br>            System.out.println(<span class="hljs-string">&quot;Thread is running...&quot;</span>);<br>            <span class="hljs-type">long</span> <span class="hljs-variable">time</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>            <span class="hljs-comment">/*</span><br><span class="hljs-comment">             * 使用while循环模拟 sleep 方法，这里不要使用sleep，否则在阻塞时会 抛</span><br><span class="hljs-comment">             * InterruptedException异常而退出循环，这样while检测stop条件就不会执行，</span><br><span class="hljs-comment">             * 失去了意义。</span><br><span class="hljs-comment">             */</span><br>            <span class="hljs-keyword">while</span> ((System.currentTimeMillis() - time &lt; <span class="hljs-number">1000</span>)) &#123;&#125;<br>        &#125;<br>        System.out.println(<span class="hljs-string">&quot;Thread exiting under request...&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="使用thread-interrupt-中断非阻塞状态线程"><a href="#使用thread-interrupt-中断非阻塞状态线程" class="headerlink" title="使用thread.interrupt()中断非阻塞状态线程"></a>使用thread.interrupt()中断非阻塞状态线程</h3><ul>
+<li>虽然第一种方法要求一些编码，但并不难实现。同时，它给予线程机会进行必要的清理工作。这里需注意一点的是需将共享变量定义成volatile 类型或将对它的一切访问封入同步的块&#x2F;方法（synchronized blocks&#x2F;methods）中。下面是中断一个非阻塞状态的线程的常见做法，但对非检测isInterrupted()条件会更简洁:<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Example2</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">Example2</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Example2</span>();<br>        System.out.println(<span class="hljs-string">&quot;Starting thread...&quot;</span>);<br>        thread.start();<br>        Thread.sleep(<span class="hljs-number">3000</span>);<br>        System.out.println(<span class="hljs-string">&quot;Asking thread to stop...&quot;</span>);<br>        <span class="hljs-comment">// 发出中断请求</span><br>        thread.interrupt();<br>        Thread.sleep(<span class="hljs-number">3000</span>);<br>        System.out.println(<span class="hljs-string">&quot;Stopping application...&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 每隔一秒检测是否设置了中断标示</span><br>        <span class="hljs-keyword">while</span> (!Thread.currentThread().isInterrupted()) &#123;<br>            System.out.println(<span class="hljs-string">&quot;Thread is running...&quot;</span>);<br>            <span class="hljs-type">long</span> <span class="hljs-variable">time</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>            <span class="hljs-comment">// 使用while循环模拟 sleep</span><br>            <span class="hljs-keyword">while</span> ((System.currentTimeMillis() - time &lt; <span class="hljs-number">1000</span>) ) &#123;<br>            &#125;<br>        &#125;<br>        System.out.println(<span class="hljs-string">&quot;Thread exiting under request...&quot;</span>);<br>    &#125;<br>&#125;<br><span class="hljs-comment">//到目前为止一切顺利！但是，当线程等待某些事件发生而被阻塞，又会发生什么？当然，如果线程被阻塞，它便不能核查共享变量，也就不能停止。这在许多情况下会发生，例如调用Object.wait()、ServerSocket.accept()和DatagramSocket.receive()时，这里仅举出一些。</span><br><span class="hljs-comment">//他们都可能永久的阻塞线程。即使发生超时，在超时期满之前持续等待也是不可行和不适当的，所以，要使用某种机制使得线程更早地退出被阻塞的状态。下面就来看一下中断阻塞线程技术。</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="使用thread-interrupt-中断阻塞状态线程"><a href="#使用thread-interrupt-中断阻塞状态线程" class="headerlink" title="使用thread.interrupt()中断阻塞状态线程"></a>使用thread.interrupt()中断阻塞状态线程</h3><ul>
+<li>Thread.interrupt()方法不会中断一个正在运行的线程。这一方法实际上完成的是，设置线程的中断标示位，在线程受到阻塞的地方（如调用sleep、wait、join等地方）抛出一个异常InterruptedException，并且中断状态也将被清除，这样线程就得以退出阻塞的状态<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Example3</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">Example3</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Example3</span>();<br>        System.out.println(<span class="hljs-string">&quot;Starting thread...&quot;</span>);<br>        thread.start();<br>        Thread.sleep(<span class="hljs-number">3000</span>);<br>        System.out.println(<span class="hljs-string">&quot;Asking thread to stop...&quot;</span>);<br>        thread.interrupt();<span class="hljs-comment">// 等中断信号量设置后再调用</span><br>        Thread.sleep(<span class="hljs-number">3000</span>);<br>        System.out.println(<span class="hljs-string">&quot;Stopping application...&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">while</span> (!Thread.currentThread().isInterrupted()) &#123;<br>            System.out.println(<span class="hljs-string">&quot;Thread running...&quot;</span>);<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-comment">/*</span><br><span class="hljs-comment">                 * 如果线程阻塞，将不会去检查中断信号量stop变量，所 以thread.interrupt()</span><br><span class="hljs-comment">                 * 会使阻塞线程从阻塞的地方抛出异常，让阻塞线程从阻塞状态逃离出来，并</span><br><span class="hljs-comment">                 * 进行异常块进行 相应的处理</span><br><span class="hljs-comment">                 */</span><br>                Thread.sleep(<span class="hljs-number">1000</span>);<span class="hljs-comment">// 线程阻塞，如果线程收到中断操作信号将抛出异常</span><br>            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                System.out.println(<span class="hljs-string">&quot;Thread interrupted...&quot;</span>);<br>                <span class="hljs-comment">/*</span><br><span class="hljs-comment">                 * 如果线程在调用 Object.wait()方法，或者该类的 join() 、sleep()方法</span><br><span class="hljs-comment">                 * 过程中受阻，则其中断状态将被清除</span><br><span class="hljs-comment">                 */</span><br>                System.out.println(<span class="hljs-built_in">this</span>.isInterrupted());<span class="hljs-comment">// false</span><br><br>                <span class="hljs-comment">//中不中断由自己决定，如果需要真真中断线程，则需要重新设置中断位，如果</span><br>                <span class="hljs-comment">//不需要，则不用调用</span><br>                Thread.currentThread().interrupt();<br>            &#125;<br>        &#125;<br>        System.out.println(<span class="hljs-string">&quot;Thread exiting under request...&quot;</span>);<br>    &#125;<br>&#125;<br><span class="hljs-comment">//一旦Example3中的Thread.interrupt()被调用，线程便收到一个异常，于是逃离了阻塞状态并确定应该停止。上面我们还可以使用共享信号量来替换!Thread.currentThread().isInterrupted()条件，但不如它简洁。</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="死锁状态线程无法被中断"><a href="#死锁状态线程无法被中断" class="headerlink" title="死锁状态线程无法被中断"></a>死锁状态线程无法被中断</h3><h3 id="IO中断"><a href="#IO中断" class="headerlink" title="IO中断"></a>IO中断</h3><ul>
+<li>如果线程在I&#x2F;O操作进行时被阻塞，又会如何？I&#x2F;O操作可以阻塞线程一段相当长的时间，特别是牵扯到网络应用时。例如，服务器可能需要等待一个请求（request），又或者，一个网络应用程序可能要等待远端主机的响应。</li>
+<li>实现此InterruptibleChannel接口的通道是可中断的：如果某个线程在可中断通道上因调用某个阻塞的 I&#x2F;O 操作（常见的操作一般有这些：serverSocketChannel. accept()、socketChannel.connect、socketChannel.open、socketChannel.read、socketChannel.write、fileChannel.read、fileChannel.write）而进入阻塞状态，而另一个线程又调用了该阻塞线程的 interrupt 方法，这将导致该通道被关闭，并且已阻塞线程接将会收到ClosedByInterruptException，并且设置已阻塞线程的中断状态。另外，如果已设置某个线程的中断状态并且当它在通道上调用某个阻塞的 I&#x2F;O 操作，则该通道将关闭并且该线程并立即接收到 ClosedByInterruptException，并仍然设置其中断状态。如果情况是这样，其代码的逻辑和第三个例子中的是一样的，只是异常不同而已。</li>
+<li>如果你正使用通道（channels）（这是在Java 1.4中引入的新的I&#x2F;O API），那么被阻塞的线程将收到一个ClosedByInterruptException异常。但是，你可能正使用Java1.0之前就存在的传统的I&#x2F;O，而且要求更多的工作去处理中断。既这种情况下，Thread.interrupt()将不起作用，因为线程将不会退出被阻塞状态。Example5描述了这一行为。尽管interrupt()被调用，线程也不会退出被阻塞状态，比如ServerSocket的accept方法根本不抛出异常。</li>
+<li>很幸运，Java平台为这种情形提供了一项解决方案，即调用阻塞该线程的套接字的close()方法。在这种情形下，如果线程被I&#x2F;O操作阻塞，当调用该套接字的close方法时，该线程在调用accept地方法将接收到一个SocketException（SocketException为IOException的子异常）异常，这与使用interrupt()方法引起一个InterruptedException异常被抛出非常相似，（注，如果是流因读写阻塞后，调用流的close方法也会被阻塞，根本不能调用，更不会抛IOExcepiton，此种情况下怎样中断？我想可以转换为通道来操作流可以解决，比如文件通道）。下面是具体实现：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Example6</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br>    <span class="hljs-keyword">volatile</span> ServerSocket socket;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-type">Example6</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Example6</span>();<br>        System.out.println(<span class="hljs-string">&quot;Starting thread...&quot;</span>);<br>        thread.start();<br>        Thread.sleep(<span class="hljs-number">3000</span>);<br>        System.out.println(<span class="hljs-string">&quot;Asking thread to stop...&quot;</span>);<br>        Thread.currentThread().interrupt();<span class="hljs-comment">// 再调用interrupt方法</span><br>        thread.socket.close();<span class="hljs-comment">// 再调用close方法</span><br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(<span class="hljs-number">3000</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>        &#125;<br>        System.out.println(<span class="hljs-string">&quot;Stopping application...&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            socket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerSocket</span>(<span class="hljs-number">8888</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            System.out.println(<span class="hljs-string">&quot;Could not create the socket...&quot;</span>);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">while</span> (!Thread.currentThread().isInterrupted()) &#123;<br>            System.out.println(<span class="hljs-string">&quot;Waiting for connection...&quot;</span>);<br>            <span class="hljs-keyword">try</span> &#123;<br>                socket.accept();<br>            &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                System.out.println(<span class="hljs-string">&quot;accept() failed or interrupted...&quot;</span>);<br>                Thread.currentThread().interrupt();<span class="hljs-comment">//重新设置中断标示位</span><br>            &#125;<br>        &#125;<br>        System.out.println(<span class="hljs-string">&quot;Thread exiting under request...&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="JMM模型"><a href="#JMM模型" class="headerlink" title="JMM模型"></a>JMM模型</h1><h2 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h2><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+
+<ul>
+<li>新建状态（ NEW）： 线程刚创建, 尚未启动。Thread thread &#x3D; new Thread()。</li>
+<li>可运行状态（RUNNABLE）： 线程对象创建后，其他线程(比如 main 线程）调用了该对象的 start 方法。该状态的线程位于可运行线程池中，等待被线程调度选中，获取 cpu 的使用权。表示当前线程正在运行中。处于RUNNABLE状态的线程在Java虚拟机中运行，也有可能在等待其他系统资源（比如I&#x2F;O）。<ul>
+<li>Java线程的<strong>RUNNABLE</strong>状态其实是包括了传统操作系统线程的<strong>ready</strong>和<strong>running</strong>两个状态的。</li>
+</ul>
+</li>
+<li>阻塞状态（Blocked）： 线程正在运行的时候，被暂停。通常是为了等待某个时间的发生(比如说某项资源就绪)之后再继续运行。sleep,suspend，wait等方法都可以导致线程阻塞</li>
+<li>等待（WAITING）： 进入该状态的线程需要等待其他线程做出一些特定动作（通知或中断）。<ul>
+<li>Object.wait()：使当前线程处于等待状态直到另一个线程唤醒它；</li>
+<li>Thread.join()：等待线程执行完毕，底层调用的是Object实例的wait方法；</li>
+<li>LockSupport.park()：除非获得调用许可，否则禁用当前线程进行线程调度。</li>
+</ul>
+</li>
+<li>超时等待(TIMED_WAITING)： 该状态不同于WAITING，它可以在指定的时间后自行返回。<ul>
+<li>Thread.sleep(long millis)：使当前线程睡眠指定时间；</li>
+<li>Object.wait(long timeout)：线程休眠指定时间，等待期间可以通过notify()&#x2F;notifyAll()唤醒；</li>
+<li>Thread.join(long millis)：等待当前线程最多执行millis毫秒，如果millis为0，则会一直执行；</li>
+<li>LockSupport.parkNanos(long nanos)： 除非获得调用许可，否则禁用当前线程进行线程调度指定时间；</li>
+<li>LockSupport.parkUntil(long deadline)：同上，也是禁止线程进行调度指定时间；</li>
+</ul>
+</li>
+<li>终止(TERMINATED)： 表示该线程已经执行完毕，如果一个线程的run方法执行结束或者调用stop方法后，该线程就会死亡。对于已经死亡的线程，无法再使用start方法令其进入就绪。</li>
+</ul>
+</li>
+</ul>
+<h2 id="线程的启动"><a href="#线程的启动" class="headerlink" title="线程的启动"></a>线程的启动</h2><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%AF%E5%8A%A8.png" srcset="/img/loading.gif" lazyload alt="线程的启动"></li>
+</ul>
+<h2 id="JMM模型基础"><a href="#JMM模型基础" class="headerlink" title="JMM模型基础"></a>JMM模型基础</h2><ul>
+<li><p>Java内存（JMM）模型是在硬件内存模型基础上更高层的抽象，它屏蔽了各种硬件和操作系统对内存访问的差异性，从而实现让Java程序在各种平台下都能达到一致的并发效果。</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JMM%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" />
+</li>
+<li><p>主内存：存储共享的变量值（实例变量和类变量，不包含局部变量，因为局部变量是线程私有的，因此不存在竞争问题）</p>
+</li>
+<li><p>工作内存：CPU中每个线程中保留共享变量的副本，线程的工作内存，线程在变更修改共享变量后同步回主内存，在变量被读取前从主内存刷新变量值来实现的。</p>
+</li>
+<li><p>内存间的交互操作：不同线程之间不能直接访问不属于自己工作内存中的变量，线程间变量的值的传递需要通过主内存中转来完成。（lock，unlock，read，load，use，assign，store，write）</p>
+</li>
+</ul>
+<h2 id="指令重排"><a href="#指令重排" class="headerlink" title="指令重排"></a>指令重排</h2><ul>
+<li>指令重排分为三种<ul>
+<li>编译器优化重排：编译器在<strong>不改变单线程程序语义</strong>的前提下，可以重新安排语句的执行顺序。</li>
+<li>指令并行重排： 现代处理器采用了指令级并行技术来将多条指令重叠执行。如果<strong>不存在数据依赖性</strong>(即后一个执行的语句无需依赖前面执行的语句的结果)，处理器可以改变语句对应的机器指令的执行顺序。</li>
+<li>内存系统重排：由于处理器使用缓存和读写缓存冲区，这使得加载(load)和存储(store)操作看上去可能是在乱序执行，因为三级缓存的存在，导致内存与缓存的数据同步存在时间差。</li>
+</ul>
+</li>
+<li>JMM内部会有指令重排，并且会有as-if-serial跟happen-before的理念来保证指令的正确性<ul>
+<li>为了提高性能，编译器和处理器常常会对既定的代码执行顺序进行指令重排序</li>
+<li>as-if-serial：不管怎么重排序，单线程下的执行结果不能被改变</li>
+<li>先行发生原则(happen-before)：先行发生原则有很多，其中程序次序原则，在一个线程内，按照程序书写的顺序执行，书写在前面的操作先行发生于书写在后面的操作，准确地讲是控制流顺序而不是代码顺序</li>
+</ul>
+</li>
+</ul>
+<h2 id="JMM模型特性"><a href="#JMM模型特性" class="headerlink" title="JMM模型特性"></a>JMM模型特性</h2><ul>
+<li>Java内存模型为了解决多线程环境下共享变量的一致性问题，有三大特性<ul>
+<li>原子性：操作一旦开始就会一直运行到底，中间不会被其它线程打断（这操作可以是一个操作，也可以是多个操作），在内存中原子性操作包括read、load、user、assign、store、write，如果需要一个更大范围的原子性可以使用synchronized来实现，synchronized块之间的操作。</li>
+<li>可见性：一个线程修改了共享变量的值，其它线程能立即感知到这种变化，修改之后立即同步回主内存，每次读取前立即从主内存刷新，可以使用volatile保证可见性，也可以使用关键字synchronized和final</li>
+<li>有序性：在本线程中所有的操作都是有序的；在另一个线程中，看来所有的操作都是无序的，就可需要使用具有天然有序性的volatile保持有序性，因为其禁止重排序</li>
+</ul>
+</li>
+</ul>
+<h2 id="happen-before概念"><a href="#happen-before概念" class="headerlink" title="happen-before概念"></a>happen-before概念</h2><ul>
+<li>如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前。</li>
+<li>两个操作之间存在happens-before关系，并不意味着Java平台的具体实现必须要按照happens-before关系指定的顺序来执行。如果重排序之后的执行结果，与按happens-before关系来执行的结果一致，那么这种重排序并不非法（也就是说，JMM允许这种重排序）</li>
+<li>具体规则<ul>
+<li>(1)单一线程原则：在一个线程内，在程序前面的操作先行发生于后面的操作。</li>
+<li>(2)监视器锁规则：一个 unlock 操作先行发生于后面对同一个锁的 lock 操作。</li>
+<li>(3)volatile变量规则：对一个 volatile 变量的写操作先行发生于后面对这个变量的读操作。</li>
+<li>(4)传递性：如果A happens-before B，且B happens-before C，那么A happens-before C。</li>
+<li>(5)start()规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A线程的ThreadB.start()操作happens-before于线程B中的任意操作。</li>
+<li>(6)Join()规则：如果线程A执行操作ThreadB.join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。</li>
+<li>(7)程序中断规则：对线程interrupted()方法的调用先行于被中断线程的代码检测到中断时间的发生。</li>
+<li>(8)对象finalize规则：一个对象的初始化完成（构造函数执行结束）先行于发生它的finalize()方法的开始。</li>
+</ul>
+</li>
+</ul>
+<h2 id="JMM模型与JVM内存模型"><a href="#JMM模型与JVM内存模型" class="headerlink" title="JMM模型与JVM内存模型"></a>JMM模型与JVM内存模型</h2><ul>
+<li>并不是同一个层次的内存划分， 这两者基本上是没有关系的， 如果两者一定要勉强对应起来， 那从变量、 主内存、 工作内存的定义来看， 主内存主要对应于Java堆中的对象实例数据部分， 而工作内存则对应于虚拟机栈中的部分区域。 从更低层次上说， 主内存就直接对应于物理硬件的内存， 而为了获取更好的运行速度， 虚拟机（ 甚至是硬件系统本身的优化措施） 可能会让工作内存优先存储于寄存器和高速缓存中， 因为程序运行时主要访问读写的是工作内存。</li>
+</ul>
+<h2 id="Volatile"><a href="#Volatile" class="headerlink" title="Volatile"></a>Volatile</h2><h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。（实现可见性</li>
+<li>禁止进行指令重排序。（实现有序性）</li>
+<li>volatile 只能保证对单次读&#x2F;写的原子性，i++ 这种操作不能保证原子性</li>
+</ul>
+<h3 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h3><ul>
+<li><p>当写一个volatile变量时，JMM会把该线程对应的工作内存中的共享变量值更新后刷新到主内存，</p>
+</li>
+<li><p>当读取一个volatile变量时，JMM会把该线程对应的工作内存置为无效，线程会从主内存中读取共享变量。</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/volatile%E5%86%99%E6%93%8D%E4%BD%9C.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" />
+
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/volatile%E8%AF%BB%E6%93%8D%E4%BD%9C.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" /></li>
+</ul>
+<h3 id="禁止指令重排-有序性"><a href="#禁止指令重排-有序性" class="headerlink" title="禁止指令重排(有序性)"></a>禁止指令重排(有序性)</h3><ul>
+<li><p>JMM对volatile的禁止指令重排采用内存屏障插入策略：</p>
+</li>
+<li><p>Loadload屏障：load1;loadload;load2</p>
+<ul>
+<li>在load2及后续读取操作要读取的数据被访问前，保证laod1要读取的数据被读取完毕。</li>
+</ul>
+</li>
+<li><p>StoreStore屏障：store1;Storestore；store2</p>
+<ul>
+<li>在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见</li>
+</ul>
+</li>
+<li><p>LoadStore屏障：Load1; LoadStore; Store2</p>
+<ul>
+<li>在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。</li>
+</ul>
+</li>
+<li><p>StoreLoad屏障：Store1; StoreLoad; Load2</p>
+<ul>
+<li>在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。</li>
+</ul>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" /></li>
+</ul>
+<h2 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h2><h3 id="特性-1"><a href="#特性-1" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>原子性：确保线程互斥的访问同步代码</li>
+<li>可见性：保证共享变量的修改能够及时可见，其实是通过Java内存模型中的 “对一个变量unlock操作之前，必须要同步到主内存中；如果对一个变量进行lock操作，则将会清空工作内存中此变量的值，在执行引擎使用此变量前，需要重新从主内存中load操作或assign操作初始化变量值” 来保证的</li>
+<li>有序性：有效解决重排序问题，即 “一个unlock操作先行发生(happen-before)于后面对同一个锁的lock操作”。</li>
+</ul>
+<h3 id="Synchronized缺点"><a href="#Synchronized缺点" class="headerlink" title="Synchronized缺点"></a>Synchronized缺点</h3><ul>
+<li>Synchronized会让没有得到锁的资源进入Block状态，争夺到资源之后又转为Running状态，这个过程涉及到操作系统用户模式和内核模式的切换，代价比较高。</li>
+<li>Java1.6为 synchronized 做了优化，增加了从偏向锁到轻量级锁再到重量级锁的过度，但是在最终转变为重量级锁之后，性能仍然较低。</li>
+</ul>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><ul>
+<li>synchronized方法： synchronized当前实例对象，进入同步代码前要获得当前实例的锁</li>
+<li>synchronized静态方法： synchronized当前类的class对象 ，进入同步代码前要获得当前类对象的锁</li>
+<li>synchronized代码块：synchronized括号里面的对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>有线程访问对象的同步代码块时，另外的线程可以访问该对象的非同步代码块</li>
+<li>若锁住的是同一个对象，一个线程在访问对象的同步代码块时，另一个访问对象的同步代码块的线程会被阻塞。</li>
+<li>若锁住的是同一个对象，一个线程在访问对象的同步方法时，另一个访问对象的同步方法的线程会被阻塞。</li>
+<li>若锁住的是同一个对象，一个线程在访问对象的同步代码块时，另一个访问对象同步方法的线程会被阻塞，反之亦然。</li>
+<li>同一个类的不同对象的锁互不干扰</li>
+<li>类锁由于也是一种特殊的对象锁，因此表现和上述一致，而由于一个类只有一把对象锁，所以同一个类的不同对象使用类锁将会是同步的</li>
+<li>类锁和对象锁互不干扰</li>
+</ul>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/syn%E5%8E%9F%E7%90%86.png" srcset="/img/loading.gif" lazyload alt="syn原理" style="zoom:200%;" />
+
+
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201012224941478.png" srcset="/img/loading.gif" lazyload alt="image-20201012224941478" style="zoom:50%;" />
+</li>
+<li><p>synchronized 是JVM实现的一种锁，其中锁的获取和释放分别是monitorenter 和 monitorexit 指令。加了 synchronized 关键字的代码段，生成的字节码文件会多出 monitorenter 和 monitorexit 两条指令，并且会多一个 ACC_SYNCHRONIZED 标志位，当方法调用时，调用指令将会检查方法的ACC_SYNCHRONIZED 访问标志是否被设置，如果设置了，执行线程将先获取monitor，获取成功之后才能执行方法体，方法执行完后再释放monitor（监控）。在方法执行期间，其他任何线程都无法再获得同一个monitor对象。</p>
+</li>
+<li><p>synchronized是java提供的原子性内置锁，这种内置的并且使用者看不到的锁也被称为<strong>监视器锁</strong>，使用synchronized之后，会在编译之后在同步的代码块前后加上monitorenter和monitorexit字节码指令，他依赖操作系统底层互斥锁实现。他的作用主要就是实现原子性操作和解决共享变量的内存可见性问题。<br>  执行monitorenter指令时会尝试获取对象锁，如果对象没有被锁定或者已经获得了锁，锁的计数器+1。此时其他竞争锁的线程则会进入等待队列中。<br>  执行monitorexit指令时则会把计数器-1，当计数器值为0时，则锁释放，处于等待队列中的线程再继续竞争锁。<br>  synchronized是排它锁，当一个线程获得锁之后，其他线程必须等待该线程释放锁后才能获得锁，而且由于Java中的线程和操作系统原生线程是一一对应的，线程被阻塞或者唤醒时时会从用户态切换到内核态，这种转换非常消耗性能。<br>  从内存语义来说，加锁的过程会清除工作内存中的共享变量，再从主内存读取，而释放锁的过程则是将工作内存中的共享变量写回主内存。<br>  <em>实际上大部分时候我认为说到monitorenter就行了，但是为了更清楚的描述，还是再具体一点</em>。<br>  如果再深入到源码来说，synchronized实际上有两个队列waitSet和entryList。用来保存 <code>ObjectWaiter</code> 对象列表，<code>ObjectWaiter</code> 对象用来封装每个等待该 monitor 的线程</p>
+<ol>
+<li>当多个线程进入同步代码块时，首先进入entryList</li>
+<li>在 EntryList 与 WaitSet 中的线程争抢进入 owner 中，成功进入到 owner 的线程使 ObjectMonitor 对象的 count 值 +1</li>
+<li>如果线程调用wait方法，将释放锁，当前线程置为null，计数器-1，同时进入waitSet等待被唤醒，调用notify或者notifyAll之后又会进入entryList竞争锁</li>
+<li>如果 owner 中的当前线程执行完毕，释放 monitor 并复位变量的值，其他在 EntryList 与 WaitSet 中的所有线程重新争抢进入 Owner 中。</li>
+</ol>
+  <img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/synchronized%E5%8E%9F%E7%90%86%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="img"/>
+</li>
+<li><p>在Java1.6之后，sychronized在实现上分为了偏向锁、轻量级锁和重量级锁，其中偏向锁在 java1.6 是默认开启的，轻量级锁在多线程竞争的情况下会膨胀成重量级锁，有关锁的数据都保存在对象头中。</p>
+<ul>
+<li>偏向锁：在只有一个线程访问同步块时使用，通过CAS操作获取锁</li>
+<li>轻量级锁：当存在多个线程交替访问同步块，偏向锁就会升级为轻量级锁。当线程获取轻量级锁失败，说明存在着竞争，轻量级锁会膨胀成重量级锁，当前线程会通过自旋（通过CAS操作不断获取锁），后面的其他获取锁的线程则直接进入阻塞状态。</li>
+<li>重量级锁：锁获取失败则线程直接阻塞，因此会有线程上下文的切换，性能最差。</li>
+</ul>
+</li>
+</ul>
+<h3 id="CAS操作-Compare-and-Swap"><a href="#CAS操作-Compare-and-Swap" class="headerlink" title="CAS操作( Compare-and-Swap)"></a>CAS操作( Compare-and-Swap)</h3><ul>
+<li>1.5以后才可以使用CAS操作。CAS指令需要有3个操作数， 分别是内存位置（ 在Java中可以简单理解为变量的内存地址， 用V表示） 、 旧的预期值（ 用A表示） 和新值（ 用B表示） 。 CAS指令执行时， 当且仅当V符合旧预期值A时， 处理器用新值B更新V的值， 否则它就不执行更新， 但是无论是否更新了V的值， 都会返回V的旧值， 上述的处理过程是一个原子操作。</li>
+<li>三个问题<ul>
+<li><h4 id="CAS的ABA问题"><a href="#CAS的ABA问题" class="headerlink" title="CAS的ABA问题"></a><strong>CAS的ABA</strong>问题</h4><ul>
+<li>ABA问题：在进行获取主内存值的时候，该内存值在我们写入主内存的时候，已经被其他线程修改了N次，但是最终又改成原来的值了</li>
+<li>解决方案：使用带有版本号的AtomicStampedReference 来解决</li>
+</ul>
+</li>
+<li><strong>循环时间长开销大</strong><ul>
+<li>解决思路是让JVM支持处理器提供的<strong>pause指令</strong>。<br> pause指令能让自旋失败时cpu睡眠一小段时间再继续自旋，从而使得读操作的频率低很多,为解决内存顺序冲突而导致的CPU流水线重排的代价也会小很多。</li>
+</ul>
+</li>
+<li>只能保证一个共享变量的原子操作<ul>
+<li>使用JDK 1.5开始就提供的<code>AtomicReference</code>类保证对象之间的原子性，把多个变量放到一个对象里面进行CAS操作；</li>
+<li>使用锁。锁内的临界区代码可以保证只有当前线程能操作。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>多个值的CAS操作可以通过AtomicReference来处理或者使用锁synchronized实现。</li>
+</ul>
+<h3 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h3><ul>
+<li>LongAdder就是尝试使用分段CAS的方式来提升高并发执行CAS操作的性能，当并发更新的线程数量过多，其内部会搞一个Cell数组，每个数组是一个数值分段，这时，让大量的线程分别去对不同Cell内部的value值进行CAS累加操作，把CAS计算压力分散到了不同的Cell分段数值中，这样就可以大幅度的降低多线程并发更新同一个数值时出现的无限循环的问题，而且他内部实现了自动分段迁移的机制，也就是如果某个Cell的value执行CAS失败了，那么就会自动去找另外一个Cell分段内的value值进行CAS操作。</li>
+<li>最后，从LongAdder中获取当前累加的总值，就会把base值和所有Cell分段数值加起来返回 从LongAdder分段加锁的实现逻辑中，我们也可以对于一些并发量较大，持续时间较长的不适用缓存模式的抢购类项目的乐观锁进行改造，假如商品有1000个库存，那么完全可以给拆成20个库存段，可以在数据库的表里建20个库存字段，比如stock_01，stock_02，以此类推，总之，就是把你的1000件库存给他拆开，每个库存段是50件库存，比如stock_01对应50件库存，stock_02对应50件库存。接着，每秒1000个请求过来了，通过简单的随机算法，每个请求都是随机在20个分段库存里，选择一个进行加锁。这样有最多20个下单请求一起执行，每个下单请求锁了一个库存分段，然后在业务逻辑里面，就对数据库的那个分段库存进行操作即可，包括查库存 -&gt; 判断库存是否充足 -&gt; 扣减库存，通过这种方式提升并发量，提高用户体验。</li>
+</ul>
+<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E9%94%81%E4%BC%98%E5%8C%96%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p>对象头中锁标志位</p>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<h3 id="偏向锁（biased-Locking"><a href="#偏向锁（biased-Locking" class="headerlink" title="偏向锁（biased Locking)"></a>偏向锁（biased Locking)</h3><ul>
+<li><p>它的目的是消除数据在无竞争情况下的同步原语， 进一步提高程序的运行性能。 如果说轻量级锁是在无竞争的情况下使用CAS操作去消除同步使用的互斥量， 那偏向锁就是在无竞争的情况下把整个同步都消除掉， 连CAS操作都不做了。  </p>
+</li>
+<li><p>偏向锁的过程</p>
+<ul>
+<li>当锁对象第一次被线程获取的时候，虚拟机将会把对象头中的标志位设为“01”， 即偏向模式。 同时使用CAS操作把获取到这个锁的线程的ID记录在对象的Mark Word之中， 如果CAS操作成功， 持有偏向锁的线程以后每次进入这个锁相关的同步块时， 虚拟机都可以不再进行任何同步操作（ 例如Locking、 Unlocking及对Mark Word的Update等） 。  </li>
+<li>当有另外一个线程去尝试获取这个锁时， 偏向模式就宣告结束。 根据锁对象目前是否处于被锁定的状态， 撤销偏向（ Revoke Bias） 后恢复到未锁定（ 标志位为“01”） 或轻量级锁定（ 标志位为“00”） 的状态， 后续的同步操作就如上面介绍的轻量级锁那样执行</li>
+</ul>
+</li>
+<li><p>偏向锁可以提高带有同步但无竞争的程序性能。 它同样是一个带有效益权衡（ Trade Off） 性质的优化， 也就是说， 它并不一定总是对程序运行有利， 如果程序中大多数的锁总是被多个不同的线程访问， 那偏向模式就是多余的。 在具体问题具体分析的前提下， 有时候使用参数-XX： -UseBiasedLocking来禁止偏向锁优化反而可以提升性能  </p>
+</li>
+<li><p>偏向锁的替换是由另一个线程进来获取，上一个偏向锁已退出同步代码块和非活动状态，升级是由于替换失败，则会当当前持有偏向锁线程执行到安全点时，暂停持有偏向锁线程，偏向锁撤销，然后升级当前对象的锁状态。升级后再唤醒当前持有偏向锁的线程继续执行。此时锁是轻量级锁了</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%81%8F%E5%90%91%E9%94%81%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B.jpg" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>一个线程在第一次进入同步块时，会在对象头和栈帧中的锁记录里存储锁的偏向的线程ID。当下次该线程进入这个同步块时，会去检查锁的Mark Word里面是不是放的自己的线程ID。<br>如果是，表明该线程已经获得了锁，以后该线程在进入和退出同步块时不需要花费CAS操作来加锁和解锁 ；如果不是，就代表有另一个线程来竞争这个偏向锁。这个时候会尝试使用CAS来替换Mark Word里面的线程ID为新线程的ID，这个时候要分两种情况：<ul>
+<li>成功，表示之前的线程不存在了， Mark Word里面的线程ID为新线程的ID，锁不会升级，仍然为偏向锁；</li>
+<li>失败，表示之前的线程仍然存在，那么暂停之前的线程，设置偏向锁标识为0，并设置锁标志位为00，升级为轻量级锁，会按照轻量级锁的方式进行竞争锁</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E8%8E%B7%E5%BE%97%E5%92%8C%E6%92%A4%E9%94%80%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" />
+
+<ul>
+<li>偏向锁使用了一种<strong>等到竞争出现才释放锁的机制</strong>，所以当其他线程尝试竞争偏向锁时， 持有偏向锁的线程才会释放锁。<br>偏向锁升级成轻量级锁时，会暂停拥有偏向锁的线程，重置偏向锁标识，这个过程看起来容易，实则开销还是很大的，大概的过程如下：<ol>
+<li>在一个安全点（在这个时间点上没有字节码正在执行）停止拥有锁的线程。</li>
+<li>遍历线程栈，如果存在锁记录的话，需要修复锁记录和Mark Word，使其变成无锁状态。</li>
+<li>唤醒被停止的线程，将当前锁升级成轻量级锁。<br>所以，如果应用程序里所有的锁通常处于竞争状态，那么偏向锁就会是一种累赘，对于这种情况，我们可以一开始就把偏向锁这个默认功能给关闭：</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="轻量级锁-Lightweight-Locking"><a href="#轻量级锁-Lightweight-Locking" class="headerlink" title="轻量级锁(Lightweight Locking)"></a>轻量级锁(Lightweight Locking)</h3><ul>
+<li>轻量级并不是用来代替重量级的，是在没有多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗</li>
+<li>加锁过程<ul>
+<li>代码进入同步块时，如果同步对象的所标志位状态为01未锁定，虚拟机首先将再当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间,用于储存锁对象目前的Mark Word的拷贝(Lock Record)。接下来，使用CAS操作尝试将对象的Mark Word更新为指向Lock Record的指针。如果更新成功了则该线程就拥有了该对象的锁，并且对象Mark Word的所标志位转换为00，即表示此对象处于轻量级锁定状态。如果更新操作失败，虚拟机会检查对象的Mark Word是否指向当前线程的栈帧，如果是则说明当前对象已经拥有了这个对象的锁，那就可以直接进入同步块继续执行。否则说明这个锁对象已经被其他线程抢占了。如果有两条以上的线程竞争同一个锁，那轻量级锁则不再有效，要膨胀成重量级锁，锁标志位变为 10，Mark Word中存储的就是指向重量级锁的指针，后面等待锁的线程也要进入阻塞状态</li>
+</ul>
+</li>
+<li>解锁过程<ul>
+<li>解锁过程也是通过CAS来进行的，如果对象的Mark Word依然指向着线程的锁记录，那就用CAS操作把对象当前的Mark Word和线程中复制的Displaced Mark Word 替换回来，如果替换成功，则整个同步过程就完成了，如果替换失败，说明有其他线程尝试获取过该锁，那就要在释放锁的同时，唤醒被挂起的线程。</li>
+</ul>
+</li>
+<li>轻量级锁能提升程序同步性能的依据是“对于绝大部分的锁， 在整个同步周期内都是不存在竞争的”， 这是一个经验数据。 如果没有竞争， 轻量级锁使用CAS操作避免了使用互斥量的开销， 但如果存在锁竞争， 除了互斥量的开销外， 还额外发生了CAS操作， 因此在有竞争的情况下， 轻量级锁会比传统的重量级锁更慢  </li>
+<li><strong>轻量级锁的释放</strong><ul>
+<li><p>在释放锁时，当前线程会使用CAS操作将Displaced Mark Word的内容复制回锁的Mark Word里面。如果没有发生竞争，那么这个复制的操作会成功。如果有其他线程因为自旋多次导致轻量级锁升级成了重量级锁，那么CAS操作会失败，此时会释放锁并唤醒被阻塞的线程。</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E6%B5%81%E7%A8%8B%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="适应性自旋（Adaptive-Spinning）"><a href="#适应性自旋（Adaptive-Spinning）" class="headerlink" title="适应性自旋（Adaptive Spinning）"></a>适应性自旋（Adaptive Spinning）</h3><ul>
+<li>自旋：因为共享数据的锁定状态只会持续很短的一段时间，去挂起和恢复线程性价比不高，所以让线程执行自旋来等待</li>
+<li>适应性自旋：从轻量级锁获取的流程中我们知道，当线程在获取轻量级锁的过程中执行CAS操作失败时，是要通过自旋来获取重量级锁的。问题在于，自旋是需要消耗CPU的，如果一直获取不到锁的话，那该线程就一直处在自旋状态，白白浪费CPU资源。其中解决这个问题最简单的办法就是指定自旋的次数，例如让其循环10次，如果还没获取到锁就进入阻塞状态。但是JDK采用了更聪明的方式——适应性自旋，简单来说就是线程如果自旋成功了，则下次自旋的次数会更多，如果自旋失败了，则自旋的次数就会减少。</li>
+<li>自旋也不是一直进行下去的，如果自旋到一定程度（和JVM、操作系统相关），依然没有获取到锁，称为自旋失败，那么这个线程会阻塞。同时这个锁就会<strong>升级成重量级锁</strong>。</li>
+</ul>
+<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h3><ul>
+<li>重量级锁依赖于操作系统的互斥量（mutex） 实现的，而操作系统中线程间状态的转换需要相对比较长的时间，所以重量级锁效率很低，但被阻塞的线程不会消耗CPU。</li>
+<li>每一个对象都可以当做一个锁，当多个线程同时请求某个对象锁时，对象锁会设置几种状态用来区分请求的线程：<ul>
+<li><pre><code class="hljs">Contention List：所有请求锁的线程将被首先放置到该竞争队列
+Entry List：Contention List中那些有资格成为候选人的线程被移到Entry List
+Wait Set：那些调用wait方法被阻塞的线程被放置到Wait Set
+OnDeck：任何时刻最多只能有一个线程正在竞争锁，该线程称为OnDeck
+Owner：获得锁的线程称为Owner
+!Owner：释放锁的线程
+</code></pre>
+</li>
+</ul>
+</li>
+<li>当一个线程尝试获得锁时，如果该锁已经被占用，则会将该线程封装成一个<code>ObjectWaiter</code>对象插入到Contention List的队列的队首，然后调用<code>park</code>函数挂起当前线程。</li>
+<li>当线程释放锁时，会从Contention List或EntryList中挑选一个线程唤醒，被选中的线程叫做<code>Heir presumptive</code>即假定继承人，假定继承人被唤醒后会尝试获得锁，但**<code>synchronized</code>是非公平的**，所以假定继承人不一定能获得锁。这是因为对于重量级锁，线程先自旋尝试获得锁，这样做的目的是为了减少执行操作系统同步操作带来的开销。如果自旋不成功再进入等待队列。这对那些已经在等待队列中的线程来说，稍微显得不公平，还有一个不公平的地方是自旋线程可能会抢占了Ready线程的锁。</li>
+<li>如果线程获得锁后调用<code>Object.wait</code>方法，则会将线程加入到WaitSet中，当被<code>Object.notify</code>唤醒后，会将线程从WaitSet移动到Contention List或EntryList中去。需要注意的是，当调用一个锁对象的<code>wait</code>或<code>notify</code>方法时，<strong>如当前锁的状态是偏向锁或轻量级锁则会先膨胀成重量级锁</strong>。</li>
+</ul>
+<h3 id="锁粗化（Lock-Coarsening）"><a href="#锁粗化（Lock-Coarsening）" class="headerlink" title="锁粗化（Lock Coarsening）"></a>锁粗化（Lock Coarsening）</h3><ul>
+<li>锁粗化的概念应该比较好理解，就是将多次连接在一起的加锁、解锁操作合并为一次，将多个连续的锁扩展成一个范围更大的锁。</li>
+</ul>
+<h3 id="锁消除（Lock-Elimination）"><a href="#锁消除（Lock-Elimination）" class="headerlink" title="锁消除（Lock Elimination）"></a>锁消除（Lock Elimination）</h3><ul>
+<li>锁消除即删除不必要的加锁操作。根据代码逃逸技术，如果判断到一段代码中，堆上的数据不会逃逸出当前线程，那么可以认为这段代码是线程安全的，不必要加锁。</li>
+</ul>
+<h3 id="各种锁的优缺点对比"><a href="#各种锁的优缺点对比" class="headerlink" title="各种锁的优缺点对比"></a>各种锁的优缺点对比</h3><table>
+<thead>
+<tr>
+<th>锁</th>
+<th align="left">优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>偏向锁</td>
+<td align="left">加锁和解锁不需要额外的消耗，和执行非同步方法比仅存在纳秒级的差距。</td>
+<td>如果线程间存在锁竞争，会带来额外的锁撤销的消耗。</td>
+<td>适用于只有一个线程访问同步块场景。</td>
+</tr>
+<tr>
+<td>轻量级锁</td>
+<td align="left">竞争的线程不会阻塞，提高了程序的响应速度。</td>
+<td>如果始终得不到锁竞争的线程使用自旋会消耗CPU。</td>
+<td>追求响应时间。同步块执行速度非常快。</td>
+</tr>
+<tr>
+<td>重量级锁</td>
+<td align="left">线程竞争不使用自旋，不会消耗CPU。</td>
+<td>线程阻塞，响应时间缓慢。</td>
+<td>追求吞吐量。同步块执行时间较长。</td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">多线程</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>多线程基础</div>
+      <div>https://x-leonidas.github.io/2022/02/01/04Java/多线程/多线程基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" title="同步容器">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">同步容器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/" title="线程池和JUC">
+                        <span class="hidden-mobile">线程池和JUC</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

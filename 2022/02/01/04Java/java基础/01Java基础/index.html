@@ -1,0 +1,848 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="java基础Object通用方法 public native int hashCode()  public boolean equals(Object obj)  protected native Object clone() throws CloneNotSupportedException  public String toString()  public final native Class">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01Java基础">
+<meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/04Java/java%E5%9F%BA%E7%A1%80/01Java%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="java基础Object通用方法 public native int hashCode()  public boolean equals(Object obj)  protected native Object clone() throws CloneNotSupportedException  public String toString()  public final native Class">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/threadLocal.png">
+<meta property="article:published_time" content="2022-02-01T12:00:08.000Z">
+<meta property="article:modified_time" content="2023-03-02T14:12:57.000Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/threadLocal.png">
+  
+  
+  
+  <title>01Java基础 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="01Java基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:08
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">01Java基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="java基础"><a href="#java基础" class="headerlink" title="java基础"></a>java基础</h1><h2 id="Object通用方法"><a href="#Object通用方法" class="headerlink" title="Object通用方法"></a>Object通用方法</h2><ul>
+<li><pre><code class="java">public native int hashCode()
+
+public boolean equals(Object obj)
+
+protected native Object clone() throws CloneNotSupportedException
+
+public String toString()
+
+public final native Class&lt;?&gt; getClass()
+
+protected void finalize() throws Throwable &#123;&#125;
+
+public final native void notify()
+
+public final native void notifyAll()
+
+public final native void wait(long timeout) throws InterruptedException
+
+public final void wait(long timeout, int nanos) throws InterruptedException
+
+public final void wait() throws InterruptedException
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-meta">## String</span><br><span class="hljs-meta">### 不可变的好处</span><br>+ 缓存hash值<br>  + 因为 <span class="hljs-keyword">String</span> 的 hash 值经常被使用，例如 <span class="hljs-keyword">String</span> 用做 HashMap 的 key。不可变的特性可以使得 hash 值也不可变，因此只需要进行一次计算。<br>+ StringPool的需要<br>  + 如果一个 <span class="hljs-keyword">String</span> 对象已经被创建过了，那么就会从 <span class="hljs-keyword">String</span> Pool 中取得引用。只有 <span class="hljs-keyword">String</span> 是不可变的，才可能使用 <span class="hljs-keyword">String</span> Pool。<br>+ 安全<br>+ 线程安全<br>+ 性能提升<br><span class="hljs-meta">## 枚举</span><br>+ <br><span class="hljs-meta">## 泛型</span><br><span class="hljs-meta">### 泛型的标记符</span><br>+ E:<span class="hljs-type">element</span>(元素，集合中使用，特性是枚举)<br>+ Type (Java类)<br>+ Key (键)<br>+ Value (值)<br>+ Number (数值类型)<br>+ ？ ：表示不确定的java类型，<br>  + 在java集合框架中，对于参数值是未知的容器类，只能读取其中的元素，不能向其添加元素，因为其类型是未知的，所以编译器无法识别添加元素的类型和容器的类型是否兼容，<span class="hljs-literal">null</span> 是例外。<br><span class="hljs-meta">### 桥接方法</span><br>+ 当一个子类在继承（或实现）一个父类（或接口）的泛型方法时，在子类中明确指定了泛型类型，编译器为了让子类有一个与父类的方法签名一致二点方法，就会在子类中自动生成一个与父类的方法签名一致的桥接方法<br>+ ```java<br>  <span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">interface</span> <span class="hljs-title">Parent</span>&lt;<span class="hljs-title">T</span>&gt;</span>&#123;<br>      <span class="hljs-keyword">public</span> void <span class="hljs-keyword">set</span>(T t);<br>  &#125;<br>  <br>  <span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">class</span> <span class="hljs-title">Child</span> <span class="hljs-keyword"><span class="hljs-keyword">implements</span> <span class="hljs-type">Parent</span></span>&lt;<span class="hljs-title">String</span>&gt;</span>&#123;<br>      <span class="hljs-meta">@Override</span><br>      <span class="hljs-keyword">public</span> void <span class="hljs-keyword">set</span>(<span class="hljs-keyword">String</span> s)&#123;<br>          Sout(<span class="hljs-string">&quot;child.&quot;</span>);<br>      &#125;<br>  &#125;<br>  <br>  <span class="hljs-comment">// 编译后的代码</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">class</span> <span class="hljs-title">Child</span> <span class="hljs-keyword"><span class="hljs-keyword">implements</span> <span class="hljs-type">Parent</span></span></span>&#123;<br>      <span class="hljs-keyword">public</span> void <span class="hljs-keyword">set</span>(<span class="hljs-keyword">String</span> s)&#123;<br>          <br>      &#125;<br>      <br>      <br>      <span class="hljs-keyword">public</span> colatile void <span class="hljs-keyword">set</span>(Object obj)&#123;<br>          <span class="hljs-keyword">set</span>((<span class="hljs-keyword">String</span>)obj)<br>      &#125;<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h3 id="上界通配符"><a href="#上界通配符" class="headerlink" title="上界通配符 &lt;？ extends Fruit&gt;"></a>上界通配符 &lt;？ extends Fruit&gt;</h3><ul>
+<li>要求该泛型的类型，只能是实参类型，或实参类型的 <strong>子类</strong> 类型</li>
+<li>只能存，不能取</li>
+</ul>
+<h3 id="下界通配符"><a href="#下界通配符" class="headerlink" title="下界通配符&lt;？ super Fruit&gt;"></a>下界通配符&lt;？ super Fruit&gt;</h3><ul>
+<li>要求该泛型的类型，只能是实参类型，或实参类型的 <strong>父类</strong> 类型</li>
+<li>可以存，可以取，不过取出来的为Object类型</li>
+</ul>
+<p>	</p>
+<h3 id="PECS（Producer-Extends-Consumer-Super）原则"><a href="#PECS（Producer-Extends-Consumer-Super）原则" class="headerlink" title="PECS（Producer Extends Consumer Super）原则"></a>PECS（Producer Extends Consumer Super）原则</h3><ul>
+<li><strong>频繁往外读取内容的，适合用上界Extends</strong></li>
+<li><strong>经常往里插入的，适合用下界Super</strong></li>
+</ul>
+<h3 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h3><ul>
+<li>子类也是泛型类，那么子类和父类的泛型类型要一致：<strong>public</strong> <strong>class</strong> <strong>ResultChild</strong>&lt;**T**&gt; <strong>extends</strong> <strong>Result</strong>&lt;**T**&gt; {}</li>
+<li>子类不是泛型类，那么父类要指定数据类型 <strong>public</strong> <strong>class</strong> <strong>ResultChild</strong> <strong>extends</strong> <strong>Result</strong>&lt;**String**&gt; {}</li>
+</ul>
+<h3 id="泛型接口"><a href="#泛型接口" class="headerlink" title="泛型接口"></a>泛型接口</h3><ul>
+<li>实现类不是泛型类，接口要明确数据类型</li>
+<li>实现类也是泛型类，实现类和接口的泛型类型要一致</li>
+</ul>
+<h3 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h3><ul>
+<li>修饰符与返回值类型之间的 <code>&lt;T&gt;</code> 用于声明此方法为泛型方法</li>
+<li>泛型方法，是在调用方法的时候指明泛型的具体类型</li>
+</ul>
+<h3 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h3><ul>
+<li>因为泛型信息只存在于代码编译阶段，所以在进入 <strong>JVM</strong> 之前，会把与泛型相关的信息擦除，这就称为 <strong>类型擦除</strong></li>
+</ul>
+<h3 id="泛型注意的点"><a href="#泛型注意的点" class="headerlink" title="泛型注意的点"></a>泛型注意的点</h3><ul>
+<li>泛型会影响重载，因为类型擦除，所以无法在类中同时定义以下两个方法：<ul>
+<li>public void test（List<String> str）{}</li>
+<li>public void test （List<Integer> str）{}</li>
+</ul>
+</li>
+<li>instanceof 不能直接用于泛型比较</li>
+<li>泛型中的静态变量只有一份</li>
+</ul>
+<h3 id="泛型的PESC原则"><a href="#泛型的PESC原则" class="headerlink" title="泛型的PESC原则"></a>泛型的PESC原则</h3><ul>
+<li>Producer Extends Consumer Super</li>
+<li>只是从一个泛型集合中提取元素，应该使用Extends，如果经常向集合中插入内容，适合用&lt;? super T&gt;,如果想在同一个集合中同时使用这两种方法，则不应该使用这个限定符</li>
+</ul>
+<h2 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h2><h3 id="成员内部类"><a href="#成员内部类" class="headerlink" title="成员内部类"></a>成员内部类</h3><ul>
+<li>成员内部类是最普通的内部类，它的定义为位于另一个类的内部</li>
+<li>特点<ul>
+<li>成员内部类可以无条件访问外部类的所有成员属性和成员方法（包括private成员和静态成员）。</li>
+<li>当成员内部类拥有和外部类同名的成员变量或者方法时，会发生隐藏现象，即默认情况下访问的是成员内部类的成员。如果要访问外部类的同名成员，需要以下面的形式进行访问：外部类.this.成员内部类变量 外部类.this.成员内部类方法</li>
+<li>成员内部类可以拥有 private 访问权限、protected 访问权限、public 访问权限及包访问权限</li>
+</ul>
+</li>
+</ul>
+<h3 id="局部内部类"><a href="#局部内部类" class="headerlink" title="局部内部类"></a>局部内部类</h3><ul>
+<li>局部内部类是定义在一个方法或者一个作用域里面的类，它和成员内部类的区别在于局部内部类的访问仅限于方法内或者该作用域内。</li>
+<li>局部内部类就像是方法里面的一个局部变量一样，是不能有 public、protected、private 以及 static 修饰符的</li>
+</ul>
+<h3 id="匿名内部类"><a href="#匿名内部类" class="headerlink" title="匿名内部类"></a>匿名内部类</h3><ul>
+<li>匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限</li>
+<li>匿名内部类用于继承其他类或是实现接口，并不需要增加额外的方法，只是对继承方法的实现或是重写。</li>
+</ul>
+<h3 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h3><ul>
+<li>用static修饰的内部类，称为静态内部类，完全属于外部类本身，不属于外部类某一个对象</li>
+<li>static关键字的作用是把修饰的成员变成类相关，而不是实例相关</li>
+<li>静态内部类可以包含静态成员，也可以包含非静态成员，但是在非静态内部类中不可以声明静态成员。</li>
+<li>静态类内部不可以访问外部类的实例成员，只能访问外部类的类成员，即使是静态内部类的实例方法也不能访问外部类的实例成员，只能访问外部类的静态成员</li>
+<li>外部类不可以定义为静态类，Java中静态类只有一种，那就是静态内部类，顶级类不能用static 修饰</li>
+<li>外部类如何调用静态内部类中的属性和方法<ul>
+<li>外部类可以通过创建静态内部类实例的方法来调用静态内部类的非静态属性和方法</li>
+<li>外部类可以直接通过“ 外部类.内部类.属性（方法）” 的方式直接调用静态内部类中的静态属性和方法</li>
+</ul>
+</li>
+<li>如何创建静态内部类实例<ul>
+<li>在非外部类中：外部类名.内部类名 name &#x3D; new 外部类名.内部类名();</li>
+<li>在外部类中：内部类名 name &#x3D; new 内部类名();</li>
+</ul>
+</li>
+</ul>
+<h2 id="immutable类"><a href="#immutable类" class="headerlink" title="immutable类"></a>immutable类</h2><ul>
+<li>确保fileds中的成员都被private final修饰：private保证内部成员不会被外部直接访问；final确保在成员被初始化之后不会被重新assigned。</li>
+<li>不提供改变成员的方法，例如setX</li>
+<li>使用final修饰自定义类，确保类中的所有方法不会被重写。</li>
+<li>如果类中的某成员为mutable类型，那么在初始化该成员或者企图使用get方法从外部对其进行观察的时候，应该使用深度拷贝，确保类immutable。</li>
+<li></li>
+</ul>
+<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><ul>
+<li><p>描述注解的使用范围</p>
+</li>
+<li><p>@Target(ElementType.TYPE) 作用接口、类、枚举、注解<br>@Target(ElementType.FIELD) 作用属性字段、枚举的常量<br>@Target(ElementType.METHOD) 作用方法<br>@Target(ElementType.PARAMETER) 作用方法参数<br>@Target(ElementType.CONSTRUCTOR) 作用构造函数<br>@Target(ElementType.LOCAL_VARIABLE)作用局部变量<br>@Target(ElementType.ANNOTATION_TYPE)作用于注解（@Retention注解中就使用该属性）<br>@Target(ElementType.PACKAGE) 作用于包<br>@Target(ElementType.TYPE_PARAMETER) 作用于类型泛型，即泛型方法、泛型类、泛型接口 （jdk1.8加入）<br>@Target(ElementType.TYPE_USE) 类型使用.可以用于标注任意类型除了 class （jdk1.8加入）</p>
+<p>@Target(ElementType.MODEL) ： 用于模块，（JDK9加入）</p>
+</li>
+</ul>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><ul>
+<li>描述注解保留的时间范围</li>
+<li>@Retention(RetentionPolicy.SOURCE)，注解仅存在于源码中，在class字节码文件中不包含</li>
+<li>@Retention(RetentionPolicy.CLASS)， 默认的保留策略，注解会在class字节码文件中存在，但运行时无法获得</li>
+<li>@Retention(RetentionPolicy.RUNTIME)， 注解会在class字节码文件中存在，在运行时可以通过反射获取到</li>
+</ul>
+<h4 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h4><ul>
+<li>描述在使用 javadoc 工具为类生成帮助文档时是否要保留其注解信息。</li>
+</ul>
+<h4 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h4><ul>
+<li>使被它修饰的注解具有继承性（如果某个类使用了被@Inherited修饰的注解，则其子类将自动具有该注解）。</li>
+<li>只会影响类上的注解</li>
+</ul>
+<h4 id="Repeatable"><a href="#Repeatable" class="headerlink" title="@Repeatable"></a>@Repeatable</h4><ul>
+<li>被这个元注解修饰的注解可以同时作用一个对象多次，但是每次作用注解又可以代表不同的含义</li>
+</ul>
+<h3 id="注解的属性"><a href="#注解的属性" class="headerlink" title="注解的属性"></a>注解的属性</h3><ul>
+<li>获取注解的属性<ul>
+<li><pre><code class="java">/**是否存在对应 Annotation 对象*/
+public boolean isAnnotationPresent(Class&lt;? extends Annotation&gt; annotationClass) &#123;
+    return GenericDeclaration.super.isAnnotationPresent(annotationClass);
+&#125;
+
+/**获取 Annotation 对象*/
+public &lt;A extends Annotation&gt; A getAnnotation(Class&lt;A&gt; annotationClass) &#123;
+    Objects.requireNonNull(annotationClass);
+    return (A) annotationData().annotations.get(annotationClass);
+&#125;
+/**获取所有 Annotation 对象数组*/ 
+public Annotation[] getAnnotations() &#123;
+    return AnnotationParser.toArray(annotationData().annotations);
+&#125; 
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section">## 多态</span><br><span class="hljs-section">### 基础概念</span><br><span class="hljs-bullet">+</span> 同一方法可以根据发送对象的不同而采取多种不同的行为方式<br><span class="hljs-bullet">+</span> 一个对象的实际类型是确定的,但可以指向对象的引用的类型用很多(父类,实现的接口)<br><span class="hljs-bullet">+</span> 存在的条件<br><span class="hljs-bullet">  +</span> 有继承关系<br><span class="hljs-bullet">  +</span> 字类重写父类方法<br><span class="hljs-bullet">  +</span> 父类引用指向字类对象<br><span class="hljs-bullet">+</span> 注意:多态是方法的多态,属性没有多态。<br><span class="hljs-section">### 多态原理</span><br><span class="hljs-bullet">+</span> Java 里对象方法的调用是依靠类信息里的方法表实现的。当调用对象某个方法时，JVM查找该对象类的方法表以确定该方法的直接引用地址，有了地址后才真正调用该方法。<br><span class="hljs-section">## SPI</span><br><span class="hljs-bullet">+</span> SPI ，全称为 Service Provider Interface，是一种服务发现机制。它通过在ClassPath路径下的META-INF/services文件夹查找文件，自动加载文件里所定义的类。<br><span class="hljs-section">### SPI实现方式</span><br><span class="hljs-bullet">+</span> <span class="hljs-code">```java</span><br><span class="hljs-code">  ServiceLoader&lt;SPIService&gt; load = ServiceLoader.load(SPIService.class);</span><br><span class="hljs-code">  Iterator&lt;SPIService&gt; iterator = load.iterator();</span><br><span class="hljs-code">  while(iterator.hasNext()) &#123;</span><br><span class="hljs-code">      SPIService ser = iterator.next();</span><br><span class="hljs-code">      ser.execute();</span><br><span class="hljs-code">  &#125;</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>load方法中调用了ServiceLoader.load(service, cl)，cl为线程上下文的类加载器。查找实现类和创建实现类的过程，都在LazyIterator完成。当我们调用iterator.hasNext和iterator.next方法的时候，实际上调用的都是LazyIterator的相应方法。调用lookupIterator.nextService。它通过反射的方式，创建实现类的实例并返回。</li>
+</ul>
+<h4 id="Spring-SPI"><a href="#Spring-SPI" class="headerlink" title="Spring SPI"></a>Spring SPI</h4><ul>
+<li>在<code>Springboot</code>的自动装配过程中，最终会加载<code>META-INF/spring.factories</code>文件，而加载的过程是由<code>SpringFactoriesLoader</code>加载的。从<code>CLASSPATH</code>下的每个<code>jar</code>包中搜索所有<code>META-INF/spring.factories</code></li>
+</ul>
+<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><ul>
+<li>每个线程有一个ThreadLocalMap，ThreadLocalMap中根据thread local 做hash寻址，来获取value</li>
+<li>为当前线程设置一个map,当前线程设置的值只能被当前线程获取，其他线程无法获取，原因为这个map的key为当前线程引用(this)</li>
+<li>threadlocal是一个线程内部的存储类，可以在指定线程内存储数据，数据存储以后，只有指定线程可以得到存储数据.每个线程都维护着一个ThreadLocalMap</li>
+<li>底层是数组结构，寻址使用的斐波那契散列法，哈希冲突时使用拉链法解决<ul>
+<li>维护着一个ThreadLocalMap对象，ThreadLocalMap呢是当前线程Thread一个叫threadLocals的变量中获取的。并未实现Map接口，而且他的Entry是继承WeakReference（弱引用）的，哈希冲突靠开放寻址的线性探测来实现</li>
+</ul>
+</li>
+<li>使用InheritableThreadLocal可以实现多个线程访问ThreadLocal的值</li>
+<li>因为entry继承了弱引用，应该被自动回收，但是也有可能不被回收。如果创建ThreadLocal的线程一直持续运行，那么这个Entry对象中的value就有可能一直得不到回收，发生内存泄露，使用完手动remove</li>
+</ul>
+<h3 id="add操作"><a href="#add操作" class="headerlink" title="add操作"></a>add操作</h3><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/threadLocal.png" srcset="/img/loading.gif" lazyload alt="threadLocalAdd流程"></p>
+</li>
+<li><p>内存泄漏的两种情况</p>
+<ul>
+<li>如果threadLocal定义的是线程变量，当线程运行完成，由于是线程池，线程会一直存活，会一直保持对threadLocal和value的引用，由于key采用弱引用，在下一次GC时，threadLocal对象会被回收，需要等到下一次对这个线程的threadLocal操作，才会断开对value的引用，那么这段时间中，value是一直不能被GC掉的，从而导致内存泄漏。试想一下，如果key是强引用，这种情况key和value就永远都不会被GC掉了，想想好可怕。</li>
+<li>如果threadLocal定义的是静态变量，那threadLocal对象会一直存活，在上面的场景下，value会一直被引用，导致value不会被GC，产生内存泄漏。</li>
+</ul>
+</li>
+<li></li>
+</ul>
+<h2 id="Java-Stream"><a href="#Java-Stream" class="headerlink" title="Java Stream"></a>Java Stream</h2><ul>
+<li>Stream（流）是一个来自数据源的元素队列并支持聚合操作,Steam是惰性计算，只有获取最终结果的时候才会进行计算。</li>
+<li><strong>stream()</strong> − 为集合创建串行流。</li>
+<li><strong>parallelStream()</strong> − 为集合创建并行流。</li>
+</ul>
+<h3 id="Steam操作分类"><a href="#Steam操作分类" class="headerlink" title="Steam操作分类"></a>Steam操作分类</h3><ul>
+<li>中间操作只对操作进行记录，即只会返回一个流，不会进行计算操作，而终结操作是实现了计算操作。</li>
+</ul>
+<h4 id="中间操作"><a href="#中间操作" class="headerlink" title="中间操作"></a>中间操作</h4><ul>
+<li>无状态和有状态操作<ul>
+<li>元素的处理不受之前元素的影响，后者是指该操作只有拿到所有元素之后才能继续下去</li>
+</ul>
+</li>
+</ul>
+<h4 id="终结操作"><a href="#终结操作" class="headerlink" title="终结操作"></a>终结操作</h4><ul>
+<li>短路和非短路操作<ul>
+<li>前者是指遇到某些符合条件的元素就可以得到最终结果，后者是指必须处理完所有元素才能得到最终结果</li>
+</ul>
+</li>
+</ul>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li>forEach<ul>
+<li>迭代集合中的每个数据</li>
+</ul>
+</li>
+<li>map<ul>
+<li>map 方法用于映射每个元素到对应的结果</li>
+</ul>
+</li>
+<li>filter<ul>
+<li>filter 方法用于通过设置的条件过滤出元素。</li>
+</ul>
+</li>
+<li>limit<ul>
+<li>用于获取制定数量的流</li>
+</ul>
+</li>
+<li>sorted<ul>
+<li>用于对流进行排序</li>
+</ul>
+</li>
+<li>统计<ul>
+<li><pre><code class="java">List&lt;Integer&gt; numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);  
+IntSummaryStatistics stats = numbers.stream().mapToInt((x) -&gt; x).summaryStatistics();
+
+System.out.println(&quot;列表中最大的数 : &quot; + stats.getMax());
+System.out.println(&quot;列表中最小的数 : &quot; + stats.getMin());
+System.out.println(&quot;所有数之和 : &quot; + stats.getSum()); 
+System.out.println(&quot;平均数 : &quot; + stats.getAverage());
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="使用须知"><a href="#使用须知" class="headerlink" title="使用须知"></a>使用须知</h3><ul>
+<li>在循环迭代次数较少的情况下，常规的迭代方式性能反而更好；在单核CPU服务器配置环境中，也是常规迭代方式更有优势；而在大数据循环迭代中，如果服务器是多核CPU的情况下，Stream的并行迭代优势明显。所以我们在平时处理大数据的集合时，应该尽量考虑将应用部署在多核CPU环境下，并且使用Stream的并行迭代方式进行处理。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/04Java/java%E5%9F%BA%E7%A1%80/" class="category-chain-item">java基础</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>01Java基础</div>
+      <div>https://x-leonidas.github.io/2022/02/01/04Java/java基础/01Java基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/04Java/JVM/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%8F%82%E6%95%B0/" title="虚拟机参数">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">虚拟机参数</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/04Java/java%E5%9F%BA%E7%A1%80/02Java%E9%9B%86%E5%90%88/" title="02Java集合">
+                        <span class="hidden-mobile">02Java集合</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -222,15 +222,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/02-ActiveLinux&amp;Artemis/" target="_self">
-          02-ActiveLinux&amp;Artemis
+        <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/" target="_self">
+          线程池和JUC
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/02-ActiveLinux&amp;Artemis/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/" target="_self">
         <div>
-          Active MQ 04Linux下安装下载解压在init.d下建立软连接 1ln -s /usr/local/activemq/bin/activemq ./ 设置开启启动chkconfig activemq on服务管理 123service activemq startservice activemq statusservice activemq stop NIO配置默认配置为tcp，使用的
+          线程池概念 线程池就是首先创建一些线程，它们的集合称为线程池。使用线程池可以很好地提高性能，线程池在系统启动时即创建大量空闲的线程，程序将一个任务传给线程池，线程池就会启动一条线程来执行这个任务，执行结束以后，该线程并不会死亡，而是再次返回线程池中成为空闲状态，等待执行下一个任务。  工作机制 在线程池的编程模式下，任务是提交给整个线程池，而不是直接提交给某个线程，线程池在拿到任务后，就在内部寻找
         </div>
       </a>
 
@@ -238,8 +238,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
             </time>
           </div>
         
@@ -254,12 +254,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
   
   
     <span>></span>
     
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  <a href="/categories/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">多线程</a>
   
   
 
@@ -283,440 +283,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/01-ActiveMQ/" target="_self">
-          01-ActiveMQ
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/01-ActiveMQ/" target="_self">
-        <div>
-          ActiveMQ持久化策略 关闭持久化： producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT)  KahaDB存储 KahaDB是默认的持久化策略，所有消息顺序添加到一个日志文件中，同时另外有一个索引文件记录指向这些日志的存储地址，还有一个事务日志用于消息回复操作。是一个专门针对消息持久化的解决方案,它对典型的消息使用模式进行了优化。  在da
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/00-MQ%E5%9F%BA%E7%A1%80/" target="_self">
-          00-MQ基础
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/00-MQ%E5%9F%BA%E7%A1%80/" target="_self">
-        <div>
-          消息队列 消息队列的主要目的是提供路由并保证消息的传递；如果发送消息时接收者不可用，消息队列会保留消息，直到可以成功地传递它。 消息队列的主要特点是异步处理，主要目的是减少请求响应时间和解耦。所以主要的使用场景就是将比较耗时而且不需要即时（同步）返回结果的操作作为消息放入消息队列。同时由于使用了消息队列，只要保证消息格式不变，消息的发送方和接收方并不需要彼此联系， 也不需要受对方的影响，即解耦和。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MongoDB/MongoDB/" target="_self">
-          MongoDB
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/MongoDB/MongoDB/" target="_self">
-        <div>
-          MongoDB MongoDB 是由C++语言编写的，是一个基于分布式文件存储的开源数据库系统。 在RDBMS中，表包含用于存储数据的列和行，而在MongoDB中，此相同的结构称为集合。集合包含文档，文档又包含字段，字段又是键值对。  MongoDB关系 文档间可以通过嵌入和引用来建立联系。  嵌入式关系+  引用式关系+  文档的增删改查条件操作符 (&gt;) 大于     $gt (&lt;
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MongoDB/" class="category-chain-item">MongoDB</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/Lucene/" target="_self">
-          Lucene
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/Lucene/" target="_self">
-        <div>
-          Lucene基础 Lucene是apache下的一个开源的全文检索引擎工具包。     相关概念 全文检索（Full-text Search）  全文检索就是先“分词”创建索引，再执行搜索的过程。全文检索就将一段文字分成一个个单词去查询数据！！！   分词  就是将一段文字分成一个个单词      流程   Elasticsearch与solr的区别 Sole利用zookeeper进行分布式管理，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/02-ElasticSearch%E9%9B%86%E7%BE%A4/" target="_self">
-          02-ElasticSearch集群
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/02-ElasticSearch%E9%9B%86%E7%BE%A4/" target="_self">
-        <div>
-          
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/01-ElasticSearch/" target="_self">
-          01-ElasticSearch
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/01-ElasticSearch/" target="_self">
-        <div>
-          ElasticsearchES与关系型数据库的对比   7.x版本中type的概念已经被删除了   优点 面向开发者友好，屏蔽了Lucene的复杂特性，集群自动发现（cluster discovery） 自动维护数据在多个节点上的建立 会帮我做搜索请求的负载均衡 自动维护冗余副本，保证了部分节点宕机的情况下仍然不会有任何数据丢失 ES基于Lucene提供了很多高级功能：复合查询、聚合分析、基于地理
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/00-ElasticSearch%E5%AE%89%E8%A3%85/" target="_self">
-          00-ElasticSearch安装
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/00-ElasticSearch%E5%AE%89%E8%A3%85/" target="_self">
-        <div>
-          Linux+  Kinana 可视化工具  kinana安装 http://elastic.http://elastic.coco 开箱即用  Head安装 可视化工具，依赖nodjs和npm,需要预先安装grunt,npm install -g grunt-cli  网址：https://github.com/mobz/elasticsearch-head  下载完成后，解压，打开glastic
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lua/Lua/" target="_self">
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lua/Lua/" target="_self">
           Lua
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lua/Lua/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lua/Lua/" target="_self">
         <div>
           
         </div>
@@ -726,8 +299,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
             </time>
           </div>
         
@@ -771,15 +344,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" target="_self">
-          正则表达式
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/00-ElasticSearch%E5%AE%89%E8%A3%85/" target="_self">
+          00-ElasticSearch安装
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/28/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/00-ElasticSearch%E5%AE%89%E8%A3%85/" target="_self">
         <div>
-          正则表达式匹配规则 \w: 可以匹配一个字母、数字或下划线 \W：匹配\w匹配不到的字符 \d: 匹配任意数字 \D: 匹配非数字 \s : 匹配空格 \S：匹配非空格 [1234567]: 简写[1-7] 匹配一个字符为1-7之中的任一字符 ^表示开头： $表示结尾：^A\d{3,}$  开头为A,至少三位数据结尾  | ： 或  重复匹配 * ：匹配多个符合规则的字符 例如：&#x2F;d*
+          Linux+  Kinana 可视化工具  kinana安装 http://elastic.http://elastic.coco 开箱即用  Head安装 可视化工具，依赖nodjs和npm,需要预先安装grunt,npm install -g grunt-cli  网址：https://github.com/mobz/elasticsearch-head  下载完成后，解压，打开glastic
         </div>
       </a>
 
@@ -787,8 +360,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-28 00:49" pubdate>
-              2024-10-28
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
             </time>
           </div>
         
@@ -804,6 +377,419 @@
       <span class="category-chain">
         
   <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/00-MQ%E5%9F%BA%E7%A1%80/" target="_self">
+          00-MQ基础
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/00-MQ%E5%9F%BA%E7%A1%80/" target="_self">
+        <div>
+          消息队列 消息队列的主要目的是提供路由并保证消息的传递；如果发送消息时接收者不可用，消息队列会保留消息，直到可以成功地传递它。 消息队列的主要特点是异步处理，主要目的是减少请求响应时间和解耦。所以主要的使用场景就是将比较耗时而且不需要即时（同步）返回结果的操作作为消息放入消息队列。同时由于使用了消息队列，只要保证消息格式不变，消息的发送方和接收方并不需要彼此联系， 也不需要受对方的影响，即解耦和。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/01-ElasticSearch/" target="_self">
+          01-ElasticSearch
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/01-ElasticSearch/" target="_self">
+        <div>
+          ElasticsearchES与关系型数据库的对比   7.x版本中type的概念已经被删除了   优点 面向开发者友好，屏蔽了Lucene的复杂特性，集群自动发现（cluster discovery） 自动维护数据在多个节点上的建立 会帮我做搜索请求的负载均衡 自动维护冗余副本，保证了部分节点宕机的情况下仍然不会有任何数据丢失 ES基于Lucene提供了很多高级功能：复合查询、聚合分析、基于地理
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/Lucene/" target="_self">
+          Lucene
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/Lucene/" target="_self">
+        <div>
+          Lucene基础 Lucene是apache下的一个开源的全文检索引擎工具包。     相关概念 全文检索（Full-text Search）  全文检索就是先“分词”创建索引，再执行搜索的过程。全文检索就将一段文字分成一个个单词去查询数据！！！   分词  就是将一段文字分成一个个单词      流程   Elasticsearch与solr的区别 Sole利用zookeeper进行分布式管理，
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/02-ElasticSearch%E9%9B%86%E7%BE%A4/" target="_self">
+          02-ElasticSearch集群
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/02-ElasticSearch%E9%9B%86%E7%BE%A4/" target="_self">
+        <div>
+          
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" target="_self">
+          单元测试
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" target="_self">
+        <div>
+          单元测试 单元测试的一些原则 测试用例能验证函数的正确性（这条都通不过就……）； 测试用例尽可能涵盖边界条件（例如遍历一个链表，头指针是空，只有一个节点，链表有N个节点，N是问题描述下允许的最大节点数等等）； 一些异常和错误处理（例如往一个函数里传入空指针，传入空串，这个函数能否打印一些log，返回错误码，实现加法的Add函数如何检测和处理溢出等等）    java常用的测试工具mockito
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E6%B5%81%E7%A8%8B%E5%9B%BE/" target="_self">
+          流程图
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E6%B5%81%E7%A8%8B%E5%9B%BE/" target="_self">
+        <div>
+          流程图 为便于识别，绘制流程图的习惯做法是  圆角矩形表示“开始”与“结束”； 矩形表示行动方案； 菱形表示问题判断或判定（审核&#x2F;审批&#x2F;评审）环节； 用平行四边形表示输入输出； 箭头代表工作流方向。      泳道图 可以理解为一种特殊的流程图，只不过泳道图会把部门和职能划分开。因此，泳道流程图是一种反映商业流程里，人与人或组织与组织之间关系的特殊图表。  泳道图的作用 1、泳
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E7%94%98%E7%89%B9%E5%9B%BE/" target="_self">
+          甘特图
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E7%94%98%E7%89%B9%E5%9B%BE/" target="_self">
+        <div>
+          甘特图 甘特图就是将任务与时间联系起来的一种图表形式，能够清晰展示每个任务的历时长短。 甘特图以图示通过活动列表和时间刻度表示出特定项目的顺序与持续时间。一条线条图，横轴表示时间，纵轴表示项目，线条表示期间计划和实际完成情况。直观表明计划何时进行，进展与要求的对比。便于管理者弄清项目的剩余任务，评估工作进度。  画法 把所有的任务在纵轴列出来 把预估时间在横轴列出来 在图例中画出线条，表示该任务的
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
   
   
 

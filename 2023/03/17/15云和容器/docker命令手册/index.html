@@ -1,0 +1,818 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基础命令123456#启动dockersudo service docker start# 重启dockersudo service docker restart# 停止dockersudo service docker stop 镜像1234567891011121314151617181920# 获取所有镜像docker images# 搜索镜像docker search [image nam">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker命令手册">
+<meta property="og:url" content="https://x-leonidas.github.io/2023/03/17/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/docker%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="夜坐听风">
+<meta property="og:description" content="基础命令123456#启动dockersudo service docker start# 重启dockersudo service docker restart# 停止dockersudo service docker stop 镜像1234567891011121314151617181920# 获取所有镜像docker images# 搜索镜像docker search [image nam">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-17T14:43:50.000Z">
+<meta property="article:modified_time" content="2023-05-13T08:15:02.000Z">
+<meta property="article:author" content="夜坐听风">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>docker命令手册 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="docker命令手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-17 22:43" pubdate>
+          2023-03-17 22:43:50
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">docker命令手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">启动docker</span><br>sudo service docker start<br><span class="hljs-meta prompt_"># </span><span class="language-bash">重启docker</span><br>sudo service docker restart<br><span class="hljs-meta prompt_"># </span><span class="language-bash">停止docker</span><br>sudo service docker stop<br></code></pre></td></tr></table></figure>
+<h2 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">获取所有镜像</span><br>docker images<br><span class="hljs-meta prompt_"># </span><span class="language-bash">搜索镜像</span><br>docker search [image name]  --limit 5<br><span class="hljs-meta prompt_"># </span><span class="language-bash">拉取镜像</span> <br>docker pull 镜像名称<br><span class="hljs-meta prompt_"># </span><span class="language-bash">比如</span><br>docker pull ubuntu<br>docker pull ubuntu:16.04<br><span class="hljs-meta prompt_"># </span><span class="language-bash">个人镜像</span><br>docker pull 仓库名称/镜像名称<br>docker pull xunmi/django<br><span class="hljs-meta prompt_"># </span><span class="language-bash">第三方仓库拉取</span><br>docker pull 第三方仓库地址/仓库名称/镜像名称<br>docker pull hub.c.163.com/library/mysql:latest<br>(默认仓库名为library,所有从官方获取镜像相当于`sudo docker image pull library/镜像名称`)<br><span class="hljs-meta prompt_"># </span><span class="language-bash">删除镜像</span><br>docker image rm 镜像名或镜像ID 或 docker rmi 镜像名或镜像ID<br>docker image rm hello-world<br>docker rmi 9e64176cd8a2<br></code></pre></td></tr></table></figure>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>REPOSITORY</td>
+<td>镜像所在的仓库名称</td>
+</tr>
+<tr>
+<td>TAG</td>
+<td>镜像标签</td>
+</tr>
+<tr>
+<td>IMAGEID</td>
+<td>镜像ID</td>
+</tr>
+<tr>
+<td>CREATED</td>
+<td>镜像的创建日期(不是获取该镜像的日期)</td>
+</tr>
+<tr>
+<td>SIZE</td>
+<td>镜像大小</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="加载镜像"><a href="#加载镜像" class="headerlink" title="加载镜像"></a>加载镜像</h3><ul>
+<li><pre><code class="hljs">docker run [可选参数] 镜像名 [向启动容器中传入的命令]
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs vim">  + -i	表示以《交互模式》运行容器。<br>  + -d	会创建一个守护式容器在后台运行(这样创建容器后不会自动登录容器)。<br>  + -t	表示容器启动后会进入其命令行。加入这两个参数后，容器创建就能登录进去。即分配一个伪终端。<br>  + –name	为创建的容器命名。(默认会随机给名字,不支持中文字符!!!)<br>  + -v	表示目录映射关系，即宿主机目录:容器中目录。注意:最好做目录映射，在宿主机上做修改，然后共享到容器上。<br>  + -<span class="hljs-keyword">p</span>	表示端口映射，即宿主机端口:容器中端口。 比如:-<span class="hljs-keyword">p</span> <span class="hljs-number">8080</span>:<span class="hljs-number">80</span> 就是将容器中的<span class="hljs-number">80</span>端口,映射到主机中的<span class="hljs-number">8080</span>端口<br>  + –network=host	表示将主机的网络环境映射到容器中，使容器的网络与主机相同。每个 Docker 容器都有自己的网络连接空间连接到虚拟 LAN。使用此命令则会让容器和主机共享一个网络空间。<br> ### 提交镜像<br>+ ```<span class="hljs-keyword">shell</span><br>  # 提交容器副本使之成为一个新的镜像<br>  docker commit -<span class="hljs-keyword">m</span>=<span class="hljs-string">&quot;描述信息&quot;</span> -<span class="hljs-keyword">a</span>=<span class="hljs-string">&quot;作者&quot;</span> 容器ID  要创建的目标镜像名字:[标签名]<br>  # 阿里云地址 : https://<span class="hljs-keyword">cr</span>.console.aliyun.<span class="hljs-keyword">com</span>/repository/<span class="hljs-keyword">cn</span>-hangzhou/xiangyu23/base/details<br>  # psuh 到阿里云<br>  docker login --username=向什么来着 registry.<span class="hljs-keyword">cn</span>-hangzhou.aliyuncs.<span class="hljs-keyword">com</span><br>  docker <span class="hljs-keyword">tag</span> [ImageId] registry.<span class="hljs-keyword">cn</span>-hangzhou.aliyuncs.<span class="hljs-keyword">com</span>/xiangyu23/base:[镜像版本号]<br>  docker push registry.<span class="hljs-keyword">cn</span>-hangzhou.aliyuncs.<span class="hljs-keyword">com</span>/xiangyu23/base:[镜像版本号]<br>  # pull 阿里云<br>  <br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h2 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h2><ul>
+<li><pre><code class="shell"># 查看当前所有正在运行的容器
+docker ps
+# 查看当前所有的容器
+docker ps -a
+# 使用过滤器(除了name外,常用的还可以指定id:id= 、所有停止的容器:status=exited,正在运行的容器:status=running 等)
+docker ps -f name=指定的名字
+# 显示2个上次创建的容器(2可以改变)
+docker ps -n 2
+# 显示最新创建的容器（包括所有状态）
+docker ps -l
+# 仅显示ID
+docker ps -q
+ # 显示容器大小 
+docker ps -s
+
+# 启动和关闭
+# 启动容器
+docker run 容器名或容器id
+docker start  --name[指定名称] 容器名或容器id
+-d : 后台运行容器并返回容器ID
+-i : 交互模式运行容器
+-t : 为容器分配一个伪输入终端，通常与-i同时使用，也即启动交互式容器
+-P : (大写)随机端口映射
+-p ： 指定端口映射   8080:80 暴露端口:内部的映射端口
+docker run是利用镜像生成容器，并启动容器，而docker start是启动一个之前生成过的容器
+# 停止容器
+docker stop   容器名或容器id
+# 强制关闭容器
+docker kill 容器名或容器id
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs awk">  <br><span class="hljs-comment">### 容器交互</span><br>+ ```shell<br>  <span class="hljs-comment"># 启动容器的交互终端</span><br>  docker exec -it 容器名或容器id 执行的命令 <br>   + 启动后用<span class="hljs-keyword">exit</span>退出不会关闭容器<br>  <span class="hljs-comment"># 退出容器但是不关闭容器</span><br>  Ctrl+P+Q<br>  <br>  <br>  <span class="hljs-comment"># 从容器拷贝文件到主机</span><br>  docker cp 容器ID:容器路径 目的主机路径<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li>exec 可选参数<table>
+<thead>
+<tr>
+<th>-d</th>
+<th>会创建一个守护式容器在后台运行(这样创建容器后不会自动登录容器)。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-e</td>
+<td>设置环境变量</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>表示以《交互模式》运行容器。</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>表示容器启动后会进入其命令行。加入这两个参数后，容器创建就能登录进去。即分配一个伪终端。</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>设置用户名和UID。</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>设置容器内的工作目录。</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="容器监控"><a href="#容器监控" class="headerlink" title="容器监控"></a>容器监控</h3><ul>
+<li><pre><code class="shell"> # 查看日志
+docker logs 容器ID
+docker top 容器ID
+# 细致的查看容器的情况
+docker inspect 容器ID
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean">### 导出导出容器<br>+ ```shell<br>  # 导出容器的内容流作为一个tar归档文件<br>  docker <span class="hljs-keyword">export</span> 容器ID &gt; 文件名.tar<br>  # 从tar包中的内容创建一个新的文件系统再导入为镜像<br>  cat 文件名.tart | docker <span class="hljs-keyword">import</span> -镜像用户/镜像名:镜像版本号<br>  <br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h3 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h3><ul>
+<li><pre><code class="shell"># docker 挂载主机目录访问如果出现cannot open directory : Permission denied 
+在挂载目录后面多加一个 --privileged=true 参数
+
+# 挂载数据卷
+docker run -d --privileged=true -v [宿主机路径]:[容器内路径] [镜像名]
+
+docker run -d --privileged=true -v D:\docker\shareFile:[容器内路径]:rw  [镜像名]
+# 默认是RW，可以读和写，如果限制容器只有读取权限的话要改成ro
+
+# 容器间继承卷的规则
+docker run -d --privileged=true --volumes-from [继承的镜像名]  [运行的镜像名]
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment">### 网络查看</span><br>+ ```<span class="hljs-keyword">shell</span><br><span class="hljs-keyword"></span>  <span class="hljs-comment"># 查看当前容器ID的端口</span><br>  docker <span class="hljs-keyword">inspect </span>--format=&#123;&#123;.NetworkSettings.IPAddress&#125;&#125; [容器ID]<br>  <br>  docker network <span class="hljs-keyword">inspect </span>[网络名称]<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h3 id="常用中间件的安装"><a href="#常用中间件的安装" class="headerlink" title="常用中间件的安装"></a>常用中间件的安装</h3><ul>
+<li><p>mysql</p>
+<ul>
+<li><pre><code class="shell">docker run 
+-p 3306:3306 
+--privileged=true 
+-v D:\docker\dockerFile\mysql\log:/var/log/mysql
+-v D:\docker\dockerFile\mysql\data:/var/lib/mysql
+-v D:\docker\dockerFile\mysql\conf:/etc/mysql/conf.d
+--name xyMysql 
+-e env LANG=C.UTF-8
+-e MYSQL_ROOT_PASSWORD=xiangyu9527
+mysql:5.7
+
+
+docker run -d -p 3306:3306 --privileged=true -v D:\docker\dockerFile\mysql\log:/var/log/mysql -v D:\docker\dockerFile\mysql\data:/var/lib/mysql -v D:\docker\dockerFile\mysql\conf:/etc/mysql/conf.d --name xyMysql -e MYSQL_ROOT_PASSWORD=xiangyu9527 -e LANG=C.UTF-8 -e LC_ALL=C.UTF-8 mysql:5.7
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs r"><span class="hljs-operator">+</span> 主从Mysql<br>  <span class="hljs-operator">+</span> ```shell<br>    docker run <br>    -d<br>    -p 3307:3306<br>    --privileged=true <br>    -v D:\docker\dockerFile\mysqlMaster\log:/var/log/mysql<br>    -v D:\docker\dockerFile\mysqlMaster\data:/var/lib/mysql<br>    -v D:\docker\dockerFile\mysqlMaster\conf:/etc/mysql/conf.d<br>    --name mysqlMaster <br>    -e MYSQL_ROOT_PASSWORD=root<br>    mysql:5.7<br>    <br>    docker run -d -p 3307:3306 --privileged=true -v D:\docker\dockerFile\mysqlMaster\log:/var/log/mysql -v D:\docker\dockerFile\mysqlMaster\data:/var/lib/mysql -v D:\docker\dockerFile\mysqlMaster\conf:/etc/mysql/conf.d --name mysqlMaster -e MYSQL_ROOT_PASSWORD=root mysql:5.7<br>    <br>    <br>    #设置用户权限<br>    create user &#x27;slave&#x27;@&#x27;%&#x27;  identified by &#x27;123456&#x27;;<br>    GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO &#x27;slave&#x27;@&#x27;%&#x27;;<br>    <br>    docker run <br>    -d<br>    -p 3308:3306<br>    --privileged=true <br>    -v D:\docker\dockerFile\mysqlSlave\log:/var/log/mysql<br>    -v D:\docker\dockerFile\mysqlSlave\data:/var/lib/mysql<br>    -v D:\docker\dockerFile\mysqlSlave\conf:/etc/mysql/conf.d<br>    --name mysqlSlave<br>    -e MYSQL_ROOT_PASSWORD=root<br>    mysql:5.7<br>    <br>    docker run -d -p 3308:3306 --privileged=true -v D:\docker\dockerFile\mysqlSlave\log:/var/log/mysql -v D:\docker\dockerFile\mysqlSlave\data:/var/lib/mysql -v D:\docker\dockerFile\mysqlSlave\conf:/etc/mysql/conf.d --name mysqlSlave -e MYSQL_ROOT_PASSWORD=root mysql:5.7<br>    <br>    <br>    # 从机配置<br>    change master to master_host=&#x27;172.17.0.2&#x27; , master_user=&#x27;slave&#x27;,master_password=&#x27;123456&#x27;,master_port=3306,master_log_file=&#x27;mall-mysql-bin.000001&#x27;,master_log_pos=617,master_connect_retry=30;<br>    <br>    <br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>redis</p>
+<ul>
+<li><pre><code class="shell">docker run 
+-d
+-p 6379:6379
+--privileged=true 
+-v D:\docker\dockerFile\redis\redis.conf:/etc/redis/redis.conf
+-v D:\docker\dockerFile\redis\data:/data
+--name xyRedis 
+redis:6.0.8
+redis-server /etc/redis/redis.conf
+
+docker run -d -p 6379:6379 --privileged=true -v D:\docker\dockerFile\redis\redis.conf:/etc/redis/redis.conf -v D:\docker\dockerFile\redis\data:/data --name xyRedis redis:6.0.8 redis-server /etc/redis/redis.conf
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs haskell">+ 集群<br>+ ```shell<br>  docker run<br>  -d<br>  <span class="hljs-comment">--name redis-node-1</span><br>  <span class="hljs-comment">--net host</span><br>  <span class="hljs-comment">--privileged=true</span><br>  -v <span class="hljs-type">D</span>:\docker\dockerFile\redisNode1\<span class="hljs-class"><span class="hljs-keyword">data</span>:/<span class="hljs-keyword">data</span></span><br>  redis:<span class="hljs-number">6.0</span>.<span class="hljs-number">8</span><br>  <span class="hljs-comment">--cluster-enabled yes</span><br>  <span class="hljs-comment">--appendonly yes</span><br>  <span class="hljs-comment">--port 6381</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>rockertmq</p>
+<ul>
+<li>安装namesrv</li>
+<li><pre><code class="shell">docker run -d
+--restart=always
+--name rmqnamesrv
+--privileged=true
+-p 9876:9876
+-v D:\docker\dockerFile\rocketMQ\data\namesrv\logs:/root/logs 
+-v D:\docker\dockerFile\rocketMQ\data\namesrv\store:/root/store 
+-e &quot;MAX_POSSIBLE_HEAP=100000000&quot;
+-e &quot;JAVA_OPT_EXT=-Xms512M -Xmx512M -Xmn128m&quot;
+apache/rocketmq
+sh mqnamesrv
+
+
+docker run -d --restart=always --name rmqnamesrv --privileged=true -p 9876:9876 -v D:\docker\dockerFile\rocketMQ\data\namesrv\logs:/root/logs  -v D:\docker\dockerFile\rocketMQ\data\namesrv\store:/root/store  -e &quot;MAX_POSSIBLE_HEAP=100000000&quot; -e &quot;JAVA_OPT_EXT=-Xms512M -Xmx512M -Xmn128m&quot; apache/rocketmq sh mqnamesrv
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs r">  <br><span class="hljs-operator">+</span> broker <br><br><span class="hljs-operator">+</span> ```shell<br>  docker run -d <br>  --restart=always<br>  --name rmqbroker<br>  --link rmqnamesrv:namesrv<br>  -p 10911:10911 <br>  -p 10909:10909 <br>  -v D:\docker\dockerFile\rocketMQ\data\broker\logs:/root/logs <br>  -v D:\docker\dockerFile\rocketMQ\data\broker\store:/root/store <br>  -v D:\docker\dockerFile\rocketMQ\data\broker\conf\broker.conf:/home/rocketmq/rocketmq-4.9.4/conf/broker.conf <br>  -e &quot;NAMESRV_ADDR=namesrv:9876&quot; <br>  -e &quot;JAVA_OPT_EXT=-Xms512M -Xmx512M -Xmn128m&quot; <br>  -e &quot;MAX_POSSIBLE_HEAP=200000000&quot; <br>  apache/rocketmq <br>  sh mqbroker -c /home/rocketmq/rocketmq-4.9.2/conf/broker.conf<br>  <br>  docker run -d --restart=always --name rmqbroker --link rmqnamesrv:namesrv -p 10911:10911  -p 10909:10909 -v D:\docker\dockerFile\rocketMQ\data\broker\logs:/root/logs -v D:\docker\dockerFile\rocketMQ\data\broker\store:/root/store  -v D:\docker\dockerFile\rocketMQ\data\broker\conf\broker.conf:/home/rocketmq/rocketmq-4.9.4/conf/broker.conf  -e &quot;NAMESRV_ADDR=namesrv:9876&quot;  -e &quot;JAVA_OPT_EXT=-Xms512M -Xmx512M -Xmn128m&quot;  -e &quot;MAX_POSSIBLE_HEAP=200000000&quot; apache/rocketmq sh mqbroker -c /home/rocketmq/rocketmq-4.9.2/conf/broker.conf<br></code></pre></td></tr></table></figure>
+
++ config
+
++ ```
+  brokerClusterName = DefaultCluster
+  brokerName = broker-a
+  brokerId = 0
+  deleteWhen = 04
+  fileReservedTime = 48
+  brokerRole = ASYNC_MASTER
+  flushDiskType = ASYNC_FLUSH
+  brokerIP1 = 127.0.0.1
+  diskMaxUsedSpaceRatio=95
+  <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs routeros">  <br>    <br>  <br>+ consloe<br><br>  + ```shell<br>    docker <span class="hljs-built_in">run</span> -d <br>    <span class="hljs-attribute">--restart</span>=always <br>    --name rmqadmin <br>    -e <span class="hljs-string">&quot;JAVA_OPTS=-Drocketmq.namesrv.addr=127.0.0.1:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false&quot;</span><br>    -p 8085:8080<br>    --ulimit <span class="hljs-attribute">nofile</span>=1024<br>    styletang/rocketmq-console-ng:latest<br>    <br>    docker <span class="hljs-built_in">run</span> -d <span class="hljs-attribute">--restart</span>=always --name rmqadmin -e <span class="hljs-string">&quot;JAVA_OPTS=-Drocketmq.namesrv.addr=127.0.0.1:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false&quot;</span> -p 8085:8080 --ulimit <span class="hljs-attribute">nofile</span>=1024<br>    styletang/rocketmq-console-ng:latest<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><ul>
+<li><pre><code class="shell"># 通过dockerfile 构建镜像
+docker build -t contosjava8:1.0 .
+# -f [文件路径]  可以指定文件路径
+</code></pre>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>docker命令手册</div>
+      <div>https://x-leonidas.github.io/2023/03/17/15云和容器/docker命令手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/26/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/win11ForDocker%E9%97%AE%E9%A2%98/" title="win11ForDocker问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">win11ForDocker问题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/16/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/Docker%20Desktop/" title="Docker Desktop">
+                        <span class="hidden-mobile">Docker Desktop</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
