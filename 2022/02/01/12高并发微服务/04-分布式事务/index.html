@@ -21,12 +21,12 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="分布式事务2PC Two-phase commit protocol,中文叫二阶段提交。二阶段提交是一种强一致性设计，2PC 引入一个事务协调者的角色来协调管理各参与者（也可称之为各本地资源）的提交和回滚，二阶段分别指的是准备（投票）和提交两个阶段。  事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段">
+    <meta name="description" content="分布式事务2PC事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。  假如在第一阶段所有参与者都返回准备成功，那么协调者则向所有参与者发送提交事务命令，然后等待所有事务都提交成功之后，返回事务执行成功。    假如在第一阶段有一个参与者返回失败，那么协">
 <meta property="og:type" content="article">
 <meta property="og:title" content="04-分布式事务">
 <meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E5%BE%AE%E6%9C%8D%E5%8A%A1/04-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/index.html">
 <meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="分布式事务2PC Two-phase commit protocol,中文叫二阶段提交。二阶段提交是一种强一致性设计，2PC 引入一个事务协调者的角色来协调管理各参与者（也可称之为各本地资源）的提交和回滚，二阶段分别指的是准备（投票）和提交两个阶段。  事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段">
+<meta property="og:description" content="分布式事务2PC事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。  假如在第一阶段所有参与者都返回准备成功，那么协调者则向所有参与者发送提交事务命令，然后等待所有事务都提交成功之后，返回事务执行成功。    假如在第一阶段有一个参与者返回失败，那么协">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/2PC%E5%87%86%E5%A4%87%E6%88%90%E5%8A%9F.png">
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/2PC%E5%87%86%E5%A4%87%E5%A4%B1%E8%B4%A5.png">
@@ -233,7 +233,7 @@
         
         
         
-          25 分钟
+          24 分钟
         
       </span>
     
@@ -275,10 +275,7 @@
             
               <div class="markdown-body">
                 
-                <h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><h3 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h3><ul>
-<li>Two-phase commit protocol,中文叫二阶段提交。<strong>二阶段提交是一种强一致性设计</strong>，2PC 引入一个事务协调者的角色来协调管理各参与者（也可称之为各本地资源）的提交和回滚，二阶段分别指的是准备（投票）和提交两个阶段。</li>
-</ul>
-<h4 id="事务流程"><a href="#事务流程" class="headerlink" title="事务流程"></a>事务流程</h4><ul>
+                <h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><h3 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h3><h4 id="事务流程"><a href="#事务流程" class="headerlink" title="事务流程"></a>事务流程</h4><ul>
 <li><p>协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了</p>
 </li>
 <li><p>同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。</p>
@@ -536,8 +533,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E5%BE%AE%E6%9C%8D%E5%8A%A1/03-%E9%AB%98%E5%B9%B6%E5%8F%91/" title="03-高并发">
-                        <span class="hidden-mobile">03-高并发</span>
+                      <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E5%BE%AE%E6%9C%8D%E5%8A%A1/02-%E5%88%86%E5%B8%83%E5%BC%8F%E7%AE%97%E6%B3%95/" title="02-分布式算法">
+                        <span class="hidden-mobile">02-分布式算法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

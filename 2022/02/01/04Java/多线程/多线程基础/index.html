@@ -240,7 +240,7 @@
         
         
         
-          108 分钟
+          106 分钟
         
       </span>
     
@@ -632,7 +632,6 @@
 </ul>
 <h3 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h3><ul>
 <li>LongAdder就是尝试使用分段CAS的方式来提升高并发执行CAS操作的性能，当并发更新的线程数量过多，其内部会搞一个Cell数组，每个数组是一个数值分段，这时，让大量的线程分别去对不同Cell内部的value值进行CAS累加操作，把CAS计算压力分散到了不同的Cell分段数值中，这样就可以大幅度的降低多线程并发更新同一个数值时出现的无限循环的问题，而且他内部实现了自动分段迁移的机制，也就是如果某个Cell的value执行CAS失败了，那么就会自动去找另外一个Cell分段内的value值进行CAS操作。</li>
-<li>最后，从LongAdder中获取当前累加的总值，就会把base值和所有Cell分段数值加起来返回 从LongAdder分段加锁的实现逻辑中，我们也可以对于一些并发量较大，持续时间较长的不适用缓存模式的抢购类项目的乐观锁进行改造，假如商品有1000个库存，那么完全可以给拆成20个库存段，可以在数据库的表里建20个库存字段，比如stock_01，stock_02，以此类推，总之，就是把你的1000件库存给他拆开，每个库存段是50件库存，比如stock_01对应50件库存，stock_02对应50件库存。接着，每秒1000个请求过来了，通过简单的随机算法，每个请求都是随机在20个分段库存里，选择一个进行加锁。这样有最多20个下单请求一起执行，每个下单请求锁了一个库存分段，然后在业务逻辑里面，就对数据库的那个分段库存进行操作即可，包括查库存 -&gt; 判断库存是否充足 -&gt; 扣减库存，通过这种方式提升并发量，提高用户体验。</li>
 </ul>
 <h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><ul>
 <li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E9%94%81%E4%BC%98%E5%8C%96%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="img"></p>
@@ -847,9 +846,9 @@ Owner：获得锁的线程称为Owner
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" title="同步容器">
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/02-ElasticSearch%E9%9B%86%E7%BE%A4/" title="02-ElasticSearch集群">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">同步容器</span>
+                        <span class="hidden-mobile">02-ElasticSearch集群</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -857,8 +856,8 @@ Owner：获得锁的线程称为Owner
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/" title="线程池和JUC">
-                        <span class="hidden-mobile">线程池和JUC</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/Lucene/" title="Lucene">
+                        <span class="hidden-mobile">Lucene</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
