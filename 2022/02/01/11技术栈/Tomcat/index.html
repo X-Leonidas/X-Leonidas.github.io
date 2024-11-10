@@ -21,17 +21,19 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Tomcat TODO: https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1ZK411z7WH?vd_source&#x3D;c3707fe4351e3f56c773e3786dd31268&amp;p&#x3D;13&amp;spm_id_from&#x3D;333.788.player.switch  连接器（Connector） TODO 印象笔记  容器（Container）Tomcat为什么要自己实">
+    <meta name="description" content="Tomcat TODO: https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1ZK411z7WH?vd_source&#x3D;c3707fe4351e3f56c773e3786dd31268&amp;p&#x3D;13&amp;spm_id_from&#x3D;333.788.player.switch  连接器（Connector）容器（Container）tomcat类加载  类加载目录 放置在&amp;#x2F">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat">
 <meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Tomcat/index.html">
 <meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="Tomcat TODO: https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1ZK411z7WH?vd_source&#x3D;c3707fe4351e3f56c773e3786dd31268&amp;p&#x3D;13&amp;spm_id_from&#x3D;333.788.player.switch  连接器（Connector） TODO 印象笔记  容器（Container）Tomcat为什么要自己实">
+<meta property="og:description" content="Tomcat TODO: https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1ZK411z7WH?vd_source&#x3D;c3707fe4351e3f56c773e3786dd31268&amp;p&#x3D;13&amp;spm_id_from&#x3D;333.788.player.switch  连接器（Connector）容器（Container）tomcat类加载  类加载目录 放置在&amp;#x2F">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.png">
 <meta property="article:published_time" content="2022-02-01T11:59:30.000Z">
-<meta property="article:modified_time" content="2024-11-04T15:56:47.000Z">
+<meta property="article:modified_time" content="2024-11-10T15:17:07.000Z">
 <meta property="article:author" content="夜坐听风">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.png">
   
   
   
@@ -215,7 +217,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          241 字
+          361 字
         
       </span>
     
@@ -226,7 +228,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -271,10 +273,15 @@
                 <h1 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h1><ul>
 <li>TODO: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ZK411z7WH?vd_source=c3707fe4351e3f56c773e3786dd31268&p=13&spm_id_from=333.788.player.switch">https://www.bilibili.com/video/BV1ZK411z7WH?vd_source=c3707fe4351e3f56c773e3786dd31268&amp;p=13&amp;spm_id_from=333.788.player.switch</a></li>
 </ul>
-<h2 id="连接器（Connector）"><a href="#连接器（Connector）" class="headerlink" title="连接器（Connector）"></a>连接器（Connector）</h2><ul>
-<li>TODO 印象笔记</li>
+<h2 id="连接器（Connector）"><a href="#连接器（Connector）" class="headerlink" title="连接器（Connector）"></a>连接器（Connector）</h2><h2 id="容器（Container）"><a href="#容器（Container）" class="headerlink" title="容器（Container）"></a>容器（Container）</h2><h2 id="tomcat类加载"><a href="#tomcat类加载" class="headerlink" title="tomcat类加载"></a>tomcat类加载</h2><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.png" srcset="/img/loading.gif" lazyload alt="image-20241110221436824" style="zoom:80%;" />
+
+<h3 id="类加载目录"><a href="#类加载目录" class="headerlink" title="类加载目录"></a>类加载目录</h3><ul>
+<li>放置在&#x2F;common目录中。 类库可被Tomcat和所有的Web应用程序共同使用。</li>
+<li>放置在&#x2F;server目录中。 类库可被Tomcat使用， 对所有的Web应用程序都不可见。</li>
+<li>放置在&#x2F;shared目录中。 类库可被所有的Web应用程序共同使用， 但对Tomcat自己不可见。</li>
+<li>放置在&#x2F;WebApp&#x2F;WEB-INF目录中。 类库仅仅可以被该Web应用程序使用， 对Tomcat和其他Web应</li>
 </ul>
-<h2 id="容器（Container）"><a href="#容器（Container）" class="headerlink" title="容器（Container）"></a>容器（Container）</h2><h3 id="Tomcat为什么要自己实现classload"><a href="#Tomcat为什么要自己实现classload" class="headerlink" title="Tomcat为什么要自己实现classload"></a>Tomcat为什么要自己实现classload</h3><ul>
+<h2 id="Tomcat为什么要自己实现classload"><a href="#Tomcat为什么要自己实现classload" class="headerlink" title="Tomcat为什么要自己实现classload"></a>Tomcat为什么要自己实现classload</h2><ul>
 <li>对于各个webapp中的class和lib，需要相互隔离，不能出现一个应用中加载的类库会影响另一个应用的情况；而对于许多应用，需要有共享的lib以便不浪费资源，举个例子，如果webapp1和webapp2都用到了log4j，可以将log4j提到tomcat&#x2F;lib中，表示所有应用共享此类库，试想如果log4j很大，并且20个应用都分别加载，那实在是没有必要的。<ol start="2">
 <li>第二个原因则是与jvm一样的安全性问题。使用单独的classloader去装载tomcat自身的类库，以免其他恶意或无意的破坏；</li>
 </ol>
@@ -340,7 +347,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月4日</div>
+          <div>2024年11月10日</div>
         </div>
       
       
