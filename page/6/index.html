@@ -222,15 +222,76 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/04Java/JVM/4JVM%E8%B0%83%E4%BC%98/" target="_self">
-          4JVM调优
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lua/Lua/" target="_self">
+          Lua
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/JVM/4JVM%E8%B0%83%E4%BC%98/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lua/Lua/" target="_self">
         <div>
-          常见的垃圾收集器组合参数设定(1.8) -XX:+UseSerialGC &#x3D; Serial New (DefNew) + Serial Old 小型程序。默认情况下不会是这种选项，HotSpot会根据计算及配置和JDK版本自动选择收集器   -XX:+UseParNewGC &#x3D; ParNew + SerialOld 这个组合已经很少用（在某些版本中已经废弃） https://s
+          
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lua/" class="category-chain-item">Lua</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/04Java/JVM/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%8F%82%E6%95%B0/" target="_self">
+          虚拟机参数
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/JVM/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%8F%82%E6%95%B0/" target="_self">
+        <div>
+          虚拟机运行参数 -Xms100m -Xmx100m ：  jvm的堆的最大最小限制，通常相同，其目的是为了能够在java垃圾回收机制清理完堆区后不需要重新分隔计算堆区的大小而浪费资源。 -Xmn:年轻代大小 -XX:+PrintFlagsFinal -version : 打印所有的虚拟机参数 -XX:SurvivorRatio  ：老年代和新生代的所占内存比例 -XX:Newratio ： old
         </div>
       </a>
 
@@ -283,15 +344,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" target="_self">
-          同步容器
+        <a href="/2022/02/01/04Java/JVM/4JVM%E8%B0%83%E4%BC%98/" target="_self">
+          4JVM调优
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/JVM/4JVM%E8%B0%83%E4%BC%98/" target="_self">
         <div>
-          同步容器 同步容器的单个操作都是线程安全的，但是组合操作需要手动加锁，例如遍历删除。  同步容器由于对所有的方法都加了锁会有效率问题， 所以推荐使用并发容器。     同步容器包装类1List&lt;String&gt; synchronizedList =  Collections.synchronizedList(new ArrayList&lt;&gt;());  SynchronizedL
+          常见的垃圾收集器组合参数设定(1.8) -XX:+UseSerialGC &#x3D; Serial New (DefNew) + Serial Old 小型程序。默认情况下不会是这种选项，HotSpot会根据计算及配置和JDK版本自动选择收集器   -XX:+UseParNewGC &#x3D; ParNew + SerialOld 这个组合已经很少用（在某些版本中已经废弃） https://s
         </div>
       </a>
 
@@ -320,7 +381,7 @@
   
     <span>></span>
     
-  <a href="/categories/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">多线程</a>
+  <a href="/categories/04Java/JVM/" class="category-chain-item">JVM</a>
   
   
 
@@ -443,67 +504,6 @@
     <span>></span>
     
   <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/Lucene/" class="category-chain-item">Lucene</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/" target="_self">
-          多线程基础
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/" target="_self">
-        <div>
-          多线程基础进程和线程 进程是指一个内存中正在运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程。进程也是程序的一次执行过程，是系统运行程序的基本单位；系统运行一个程序即是一个进程从创建、运行到消亡的过程。 线程是进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程。一个进程 中是可以有多个线程的，这个应用程序也可以称之为多线程程序 线程可以创建和撤
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 20:00" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="category-chain-item">多线程</a>
   
   
 
@@ -710,15 +710,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/" target="_self">
-          线程池和JUC
+        <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/02%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" target="_self">
+          02同步容器
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/02%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" target="_self">
         <div>
-          线程池概念 线程池就是首先创建一些线程，它们的集合称为线程池。使用线程池可以很好地提高性能，线程池在系统启动时即创建大量空闲的线程，程序将一个任务传给线程池，线程池就会启动一条线程来执行这个任务，执行结束以后，该线程并不会死亡，而是再次返回线程池中成为空闲状态，等待执行下一个任务。  工作机制 在线程池的编程模式下，任务是提交给整个线程池，而不是直接提交给某个线程，线程池在拿到任务后，就在内部寻找
+          同步容器 同步容器的单个操作都是线程安全的，但是组合操作需要手动加锁，例如遍历删除。  同步容器由于对所有的方法都加了锁会有效率问题， 所以推荐使用并发容器。     同步容器包装类1List&lt;String&gt; synchronizedList =  Collections.synchronizedList(new ArrayList&lt;&gt;());  SynchronizedL
         </div>
       </a>
 
@@ -771,15 +771,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/02%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" target="_self">
-          02同步容器
+        <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/01%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/" target="_self">
+          01多线程基础
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/02%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/01%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/" target="_self">
         <div>
-          同步容器 同步容器的单个操作都是线程安全的，但是组合操作需要手动加锁，例如遍历删除。  同步容器由于对所有的方法都加了锁会有效率问题， 所以推荐使用并发容器。     同步容器包装类1List&lt;String&gt; synchronizedList =  Collections.synchronizedList(new ArrayList&lt;&gt;());  SynchronizedL
+          多线程基础进程和线程 进程是指一个内存中正在运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程。进程也是程序的一次执行过程，是系统运行程序的基本单位；系统运行一个程序即是一个进程从创建、运行到消亡的过程。 线程是进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程。一个进程 中是可以有多个线程的，这个应用程序也可以称之为多线程程序 线程可以创建和撤
         </div>
       </a>
 
