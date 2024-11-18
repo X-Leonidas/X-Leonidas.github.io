@@ -42,7 +42,7 @@
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E8%8E%B7%E5%BE%97%E5%92%8C%E6%92%A4%E9%94%80%E6%B5%81%E7%A8%8B.png">
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
 <meta property="article:published_time" content="2022-02-01T12:00:08.000Z">
-<meta property="article:modified_time" content="2024-11-13T17:25:30.000Z">
+<meta property="article:modified_time" content="2024-11-18T17:44:25.000Z">
 <meta property="article:author" content="夜坐听风">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png">
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          13k 字
+          14k 字
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          113 分钟
+          115 分钟
         
       </span>
     
@@ -371,6 +371,23 @@
 </ul>
 <h2 id="活锁"><a href="#活锁" class="headerlink" title="活锁"></a>活锁</h2><ul>
 <li>现在假想有一对并行的线程用到了两个资源。它们分别尝试获取另一个锁失败后，两个线程都会释放自己持有的锁，再次进行尝试，这个过程会一直进行重复。很明显，这个过程中没有线程阻塞，但是线程仍然不会向下执行，这种状况我们称之为 活锁(live lock)。</li>
+</ul>
+<h2 id="线程安全的实现方法"><a href="#线程安全的实现方法" class="headerlink" title="线程安全的实现方法"></a>线程安全的实现方法</h2><h3 id="互斥同步"><a href="#互斥同步" class="headerlink" title="互斥同步"></a>互斥同步</h3><ul>
+<li>同步是指多个线程并发访问共享数据时，保证共享数据在同一个时刻只被一条线程使用。而互斥是实现同步的一种手段，临界区、互斥量、信号量都是常见的互斥实现方式</li>
+<li>最基本的互斥同步方法就是 synchronized 关键字</li>
+<li>阻塞同步，是一种悲观的并发策略</li>
+</ul>
+<h3 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h3><ul>
+<li>乐观锁</li>
+<li>CAS机制</li>
+</ul>
+<h3 id="无同步方案"><a href="#无同步方案" class="headerlink" title="无同步方案"></a>无同步方案</h3><ul>
+<li>可重入代码：如果一个方法的返回结果是可以预测的，只要输入了相同的数据就能返回相同的结果</li>
+<li>线程本地存储： 一段代码中所需要的数据必须与其他代码共享，这些共享数据的代码必须能保证在同一个线程中执行<ul>
+<li>经典Web交互方案，一个请求对应一个服务器线程</li>
+<li>ThreadLocal</li>
+</ul>
+</li>
 </ul>
 <h2 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h2><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
@@ -663,7 +680,7 @@
 </li>
 </ul>
 <h3 id="偏向锁（biased-Locking"><a href="#偏向锁（biased-Locking" class="headerlink" title="偏向锁（biased Locking)"></a>偏向锁（biased Locking)</h3><ul>
-<li><p>它的目的是消除数据在无竞争情况下的同步原语， 进一步提高程序的运行性能。 如果说轻量级锁是在无竞争的情况下使用CAS操作去消除同步使用的互斥量， 那偏向锁就是在无竞争的情况下把整个同步都消除掉， 连CAS操作都不做了。  </p>
+<li><p>它的目的是消除数据在无竞争情况下的同步原语， 进一步提高程序的运行性能。 <strong>如果说轻量级锁是在无竞争的情况下使用CAS操作去消除同步使用的互斥量， 那偏向锁就是在无竞争的情况下把整个同步都消除掉， 连CAS操作都不做了。</strong>  </p>
 </li>
 <li><p>偏向锁的过程</p>
 <ul>
@@ -740,7 +757,7 @@ Owner：获得锁的线程称为Owner
 <li>锁粗化的概念应该比较好理解，就是将多次连接在一起的加锁、解锁操作合并为一次，将多个连续的锁扩展成一个范围更大的锁。</li>
 </ul>
 <h3 id="锁消除（Lock-Elimination）"><a href="#锁消除（Lock-Elimination）" class="headerlink" title="锁消除（Lock Elimination）"></a>锁消除（Lock Elimination）</h3><ul>
-<li>锁消除即删除不必要的加锁操作。根据代码逃逸技术，如果判断到一段代码中，堆上的数据不会逃逸出当前线程，那么可以认为这段代码是线程安全的，不必要加锁。</li>
+<li>锁消除即删除不必要的加锁操作。根据<strong>代码逃逸技术</strong>，如果判断到一段代码中，堆上的数据不会逃逸出当前线程，那么可以认为这段代码是线程安全的，不必要加锁。</li>
 </ul>
 <h3 id="各种锁的优缺点对比"><a href="#各种锁的优缺点对比" class="headerlink" title="各种锁的优缺点对比"></a>各种锁的优缺点对比</h3><table>
 <thead>
@@ -834,7 +851,7 @@ Owner：获得锁的线程称为Owner
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月14日</div>
+          <div>2024年11月19日</div>
         </div>
       
       

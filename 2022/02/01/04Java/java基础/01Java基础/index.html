@@ -21,16 +21,16 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="java基础Object通用方法1234567891011public native int hashCode()public boolean equals(Object obj)protected native Object clone() throws CloneNotSupportedExceptionpublic String toString()public final native C">
+    <meta name="description" content="java基础面向对象和面向过程 程序和过程分别作为独立的部分来考虑，数据代表问题空间中的客体，程序代码则用于处理这些数据，这种思维方式站在计算机的角度去抽象问题和解决问题， 面向过程编程 站在显式的角度去抽象问题和解决问题，把数据和行为都看到是对象的一部分  Object通用方法1234567891011public native int hashCode()public boolean equa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="01Java基础">
 <meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/04Java/java%E5%9F%BA%E7%A1%80/01Java%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="java基础Object通用方法1234567891011public native int hashCode()public boolean equals(Object obj)protected native Object clone() throws CloneNotSupportedExceptionpublic String toString()public final native C">
+<meta property="og:description" content="java基础面向对象和面向过程 程序和过程分别作为独立的部分来考虑，数据代表问题空间中的客体，程序代码则用于处理这些数据，这种思维方式站在计算机的角度去抽象问题和解决问题， 面向过程编程 站在显式的角度去抽象问题和解决问题，把数据和行为都看到是对象的一部分  Object通用方法1234567891011public native int hashCode()public boolean equa">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/threadLocal.png">
 <meta property="article:published_time" content="2022-02-01T12:00:08.000Z">
-<meta property="article:modified_time" content="2024-11-13T13:50:05.000Z">
+<meta property="article:modified_time" content="2024-11-18T17:15:41.000Z">
 <meta property="article:author" content="夜坐听风">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/threadLocal.png">
@@ -217,7 +217,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.8k 字
+          3.9k 字
         
       </span>
     
@@ -228,7 +228,7 @@
         
         
         
-          32 分钟
+          33 分钟
         
       </span>
     
@@ -270,7 +270,11 @@
             
               <div class="markdown-body">
                 
-                <h1 id="java基础"><a href="#java基础" class="headerlink" title="java基础"></a>java基础</h1><h2 id="Object通用方法"><a href="#Object通用方法" class="headerlink" title="Object通用方法"></a>Object通用方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-type">int</span> <span class="hljs-title function_">hashCode</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">equals</span><span class="hljs-params">(Object obj)</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">native</span> Object <span class="hljs-title function_">clone</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> CloneNotSupportedException<br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">toString</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> Class&lt;?&gt; getClass()<br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">finalize</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Throwable &#123;&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">notify</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">notifyAll</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">wait</span><span class="hljs-params">(<span class="hljs-type">long</span> timeout)</span> <span class="hljs-keyword">throws</span> InterruptedException<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">wait</span><span class="hljs-params">(<span class="hljs-type">long</span> timeout, <span class="hljs-type">int</span> nanos)</span> <span class="hljs-keyword">throws</span> InterruptedException<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">wait</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> InterruptedException<br></code></pre></td></tr></table></figure>
+                <h1 id="java基础"><a href="#java基础" class="headerlink" title="java基础"></a>java基础</h1><h2 id="面向对象和面向过程"><a href="#面向对象和面向过程" class="headerlink" title="面向对象和面向过程"></a>面向对象和面向过程</h2><ul>
+<li>程序和过程分别作为独立的部分来考虑，数据代表问题空间中的客体，程序代码则用于处理这些数据，这种思维方式站在计算机的角度去抽象问题和解决问题， 面向过程编程</li>
+<li>站在显式的角度去抽象问题和解决问题，把数据和行为都看到是对象的一部分</li>
+</ul>
+<h2 id="Object通用方法"><a href="#Object通用方法" class="headerlink" title="Object通用方法"></a>Object通用方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-type">int</span> <span class="hljs-title function_">hashCode</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">equals</span><span class="hljs-params">(Object obj)</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">native</span> Object <span class="hljs-title function_">clone</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> CloneNotSupportedException<br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">toString</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> Class&lt;?&gt; getClass()<br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">finalize</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Throwable &#123;&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">notify</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">notifyAll</span><span class="hljs-params">()</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">wait</span><span class="hljs-params">(<span class="hljs-type">long</span> timeout)</span> <span class="hljs-keyword">throws</span> InterruptedException<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">wait</span><span class="hljs-params">(<span class="hljs-type">long</span> timeout, <span class="hljs-type">int</span> nanos)</span> <span class="hljs-keyword">throws</span> InterruptedException<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">wait</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> InterruptedException<br></code></pre></td></tr></table></figure>
 <h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><h3 id="不可变的好处"><a href="#不可变的好处" class="headerlink" title="不可变的好处"></a>不可变的好处</h3><ul>
 <li>缓存hash值<ul>
 <li>因为 String 的 hash 值经常被使用，例如 String 用做 HashMap 的 key。不可变的特性可以使得 hash 值也不可变，因此只需要进行一次计算。</li>
@@ -585,7 +589,7 @@ System.out.println(&quot;平均数 : &quot; + stats.getAverage());
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月13日</div>
+          <div>2024年11月19日</div>
         </div>
       
       

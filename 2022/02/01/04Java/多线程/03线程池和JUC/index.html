@@ -49,7 +49,7 @@
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170434875.png">
 <meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%9F%BA%E4%BA%8EAQS%E5%AE%9E%E7%8E%B0%E7%9A%84%E9%94%81.png">
 <meta property="article:published_time" content="2022-02-01T12:00:08.000Z">
-<meta property="article:modified_time" content="2024-10-29T15:52:57.000Z">
+<meta property="article:modified_time" content="2024-11-18T17:26:19.000Z">
 <meta property="article:author" content="夜坐听风">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0.png">
@@ -449,7 +449,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">void</span> <span class="hljs-title function_">lock</span><span class="hljs-params">()</span> <span class="hljs-comment">// 如果锁可用就获得锁，如果锁不可用就阻塞直到锁释放</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">lockInterruptibly</span><span class="hljs-params">()</span> <span class="hljs-comment">// 和 lock()方法相似, 但阻塞的线程可中断，抛出   		java.lang.InterruptedException异常</span><br><span class="hljs-type">boolean</span> <span class="hljs-title function_">tryLock</span><span class="hljs-params">()</span> <span class="hljs-comment">// 非阻塞获取锁;尝试获取锁，如果成功返回true</span><br><span class="hljs-type">boolean</span> <span class="hljs-title function_">tryLock</span><span class="hljs-params">(<span class="hljs-type">long</span> timeout, TimeUnit timeUnit)</span> <span class="hljs-comment">//带有超时时间的获取锁方法</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> <span class="hljs-comment">// 释放锁</span><br></code></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="锁的分类"><a href="#锁的分类" class="headerlink" title="锁的分类"></a>锁的分类</h3><h4 id="可重入锁和非可重入锁"><a href="#可重入锁和非可重入锁" class="headerlink" title="可重入锁和非可重入锁"></a>可重入锁和非可重入锁</h4><ul>
-<li>所谓重入锁，顾名思义。就是支持重新进入的锁，也就是说这个锁支持一个<strong>线程对资源重复加锁</strong>。<br>synchronized关键字就是使用的重入锁。比如说，你在一个synchronized实例方法里面调用另一个本实例的synchronized实例方法，它可以重新进入这个锁，不会出现任何异常。<br>如果我们自己在继承AQS实现同步器的时候，没有考虑到占有锁的线程再次获取锁的场景，可能就会导致线程阻塞，那这个就是一个“非可重入锁”。<br><code>ReentrantLock</code>的中文意思就是可重入锁。也是本文后续要介绍的重点类。</li>
+<li>所谓重入锁，顾名思义。就是支持重新进入的锁，也就是说这个锁支持一个<strong>线程对资源重复加锁</strong>。<br>synchronized关键字就是使用的重入锁。比如说，你在一个synchronized实例方法里面调用另一个本实例的synchronized实例方法，它可以重新进入这个锁，不会出现任何异常。<br>如果我们自己在继承AQS实现同步器的时候，没有考虑到占有锁的线程再次获取锁的场景，可能就会导致线程阻塞，那这个就是一个“非可重入锁”。<br><code>ReentrantLock</code>的中文意思就是可重入锁</li>
 </ul>
 <h4 id="公平锁和非公平锁"><a href="#公平锁和非公平锁" class="headerlink" title="公平锁和非公平锁"></a>公平锁和非公平锁</h4><ul>
 <li>这里的“公平”，其实通俗意义来说就是“先来后到”，也就是FIFO。如果对一个锁来说，先对锁获取请求的线程一定会先被满足，后对锁获取请求的线程后被满足，那这个锁就是公平的。反之，那就是不公平的。<br>一般情况下，<strong>非公平锁能提升一定的效率。但是非公平锁可能会发生线程饥饿（有一些线程长时间得不到锁）的情况</strong>。所以要根据实际的需求来选择非公平锁和公平锁。<br>ReentrantLock支持非公平锁和公平锁两种。</li>
@@ -590,10 +590,10 @@
 </li>
 </ul>
 <h4 id="ReentrantLock与synchronized的区别"><a href="#ReentrantLock与synchronized的区别" class="headerlink" title="ReentrantLock与synchronized的区别"></a>ReentrantLock与synchronized的区别</h4><ul>
-<li>ReentrantLock等待时可中断，当持有锁的线程长时间不释放锁的时候，等待中的线程可以选择放弃等待，转而处理其他的任务。</li>
+<li><strong>ReentrantLock等待时可中断</strong>，当持有锁的线程长时间不释放锁的时候，等待中的线程可以选择放弃等待，转而处理其他的任务。</li>
 <li>ReentranLock需要显式的加锁和解锁</li>
-<li>ReentranLock中有多个condition队列，而synchronized只有一个等待队列</li>
-<li>公平锁：synchronized和ReentrantLock默认都是非公平锁，但是ReentrantLock可以通过构造函数传参改变。只不过使用公平锁的话会导致性能急剧下降。</li>
+<li><strong>ReentranLock中有多个condition队列，而synchronized只有一个等待队列</strong></li>
+<li><strong>公平锁</strong>：synchronized和ReentrantLock默认都是非公平锁，但是ReentrantLock可以通过构造函数传参改变。只不过使用公平锁的话会导致性能急剧下降。</li>
 <li>另一种说法<ul>
 <li><strong>锁的实现</strong><ul>
 <li>synchronized 是 JVM 实现的，而 ReentrantLock 是 JDK 实现的。</li>
@@ -993,7 +993,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年10月29日</div>
+          <div>2024年11月19日</div>
         </div>
       
       
