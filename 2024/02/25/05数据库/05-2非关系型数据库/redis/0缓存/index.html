@@ -22,18 +22,6 @@
   <meta name="keywords" content="">
   
     <meta name="description" content="常见的缓存更新策略Cache Aside Pattern（旁路缓存模式） 比较适合读请求比较多的场景  写 先更新DB 直接删除cache  读 先从cache中读取数据，读取到就直接返回 cache读取不到的话，就从DB中读取返回 再把DB中读取到的数据放到cache中  为什么是删除cache而不是更新cache？ 对服务端资源造成浪费，因为cache中的数据可能需要经过服务端大量的计算才能拿">
-<meta property="og:type" content="article">
-<meta property="og:title" content="0缓存">
-<meta property="og:url" content="https://x-leonidas.github.io/2024/02/25/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/0%E7%BC%93%E5%AD%98/index.html">
-<meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="常见的缓存更新策略Cache Aside Pattern（旁路缓存模式） 比较适合读请求比较多的场景  写 先更新DB 直接删除cache  读 先从cache中读取数据，读取到就直接返回 cache读取不到的话，就从DB中读取返回 再把DB中读取到的数据放到cache中  为什么是删除cache而不是更新cache？ 对服务端资源造成浪费，因为cache中的数据可能需要经过服务端大量的计算才能拿">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BC%93%E5%AD%98%E8%AF%BB%E5%86%99%E7%A9%BF%E9%80%8F%E5%86%99.png">
-<meta property="article:published_time" content="2024-02-25T13:29:11.000Z">
-<meta property="article:modified_time" content="2024-02-25T13:57:21.000Z">
-<meta property="article:author" content="夜坐听风">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BC%93%E5%AD%98%E8%AF%BB%E5%86%99%E7%A9%BF%E9%80%8F%E5%86%99.png">
   
   
   

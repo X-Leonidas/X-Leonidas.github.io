@@ -22,37 +22,6 @@
   <meta name="keywords" content="">
   
     <meta name="description" content="线程池概念 线程池就是首先创建一些线程，它们的集合称为线程池。使用线程池可以很好地提高性能，线程池在系统启动时即创建大量空闲的线程，程序将一个任务传给线程池，线程池就会启动一条线程来执行这个任务，执行结束以后，该线程并不会死亡，而是再次返回线程池中成为空闲状态，等待执行下一个任务。  工作机制 在线程池的编程模式下，任务是提交给整个线程池，而不是直接提交给某个线程，线程池在拿到任务后，就在内部寻找">
-<meta property="og:type" content="article">
-<meta property="og:title" content="03线程池和JUC">
-<meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/03%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8CJUC/index.html">
-<meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="线程池概念 线程池就是首先创建一些线程，它们的集合称为线程池。使用线程池可以很好地提高性能，线程池在系统启动时即创建大量空闲的线程，程序将一个任务传给线程池，线程池就会启动一条线程来执行这个任务，执行结束以后，该线程并不会死亡，而是再次返回线程池中成为空闲状态，等待执行下一个任务。  工作机制 在线程池的编程模式下，任务是提交给整个线程池，而不是直接提交给某个线程，线程池在拿到任务后，就在内部寻找">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%B5%81%E7%A8%8B.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ReentrantLock%20%E7%9A%84%E7%9F%A5%E8%AF%86%E9%93%BE.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ReentrantLock%20%E7%9A%84%E7%9F%A5%E8%AF%86%E9%93%BE.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AQS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AQS%E9%98%9F%E5%88%97%E7%BB%93%E6%9E%84.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AQS-1.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015153937706.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154201686.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154540836.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015154904690.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015155439466.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015155908167.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015160044273.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015165058215.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015165746663.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170011091.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170332399.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015170434875.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%9F%BA%E4%BA%8EAQS%E5%AE%9E%E7%8E%B0%E7%9A%84%E9%94%81.png">
-<meta property="article:published_time" content="2022-02-01T12:00:08.000Z">
-<meta property="article:modified_time" content="2024-11-18T17:26:19.000Z">
-<meta property="article:author" content="夜坐听风">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0.png">
   
   
   
@@ -1040,8 +1009,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/docker/" title="docker">
-                        <span class="hidden-mobile">docker</span>
+                      <a href="/2022/02/01/04Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/02%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8/" title="02同步容器">
+                        <span class="hidden-mobile">02同步容器</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

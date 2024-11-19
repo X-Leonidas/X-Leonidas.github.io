@@ -22,19 +22,6 @@
   <meta name="keywords" content="">
   
     <meta name="description" content="Redis进阶Redis单线程模型 redis 会将每个客户端都关联一个指令队列。客户端的指令通过队列来按顺序处理，先到先服务。 在一个客户端的指令队列中的指令是顺序执行的，但是多个指令队列中的指令是无法保证顺序的，例如执行完 client-0 的队列中的 command-0 后，接下去是执行哪个队列中的第一个指令是无法确定的，但是肯定不会同时执行两个指令。 redis 同样也会为每个客户端关联一">
-<meta property="og:type" content="article">
-<meta property="og:title" content="2redis进阶">
-<meta property="og:url" content="https://x-leonidas.github.io/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/2redis%E8%BF%9B%E9%98%B6/index.html">
-<meta property="og:site_name" content="夜坐听风">
-<meta property="og:description" content="Redis进阶Redis单线程模型 redis 会将每个客户端都关联一个指令队列。客户端的指令通过队列来按顺序处理，先到先服务。 在一个客户端的指令队列中的指令是顺序执行的，但是多个指令队列中的指令是无法保证顺序的，例如执行完 client-0 的队列中的 command-0 后，接下去是执行哪个队列中的第一个指令是无法确定的，但是肯定不会同时执行两个指令。 redis 同样也会为每个客户端关联一">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis4_0.png">
-<meta property="og:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.png">
-<meta property="article:published_time" content="2022-02-01T12:00:09.000Z">
-<meta property="article:modified_time" content="2024-10-29T16:04:58.000Z">
-<meta property="article:author" content="夜坐听风">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis4_0.png">
   
   
   
@@ -610,9 +597,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/00Spring/" title="00Spring">
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/1redis%E5%9F%BA%E7%A1%80/" title="1redis基础">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">00Spring</span>
+                        <span class="hidden-mobile">1redis基础</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -620,8 +607,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/3redis%E9%9B%86%E7%BE%A4/" title="3redis集群">
-                        <span class="hidden-mobile">3redis集群</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MongoDB/MongoDB/" title="MongoDB">
+                        <span class="hidden-mobile">MongoDB</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
