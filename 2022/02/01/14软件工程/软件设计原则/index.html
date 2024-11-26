@@ -293,25 +293,25 @@
 </li>
 </ul>
 <h2 id="S-O-L-I-D"><a href="#S-O-L-I-D" class="headerlink" title="S.O.L.I.D"></a>S.O.L.I.D</h2><ul>
-<li>SRP(Single Responsibility Principle) 单一职责原则<ul>
+<li><strong>SRP(Single Responsibility Principle) 单一职责原则</strong><ul>
 <li>关于单一职责原则，其核心的思想是：一个类，只做一件事，并把这件事做好，其只有一个引起它变化的原因。单一职责原则可以看作是低耦合、高内聚在面向对象原则上的引申，将职责定义为引起变化的原因，以提高内聚性来减少引起变化的原因。</li>
 <li>职责过多，可能引起它变化的原因就越多，这将导致职责依赖，相互之间就产生影响，从而极大地损伤其内聚性和耦合度。单一职责，通常意味着单一的功能，因此不要为一个模块实现过多的功能点，以保证实体只有一个引起它变化的原因。</li>
 </ul>
 </li>
-<li>OCP(Open&#x2F;Close Principle) 开闭原则<ul>
+<li><strong>OCP(Open&#x2F;Close Principle) 开闭原则</strong><ul>
 <li>关于开放封闭原则，其核心的思想是：模块是可扩展的，而不可修改的。也就是说，对扩展是开放的，而对修改是封闭的。对扩展开放，意味着有新的需求或变化时，可以对现有代码进行扩展，以适应新的情况。对修改封闭，意味着类一旦设计完成，就可以独立完成其工作，而不要对类进行任何修改。</li>
 </ul>
 </li>
-<li>LSP(Likov substitution Principle) 里氏替换原则<ul>
+<li><strong>LSP(Likov substitution Principle) 里氏替换原则</strong><ul>
 <li>软件工程大师罗伯特·马丁（Robert C. Martin）把里氏代换原则最终简化为一句话：“Subtypes must be substitutable for their base types”。也就是，子类必须能够替换成它们的基类。即子类应该可以替换任何基类能够出现的地方，并且经过替换以后，代码还能正常工作。另外，不应该在代码中出现 if&#x2F;else 之类对子类类型进行判断的条件。里氏替换原则 LSP 是使代码符合开闭原则的一个重要保证。正是由于子类型的可替换性才使得父类型的模块在无需修改的情况下就可以扩展。</li>
 </ul>
 </li>
-<li>ISP(Interface Segregation Principle) 接口隔离原则<ul>
+<li><strong>ISP(Interface Segregation Principle) 接口隔离原则</strong><ul>
 <li>接口隔离原则的意思是把功能实现在接口中，而不是类中，使用多个专门的接口比使用单一的总接口要好。举个例子，我们对电脑有不同的使用方式，比如：写作、通讯、看电影、打游戏、上网、编程、计算和数据存储等。</li>
 <li>如果我们把这些功能都声明在电脑的抽象类里面，那么，我们的上网本、PC 机、服务器和笔记本的实现类都要实现所有的这些接口，这就显得太复杂了。所以，我们可以把这些功能接口隔离开来，如工作学习接口、编程开发接口、上网娱乐接口、计算和数据服务接口，这样，我们的不同功能的电脑就可以有所选择地继承这些接口。</li>
 </ul>
 </li>
-<li>DIP(Dpendency Inversion Principle) 依赖倒置原则<ul>
+<li><strong>DIP(Dpendency Inversion Principle) 依赖倒置原则</strong><ul>
 <li>高层模块不应该依赖于低层模块的实现，而是依赖于高层抽象。举个例子，墙面的开关不应该依赖于电灯的开关实现，而是应该依赖于一个抽象的开关的标准接口。这样，当我们扩展程序的时候，开关同样可以控制其它不同的灯，甚至不同的电器。也就是说，电灯和其它电器继承并实现我们的标准开关接口，而开关厂商就可以不需要关于其要控制什么样的设备，只需要关心那个标准的开关标准。这就是依赖倒置原则。</li>
 </ul>
 </li>
@@ -420,7 +420,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2024年11月27日</div>
         </div>
       
       
@@ -457,9 +457,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E6%B5%81%E7%A8%8B%E5%9B%BE/" title="流程图">
+                      <a href="/2022/02/01/20%E5%AE%89%E5%85%A8/%E6%92%9E%E5%BA%93%E8%84%B1%E5%BA%93/" title="撞库脱库">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">流程图</span>
+                        <span class="hidden-mobile">撞库脱库</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
