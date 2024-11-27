@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Bean加载机制+">
+    <meta name="description" content="WSL发行版迁移下面是操作方法：  首先关闭docker 关闭所有发行版：wsl --shutdown 将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）wsl --export docker-desktop-data D:">
   
   
   
-  <title>Spirng源码 - 夜坐听风</title>
+  <title>Docker Desktop - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Spirng源码"></span>
+            <span id="subtitle" data-typed-text="Docker Desktop"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-10-01 20:00" pubdate>
-          2022-10-01 20:00:08
+        <time datetime="2023-10-01 19:59" pubdate>
+          2023-10-01 19:59:28
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5 字
+          115 字
         
       </span>
     
@@ -253,12 +253,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Spirng源码</h1>
+            <h1 id="seo-header">Docker Desktop</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Bean加载机制"><a href="#Bean加载机制" class="headerlink" title="Bean加载机制"></a>Bean加载机制</h1><p>+ </p>
+                <h2 id="WSL发行版迁移"><a href="#WSL发行版迁移" class="headerlink" title="WSL发行版迁移"></a>WSL发行版迁移</h2><p>下面是操作方法：</p>
+<ol>
+<li>首先关闭docker</li>
+<li>关闭所有发行版：<br><code>wsl --shutdown</code></li>
+<li>将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）<br><code>wsl --export docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar</code></li>
+<li>注销docker-desktop-data：<br><code>wsl --unregister docker-desktop-data</code></li>
+<li>重新导入docker-desktop-data到要存放的文件夹：D:\SoftwareData\wsl\docker-desktop-data\：<br><code>wsl --import docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\ D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar --version 2</code></li>
+</ol>
 
                 
               </div>
@@ -277,15 +284,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/" class="category-chain-item">spring</a>
-  
-  
-
   
 
       </span>
@@ -304,8 +304,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Spirng源码</div>
-      <div>https://x-leonidas.github.io/2022/10/01/11技术栈/spring/Spirng源码/</div>
+      <div>Docker Desktop</div>
+      <div>https://x-leonidas.github.io/2023/10/01/15云和容器/Docker Desktop/</div>
     </div>
     <div class="license-meta">
       
@@ -317,13 +317,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年10月1日</div>
+          <div>2023年10月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月26日</div>
+          <div>2024年10月16日</div>
         </div>
       
       
@@ -360,9 +360,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/16/04Java/java%E5%9F%BA%E7%A1%80/04%E5%BA%8F%E5%88%97%E5%8C%96/" title="04序列化">
+                      <a href="/2023/10/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">04序列化</span>
+                        <span class="hidden-mobile">4. 实践</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -370,8 +370,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/08/02/22tool/perf/" title="perf">
-                        <span class="hidden-mobile">perf</span>
+                      <a href="/2023/03/26/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/win11ForDocker%E9%97%AE%E9%A2%98/" title="win11ForDocker问题">
+                        <span class="hidden-mobile">win11ForDocker问题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
