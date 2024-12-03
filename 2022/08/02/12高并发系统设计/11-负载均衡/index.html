@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="链表的分类单向链表+  双向链表+  循环链表+  跳跃链表 根据节点数量将链表分为多级，每个节点包含自身级数的指针数组，其中的元素分别指向同级的下一个节点。从最低的0级到最高级分别可以形成一个独立的子链 跳跃链表一定是有序的，通常使用Root数组保存每一级的根节点，每一级子链中的元素都存在于其下一级的子链中，其中0级节点包含所有的元素。链表的级数maxLevel于链表节点数n之间的关系为maxL">
+    <meta name="description" content="load balance LB,也可以写成SLB，Service load balance 一般来说四层LB，说的是按照ip进行负载均衡，六层SLB是按照URL进行负载均衡  负载均衡的划分四层和七层 LVS四层负载均衡，nginx&amp;#x2F;httpd&amp;#x2F;haproxy七层负载均衡， 四层和七层有啥区别，区别在于协议不同，七层是应用层协议，一般指的是http和https协议，四层指的是网">
   
   
   
-  <title>链表 - 夜坐听风</title>
+  <title>11-负载均衡 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="链表"></span>
+            <span id="subtitle" data-typed-text="11-负载均衡"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-10-01 19:59" pubdate>
-          2022-10-01 19:59:33
+        <time datetime="2022-08-02 21:19" pubdate>
+          2022-08-02 21:19:41
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          553 字
+          787 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          5 分钟
+          7 分钟
         
       </span>
     
@@ -253,20 +253,40 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">链表</h1>
+            <h1 id="seo-header">11-负载均衡</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="链表的分类"><a href="#链表的分类" class="headerlink" title="链表的分类"></a>链表的分类</h3><h4 id="单向链表"><a href="#单向链表" class="headerlink" title="单向链表"></a>单向链表</h4><p>+ </p>
-<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><p>+ </p>
-<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>+ </p>
-<h4 id="跳跃链表"><a href="#跳跃链表" class="headerlink" title="跳跃链表"></a>跳跃链表</h4><ul>
-<li>根据节点数量将链表分为多级，每个节点包含自身级数的指针数组，其中的元素分别指向同级的下一个节点。从最低的0级到最高级分别可以形成一个独立的子链</li>
-<li>跳跃链表一定是有序的，通常使用Root数组保存每一级的根节点，每一级子链中的元素都存在于其下一级的子链中，其中0级节点包含所有的元素。链表的级数maxLevel于链表节点数n之间的关系为<code>maxLevel = [lg 2 n] + 1</code>。为了避免在插入和删除节点的时候重新够着链表，放弃对不同级上节点的位置要求，仅保留不同级上的节点数目要求，这样的链表又称为<strong>随机跳跃链表</strong>。通过<code>choosePowers()</code>函数生成powers数组，然后通过<code>chooseLeves()</code>函数确定当前插入节点的级数。</li>
+                <h1 id="load-balance"><a href="#load-balance" class="headerlink" title="load balance"></a>load balance</h1><ul>
+<li>LB,也可以写成SLB，Service load balance</li>
+<li>一般来说四层LB，说的是按照ip进行负载均衡，六层SLB是按照URL进行负载均衡</li>
 </ul>
-<h4 id="稀疏表"><a href="#稀疏表" class="headerlink" title="稀疏表"></a>稀疏表</h4><ul>
-<li>当一个表只有一小部分空间被使用的时候成为稀疏表。其中很多稀疏表都可以使用链表的数据结构方式解决。例如当储存一个学校所有学生成绩时。如果用二维数组，课程作为行，学生作为列，这时很多学生并不会选修所有的课，这会造成大量的空间浪费。此时，使用Class和Student两个数组，其中class数组每个元素记录选修这门课程的链表，Student中每个元素记录这个学生所修课程的链表，这样会大量节约所需的内存空间。<br>  数组的优点是随机访问，因此需要直接访问某个元素，数组是更好的选中，如二分查找法和大多数排序算法。当只需要固定的访问某些元素（如第一个和最后一个），并且结构的改变是算法的核心则链表是更好的选则，如队列。另外数组的另一个优点是空间，链表本身还会花空间存储指向节点的指针。</li>
+<h2 id="负载均衡的划分"><a href="#负载均衡的划分" class="headerlink" title="负载均衡的划分"></a>负载均衡的划分</h2><h3 id="四层和七层"><a href="#四层和七层" class="headerlink" title="四层和七层"></a>四层和七层</h3><ul>
+<li>LVS四层负载均衡，nginx&#x2F;httpd&#x2F;haproxy七层负载均衡，</li>
+<li>四层和七层有啥区别，区别在于协议不同，七层是应用层协议，一般指的是http和https协议，四层指的是网络层协议，一般指的是tcp&#x2F;udp协议，当然也可以代理mysql协议</li>
+</ul>
+<h3 id="种类"><a href="#种类" class="headerlink" title="种类"></a>种类</h3><ul>
+<li>DNS负载均衡<ul>
+<li>要是使用DNS解析出IP的方式，来进行业务流量的分发，并发无上限</li>
+<li>DNS负载均衡主要适用于的场景是多地集群的方式，也就是可能北京有一个数据中心，在其中部署了一整套的集群提供服务，在上海有一个数据中心，也部署了同样的一套的集群来提供服务，用于预防地震，水灾，整个机房断电的故障，这种可以将请求发送给不同的数据中心，从而可以使用户更加快速的访问到服务，数据中心级别的负载均衡</li>
+</ul>
+</li>
+<li>硬件负载均衡<ul>
+<li>例如那些贵的离谱的硬件设备，F5，A10，并发百万级别</li>
+<li>硬件厂商一般能提供强力的服务，稳定性较高，性能较好，能支持百万级别的并发量，缺点就是太贵了，在一个数据中心，一般买俩就够了，做成主备的形式，提供高可靠，高可用。。。集群之间的负载均衡</li>
+</ul>
+</li>
+<li>软件负载均衡<ul>
+<li>我们常见的负载均衡软件，例如nginx，lvs，并发几万到百万级别</li>
+<li>一般就是在前端创建一个SLB，然后在后端挂上真正的物理服务器，成为多个应用服务器的控制器，可以用各种调度算法来进行调度。。。服务器之间的负载均衡</li>
+</ul>
+</li>
+</ul>
+<h3 id="GSLB"><a href="#GSLB" class="headerlink" title="GSLB"></a>GSLB</h3><ul>
+<li>GSLB其实是DNS轮询方式的一种改进，因为DNS轮询的时候比较傻，它不能对后端的服务进行健康检查，没准有一个机房挂了，但是。。。。它依旧把请求发送给那个机房，从而就有了GSLB。</li>
+<li>DNS还有一个缺点就是在DNS解析的时候，一般会先向本地的DNS服务器进行解析，但是这并不是客户端的真实的IP地址，从而有可能分配的时候，并不是距离上最近的或者是性能最好的，从而也就有GSLB。</li>
+<li>DNS的轮询其实是GSLB的一种实现方式，所以这种也能称之为GSLB，而DNS轮询这种说法比较少，而GSLB的实现方式中，还有一种方式就是HTTP 302跳转，将GSLB的IP地址作为域名的A记录，然后访问GSLB的时候，会将请求返回给客户端，然后给一个302响应，让客户端跳转到真正的地址（此种方式GSLB能看到客户端的真实的IP地址，从而给出距离跟进的服务器ip地址）。</li>
 </ul>
 
                 
@@ -286,7 +306,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="category-chain-item">02数据结构</a>
+  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
   
   
 
@@ -306,8 +326,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>链表</div>
-      <div>https://x-leonidas.github.io/2022/10/01/02数据结构/链表/</div>
+      <div>11-负载均衡</div>
+      <div>https://x-leonidas.github.io/2022/08/02/12高并发系统设计/11-负载均衡/</div>
     </div>
     <div class="license-meta">
       
@@ -319,13 +339,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年10月1日</div>
+          <div>2022年8月2日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月27日</div>
+          <div>2022年8月23日</div>
         </div>
       
       
@@ -362,9 +382,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/16/04Java/java%E5%9F%BA%E7%A1%80/04%E5%BA%8F%E5%88%97%E5%8C%96/" title="04序列化">
+                      <a href="/2022/08/02/22tool/perf/" title="perf">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">04序列化</span>
+                        <span class="hidden-mobile">perf</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -372,8 +392,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/10/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/13-RocketMQ%E9%9B%86%E7%BE%A4/" title="13-RocketMQ集群">
-                        <span class="hidden-mobile">13-RocketMQ集群</span>
+                      <a href="/2022/03/03/01-1C/%E5%A4%87%E5%BF%98/" title="备忘">
+                        <span class="hidden-mobile">备忘</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

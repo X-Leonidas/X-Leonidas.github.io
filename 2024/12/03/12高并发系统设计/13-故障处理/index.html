@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="idea插件+">
+    <meta name="description" content="故障检测gossip协议 Gossip 协议是一种允许在分布式系统中共享状态的去中心化通信协议，通过这种通信协议，我们可以将信息传播给网络或集群中的所有成员。  传播示意图     消息传播模式  反熵（Anti-Entropy） 同步节点的全部数据，以消除各节点之间的差异，目标是整个网络各节点完全的一致   传谣 仅仅发送新到达节点的数据，即只对外发送变更信息     优点  对节点间的网络连通">
   
   
   
-  <title>我的工具包 - 夜坐听风</title>
+  <title>13-故障处理 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="我的工具包"></span>
+            <span id="subtitle" data-typed-text="13-故障处理"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-11-25 23:19" pubdate>
-          2024-11-25 23:19:08
+        <time datetime="2024-12-03 23:30" pubdate>
+          2024-12-03 23:30:44
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3 字
+          398 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          1 分钟
+          4 分钟
         
       </span>
     
@@ -253,12 +253,55 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">我的工具包</h1>
+            <h1 id="seo-header">13-故障处理</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="idea插件"><a href="#idea插件" class="headerlink" title="idea插件"></a>idea插件</h1><p>+ </p>
+                <h1 id="故障检测"><a href="#故障检测" class="headerlink" title="故障检测"></a>故障检测</h1><h2 id="gossip协议"><a href="#gossip协议" class="headerlink" title="gossip协议"></a>gossip协议</h2><ul>
+<li><p><strong>Gossip 协议是一种允许在分布式系统中共享状态的去中心化通信协议，通过这种通信协议，我们可以将信息传播给网络或集群中的所有成员。</strong></p>
+</li>
+<li><p>传播示意图</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/gossip.gif" srcset="/img/loading.gif" lazyload></li>
+</ul>
+</li>
+<li><p>消息传播模式</p>
+<ul>
+<li><strong>反熵（Anti-Entropy）</strong><ul>
+<li>同步节点的全部数据，以消除各节点之间的差异，目标是整个网络各节点完全的一致</li>
+</ul>
+</li>
+<li>传谣<ul>
+<li>仅仅发送新到达节点的数据，即只对外发送变更信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>优点</p>
+<ul>
+<li>对节点间的网络连通性和稳定度要求不高</li>
+<li>能够容忍网络上的节点随意的增加和减少</li>
+<li>每个节点都是平等的，没有主子节点的概念</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>会存在系统中节点不一致的情况</li>
+<li>每次随机选择节点，不能很好的预测系统达到完全一致需要多长时间</li>
+<li>由于随机选择节点，消息可能重复发送，增加了网络压力和节点处理信息的能力</li>
+</ul>
+</li>
+<li><p>靠gossip检测故障的过程</p>
+<ul>
+<li>每个节点维护一个节点成员列表，其中包含成员ID和心跳计数器</li>
+<li>每个节点定期增加它自己心跳计数器</li>
+<li>每个节点定期向一组随机节点发送心跳，然后再传播到另一组节点上</li>
+<li>一旦节点收到心跳，成员名单就会更新到最新信息。</li>
+<li>如果心跳没有增加超过预定的时间，该成员被认为是离线的。</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -277,7 +320,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/22tool/" class="category-chain-item">22tool</a>
+  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
   
   
 
@@ -297,8 +340,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>我的工具包</div>
-      <div>https://x-leonidas.github.io/2024/11/25/22tool/我的工具包/</div>
+      <div>13-故障处理</div>
+      <div>https://x-leonidas.github.io/2024/12/03/12高并发系统设计/13-故障处理/</div>
     </div>
     <div class="license-meta">
       
@@ -310,13 +353,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年11月25日</div>
+          <div>2024年12月3日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月25日</div>
+          <div>2024年12月4日</div>
         </div>
       
       
@@ -353,18 +396,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/11/27/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%B8%B8%E7%94%A8%E7%9A%84%E5%85%B3%E7%B3%BB%E5%9B%BE/" title="常用的关系图">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">常用的关系图</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/09/22tool/%E5%8D%9A%E5%AE%A2/" title="博客">
-                        <span class="hidden-mobile">博客</span>
+                      <a href="/2024/11/27/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" title="面向对象">
+                        <span class="hidden-mobile">面向对象</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
