@@ -216,7 +216,7 @@
         
         
         
-          115 分钟
+          120 分钟
         
       </span>
     
@@ -264,6 +264,35 @@
 <li>线程可以创建和撤销另一个线程;同一个进程中的多个线程之间可以并发执行.本质的区别是<strong>是否单独占有内存地址空间及其它系统资源（比如I&#x2F;O）</strong>：</li>
 <li>CPU采用时间片轮转的方式运行进程：CPU为每个进程分配一个时间段，称作它的时间片。如果在时间片结束时进程还在运行，则暂停这个进程的运行，并且CPU分配给另一个进程（这个过程叫做上下文切换）。如果进程在时间片结束前阻塞或结束，则CPU立即进行切换，不用等待时间片用完。</li>
 <li><strong>进程是操作系统进行资源分配的基本单位，而线程是操作系统进行调度的基本单位</strong>，即CPU分配时间的单位</li>
+</ul>
+<h2 id="协程-虚拟线程"><a href="#协程-虚拟线程" class="headerlink" title="协程(虚拟线程)"></a>协程(虚拟线程)</h2><ul>
+<li><strong>协程在JDK21正式启用</strong></li>
+<li><strong>载体线程（Carrier Thread）</strong>：指真正负责执行虚拟线程中任务的平台线程。一个虚拟线程装载到一个平台线程之后，那么这个平台线程就被称为虚拟线程的载体线程。</li>
+</ul>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><ul>
+<li><strong>virtual thread &#x3D;continuation+scheduler+runnable</strong><ul>
+<li><em><strong>continuation</strong></em> ：一种提供执行和暂停函数的服务类</li>
+<li>当任务需要阻塞挂起的时候，会调用 Continuation 的 yield 操作进行阻塞，虚拟线程会从平台线程卸载。</li>
+<li>当任务解除阻塞继续执行的时候，调用 Continuation.run 会从阻塞点继续执行</li>
+<li><strong>scheduler</strong>：执行器。由它将任务提交到具体的载体线程池中执行<ul>
+<li>是 java.util.concurrent.Executor 的子类。</li>
+<li>虚拟线程框架提供了一个默认的 FIFO 的 ForkJoinPool 用于执行虚拟线程任务。</li>
+</ul>
+</li>
+<li><strong>runnable</strong>： 真正的任务包装器，由 Scheduler 负责提交到载体线程池中执行</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚拟线程的使用建议"><a href="#虚拟线程的使用建议" class="headerlink" title="虚拟线程的使用建议"></a>虚拟线程的使用建议</h3><ul>
+<li>当运行在 synchronized 修饰的代码块或者方法时，不能进行 yield 操作，此时载体线程会被阻塞，推荐使用 ReentrantLock。</li>
+<li><strong>ThreadLocal 相关问题</strong>，目前虚拟线程仍然是支持 ThreadLocal 的，但是由于虚拟线程的数量非常多，会导致 Threadlocal 中存的线程变量非常多，需要频繁 GC 去清理，对性能会有影响，官方建议尽量少使用 ThreadLocal，同时不要在虚拟线程的 ThreadLocal 中放大对象，目前官方是想通过 ScopedLocal 去替换掉 ThreadLocal，但是在 21 版本还没有正式发布，<strong>这个可能是大规模使用虚拟线程的一大难题</strong>。</li>
+<li><strong>无需池化虚拟线程</strong> 虚拟线程占用的资源很少，因此可以大量地创建而无须考虑池化，它不需要跟平台线程池一样，平台线程的创建成本比较昂贵，所以通常选择去池化，去做共享，<strong>但是池化操作本身会引入额外开销</strong>，对于虚拟线程池化反而是得不偿失，使用虚拟线程我们抛弃池化的思维，用时创建，用完就扔。</li>
+<li>适合的场景<ul>
+<li>大量的 IO 阻塞等待任务，例如下游 RPC 调用，DB 查询等。</li>
+<li>大批量的处理时间较短的计算任务。</li>
+<li>Thread-per-request (一请求一线程)风格的应用程序，例如主流的 Tomcat 线程模型或者基于类似线程模型实现的 SpringMVC 框架 ，这些应用只需要小小的改动就可以带来巨大的吞吐提升。</li>
+</ul>
+</li>
 </ul>
 <h2 id="线程组"><a href="#线程组" class="headerlink" title="线程组"></a>线程组</h2><ul>
 <li>Java中用ThreadGroup来表示线程组，我们可以使用线程组对线程进行批量控制。</li>
@@ -827,7 +856,7 @@ Owner：获得锁的线程称为Owner
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月19日</div>
+          <div>2024年12月9日</div>
         </div>
       
       
