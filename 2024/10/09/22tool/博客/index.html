@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          417 字
+          824 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          4 分钟
+          7 分钟
         
       </span>
     
@@ -310,6 +310,29 @@ hexo server
 <h2 id="部署到服务器"><a href="#部署到服务器" class="headerlink" title="部署到服务器"></a>部署到服务器</h2><ul>
 <li>TODO</li>
 </ul>
+<h1 id="提交到google-收录"><a href="#提交到google-收录" class="headerlink" title="提交到google 收录"></a>提交到google 收录</h1><ol>
+<li>确认是否被收录<ul>
+<li>以本网站为例，打开Google，输入<code>site: XXXXXXX.github.io</code>,如果Google提示“找不到相符的内容”，则说明你的网站尚未被Google收录。如果网站已经被收录，Google会自动查询和网站有关的内容</li>
+</ul>
+</li>
+<li>验证网站所有者<ul>
+<li>只有向搜索引擎添加并认证网站，证明自己是该域名的拥有者和管理者后，搜索引擎可以快速批量添加该域名下的所有子站点，而无需一一验证。认证完成后还可以使用Google Console查看并管理网站的访问统计等</li>
+<li>前往<a target="_blank" rel="noopener" href="https://www.google.com/webmasters/tools/home?hl=zh-CN">Google Console</a><ul>
+<li>选择<strong>网页前缀</strong>资源类型</li>
+<li>验证方式选择：HTML文件验证</li>
+<li>下载HTML文件后，对于Hexo，将该文件放在Hexo根目录下<code>/source</code>文件中。然后<code>hexo g -d</code>，等待部署。当你能够在浏览器中输入<code>https://XXXXXX/googleXXXXXXX.html</code>并成功跳转时，说明该文件已经添加成功。<strong>注意</strong>：  跳转后必须是原始的html页面才算成功，对于hexo下的fluid，要在googleXXXXXXX.html添加如下字段<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">layout:</span> <span class="hljs-literal">false</span><br><span class="hljs-meta">---</span><br><span class="hljs-string">此处需要空一行</span><br><span class="hljs-attr">google-site-verification:</span> <span class="hljs-string">xxxxx.html</span><br></code></pre></td></tr></table></figure></li>
+<li>添加后部署到线上，部署完成后在Google Console中点击验证</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>添加站点地图<ul>
+<li>为启用站点地图，首先要在Hexo根目录中Git Bash来安装插件：<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-generator-sitemap <span class="hljs-comment">--save</span><br><br>ADA<br></code></pre></td></tr></table></figure>
+在<strong>站点配置文件</strong>（不是主题配置文件！）<code>_config.yml</code>中添加：<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-meta"># Auto Generate sitemap</span><br><span class="hljs-symbol">sitemap:</span><br><span class="hljs-symbol">path:</span> sitemap.xml<br></code></pre></td></tr></table></figure></li>
+<li>然后<code>hexo g -d</code>，若<code>/public</code>文件夹下生成了<code>sitemap.xml</code>，并且浏览器能够访问<code>https://XXXXX/sitemap.xml</code>，说明创建成功。</li>
+</ul>
+</li>
+</ol>
 
                 
               </div>
