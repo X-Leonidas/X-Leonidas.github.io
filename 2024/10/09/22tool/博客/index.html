@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          824 字
+          929 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          7 分钟
+          8 分钟
         
       </span>
     
@@ -327,9 +327,18 @@ hexo server
 </ul>
 </li>
 <li>添加站点地图<ul>
-<li>为启用站点地图，首先要在Hexo根目录中Git Bash来安装插件：<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-generator-sitemap <span class="hljs-comment">--save</span><br><br>ADA<br></code></pre></td></tr></table></figure>
-在<strong>站点配置文件</strong>（不是主题配置文件！）<code>_config.yml</code>中添加：<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-meta"># Auto Generate sitemap</span><br><span class="hljs-symbol">sitemap:</span><br><span class="hljs-symbol">path:</span> sitemap.xml<br></code></pre></td></tr></table></figure></li>
-<li>然后<code>hexo g -d</code>，若<code>/public</code>文件夹下生成了<code>sitemap.xml</code>，并且浏览器能够访问<code>https://XXXXX/sitemap.xml</code>，说明创建成功。</li>
+<li><p>为启用站点地图，首先要在Hexo根目录中Git Bash来安装插件：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-generator-sitemap <span class="hljs-comment">--save</span><br><br>ADA<br></code></pre></td></tr></table></figure>
+<p>在<strong>站点配置文件</strong>（不是主题配置文件！）<code>_config.yml</code>中添加：</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-meta"># Auto Generate sitemap</span><br><span class="hljs-symbol">sitemap:</span><br><span class="hljs-symbol">path:</span> sitemap.xml<br></code></pre></td></tr></table></figure></li>
+<li><p>然后<code>hexo g -d</code>，若<code>/public</code>文件夹下生成了<code>sitemap.xml</code>，并且浏览器能够访问<code>https://XXXXX/sitemap.xml</code>，说明创建成功。</p>
+</li>
+<li><p>注意： 生成sitemap.xml 如果文件名中包含**&amp;** ，会生成失败</p>
+</li>
+<li><p>在Google Console中，左侧栏选择“站点地图”，在“添加新的站点地图”中，输入你的站点地图网址，比如<code>sitemap.xml</code>。</p>
+</li>
+<li><p>提交成功后，Google会在“已提交的站点地图”中显示该sitemap。索引需要一段时间编制并生效。通常情况下，48小时内Google即可完成收录。</p>
+</li>
 </ul>
 </li>
 </ol>
