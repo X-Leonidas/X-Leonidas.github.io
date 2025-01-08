@@ -21,7 +21,7 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="概述名词 冯诺依曼结构    VFS  虚拟文件系统，目录树   inode  文件索引   pageCache(页缓存)  FD文件描述符   基本概念 操作系统 操作系统是一个大型的程序系统，负责计算机的全部软、硬资源的分配、调度工作，控制和协调并发活动，实现信息的存取和保护 提供用户接口，使用户获得良好的工作环境，操作系统使整个计算机系统实现了高效率、高度自动化、高利用率和高可靠性。   操">
+    <meta name="description" content="概述计算机结构 现代计算机模型是基于冯诺依曼结构     基本概念 操作系统 操作系统是一个大型的程序系统，负责计算机的全部软、硬资源的分配、调度工作，控制和协调并发活动，实现信息的存取和保护 提供用户接口，使用户获得良好的工作环境，操作系统使整个计算机系统实现了高效率、高度自动化、高利用率和高可靠性。   操作系统的组成 计算机系统由硬件和软件两部分组成 硬件部分：指其物理装置本身，包括各种处理">
   
   
   
@@ -216,7 +216,7 @@
         
         
         
-          112 分钟
+          110 分钟
         
       </span>
     
@@ -258,24 +258,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h2><ul>
-<li><p>冯诺依曼结构</p>
+                <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="计算机结构"><a href="#计算机结构" class="headerlink" title="计算机结构"></a>计算机结构</h2><ul>
+<li><p>现代计算机模型是基于冯诺依曼结构</p>
 </li>
 <li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%86%AF%E8%AF%BA%E4%BC%8A%E6%9B%BC%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="冯诺依曼结构"></p>
-</li>
-<li><p>VFS</p>
-<ul>
-<li>虚拟文件系统，目录树</li>
-</ul>
-</li>
-<li><p>inode</p>
-<ul>
-<li>文件索引</li>
-</ul>
-</li>
-<li><p>pageCache(页缓存)</p>
-</li>
-<li><p>FD文件描述符</p>
 </li>
 </ul>
 <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
@@ -339,10 +325,8 @@
 </ol>
 <h2 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h2><ol>
 <li><p>如果一个进程在用户态需要使用内核态的功能，就进行系统调用从而陷入内核，由操作系统代为完成。</p>
-</li>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" />
-
-
+<img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" /></li>
+</ol>
 <h3 id="用户态和内核态"><a href="#用户态和内核态" class="headerlink" title="用户态和内核态"></a>用户态和内核态</h3><ul>
 <li>内核态（<em>Kernel Mode</em>）：CPU可以访问内存所有数据, 包括外围设备, 例如硬盘, 网卡. CPU也可以将自己从一个程序切换到另一个程序</li>
 <li>用户态 (<em>User Mode</em>) : 只能受限的访问内存, 且不允许访问外围设备. 占用CPU的能力被剥夺, CPU资源可以被其他程序获取</li>
@@ -350,7 +334,7 @@
 <h3 id="为什么有内核态和用户态？"><a href="#为什么有内核态和用户态？" class="headerlink" title="为什么有内核态和用户态？"></a>为什么有内核态和用户态？</h3><ul>
 <li>由于需要限制不同的程序之间的访问能力, 防止他们获取别的程序的内存数据, 或者获取外围设备的数据, 并发送到网络, CPU划分出两个权限等级 – 用户态 和 内核态</li>
 </ul>
-<h3 id="系统调用-内核切换"><a href="#系统调用-内核切换" class="headerlink" title="系统调用,内核切换"></a>系统调用,内核切换</h3><ul>
+<h3 id="系统调用-内核切换"><a href="#系统调用-内核切换" class="headerlink" title="系统调用-内核切换"></a>系统调用-内核切换</h3><ul>
 <li>内核切换在CPU中的实现称之为陷阱指令(Trap Instruction)</li>
 <li>内核调用：操作系统（内核）相当于是在应用程序和硬件之间添加了一个中间层。所以应用程序是不能够直接访问硬件设备的，只能使用内核向外提供的一组接口，这些接口让应用程序受限地访问硬件设备。我们把调用这些接口的过程叫做系统调用</li>
 <li>工作流程<ol>
@@ -362,30 +346,38 @@
 </ol>
 </li>
 </ul>
-<h3 id="中断分类"><a href="#中断分类" class="headerlink" title="中断分类"></a>中断分类</h3><ul>
-<li>外中断<br>由 CPU 执行指令以外的事件引起，如 I&#x2F;O 完成中断，表示设备输入&#x2F;输出处理已经完成，处理器能够发送下一个输入&#x2F;输出请求。此外还有时钟中断、控制台中断等。</li>
-<li>异常<br>由 CPU 执行指令的内部事件引起，如非法操作码、地址越界、算术溢出等。</li>
-<li>陷入<br>在用户程序中使用系统调用。</li>
-</ul>
-</li>
-</ol>
-<h2 id="操作系统的两种体系结构"><a href="#操作系统的两种体系结构" class="headerlink" title="操作系统的两种体系结构"></a>操作系统的两种体系结构</h2><ol>
+<h2 id="操作系统的两种体系结构"><a href="#操作系统的两种体系结构" class="headerlink" title="操作系统的两种体系结构"></a>操作系统的两种体系结构</h2><ul>
 <li>大内核<br>大内核系统将操作系统的主要内容模块都作为一个紧密联系的整体运行在核心态，从而为应用提供高性能的系统服务。因为各管理模块之间共享信息，能有效 利用相互之间的有效特性， 所以具有无可比拟的性能优势。</li>
 <li>微内核<br>由于操作系统不断复杂，因此将一部分操作系统功能移出内核，从而降低内核的复杂性。移出的部分根据分层的原则划分成若干服务，相互独立。在微内核结构下，操作系统被划分成小的、定义良好的模块，只有微内核这一个模块运行在内核态，其余模块运行在用户态。因为需要频繁地在用户态和核心态之间进行切换，所以会有一定的性能损失。</li>
-<li>优缺点<ol>
+<li>两者的优缺点<ul>
 <li>大内核：性能高，内核代码庞大，结构混乱，难以维护</li>
 <li>微内核：内核功能少，结构清晰，方便维护，但是需要频繁的在核心态和用户态进行切换，性能低</li>
-</ol>
+</ul>
 </li>
-</ol>
-<h2 id="中断分类-1"><a href="#中断分类-1" class="headerlink" title="中断分类"></a>中断分类</h2><ol>
-<li>外中断<br>由 CPU 执行指令以外的事件引起，如 I&#x2F;O 完成中断，表示设备输入&#x2F;输出处理已经完成，处理器能够发送下一个输入&#x2F;输出请求。此外还有时钟中断、控制台中断等</li>
-<li>异常<br>由 CPU 执行指令的内部事件引起，如非法操作码、地址越界、算术溢出等</li>
-<li>陷入<br>在用户程序中使用系统调用。</li>
-</ol>
-<h1 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h1><h2 id="进程、线程和协程"><a href="#进程、线程和协程" class="headerlink" title="进程、线程和协程"></a>进程、线程和协程</h2><pre><code class="hljs">进程是操作系统分配资源的最小单元，线程是操作系统调度的最小单元
-</code></pre>
-<h3 id="1-进程"><a href="#1-进程" class="headerlink" title="1.进程"></a>1.进程</h3><ul>
+</ul>
+<h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><ul>
+<li>分类<ul>
+<li>按照中断的触发方分成同步中断和异步中断</li>
+<li>根据中断是否强制触发分成可屏蔽中断和不可屏蔽中断</li>
+</ul>
+</li>
+<li>同步中断<ul>
+<li>主动触发的中断，CPU 指令直接触发</li>
+<li>触发的集中方式<ul>
+<li>陷入( trap )：在用户程序中使用系统调用。</li>
+<li>错误 : 由 CPU 执行指令的内部事件引起，如非法操作码、地址越界、算术溢出等</li>
+<li>程序的异常，这种情况和 Trap 类似，用于实现程序抛出的异常。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>异步中断<ul>
+<li>由 CPU 执行指令以外的事件引起，如 I&#x2F;O 完成中断，表示设备输入&#x2F;输出处理已经完成，处理器能够发送下一个输入&#x2F;输出请求</li>
+</ul>
+</li>
+</ul>
+<h1 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h1><h2 id="进程、线程和协程"><a href="#进程、线程和协程" class="headerlink" title="进程、线程和协程"></a>进程、线程和协程</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">进程是操作系统分配资源的最小单元，线程是操作系统调度的最小单元<br></code></pre></td></tr></table></figure>
+<h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><ul>
 <li>进程是资源分配的基本单位</li>
 <li>进程控制块(Process Control Block,PCB)描述进程的基本信息和运行状态,所谓的创建进程和撤销进程,都是指对PCB的操作</li>
 <li>进程可以并发执行</li>
@@ -401,11 +393,11 @@
 </ul>
 </li>
 </ul>
-<h3 id="2-线程"><a href="#2-线程" class="headerlink" title="2.线程"></a>2.线程</h3><ul>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><ul>
 <li>线程是独立调度的基本单位</li>
 <li>一个进程可以有多个线程,他们共享线程资源</li>
 </ul>
-<h3 id="3-纤程-协程-Fiber"><a href="#3-纤程-协程-Fiber" class="headerlink" title="3.纤程(协程)Fiber"></a>3.纤程(协程)Fiber</h3><ul>
+<h3 id="纤程-协程-Fiber"><a href="#纤程-协程-Fiber" class="headerlink" title="纤程(协程)Fiber"></a>纤程(协程)Fiber</h3><ul>
 <li>协程运行在线程之上，当一个协程执行完成后，可以选择主动让出，让另一个协程运行在当前线程之上。<strong>协程并没有增加线程数量，只是在线程的基础之上通过分时复用的方式运行多个协程</strong>，而且协程的切换在用户态完成，切换的代价比线程从用户态到内核态的代价小很多。</li>
 <li>在协程中尽量不要调用阻塞IO的方法，比如打印，读取文件，Socket接口等，除非改为异步调用的方式，并且协程只有在IO密集型的任务中才会发挥作用。<strong>协程只有和异步IO结合起来才能发挥出最大的威力</strong></li>
 <li>JAVA支持纤程的类库：quasar_core,GO、python支持</li>
@@ -447,9 +439,10 @@
 </ul>
 <h5 id="抢占式优先权"><a href="#抢占式优先权" class="headerlink" title="抢占式优先权"></a>抢占式优先权</h5><ul>
 <li>在这种方式下，系统同样是把处理机分配给优先权最高的进程，使之执行。但在其执行期间，只要又出现了另一个其优先权更高的进程，进程调度程序就立即停止当前进程(原优先权最高的进程)的执行，重新将处理机分配给新到的优先权最高的进程。因此，在采用这种调度算法时，是每当系统中出现一个新的就绪进程i 时，就将其优先权Pi与正在执行的进程j 的优先权Pj进行比较。如果Pi≤Pj，原进程Pj便继续执行；但如果是Pi&gt;Pj，则立即停止Pj的执行，做进程切换，使i 进程投入执行。显然，这种抢占式的优先权调度算法能更好地满足紧迫作业的要求，故而常用于要求比较严格的实时系统中，以及对性能要求较高的批处理和分时系统中。</li>
-</ul>
-<h5 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h5><ul>
+<li>问题<ul>
 <li>容易出现优先级倒置现象：优先级反转是指一个低优先级的任务持有一个被高优先级任务所需要的共享资源。高优先任务由于因资源缺乏而处于受阻状态，一直等到低优先级任务释放资源为止。而低优先级获得的CPU时间少，如果此时有优先级处于两者之间的任务，并且不需要那个共享资源，则该中优先级的任务反而超过这两个任务而获得CPU时间。如果高优先级等待资源时不是阻塞等待，而是忙循环，则可能永远无法获得资源，因为此时低优先级进程无法与高优先级进程争夺CPU时间，从而无法执行，进而无法释放资源，造成的后果就是高优先级任务无法获得资源而继续推进。</li>
+</ul>
+</li>
 <li>解决方案<ul>
 <li>设置优先级上限，给临界区一个高优先级，进入临界区的进程都将获得这个高优先级，如果其他试图进入临界区的进程的优先级都低于这个高优先级，那么优先级反转就不会发生。</li>
 <li>优先级继承，当一个高优先级进程等待一个低优先级进程持有的资源时，低优先级进程将暂时获得高优先级进程的优先级别，在释放共享资源后，低优先级进程回到原来的优先级别。嵌入式系统VxWorks就是采用这种策略。</li>
@@ -519,23 +512,12 @@
 <li>2.2 优先级调度<br>为每个进程分配一个优先级,按优先级进行调度<br>为了防止优先级低的进程永远得不到调度,可以随着时间的推移增加等待进程的优先级</li>
 <li>2.3 多级反馈队列<br>一个进程需要执行 100 个时间片，如果采用时间片轮转调度算法，那么需要交换 100 次。<br>多级队列是为这种需要连续执行多个时间片的进程考虑，它设置了多个队列，每个队列时间片大小都不同，例如 1,2,4,8,..。进程在第一个队列没执行完，就会被移到下一个队列。这种方式下，之前的进程只需要交换 7 次。<br>每个队列优先权也不同，最上面的优先权最高。因此只有上一个队列没有进程在排队，才能调度当前队列上的进程。可以将这种调度算法看成是时间片轮转调度算法和优先级调度算法的结合。</li>
 </ul>
-<h2 id="实时系统"><a href="#实时系统" class="headerlink" title="实时系统"></a>实时系统</h2><p>实时系统要求一个请求在一个确定的时间内得到响应分为y硬实时和软实时,前者必须满足绝对的截止时间,后者可以容忍一定的超时</p>
-<h3 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h3><ul>
-<li>硬中断<ul>
-<li>也叫异步中断，由与系统相连接的外设（网卡、硬盘)自动产生的，主要是用来通知操作系统中系统外设状态的变化，比如当网卡收到数据包的时候，就会发出一个中断</li>
-</ul>
-</li>
-<li>软中断<ul>
-<li>也叫同步中断。软中断是由CPU执行中断产生指令时产生，是由程序预先实现好的，不是随机的。</li>
-</ul>
-</li>
-</ul>
-<h1 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a>进程同步</h1><h2 id="1-临界区"><a href="#1-临界区" class="headerlink" title="1. 临界区"></a>1. 临界区</h2><p>每个进程中,对临界资源进行访问的代码称为临界区(临界资源是一次仅允许一个进程使用的共享资源)为了互斥访问临界区资源,每个进程在进入临界区之前,需要先进行检查.</p>
-<h2 id="2-同步和互斥"><a href="#2-同步和互斥" class="headerlink" title="2.同步和互斥"></a>2.同步和互斥</h2><ul>
+<h2 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a>进程同步</h2><h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>每个进程中,对临界资源进行访问的代码称为临界区(临界资源是一次仅允许一个进程使用的共享资源)为了互斥访问临界区资源,每个进程在进入临界区之前,需要先进行检查.</p>
+<h3 id="同步和互斥"><a href="#同步和互斥" class="headerlink" title="同步和互斥"></a>同步和互斥</h3><ul>
 <li>同步:多个线程按一定顺序执行</li>
 <li>互斥:多个线程在同一时刻只有一个线程能进入临界区</li>
 </ul>
-<h2 id="3-信号量"><a href="#3-信号量" class="headerlink" title="3.信号量"></a>3.信号量</h2><ul>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><ul>
 <li>信号量(Semaphore)是一个整形变量,可以对其执行down和up操作,也就是常见的P和V操作<ul>
 <li>down:如果信号量大于0,执行-1操作;如果信号量等于0,j进程睡眠,等待信号量大于0.</li>
 <li>up:对信号量执行+1操作,唤醒睡眠的进程让其完成down操作.</li>
@@ -551,16 +533,20 @@
 <li>为了同步生产者和消费者的行为，需要记录缓冲区中物品的数量。数量可以使用信号量来进行统计，这里需要使用两个信号量：empty 记录空缓冲区的数量，full 记录满缓冲区的数量。其中，empty 信号量是在生产者进程中使用，当 empty 不为 0 时，生产者才可以放入物品；full 信号量是在消费者进程中使用，当 full 信号量不为 0 时，消费者才可以取走物品。</li>
 <li>注意，不能先对缓冲区进行加锁，再测试信号量。也就是说，不能先执行 down(mutex) 再执行 down(empty)。如果这么做了，那么可能会出现这种情况：生产者对缓冲区加锁后，执行 down(empty) 操作，发现 empty &#x3D; 0，此时生产者睡眠。消费者不能进入临界区，因为生产者对缓冲区加锁了，消费者就无法执行 up(empty) 操作，empty 永远都为 0，导致生产者永远等待下，不会释放锁，消费者因此也会永远等待下去。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 100</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> semaphore;<br>semaphore mutex = <span class="hljs-number">1</span>;<br>semaphore empty = N;<br>semaphore full = <span class="hljs-number">0</span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">producer</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        <span class="hljs-type">int</span> item = <span class="hljs-built_in">produce_item</span>();<br>        <span class="hljs-built_in">down</span>(&amp;empty);<br>        <span class="hljs-built_in">down</span>(&amp;mutex);<br>        <span class="hljs-built_in">insert_item</span>(item);<br>        <span class="hljs-built_in">up</span>(&amp;mutex);<br>        <span class="hljs-built_in">up</span>(&amp;full);<br>    &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">consumer</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        <span class="hljs-built_in">down</span>(&amp;full);<br>        <span class="hljs-built_in">down</span>(&amp;mutex);<br>        <span class="hljs-type">int</span> item = <span class="hljs-built_in">remove_item</span>();<br>        <span class="hljs-built_in">consume_item</span>(item);<br>        <span class="hljs-built_in">up</span>(&amp;mutex);<br>        <span class="hljs-built_in">up</span>(&amp;empty);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
+<h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><ul>
+<li>用来通知线程有一些事件已发生，从而启动后继任务的开始</li>
+<li>事件对象通过通知操作的方式来保持线程的同步，并且可以实现不同进程中的线程同步操作</li>
+</ul>
 <h3 id="管程"><a href="#管程" class="headerlink" title="管程"></a>管程</h3><ul>
 <li>管程指的是管理共享变量以及对共享变量的操作过程，让它们支持并发。翻译为 Java 就是管理类的成员变量和成员方法，让这个类是线程安全的。</li>
 <li>使用信号量机制实现的生产者消费者问题需要客户端代码做很多控制，而管程把控制的代码独立出来，不仅不容易出错，也使得客户端代码调用更容易。</li>
 <li>c 语言不支持管程，下面的示例代码使用了类 Pascal 语言来描述管程。示例代码的管程提供了 insert() 和 remove() 方法，客户端代码通过调用这两个方法来解决生产者-消费者问题。<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Pascal">    monitor ProducerConsumer<br>    integer i;<br>    condition c;<br>    <span class="hljs-function"><span class="hljs-keyword">procedure</span> <span class="hljs-title">insert</span><span class="hljs-params">()</span>;</span><br>    <span class="hljs-keyword">begin</span><br>        <span class="hljs-comment">// ...</span><br>    <span class="hljs-keyword">end</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">procedure</span> <span class="hljs-title">remove</span><span class="hljs-params">()</span>;</span><br>    <span class="hljs-keyword">begin</span><br>        <span class="hljs-comment">// ...</span><br>    <span class="hljs-keyword">end</span>;<br><span class="hljs-keyword">end</span> monitor;<br></code></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="经典同步问题"><a href="#经典同步问题" class="headerlink" title="经典同步问题"></a>经典同步问题</h2><ul>
+<h3 id="经典同步问题"><a href="#经典同步问题" class="headerlink" title="经典同步问题"></a>经典同步问题</h3><ul>
 <li>读者-写者问题<br>  允许多个进程同时对数据进行读操作，但是不允许读和写以及写和写操作同时发生。</li>
 <li>一个整型变量 count 记录在对数据进行读操作的进程数量，一个互斥量 count_mutex 用于对 count 加锁，一个互斥量 data_mutex 用于对读写的数据加锁。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> semaphore;<br><span class="hljs-comment">//互斥量,对count加锁</span><br>semaphore count_mutex = <span class="hljs-number">1</span>;<br><span class="hljs-comment">//互斥量,对读写的数据加锁</span><br>semaphore data_mutex = <span class="hljs-number">1</span>;<br><span class="hljs-comment">//进行读操作的进程数量</span><br><span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reader</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        <span class="hljs-built_in">down</span>(&amp;count_mutex);<br>        count++;<br>        <span class="hljs-keyword">if</span>(count == <span class="hljs-number">1</span>) <span class="hljs-built_in">down</span>(&amp;data_mutex); <span class="hljs-comment">// 第一个读者需要对数据进行加锁，防止写进程访问</span><br>        <span class="hljs-built_in">up</span>(&amp;count_mutex);<br>        <span class="hljs-built_in">read</span>();<br>        <span class="hljs-built_in">down</span>(&amp;count_mutex);<br>        count--;<br>        <span class="hljs-keyword">if</span>(count == <span class="hljs-number">0</span>) <span class="hljs-built_in">up</span>(&amp;data_mutex);<br>        <span class="hljs-built_in">up</span>(&amp;count_mutex);<br>    &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">writer</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        <span class="hljs-built_in">down</span>(&amp;data_mutex);<br>        <span class="hljs-built_in">write</span>();<br>        <span class="hljs-built_in">up</span>(&amp;data_mutex);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h2><ul>
+<h2 id="进程通信IPC"><a href="#进程通信IPC" class="headerlink" title="进程通信IPC"></a>进程通信IPC</h2><ul>
 <li>进程同步与进程通信很容易混淆，它们的区别在于：<ol>
 <li>进程同步：控制多个进程按一定顺序执行；</li>
 <li>进程通信：进程间传输信息。</li>
@@ -882,7 +868,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月22日</div>
+          <div>2025年1月9日</div>
         </div>
       
       
@@ -928,12 +914,6 @@
                   </article>
                   <article class="post-next col-6">
                     
-                    
-                      <a href="/2022/02/01/13Linux/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux常用命令">
-                        <span class="hidden-mobile">Linux常用命令</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
                     
                   </article>
                 </div>
