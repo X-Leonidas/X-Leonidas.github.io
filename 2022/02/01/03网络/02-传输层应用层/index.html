@@ -492,10 +492,10 @@
 </ul>
 <h4 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h4><ul>
 <li>TCP 在刚建立连接完成后，首先是有个慢启动的过程，这个慢启动的意思就是一点一点的提高发送数据包的数量</li>
-<li><strong>当发送方每收到一个 ACK，拥塞窗口 cwnd 的大小加1。</strong>慢启动算法，发包的个数是<strong>指数性的增长</strong>。 <ul>
+<li><strong>当发送方每收到一个 ACK，拥塞窗口 cwnd 的大小加1倍。</strong>慢启动算法，发包的个数是<strong>指数性的增长</strong>。 <ul>
 <li>慢启动门限  <code>ssthresh</code>，一般来说 <code>ssthresh</code> 的大小是 <code>65535</code> 字节。</li>
-<li>当 <code>cwnd &lt; ssthresh</code> 时，使用慢启动算法。</li>
-<li>当 <code>cwnd &gt;= ssthresh</code> 时，就会使用「拥塞避免算法」。</li>
+<li><strong>当 <code>cwnd &lt; ssthresh</code> 时，使用慢启动算法。</strong></li>
+<li><strong>当 <code>cwnd &gt;= ssthresh</code> 时，就会使用「拥塞避免算法」。</strong></li>
 </ul>
 </li>
 </ul>
@@ -1240,7 +1240,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年2月11日</div>
+          <div>2025年3月1日</div>
         </div>
       
       

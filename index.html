@@ -270,60 +270,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/03/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/12-%E4%B8%80%E8%87%B4%E6%80%A7hash/" target="_self">
-          12-一致性hash
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/12/03/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/12-%E4%B8%80%E8%87%B4%E6%80%A7hash/" target="_self">
-        <div>
-          一致性哈希 一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射 将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本 为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-03 00:07" pubdate>
-              2024-12-03
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
         <a href="/2024/02/21/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/1.%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" target="_self">
           1.系统设计
         </a>
@@ -378,15 +324,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
-          07-分布式Session
+        <a href="/2022/08/02/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/11-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" target="_self">
+          11-负载均衡
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/02/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/11-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" target="_self">
         <div>
-          分布式系统中session一致性问题Redis实现 我们只需在用户首次登陆的时候将用户信息放到 Token并缓存到 Redis 中，同时设置一个过期时间。 定义一个拦截器 SessionInterceptor，当访问 web 接口的时候检验用户的 token 信息，判断用户是否登陆，未登录的情况下一些业务接口是无法访问的，以及在登陆的情况下拿到我们需要的用户信息， 式简单易用，而且Redis 在分
+          load balance LB,也可以写成SLB，Service load balance 一般来说四层LB，说的是按照ip进行负载均衡，六层SLB是按照URL进行负载均衡  负载均衡的划分四层和七层 LVS四层负载均衡，nginx&#x2F;httpd&#x2F;haproxy七层负载均衡， 四层和七层有啥区别，区别在于协议不同，七层是应用层协议，一般指的是http和https协议，四层指的是网
         </div>
       </a>
 
@@ -394,116 +340,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2023-02-01 19:59" pubdate>
-              2023-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/05/05/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/09-%E4%BA%BF%E7%BA%A7%E6%B5%81%E9%87%8F%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84/" target="_self">
-          09-亿级流量多级缓存架构
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/05/05/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/09-%E4%BA%BF%E7%BA%A7%E6%B5%81%E9%87%8F%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84/" target="_self">
-        <div>
-          《Lua简明教程》Lua 程序设计Lua 是由巴西里约热内卢天主教大学（Pontifical Catholic University of Rio de Janeiro）里的一个研究小组于1993年开发的一种轻量、小巧的脚本语言，用标准 C 语言编写，其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。官网：http://www.lua.org/Redis 在 2.6 版本中推
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-05-05 23:52" pubdate>
-              2022-05-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/09/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/10-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" target="_self">
-          10-分布式缓存
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/09/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/10-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" target="_self">
-        <div>
-          缓存缓存属性 吞吐量 命中率 扩展功能 分布式支持  缓存算法 FIFO LRU 优先淘汰最久未被使用访问过的数据。   LFU 优先淘汰最不经常使用的数据   Tiny LFU 为了缓解 LFU 每次访问都要修改计数器所带来的性能负担,inyLFU 会首先采用 Sketch 对访问数据进行分析，所谓 Sketch 是统计学上的概念，指用少量的样本数据来估计全体数据的特征，这种做法显然牺牲了一定程
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-09 22:51" pubdate>
-              2022-02-09
+            <time datetime="2022-08-02 21:19" pubdate>
+              2022-08-02
             </time>
           </div>
         
@@ -549,6 +387,222 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/05-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" target="_self">
         <div>
           分布式锁 为何需要分布式锁 避免不同节点重复相同的工作：比如用户执行了某个操作有可能不同节点会发送多封邮件； 避免破坏数据的正确性：如果两个节点在同一条数据上同时进行操作，可能会造成数据错误或不一致的情况出现；    基于数据库实现 它的基本原理和 Redis 的 SETNX 类似，其实就是创建一个分布式锁表，加锁后，我们就在表增加一条记录，释放锁即把该数据删掉  问题 没有失效时间，容易导致死锁
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/10-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" target="_self">
+          10-分布式缓存
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/10-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" target="_self">
+        <div>
+          缓存缓存属性 吞吐量 命中率 扩展功能 分布式支持  缓存算法 FIFO LRU 优先淘汰最久未被使用访问过的数据。   LFU 优先淘汰最不经常使用的数据   Tiny LFU 为了缓解 LFU 每次访问都要修改计数器所带来的性能负担,inyLFU 会首先采用 Sketch 对访问数据进行分析，所谓 Sketch 是统计学上的概念，指用少量的样本数据来估计全体数据的特征，这种做法显然牺牲了一定程
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/12-%E4%B8%80%E8%87%B4%E6%80%A7hash/" target="_self">
+          12-一致性hash
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/12-%E4%B8%80%E8%87%B4%E6%80%A7hash/" target="_self">
+        <div>
+          一致性哈希 一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射 将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本 为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/09-%E4%BA%BF%E7%BA%A7%E6%B5%81%E9%87%8F%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84/" target="_self">
+          09-亿级流量多级缓存架构
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/09-%E4%BA%BF%E7%BA%A7%E6%B5%81%E9%87%8F%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84/" target="_self">
+        <div>
+          《Lua简明教程》Lua 程序设计Lua 是由巴西里约热内卢天主教大学（Pontifical Catholic University of Rio de Janeiro）里的一个研究小组于1993年开发的一种轻量、小巧的脚本语言，用标准 C 语言编写，其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。官网：http://www.lua.org/Redis 在 2.6 版本中推
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
+          07-分布式Session
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
+        <div>
+          分布式系统中session一致性问题Redis实现 我们只需在用户首次登陆的时候将用户信息放到 Token并缓存到 Redis 中，同时设置一个过期时间。 定义一个拦截器 SessionInterceptor，当访问 web 接口的时候检验用户的 token 信息，判断用户是否登陆，未登录的情况下一些业务接口是无法访问的，以及在登陆的情况下拿到我们需要的用户信息， 式简单易用，而且Redis 在分
         </div>
       </a>
 
@@ -657,60 +711,6 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/04-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" target="_self">
         <div>
           分布式事务2PC事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。  假如在第一阶段所有参与者都返回准备成功，那么协调者则向所有参与者发送提交事务命令，然后等待所有事务都提交成功之后，返回事务执行成功。    假如在第一阶段有一个参与者返回失败，那么协
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/01-%E6%A6%82%E5%BF%B5/" target="_self">
-          01-概念
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/01-%E6%A6%82%E5%BF%B5/" target="_self">
-        <div>
-          AKF扩展立方体基本概念 简单来说就是通过加机器就可以解决容量和可用性问题   X轴 —— 代表无差别的克隆服务和数据，工作可以很均匀的分散在不同的服务实例上；Y轴 —— 关注应用中功能的分解和业务的拆分，比如数据类型，交易执行类型的划分。微服务就是Y轴扩展的实例Z轴 —— 关注服务和数据的优先级划分，如分地域划分。 分库分表 CDN   三个维度扩展的对比 1.X轴扩展优点：成本最低，实施简单；
         </div>
       </a>
 

@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k 字
+          3.2k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          22 分钟
+          27 分钟
         
       </span>
     
@@ -418,6 +418,7 @@
 </li>
 </ul>
 <h3 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h3><ul>
+<li>B<strong>树属于多叉树又名平衡多路查找树</strong></li>
 <li>m阶的B树具有以下性质：<ul>
 <li>根节点至少有两个子节点</li>
 <li>每个节点有M-1个key，并且以升序排列</li>
@@ -427,7 +428,22 @@
 </li>
 </ul>
 <h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><ul>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015000336247.png" srcset="/img/loading.gif" lazyload alt="image-20201015000336247" style="zoom:80%;" /></li>
+<li><p>B+树是在B树的基础上又一次的改进，其主要对两个方面进行了提升，一方面是查询的稳定性，另外一方面是在数据排序方面更友好。</p>
+</li>
+<li><p>B+树的<strong>非叶子</strong>节点<strong>不保存具体的数据，而只保存关键字的索引</strong>，而所有的数据最终都会保存到叶子节点。因为所有数据必须要到叶子节点才能获取到，所以每次数据查询的次数都一样，这样一来B+树的查询速度也就会比较稳定，而B树的查找过程中，不同的关键字查找的次数很有可能都是不同的（有的数据可能在根节点，有的数据可能在最下层的叶节点），所以在数据库的应用层面，B+树就显得更合适。</p>
+</li>
+<li><p>B+树叶子节点的关键字从小到大有序排列，左边结尾数据都会保存右边节点开始数据的指针。因为叶子节点都是有序排列的，所以B+树对于数据的排序有着更好的支持。</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015000336247.png" srcset="/img/loading.gif" lazyload alt="image-20201015000336247" style="zoom:80%;" />
+</li>
+<li><p><strong>B树和B+树的对比</strong></p>
+<ul>
+<li>B+<strong>树查询速度更稳定</strong>：B+所有关键字数据地址都存在<strong>叶子</strong>节点上，所以每次查找的次数都相同所以查询速度要比B树更稳定。</li>
+<li>B+<strong>树天然具备排序功能：</strong>B+树所有的<strong>叶子</strong>节点数据构成了一个有序链表，在查询大小区间的数据时候更方便，数据紧密性很高，缓存的命中率也会比B树高。</li>
+<li>B+<strong>树全节点遍历更快：</strong>B+树遍历整棵树只需要遍历所有的<strong>叶子</strong>节点即可，而不需要像B树一样需要对每一层进行遍历，这有利于数据库做全表扫描。</li>
+<li><strong>B树</strong>相对于<strong>B+树</strong>的优点是，如果经常访问的数据离根节点很近，而<strong>B树</strong>的<strong>非叶子</strong>节点本身存有关键字和数据，所以在查询这种数据检索的时候会要比<strong>B+树</strong>快。</li>
+</ul>
+</li>
 </ul>
 <h3 id="DSW算法"><a href="#DSW算法" class="headerlink" title="DSW算法"></a>DSW算法</h3><ul>
 <li>DSW算法构建平衡二叉树：TODO</li>
@@ -497,7 +513,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年10月27日</div>
+          <div>2025年3月1日</div>
         </div>
       
       
