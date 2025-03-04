@@ -1,0 +1,829 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="负载均衡与代理技术 LB,也可以写成SLB，Service load balance 一般来说四层LB，说的是按照ip进行负载均衡，六层SLB是按照URL进行负载均衡 职责：服务发现，健康检查，负载均衡 好处 命名抽象：客户端通过统一的访问机制（如 DNS 或内置库）连接到负载均衡器，无需关心后端服务器的拓扑结构或配置细节。 容错能力：通过健康检查和负载均衡算法，将请求分配至正常运行的后端服务器。">
+  
+  
+  
+  <title>11-负载均衡和代理 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="11-负载均衡和代理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-02 21:19" pubdate>
+          2022-08-02 21:19:41
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">11-负载均衡和代理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="负载均衡与代理技术"><a href="#负载均衡与代理技术" class="headerlink" title="负载均衡与代理技术"></a>负载均衡与代理技术</h1><ul>
+<li>LB,也可以写成SLB，Service load balance</li>
+<li>一般来说四层LB，说的是按照ip进行负载均衡，六层SLB是按照URL进行负载均衡</li>
+<li>职责：服务发现，健康检查，负载均衡</li>
+<li>好处<ul>
+<li><strong>命名抽象</strong>：客户端通过统一的访问机制（如 DNS 或内置库）连接到负载均衡器，无需关心后端服务器的拓扑结构或配置细节。</li>
+<li><strong>容错能力</strong>：通过健康检查和负载均衡算法，将请求分配至正常运行的后端服务器。故障服务器会被自动移出负载均衡池，为运维人员提供足够的修复窗口。</li>
+<li><strong>成本和性能收益</strong>：后端服务器通常分布在多个网络区域（Zone&#x2F;Region），负载均衡器根据策略将请求保持在同一网络区域内，从而提高服务性能（减少延迟）并降低资源成本（减少跨区域带宽费用）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="负载均衡的划分"><a href="#负载均衡的划分" class="headerlink" title="负载均衡的划分"></a>负载均衡的划分</h2><ul>
+<li>从网络层次的角度来看，所有负载均衡器可以分为两类：四层负载均衡和七层负载均衡，分别对应 OSI 模型的第四层（传输层）和第七层（应用层）</li>
+<li>从种类上看<ul>
+<li>DNS负载均衡<ul>
+<li>要是使用DNS解析出IP的方式，来进行业务流量的分发，并发无上限</li>
+<li>DNS负载均衡主要适用于的场景是多地集群的方式，也就是可能北京有一个数据中心，在其中部署了一整套的集群提供服务，在上海有一个数据中心，也部署了同样的一套的集群来提供服务，用于预防地震，水灾，整个机房断电的故障，这种可以将请求发送给不同的数据中心，从而可以使用户更加快速的访问到服务，数据中心级别的负载均衡</li>
+</ul>
+</li>
+<li>硬件负载均衡<ul>
+<li>例如那些贵的离谱的硬件设备，F5，A10，并发百万级别</li>
+<li>硬件厂商一般能提供强力的服务，稳定性较高，性能较好，能支持百万级别的并发量，缺点就是太贵了，在一个数据中心，一般买俩就够了，做成主备的形式，提供高可靠，高可用。。。集群之间的负载均衡</li>
+</ul>
+</li>
+<li>软件负载均衡<ul>
+<li>我们常见的负载均衡软件，例如nginx，lvs，并发几万到百万级别</li>
+<li>一般就是在前端创建一个SLB，然后在后端挂上真正的物理服务器，成为多个应用服务器的控制器，可以用各种调度算法来进行调度服务器之间的负载均衡</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="四层负载均衡"><a href="#四层负载均衡" class="headerlink" title="四层负载均衡"></a>四层负载均衡</h3><ul>
+<li>四层负载均衡并非严格限定于OSI 模型的第四层（传输层），实际涉及多个网络层次<ul>
+<li><strong>第二层</strong>（数据链路层）：通过修改帧头中的 MAC 地址，将请求从一个物理网络节点转发到另一个节点。这种方式通常用于同一广播域内的转发，例如交换机或桥接设备完成的二层转发操作。</li>
+<li><strong>第三层</strong>（网络层）：通过修改 IP 地址，实现跨子网的请求路由和转发。这是路由器的核心功能，通过修改数据包的源或目的 IP 地址，实现子网之间的通信和流量转发。</li>
+<li><strong>第四层</strong>（传输层）：通过修改 TCP&#x2F;UDP 端口号或连接的目标地址，利用网络地址转换（NAT）技术隐藏内部网络结构，将请求从一个入口转发至多个后端服务。</li>
+</ul>
+</li>
+<li>典型情况下，四层负载均衡器处理的是 TCP、UDP 等连接协议，它并不关心传输字节所代表的具体应用内容，这些字节可能来自 Web 应用、数据库服务或其他网络服务。因此，四层负载均衡器具有广泛的应用范围，能够适应各种不同类型的网络服务。</li>
+<li>由于建立连接的开销较大（例如 TCP 三次握手，尤其在启用 TLS 加密时），许多网络协议（如 TCP、HTTP&#x2F;2、QUIC 和 WebSockets）在演进过程中逐步引入了“多路复用”（multiplexing）和“连接保持”（connection keep-alive）等特性，也就是将同一连接或会话的流量始终转发到相同的后端服务器，从而避免频繁的连接建立过程。</li>
+<li><strong>阻抗不匹配</strong>现象<ul>
+<li>Client A 和 Client B 两个 HTTP&#x2F;2 客户端通过四层负载均衡器和后端服务器建立持久连接。。</li>
+<li>Client A 的 TCP 连接每分钟发送 40 个 HTTP 请求，而 Client B 的 TCP 连接每秒发送 1 个 HTTP 请求。</li>
+<li>四层负载均衡器将 Client A 的所有 TCP 请求转发至同一台服务器，导致该服务器过载，而其他服务器则处于闲置状态。这种资源利用不均的问题在电气工程领域被称为“阻抗不匹配”现象。</li>
+</ul>
+</li>
+</ul>
+<h3 id="七层负载均衡"><a href="#七层负载均衡" class="headerlink" title="七层负载均衡"></a>七层负载均衡</h3><ul>
+<li><p>七层负载均衡器工作在应用层，这意味着负载均衡器必须与后端服务器建立新的传输层连接，并将客户端的请求代理到后端服务器。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E4%B8%83%E5%B1%82%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%A8%A1%E5%9E%8B.png" srcset="/img/loading.gif" lazyload alt="七层负载均衡"></p>
+</li>
+</ul>
+<h2 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h2><ul>
+<li><strong>轮询均衡算法</strong>（Round-Robin）：按依次循环的方式将请求调度到不同的服务器上，该算法最大的特点是实现简单。轮询算法假设所有的服务器处理请求的能力都一样，调度器会将所有的请求平均分配给每个真实服务器。</li>
+<li><strong>最小连接均衡算法</strong>（Least-Connection）：该算法中调度器需要记录各个服务器已建立连接的数量，然后把新的连接请求分配到当前连接数最小的服务器。<ul>
+<li>最小连接均衡算法特别适合于服务器处理时间不一致的场景。例如，当某些请求可能占用较长时间，而另一些请求很快就会完成时，最小连接算法可以有效避免某些服务器因处理大量复杂请求而过载。</li>
+</ul>
+</li>
+<li><strong>一致性哈希均衡算法</strong>（Consistency Hash）：将请求中的某些特征数据（例如 IP、MAC 或者更上层应用的某些信息）作为特征值来计算需要落在的节点。一致性哈希算法会保证同一个特征值的请求每一次都会落在相同的服务器上。</li>
+<li><strong>随机均衡算法</strong>（Random）：此种负载均衡算法类似于轮询调度，不过在分配处理请求时是随机的过程。由概率论可以得知，随着客户端调用服务端的次数增多，其实际效果趋近于平均分配请求到服务端的每一台服务器，也就是达到轮询的效果。</li>
+</ul>
+<h2 id="负载均衡拓扑"><a href="#负载均衡拓扑" class="headerlink" title="负载均衡拓扑"></a>负载均衡拓扑</h2><h3 id="中间代理型"><a href="#中间代理型" class="headerlink" title="中间代理型"></a>中间代理型</h3><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%90%86%E5%9E%8B.png" srcset="/img/loading.gif" lazyload alt="image-20250305004843994"></p>
+</li>
+<li><p>优点：配置简便，用户只需通过 DNS 连接到负载均衡器，无需关心后端细节，使用体验简单直观；</p>
+</li>
+<li><p>缺点：存在单点故障的风险，负载均衡器一旦出现故障，会导致整个系统无法访问。</p>
+</li>
+</ul>
+<h3 id="边缘代理型"><a href="#边缘代理型" class="headerlink" title="边缘代理型"></a>边缘代理型</h3><ul>
+<li><p>边缘代理型实际上是中间代理型拓扑的一个变种。</p>
+</li>
+<li><p>在全球多个数据中心部署边缘节点，这些节点具备代理功能，用户请求会被路由至最近的节点。收到请求后，边缘节点会执行安全检查（如 DDoS 防护），根据缓存策略决定是返回缓存内容（CDN 技术），或者将请求转发至源服务器（请求加速技术）</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%BE%B9%E7%BC%98%E4%BB%A3%E7%90%86%E5%9E%8B.png" srcset="/img/loading.gif" lazyload alt="image-20250305010030907"></p>
+</li>
+<li><p>优点：通过将负载均衡、缓存和安全策略集中在网络边缘，边缘代理显著降低延迟、提高响应速度，并增强安全性（如 DDoS 防护）；</p>
+</li>
+<li><p>缺点：虽然边缘代理减少了单点故障的风险，但若某个边缘节点发生故障，仍会影响到该节点服务的用户。</p>
+</li>
+</ul>
+<h3 id="客户端内嵌"><a href="#客户端内嵌" class="headerlink" title="客户端内嵌"></a>客户端内嵌</h3><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%86%85%E5%B5%8C.png" srcset="/img/loading.gif" lazyload alt="image-20250305010120189"></p>
+</li>
+<li><p>为解决中间代理型拓扑的单点故障问题，出现了更复杂的解决方案，其中之一是将负载均衡器以 SDK 库形式嵌入客户端这些 SDK 库如 Finagle、Eureka、Ribbon 和 Hystrix 等，它们优缺点是：</p>
+</li>
+<li><p>优点：将负载均衡器功能“转移”至客户端，避免了单点故障问题；</p>
+</li>
+<li><p>缺点：需要为每种编程语言实现相应的 SDK，且在项目复杂时，处理版本依赖和兼容性问题变得棘手</p>
+</li>
+</ul>
+<h3 id="边车代理型"><a href="#边车代理型" class="headerlink" title="边车代理型"></a>边车代理型</h3><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%BE%B9%E8%BD%A6%E4%BB%A3%E7%90%86%E5%9E%8B.png" srcset="/img/loading.gif" lazyload alt="image-20250305010225994"></p>
+</li>
+<li><p>边车代理型拓扑近年来在微服务架构中得到广泛应用，并发展成为一种被称为“服务网格”（Service Mesh）的架构模式。边车代理的基本原理是在应用容器或服务旁边部署一个独立的代理容器，用于实现请求的负载均衡和流量管理。目前，像 Envoy 和 Linkerd 等网络型边车代理已被广泛应用</p>
+</li>
+</ul>
+<h2 id="LVS"><a href="#LVS" class="headerlink" title="LVS"></a>LVS</h2><ul>
+<li><p>四层负载均衡器的典型代表是 LVS（Linux Virtual Server，Linux 虚拟服务器），由中国程序员章文嵩于 1998 年开发。</p>
+</li>
+<li><p>LVS 的基本原理可以用一句话概述，通过修改 MAC 层、IP 层、TCP 层的数据包，实现一部分交换机和网关的功能，将流量转发至真正的服务器上。这三种数据包修改方式分别对应 LVS 提供的三种工作模式</p>
+</li>
+<li><p>LVS 架构从逻辑上可分为调度层、Server 集群层和共享存储层。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201227174449953.png" srcset="/img/loading.gif" lazyload alt="image-20201227174449953"></p>
+</li>
+</ul>
+<h3 id="LVS的三种模式"><a href="#LVS的三种模式" class="headerlink" title="LVS的三种模式"></a>LVS的三种模式</h3><ul>
+<li>基本概念<ul>
+<li>DS：Director Server，前端负载均衡节点服务器。</li>
+<li>RS：Real Server，后端真实服务器。</li>
+<li>CIP：Client IP，客户端 IP 地址。</li>
+<li>VIP：Virtual IP，负载均衡对外提供访问的 IP 地址，一般负载均衡 IP 都会通过 Virtual IP 实现高可用。</li>
+<li>RIP：RealServer IP，负载均衡后端的真实服务器 IP 地址。</li>
+<li>DIP：Director IP，负载均衡与后端服务器通信的 IP 地址。</li>
+<li>CMAC： 客户端 MAC 地址，LVS 连接的路由器的 MAC 地址。呕 </li>
+<li>VMAC： 负载均衡 LVS 的 VIP 对应的 MAC 地址。</li>
+<li>DMAC： 负载均衡 LVS 的 DIP 对应的 MAC 地址。</li>
+<li>RMAC： 后端真实服务器的 RIP 地址对应的 MAC 地址。</li>
+</ul>
+</li>
+</ul>
+<h4 id="直接路由模式"><a href="#直接路由模式" class="headerlink" title="直接路由模式"></a>直接路由模式</h4><ul>
+<li><p>在直接路由模式中，请求通过负载均衡器转发至后端服务器，而后端服务器的响应无需再经过负载均衡器，请求、转发和响应之间形成“三角关系”，因此该模式也被称为“三角传输模式”。</p>
+</li>
+<li><p><strong>需要注意的是</strong>，后端服务器接收到的数据包中，IP 层的目标地址（即 VIP）并不属于后端服务器的物理网络接口，这些数据包会被丢弃。因此，必须将 VIP 地址绑定到本地回环接口（lo 接口）</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/DR.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+</li>
+<li><p>当客户端用户发送请求给 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 网站时，首先经过 DNS 解析到 IP 后并向百度服务器发送请求，数据包经过网络到百度 LVS 负载均衡服务器，这时到达 LVS 网卡时的数据包包括：源 IP 地址（客户端地址）、目的 IP 地址（百度对外服务器 IP 地址，也就是 VIP）、源 MAC 地址（CMAC &#x2F; LVS 连接路由器的 MAC 地址）、目标 MAC 地址（VMAC &#x2F; VIP 对应的 MAC 地址）。</p>
+</li>
+<li><p>数据包到达网卡后，经过链路层到达 PREROUTING 链，进行查找路由，发现目的 IP 是 LVS 的 VIP，这时就会发送至 INPUT 链中并且数据包的 IP 地址、MAC 地址、Port 都未经过修改。</p>
+</li>
+<li><p>数据包到达 INPUT 链中，LVS 会根据目的 IP 和 Port（端口）确认是否为 LVS 定义的服务，如是定义过的 VIP 服务，会根据配置的服务信息，从 RealServer 中选择一个后端服务器 RS1，然后 RS1 作为目标出方向的路由，确定下一跳信息及数据包通过具体的哪个网卡发出，最好将数据包通过 INET_HOOK 到 OUTPUT 链中。</p>
+</li>
+<li><p>数据包通过 POSTROUTING 链后，目的 MAC 地址将会修改为 RealServer 服务器 MAC 地址（RMAC）源 MAC 地址修改为 LVS 与 RS 同网段的 IP 地址的 MAC 地址（DMAC）此时，数据包将会发至 RealServer 服务器。</p>
+</li>
+<li><p>数据包到达 RealServer 服务器后，发现请求报文的 MAC 地址是自己的网卡 MAC 地址，将会接受此报文，待处理完成之后，将响应报文通过 lo 接口传送给 eth0 网卡然后向外发出。此时的源 IP 地址为 VIP，目标 IP 为 CIP，源 MAC 地址为 RS1 的 RMAC，目的 MAC 地址为下一跳路由器的 MAC 地址（CMAC），最终数据包通过 RS 相连的路由器转发给客户端。</p>
+</li>
+<li><p>优缺点</p>
+<ul>
+<li>它特别适合<strong>响应流量远大于请求流量</strong>的场景。例如，在典型的 HTTP 请求&#x2F;响应模式中，请求流量可能仅占总流量的 10%，而响应流量占 90%。通过三角传输模式，负载均衡器只需处理 1&#x2F;10 的总流量。这种设计不仅显著降低了带宽成本，还提升了负载均衡器的可靠性（流量越少、负载越轻、越不容易出现问题）。</li>
+<li><strong>监控功能受限</strong>：由于响应流量直接返回客户端，负载均衡器无法监控完整的 TCP 连接状态，这可能影响防火墙策略的实施。例如，负载均衡器只能捕获 TCP 连接的 SYN 包，而无法跟踪后续的 ACK 包。</li>
+<li><strong>网络架构要求高</strong>：负载均衡器与后端服务器之间通过链路层通信，因此要求两者位于同一子网内，这对网络拓扑设计提出了较高的要求。</li>
+</ul>
+</li>
+</ul>
+<h4 id="隧道模式"><a href="#隧道模式" class="headerlink" title="隧道模式"></a>隧道模式</h4><ul>
+<li><p>隧道模式的基本原理是，LVS 创建一个新的 IP 数据包，将原始 IP 数据包作为“负载”（payload）嵌入其中。新数据包随后被三层交换机路由到后端服务器，后者通过拆包机制移除额外的头部，恢复原始 IP 数据包并进行处理。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/TUN.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p>客户端发送数据包经过网络后到 LVS 网卡，数据包源 IP 为 CIP，目的 IP 为 VIP。</p>
+</li>
+<li><p>进入 PREROUTING 链后，会根据目的 IP 去查找路由，确定是否为本机 IP，数据包将转发至 INPUT 链中，到 LVS，源 IP 和 目的 IP 不变。</p>
+</li>
+<li><p>到 LVS 后，通过目的 IP 和目的 PORT 查找是否为 IPVS 服务，如是 IPVS 服务，将会选择一个 RS 后端服务器， 源 IP 为 DIP，目标 IP 为 RIP，数据包将会转发至 OUTPUT 链中。</p>
+</li>
+<li><p>数据包根据路由信息到达 LVS 网卡，发送至路由器网关，最终到达后端服务器。</p>
+</li>
+<li><p>后端服务器收到数据包后，会拆掉最外层的 IP 地址后，会发现还有一层 IP 首部，源 IP 为 CIP，目的 IP 为 VIP，TUNL0 上配置 VIP，查找路由后判断为本机 IP 地址，将会发给用户空间层的应用程序响应后 VIP 为源 IP，CIP 为目的 IP 数据包发送至网卡，最终返回至客户端用户。</p>
+</li>
+<li><p>优点</p>
+<ul>
+<li>单臂模式，LVS负载压力小</li>
+<li>数据包修改小，信息完整性高</li>
+<li>可跨机房</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>不支持端口映射</li>
+<li>需在RS后端服务器安装模块及配置VIP</li>
+<li>隧道头部IP地址固定，RS后端服务器网卡可能会不均匀</li>
+<li>隧道头部的加入可能会导致分片，最终会影响服务器性能</li>
+</ul>
+</li>
+<li><p>使用场景</p>
+<ul>
+<li>如对转发要求较高且具有跨机房需求的，可选择TUN模式。</li>
+</ul>
+</li>
+</ul>
+<h4 id="网络地址转换模式"><a href="#网络地址转换模式" class="headerlink" title="网络地址转换模式"></a>网络地址转换模式</h4><ul>
+<li><p><strong>直接修改原始 IP 数据包的目标地址，将其替换为后端服务器的地址</strong>。这种方式被称为“网络地址转换”（NAT）模式</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/NAT.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+</li>
+<li><p>客户端发出的请求数据包经过网络到达 LVS 网卡，数据包源 IP 为 CIP，目的 IP 为 VIP。</p>
+</li>
+<li><p>然后进入 PREROUTING 链中，根据目的 IP 查找路由，确定是否为本机 IP 地址，随后将数据包转发至 INPUT 链中，源 IP 和 目的 IP 不变。</p>
+</li>
+<li><p>到达 LVS 后，通过目的 IP 和目的 PORT 查找是否为 IPVS 服务，如是 IPVS 服务，将会选择一个 RS 来作为后端服务器，数据包的目的 IP 地址将会修改为 RIP，这时并以 RIP 为目的 IP 去查找路由，确定下一跳及 PORT 信息后，数据包将会转发至 OUTPUT 链中。</p>
+</li>
+<li><p>被修改过的数据包经过 POSTROUTING 链后，到达 RS 服务器，数据包源 IP 为 CIP，目的 IP 为 RIP。</p>
+</li>
+<li><p>RS 服务器经过处理后，将会把数据包发送至用户空间的应用程序，待处理完成后，发送响应数据包，RS 服务器的默认网关为 LVS 的 IP，应用程序将会把数据包转发至下一跳 LVS 服务器，数据包源 IP 为 RIP，目的 IP 为 CIP。</p>
+</li>
+<li><p>LVS 服务器收到 RS 服务器响应的数据包后，查找路由，目的 IP 不是本机 IP 并且 LVS 服务器开启了 FORWARD 模式，会将数据包转发给它，数据包不变。</p>
+</li>
+<li><p>LVS 服务器收到响应数据包后，根据目的 IP 和 目的 PORT 查找相应的服务，这时，源 IP 为 VIP，通过查找路由，确定下一跳信息并将数据包发送至网关，最终回应给客户端用户。</p>
+</li>
+<li><p>优点</p>
+<ul>
+<li>支持端口映射，如 RS 服务器 PORT 与 VPORT 不一致的话，LVS 会修改目的 IP 地址和 DPORT 以支持端口映射；</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>双向流量对 LVS 会产生较大的负载压力；</li>
+</ul>
+</li>
+</ul>
+<h4 id="主备模式"><a href="#主备模式" class="headerlink" title="主备模式"></a>主备模式</h4><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%9B%9B%E5%B1%82%E4%B8%BB%E5%A4%87%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload alt="image-20250305012117290"></p>
+</li>
+<li><p>缺陷</p>
+<ul>
+<li>在正常运行时，50% 的资源处于闲置状态，备用服务器始终处于空转状态，导致资源利用率低下。</li>
+<li>现代分布式系统更加注重高容错性。理想情况下，即使多个实例同时发生故障，服务仍应能持续运行。然而，在主备模式下，一旦主节点和备用节点同时发生故障，服务将完全中断</li>
+</ul>
+</li>
+</ul>
+<h2 id="GSLB"><a href="#GSLB" class="headerlink" title="GSLB"></a>GSLB</h2><ul>
+<li>全局负载均衡</li>
+<li>GSLB其实是DNS轮询方式的一种改进，因为DNS轮询的时候比较傻，它不能对后端的服务进行健康检查，没准有一个机房挂了，但是它依旧把请求发送给那个机房，从而就有了GSLB。</li>
+<li>DNS还有一个缺点就是在DNS解析的时候，一般会先向本地的DNS服务器进行解析，但是这并不是客户端的真实的IP地址，从而有可能分配的时候，并不是距离上最近的或者是性能最好的，从而也就有GSLB。</li>
+<li>DNS的轮询其实是GSLB的一种实现方式，所以这种也能称之为GSLB，而DNS轮询这种说法比较少，而GSLB的实现方式中，还有一种方式就是HTTP 302跳转，将GSLB的IP地址作为域名的A记录，然后访问GSLB的时候，会将请求返回给客户端，然后给一个302响应，让客户端跳转到真正的地址（此种方式GSLB能看到客户端的真实的IP地址，从而给出距离跟进的服务器ip地址）。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>11-负载均衡和代理</div>
+      <div>https://x-leonidas.github.io/2022/08/02/12高并发系统设计/11-负载均衡和代理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年8月2日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年3月5日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/08/02/22tool/%E6%95%88%E7%8E%87%E6%B2%9F%E9%80%9A%E6%96%B9%E6%B3%95/" title="效率沟通方法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">效率沟通方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/03/01-1C/%E5%A4%87%E5%BF%98/" title="备忘">
+                        <span class="hidden-mobile">备忘</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

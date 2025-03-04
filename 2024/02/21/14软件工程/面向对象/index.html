@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一致性哈希 一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&amp;#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射 将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本 为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为">
+    <meta name="description" content="面向对象编程什么是面向对象 面向对象编程是一种编程范式或编程风格。它以类或对象作为组织代码的基本单元，并将封装、抽象、继承、多态四个特性，作为代码设计和实现的基石  封装、抽象、继承、多态分别可以解决哪些编程问题？ 封装 封装也叫作信息隐藏或者数据访问保护。类通过暴露有限的访问接口，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。 封装后的类，可以提高类的易用性，提高代码的可读性">
   
   
   
-  <title>12-一致性hash - 夜坐听风</title>
+  <title>面向对象 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="12-一致性hash"></span>
+            <span id="subtitle" data-typed-text="面向对象"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:33
+        <time datetime="2024-02-21 23:53" pubdate>
+          2024-02-21 23:53:14
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          362 字
+          802 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          4 分钟
+          7 分钟
         
       </span>
     
@@ -253,24 +253,54 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">12-一致性hash</h1>
+            <h1 id="seo-header">面向对象</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a>一致性哈希</h2><ul>
-<li>一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射</li>
-<li>将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本</li>
-<li>为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为了避免当某个节点下线时，该节点所负责的数据不可用，通常设计为环状，几个节点为物理节点。</li>
+                <h1 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h1><h2 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h2><ul>
+<li>面向对象编程是一种<strong>编程范式或编程风格</strong>。它以<strong>类</strong>或<strong>对象</strong>作为组织代码的基本单元，并将<code>封装</code>、<code>抽象</code>、<code>继承</code>、<code>多态</code>四个特性，作为代码设计和实现的基石</li>
 </ul>
-<h3 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h3><ul>
-<li>解决数据倾斜的问题（环被分的不平均）</li>
-<li>不用真实ip去分配节点，而是为每个ip分配多个虚拟节点</li>
+<h2 id="封装、抽象、继承、多态分别可以解决哪些编程问题？"><a href="#封装、抽象、继承、多态分别可以解决哪些编程问题？" class="headerlink" title="封装、抽象、继承、多态分别可以解决哪些编程问题？"></a>封装、抽象、继承、多态分别可以解决哪些编程问题？</h2><ul>
+<li>封装<ul>
+<li>封装也叫作信息隐藏或者数据访问保护。类通过暴露<strong>有限的访问接口</strong>，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。</li>
+<li>封装后的类，可以提高类的易用性，提高代码的可读性和可维护性</li>
 </ul>
-<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>当服务器被添加或删除时，很小一部分的键被重新分配。</li>
-<li>容易水平扩展，因为数据分布更加均匀。</li>
-<li>缓解热点健问题。 对特定分片的过度访问可能会导致服务器过载。 想象一下 Katy Perry、Justin Bieber 和 Lady Gaga 的数据最终都在同一个分片上。 一致性哈希通过更均匀地分配数据来缓解这个问题。</li>
+</li>
+<li>抽象<ul>
+<li>封装主要讲的是如何隐藏信息、保护数据。而抽象讲的是如何<strong>隐藏方法的具体实现</strong>，让调用者只需要关心方法提供了哪些功能，并不需要知道这些功能是如何实现的。</li>
+<li>在面对复杂系统的时候，人脑能承受的信息复杂程度是有限的，所以我们必须忽略掉一些非关键性的实现细节。而抽象作为一种<strong>只关注功能点不关注实现的设计思路</strong>，正好帮我们的大脑过滤掉许多非必要的信息。</li>
+</ul>
+</li>
+<li>继承<ul>
+<li>分为单继承和多继承</li>
+<li>继承最大的一个好处就是<strong>代码复用</strong></li>
+<li>过度使用继承，继承层次过深过复杂，就会导致代码可读性、可维护性变差。</li>
+</ul>
+</li>
+<li>多态<ul>
+<li>多态是指，子类可以替换父类，在实际的代码运行过程中，调用子类的方法实现。</li>
+<li>多态特性能提高代码的<strong>可扩展性和复用性</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="面向对象比面向过程有哪些优势？"><a href="#面向对象比面向过程有哪些优势？" class="headerlink" title="面向对象比面向过程有哪些优势？"></a>面向对象比面向过程有哪些优势？</h2><ul>
+<li>什么是面向过程编程？<ul>
+<li>面向过程编程也是一种编程范式或编程风格。它以过程（可以理解为方法、函数、操作）作为组织代码的基本单元，以数据（可以理解为成员变量、属性）与方法相分离为最主要的特点。面向过程风格是一种<strong>流程化的编程风格</strong>，通过拼接一组顺序执行的方法来操作数据完成一项功能。</li>
+<li>面向过程编程语言首先是一种编程语言。它最大的特点是<strong>不支持类和对象</strong>两个语法概念，不支持丰富的面向对象编程特性（比如继承、多态、封装），仅支持面向过程编程。</li>
+<li>面向过程和面向对象最基本的区别就是，<strong>代码的组织方式不同</strong><ul>
+<li>面向过程风格的代码被组织成了一组方法集合及其数据结构（struct User），方法和数据结构的定义是分开的</li>
+<li>面向对象风格的代码被组织成一组类，方法和数据结构被绑定一起，定义在类中。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>OOP 更加能够应对大规模复杂程序的开发</li>
+<li>OOP 风格的代码更易复用、易扩展、易维护</li>
+<li>OOP 语言更加人性化、更加高级、更加智能</li>
+</ul>
+</li>
 </ul>
 
                 
@@ -290,7 +320,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
+  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
   
   
 
@@ -310,8 +340,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>12-一致性hash</div>
-      <div>https://x-leonidas.github.io/2022/02/01/12高并发系统设计/12-一致性hash/</div>
+      <div>面向对象</div>
+      <div>https://x-leonidas.github.io/2024/02/21/14软件工程/面向对象/</div>
     </div>
     <div class="license-meta">
       
@@ -323,13 +353,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2024年2月21日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年5月30日</div>
+          <div>2023年3月26日</div>
         </div>
       
       
@@ -366,9 +396,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/10-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" title="10-分布式缓存">
+                      <a href="/2024/02/21/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/09-%E4%BA%BF%E7%BA%A7%E6%B5%81%E9%87%8F%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84/" title="09-亿级流量多级缓存架构">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">10-分布式缓存</span>
+                        <span class="hidden-mobile">09-亿级流量多级缓存架构</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -376,8 +406,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" title="单元测试">
-                        <span class="hidden-mobile">单元测试</span>
+                      <a href="/2024/02/21/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/1.%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" title="1.系统设计">
+                        <span class="hidden-mobile">1.系统设计</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

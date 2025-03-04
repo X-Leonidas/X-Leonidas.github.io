@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="缓存缓存属性 吞吐量 命中率 扩展功能 分布式支持  缓存算法 FIFO LRU 优先淘汰最久未被使用访问过的数据。   LFU 优先淘汰最不经常使用的数据   Tiny LFU 为了缓解 LFU 每次访问都要修改计数器所带来的性能负担,inyLFU 会首先采用 Sketch 对访问数据进行分析，所谓 Sketch 是统计学上的概念，指用少量的样本数据来估计全体数据的特征，这种做法显然牺牲了一定程">
+    <meta name="description" content="10亿数据如何插入Mysql，10连问，你想到了几个？ TODO">
   
   
   
-  <title>10-分布式缓存 - 夜坐听风</title>
+  <title>4. 实践 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="10-分布式缓存"></span>
+            <span id="subtitle" data-typed-text="4. 实践"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:33
+        <time datetime="2022-02-21 23:53" pubdate>
+          2022-02-21 23:53:14
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          18 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          15 分钟
+          1 分钟
         
       </span>
     
@@ -253,65 +253,13 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">10-分布式缓存</h1>
+            <h1 id="seo-header">4. 实践</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><h3 id="缓存属性"><a href="#缓存属性" class="headerlink" title="缓存属性"></a>缓存属性</h3><ul>
-<li>吞吐量</li>
-<li>命中率</li>
-<li>扩展功能</li>
-<li>分布式支持</li>
-</ul>
-<h3 id="缓存算法"><a href="#缓存算法" class="headerlink" title="缓存算法"></a>缓存算法</h3><ul>
-<li>FIFO</li>
-<li>LRU<ul>
-<li>优先淘汰最久未被使用访问过的数据。</li>
-</ul>
-</li>
-<li>LFU<ul>
-<li>优先淘汰最不经常使用的数据</li>
-</ul>
-</li>
-<li>Tiny LFU<ul>
-<li>为了缓解 LFU 每次访问都要修改计数器所带来的性能负担,inyLFU 会首先采用 Sketch 对访问数据进行分析，所谓 Sketch 是统计学上的概念，指用少量的样本数据来估计全体数据的特征，这种做法显然牺牲了一定程度的准确性，但是只要样本数据与全体数据具有相同的概率分布，Sketch 得出的结论仍不失为一种高效与准确之间权衡的有效结论。借助<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Count%E2%80%93min_sketch">Count–Min Sketch</a>算法（可视为<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bloom_filter">布隆过滤器</a>的一种等价变种结构），TinyLFU 可以用相对小得多的记录频率和空间来近似地找出缓存中的低价值数据。为了解决 LFU 不便于处理随时间变化的热度变化问题，TinyLFU 采用了基于“滑动时间窗”（在“<a target="_blank" rel="noopener" href="https://icyfenix.cn/distribution/traffic-management/traffic-control.html">流量控制</a>”中我们会更详细地分析这种算法）的热度衰减算法，简单理解就是每隔一段时间，便会把计数器的数值减半，以此解决“旧热点”数据难以清除的问题。</li>
-</ul>
-</li>
-<li>W-Tiny LFU<ul>
-<li>为了改善Tiny LFU无法很好应对稀疏突发访问的问题，所谓稀疏突发访问是指由一些绝对频率较小但是突发访问频率很高的数据。譬如某些运维性质的任务，也许一天、一周只会在特定时间运行一次，其余时间都不会用到，此时 TinyLFU 就很难让这类元素通过 Sketch 的过滤，因为它们无法在运行期间积累到足够高的频率。</li>
-<li>应对短时间的突发访问是 LRU 的强项，具体做法是将新记录暂时放入一个名为 Window Cache 的前端 LRU 缓存里面，让这些对象可以在 Window Cache 中累积热度，如果能通过 TinyLFU 的过滤器，再进入名为 Main Cache 的主缓存中存储，主缓存根据数据的访问频繁程度分为不同的段（LFU 策略，实际上 W-TinyLFU 只分了两段），但单独某一段局部来看又是基于 LRU 策略去实现的（称为 Segmented LRU）。每当前一段缓存满了之后，会将低价值数据淘汰到后一段中去存储，直至最后一段也满了之后，该数据就彻底清理出缓存。TODO:原理</li>
-</ul>
-</li>
-</ul>
-<h3 id="Caffeine"><a href="#Caffeine" class="headerlink" title="Caffeine"></a>Caffeine</h3><ul>
-<li>将对数据的读写看到是日志的提交过程，设由专门的环形缓冲区来记录由于数据读取而产生的状态变动日志。为进一步减少竞争，caffeine对每条线程（对线程取hash，哈希值相同的使用同一个缓冲区）都设置一个专用的环形缓冲<ul>
-<li>环形缓冲：它是一种拥有读、写两个指针的数据复用结构，在计算机科学中有非常广泛的应用。举个具体例子，譬如一台计算机通过键盘输入，并通过 CPU 读取“HELLO WIKIPEDIA”这个长 14 字节的单词，通常需要一个至少 14 字节以上的缓冲区才行。但如果是环形缓冲结构，读取和写入就应当一起进行，在读取指针之前的位置均可以重复使用，理想情况下，只要读取指针不落后于写入指针一整圈，这个缓冲区就可以持续工作下去，能容纳无限多个新字符。否则，就必须阻塞写入操作去等待读取清空缓冲区。</li>
-</ul>
-</li>
-<li>读写性能<ul>
-<li>从 Caffeine 读取数据时，数据本身会在其内部的 ConcurrentHashMap 中直接返回，而数据的状态信息变更就存入环形缓冲中，由后台线程异步处理。如果异步处理的速度跟不上状态变更的速度，导致缓冲区满了，那此后接收的状态的变更信息就会直接被丢弃掉，直至缓冲区重新富余。通过环形缓冲和容忍有损失的状态变更，Caffeine 大幅降低了由于数据读取而导致的垃圾收集和锁竞争，因此 Caffeine 的读取性能几乎能与 ConcurrentHashMap 的读取性能相同。</li>
-<li>写数据时，将使用传统的有界队列来存放状态变更信息，写入带来的状态更是无损的，不允许丢失任何状态，这是考虑到许多状态的默认值必须通过写入操作来完成初始化，因此写入会有一定的性能损失，相比 ConcurrentHashMap，Caffeine 在写入时大约会慢 10%左右。</li>
-</ul>
-</li>
-</ul>
-<h3 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h3><ul>
-<li>复制式缓存<ul>
-<li>复制式缓存可以看作是“能够支持分布式的进程内缓存”，它的工作原理与 Session 复制类似。缓存中所有数据在分布式集群的每个节点里面都存在有一份副本，读取数据时无须网络访问，直接从当前节点的进程内存中返回，理论上可以做到与进程内缓存一样高的读取性能；当数据发生变化时，就必须遵循复制协议，将变更同步到集群的每个节点中，复制性能随着节点的增加呈现平方级下降，变更数据的代价十分高昂。</li>
-</ul>
-</li>
-<li>集中式缓存<ul>
-<li>分布式缓存的主流形式</li>
-<li>集中式缓存的读、写都需要网络访问，其好处是不会随着集群节点数量的增加而产生额外的负担，其坏处自然是读、写都不再可能达到进程内缓存那样的高性能</li>
-<li>它与使用缓存的应用分处在独立的进程空间中，这么做的好处是能够为异构语言提供服务，达成语言解耦的目的。坏处是如果要缓存对象等复杂类型的话，基本上就只能靠序列化来支撑具体语言的类型系统（支持 Hash 类型的缓存，可以部分模拟对象类型）不仅有序列化的成本，还很容易导致传输成本也显著增加。</li>
-</ul>
-</li>
-</ul>
-<h3 id="分布式缓存一致性"><a href="#分布式缓存一致性" class="headerlink" title="分布式缓存一致性"></a>分布式缓存一致性</h3><ul>
-<li>保证缓存一致性的设计模式：Cache Aside、Read&#x2F;Write Through、Write Behind Caching </li>
-<li>保证缓存一致性的基本手段：定时任务扫描，业务系统MQ，binlog变更MQ</li>
-<li>缓存更新时，为了防止产生脏数据，需要加锁，但是还不能保证当前更新的数据就是最新的数据，需要比较数据的产生时间。</li>
-<li>对于时间相同的数据，更新时发现时同一秒的数据，但是值不相等，通过消息触发二次更新来保证缓存中的数据是最新的</li>
+                <h1 id="10亿数据如何插入Mysql，10连问，你想到了几个？"><a href="#10亿数据如何插入Mysql，10连问，你想到了几个？" class="headerlink" title="10亿数据如何插入Mysql，10连问，你想到了几个？"></a>10亿数据如何插入Mysql，10连问，你想到了几个？</h1><ul>
+<li>TODO</li>
 </ul>
 
                 
@@ -331,8 +279,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">12高并发系统设计</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-1关系型数据库</a>
+  
+  
+
   
 
       </span>
@@ -351,8 +306,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>10-分布式缓存</div>
-      <div>https://x-leonidas.github.io/2022/02/01/12高并发系统设计/10-分布式缓存/</div>
+      <div>4. 实践</div>
+      <div>https://x-leonidas.github.io/2022/02/21/05数据库/05-1关系型数据库/4. 实践/</div>
     </div>
     <div class="license-meta">
       
@@ -364,13 +319,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2022年2月21日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月5日</div>
+          <div>2023年3月26日</div>
         </div>
       
       
@@ -407,9 +362,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
+                      <a href="/2022/02/21/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/%E7%89%88%E6%9C%AC%E5%AF%B9%E5%BA%94/" title="版本对应">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">4. 实践</span>
+                        <span class="hidden-mobile">版本对应</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -417,8 +372,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/12-%E4%B8%80%E8%87%B4%E6%80%A7hash/" title="12-一致性hash">
-                        <span class="hidden-mobile">12-一致性hash</span>
+                      <a href="/2022/02/09/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" title="系统架构">
+                        <span class="hidden-mobile">系统架构</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
