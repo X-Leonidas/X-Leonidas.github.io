@@ -21,7 +21,7 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="分布式事务2PC事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。  假如在第一阶段所有参与者都返回准备成功，那么协调者则向所有参与者发送提交事务命令，然后等待所有事务都提交成功之后，返回事务执行成功。    假如在第一阶段有一个参与者返回失败，那么协">
+    <meta name="description" content="分布式事务 符合 ACID 特性的事务称为“刚性事务”，把后面将要介绍的可靠事件队列、TCC、Saga 实现的事务，统称为“柔性事务”。  2PC事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。  假如在第一阶段所有参与者都返回准备成功，那么协调者则">
   
   
   
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.9k 字
+          3.3k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          24 分钟
+          28 分钟
         
       </span>
     
@@ -258,7 +258,10 @@
             
               <div class="markdown-body">
                 
-                <h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><h3 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h3><h4 id="事务流程"><a href="#事务流程" class="headerlink" title="事务流程"></a>事务流程</h4><ul>
+                <h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><ul>
+<li>符合 ACID 特性的事务称为“刚性事务”，把后面将要介绍的可靠事件队列、TCC、Saga 实现的事务，统称为“柔性事务”。</li>
+</ul>
+<h3 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h3><h4 id="事务流程"><a href="#事务流程" class="headerlink" title="事务流程"></a>事务流程</h4><ul>
 <li><p>协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了</p>
 </li>
 <li><p>同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。</p>
@@ -319,12 +322,8 @@
 </ul>
 <h4 id="3PC总结"><a href="#3PC总结" class="headerlink" title="3PC总结"></a>3PC总结</h4><ul>
 <li>3PC 相对于 2PC 做了一定的改进：<strong>引入了参与者超时机制</strong>，并且增加了预提交阶段使得故障恢复之后协调者的决策复杂度降低，但整体的交互过程更长了，性能有所下降，并且还是会存在数据不一致问题。所以 2PC 和 3PC 都不能保证数据100%一致，因此一般都需要有定时扫描补偿机制。</li>
-</ul>
-<h3 id="Saga"><a href="#Saga" class="headerlink" title="Saga"></a>Saga</h3><ul>
-<li>属于长事务解决方案，将长事务拆分为多个本地短事务<ul>
-<li>长事务 —&gt; T1,T2…….Tn 本地短事务</li>
-<li>每个短事务都有一个补偿动作 ——&gt; C1,C2,……..Cn</li>
-<li>如果T1，T2~ Tn 这些短事务顺利完成的话，则整个事务结束，否则将采取回复模式</li>
+<li><ul>
+<li></li>
 </ul>
 </li>
 </ul>
@@ -347,6 +346,17 @@
 </li>
 <li><p><strong>TCC可以跨数据库、跨不同的业务系统来实现事务</strong>。</p>
 </li>
+</ul>
+<h3 id="Saga"><a href="#Saga" class="headerlink" title="Saga"></a>Saga</h3><ul>
+<li>属于长事务解决方案，将长事务拆分为多个本地短事务<ul>
+<li><strong>将大事务 T 拆分成若干小事务</strong>，命名为 T1，T2，Tn，每个子事务都具备原子性。如果分布式事务 T 能够正常提交，那么它对数据的影响应该与连续按顺序成功提交子事务 Ti 等价。</li>
+<li>每个短事务都有一个补偿动作 ——&gt; C1,C2,……..Cn</li>
+<li>如果T1，T2~ Tn 这些短事务顺利完成的话，则整个事务结束，否则将采取回复模式</li>
+</ul>
+</li>
+<li>Saga 非常适合处理流程较长、且需要保证事务最终一致性的业务场景。例如，在一个旅游预订平台中，用户可能同时预订机票、酒店和租车服务，这些服务可能由不同的微服务或第三方供应商提供。在这种场景下，Saga 事务模型允许系统逐步执行每个操作，并在任一步骤失败时有序地执行补偿操作，从而确保系统的一致性并提升用户体验。</li>
+<li>与 TCC 相比，Saga 通常采用事件驱动设计，即每个服务都是异步执行的，无需设计资源的冻结状态或处理撤销冻结的操作。但缺点是不具备隔离性，多个 Saga 小事务操作同一数据源时，无法保证操作的原子性，可能出现数据被覆盖的情况。</li>
+<li>尽管补偿操作较易实现，但确保正向操作与补偿操作的严格执行仍需要大量精力。因此，Saga 事务通常不通过裸编码实现，而是在事务中间件的支持下完成。前面提到的 Seata 中间件也支持 Saga 事务模型。</li>
 </ul>
 <h3 id="GASA"><a href="#GASA" class="headerlink" title="GASA"></a>GASA</h3><ul>
 <li>有补偿</li>
@@ -474,7 +484,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年2月28日</div>
+          <div>2025年3月6日</div>
         </div>
       
       
@@ -521,8 +531,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">
-                        <span class="hidden-mobile">正则表达式</span>
+                      <a href="/2022/02/01/12%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/08-%E6%9C%8D%E5%8A%A1%E5%B9%82%E7%AD%89/" title="08-服务幂等">
+                        <span class="hidden-mobile">08-服务幂等</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
