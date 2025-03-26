@@ -271,7 +271,7 @@
 <li>SynchronizedList中的listIterator和listIterator(int index) 方法并没有做同步处理，而是快速失败机制，所以在进行遍历时，需要开发者手动加锁</li>
 </ul>
 <h2 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h2><ul>
-<li>特点以Concurrent开头或者时CopyOnWriteArrayList&#x2F;Set</li>
+<li>特点以Concurrent开头或者CopyOnWriteArrayList&#x2F;Set</li>
 </ul>
 <h3 id="并发MAP"><a href="#并发MAP" class="headerlink" title="并发MAP"></a>并发MAP</h3><h4 id="ConcurrentMap接口"><a href="#ConcurrentMap接口" class="headerlink" title="ConcurrentMap接口"></a>ConcurrentMap接口</h4><ul>
 <li><strong>putIfAbsent：</strong>与原有put方法不同的是，putIfAbsent方法中如果插入的key相同，则不替换原有的value值；</li>
@@ -442,7 +442,7 @@
 <li>大多数操作都以固定时间运行（不计阻塞消耗的时间）。异常包括 <code>remove</code>、<code>removeFirstOccurrence</code>、<code>removeLastOccurrence</code>、<code>contains</code>、<code>iterator.remove()</code> 以及批量操作，它们均以线性时间运行。</li>
 </ul>
 <h2 id="Copy-On-Write"><a href="#Copy-On-Write" class="headerlink" title="Copy On Write"></a>Copy On Write</h2><h3 id="copy-on-write-机制"><a href="#copy-on-write-机制" class="headerlink" title="copy on write 机制"></a>copy on write 机制</h3><ul>
-<li>写入时复制思想，当有多个调用者同时去请求一个资源数据的时候，有一个调用者出于某些原因需要对当前的数据源进行修改，这个时候系统将会复制一个当前数据源的副本给调用者修改</li>
+<li>写入时复制思想，当有多个调用者同时去请求一个资源数据的时候，有一个调用者出于某些原因需要对当前的数据源进行修改，这个时候系统将会复制一个当前数据源的副本给调用者修改，并且写时会加锁，保证同一时刻只有一个调用者进行写操作</li>
 <li>CopyOnWrite容器即<strong>写时复制的容器</strong>,当我们往一个容器中添加元素的时候，不直接往容器中添加，而是将当前容器进行copy，复制出来一个新的容器，然后向新容器中添加我们需要的元素，最后将原容器的引用指向新容器。</li>
 <li>好处：<ul>
 <li>我们可以在并发的场景下对容器进行”读操作”而不需要”加锁”，从而达到读写分离的目的。从JDK 1.5 开始Java并发包里提供了两个使用CopyOnWrite机制实现的并发容器 ，分别是CopyOnWriteArrayList和CopyOnWriteArraySet 。我们着重给大家介绍一下CopyOnWriteArrayList。</li>
@@ -521,7 +521,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年1月30日</div>
+          <div>2025年3月27日</div>
         </div>
       
       

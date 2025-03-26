@@ -1,0 +1,845 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="二叉树名词解释 叶子节点：末尾的子节点，自己下面不再连接有节点的节点（即末端），称为叶子节点（又称为终端结点）  二叉树旋转左旋 逆时针旋：头节点变成了心头节点的左孩子     右旋 顺时针旋：头节点变成了新头结点的右孩子。       旋转的情况 LL       RR     LR     RL      遍历方式广度优先遍历(BFS) 广度优先遍历先从树的最高层开始，从左向右逐层向下访问树中">
+  
+  
+  
+  <title>二叉树 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="二叉树"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 19:59" pubdate>
+          2022-02-01 19:59:27
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">二叉树</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><ul>
+<li>叶子节点：末尾的子节点，自己下面不再连接有节点的节点（即末端），称为叶子节点（又称为终端结点）</li>
+</ul>
+<h3 id="二叉树旋转"><a href="#二叉树旋转" class="headerlink" title="二叉树旋转"></a>二叉树旋转</h3><h4 id="左旋"><a href="#左旋" class="headerlink" title="左旋"></a>左旋</h4><ul>
+<li><p>逆时针旋：头节点变成了心头节点的左孩子</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%B7%A6%E6%97%8B.gif" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h4 id="右旋"><a href="#右旋" class="headerlink" title="右旋"></a>右旋</h4><ul>
+<li><p>顺时针旋：头节点变成了新头结点的右孩子。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%8F%B3%E6%97%8B.gif" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%B7%A6%E6%97%8B%E5%8F%B3%E6%97%8B.png" srcset="/img/loading.gif" lazyload alt="左旋右旋"></p>
+</li>
+</ul>
+<h4 id="旋转的情况"><a href="#旋转的情况" class="headerlink" title="旋转的情况"></a>旋转的情况</h4><ul>
+<li><p>LL</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/LL.png" srcset="/img/loading.gif" lazyload style="zoom:75%;" />
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>RR</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/RR.png" srcset="/img/loading.gif" lazyload style="zoom:75%;" /></li>
+</ul>
+</li>
+<li><p>LR</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/LR.png" srcset="/img/loading.gif" lazyload style="zoom:75%;" /></li>
+</ul>
+</li>
+<li><p>RL</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/RL.png" srcset="/img/loading.gif" lazyload style="zoom:75%;" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="遍历方式"><a href="#遍历方式" class="headerlink" title="遍历方式"></a>遍历方式</h3><h4 id="广度优先遍历-BFS"><a href="#广度优先遍历-BFS" class="headerlink" title="广度优先遍历(BFS)"></a>广度优先遍历(BFS)</h4><ul>
+<li>广度优先遍历先从树的最高层开始，从左向右逐层向下访问树中的每一个元素。</li>
+<li>应用：<ul>
+<li>二叉树层序打印   力扣102</li>
+<li>最短路径(<strong>无权最短路径问题</strong>)</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h4 id="深度优先遍历-DFS）"><a href="#深度优先遍历-DFS）" class="headerlink" title="深度优先遍历(DFS）"></a>深度优先遍历(DFS）</h4><ul>
+<li>深度优先遍历会尽量从根节点访问到叶节点，再回溯至最近一次有未访问子节点的节点，再访问到其叶节点。根据其访问节点的先后顺序可以有多种访问的方式，但常用的主要是<strong>前序树遍历、中序树遍历和后序树遍历</strong>。</li>
+</ul>
+<h5 id="前序树遍历"><a href="#前序树遍历" class="headerlink" title="前序树遍历"></a>前序树遍历</h5><ul>
+<li>对于每一个子树的遍历顺序：中  左  右</li>
+</ul>
+<h5 id="中序树遍历"><a href="#中序树遍历" class="headerlink" title="中序树遍历"></a>中序树遍历</h5><ul>
+<li>对于每一个子树的遍历顺序：左 中  右</li>
+<li>后继节点 前驱节点  ：在中序遍历中一个节点的下一个或上一个</li>
+<li>Morris遍历法：</li>
+</ul>
+<h5 id="后序树遍历"><a href="#后序树遍历" class="headerlink" title="后序树遍历"></a>后序树遍历</h5><ul>
+<li>对于每一个子树的遍历顺序：右 左 中</li>
+</ul>
+<h4 id="Morris遍历"><a href="#Morris遍历" class="headerlink" title="Morris遍历"></a>Morris遍历</h4><ul>
+<li>遍历标准：   当前节点为cur<ol>
+<li>cur没有左子树，cue向右子树 移动(cur &#x3D; cur.right)</li>
+<li>cur存在左子树，找到左子树上最右的节点 记为mostright</li>
+<li>mostright的右子树为空， 则设置mostright的右子树指向cur,然后cur向左移动</li>
+<li>mostright的右子树为cur,让其指向空，cur向右移动</li>
+</ol>
+</li>
+<li>Morris遍历中， 如果一个节点有左子树，morris遍历能回到这个节点两次，当第二次到达这个节点的时候，说明左子树上的节点已经全部遍历完。如果一个节点没有左子树，则只到达这个节点一次。</li>
+</ul>
+<h3 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h3><ul>
+<li>满二叉树：一棵二叉树的结点要么是叶子结点，要么它有两个子结点（如果一个二叉树的层数为K，且结点总数是(2^k) -1，则它就是满二叉树。）</li>
+<li>满二叉树的节点总数SUM和高度L的公式为   SUM &#x3D;  $2^{L}-1$</li>
+</ul>
+<h3 id="2-3树"><a href="#2-3树" class="headerlink" title="2-3树"></a>2-3树</h3><ul>
+<li><p>2-3树是最简单的B-树（或-树）结构，其每个非叶节点都有两个或三个子女，而且所有叶都在统一层上。2-3树不是二叉树，其节点可拥有3个孩子。不过，2-3树与满二叉树相似。高为h的2-3树包含的节点数大于等于高度为h的满二叉树的节点数，即至少有2^h-1个节点</p>
+</li>
+<li><p>特质</p>
+<ul>
+<li>2-3 树所有叶子节点都在同一层</li>
+<li>1 个节点可以有 1 到 2 个数据，如果有三个需要调整树结构</li>
+<li>1 个节点 1 个数据时，则有两个子节点</li>
+<li>1 个节点 2 个数据时，则有三个子节点，且中间子节点是介于两个节点间的值</li>
+</ul>
+</li>
+<li><p>插入图解</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/2-3%E6%A0%91.png" srcset="/img/loading.gif" lazyload alt="2-3树"></li>
+</ul>
+</li>
+</ul>
+<h3 id="完全二叉树CBT"><a href="#完全二叉树CBT" class="headerlink" title="完全二叉树CBT"></a>完全二叉树CBT</h3><ul>
+<li>若设二叉树的深度为k，除第 k 层外，其它各层 (1～k-1) 的结点数都达到最大个数，第k 层所有的结点都<strong>连续集中在最左边</strong>，这就是完全二叉树。</li>
+<li>一个从0开始数组 (下标位置)【0，1，2，3，4，5.。。。。。】对应的二叉树的结构一些规律<ul>
+<li>子字节i的父节点的值是  (i-1)&#x2F;2</li>
+<li>父节点f的左右子树是 f * 2 + 1 和 f*2 +2</li>
+</ul>
+</li>
+</ul>
+<h3 id="二叉查找树BST（搜索二叉树）"><a href="#二叉查找树BST（搜索二叉树）" class="headerlink" title="二叉查找树BST（搜索二叉树）"></a>二叉查找树BST（搜索二叉树）</h3><ul>
+<li>首先它也是一个二叉树，故满足递归定义;</li>
+<li>其次每个节点只存在一个值;</li>
+<li>需满足左子树任意值&lt;&#x3D;根值&lt;&#x3D;右子树任意值 ，故按照中序遍历会得到一个非递减(依次升序)序列。标注的搜索二叉树没有重复的值，因为相同的值可以压缩在一个节点上。</li>
+<li>性质<ul>
+<li>1.在一棵二叉查找树上，执行查找、插入、删除等操作的时间复杂度为O（logn）。因为，一棵由n个结点，随机构造的二叉查找树的高度为lgn，所以顺理成章，一般操作的执行时间为O（lgn）。</li>
+<li>2.但若是一棵具有n个结点的线性链，则此些操作最坏情况运行时间为O（n）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="平衡二叉树AVL"><a href="#平衡二叉树AVL" class="headerlink" title="平衡二叉树AVL"></a>平衡二叉树AVL</h3><ul>
+<li>首先仍是一棵二叉树，满足递归定义;</li>
+<li>其次又是一棵BST，满足有序;</li>
+<li>每个节点左右子树高度差的绝对值不能超过1</li>
+<li>性质<ul>
+<li>会发生左旋和右旋操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="红黑树Red-Black-Tree"><a href="#红黑树Red-Black-Tree" class="headerlink" title="红黑树Red Black  Tree"></a>红黑树Red Black  Tree</h3><ul>
+<li>首先仍是一棵二叉树，满足递归定义; </li>
+<li>其次又是一棵BST，满足有序;</li>
+<li>最长子树不超过最短子树的两倍</li>
+<li>根节点是黑色，叶子节点为黑色。每个红色节点的子节点一定都是黑色。</li>
+<li>任意一结点到每个叶子结点的路径都包含数量相同的黑结点。红色节点不相邻</li>
+</ul>
+<h3 id="SB树"><a href="#SB树" class="headerlink" title="SB树"></a>SB树</h3><ul>
+<li>TODO</li>
+</ul>
+<h3 id="自适应树"><a href="#自适应树" class="headerlink" title="自适应树"></a>自适应树</h3><ul>
+<li>虽然平衡树能使树的平均路径深度得到有效降低，但是频繁的对树进行平衡操作会造成很大的性能浪费，因为通常我们更关心执行插入、删除和查找操作的效率而不是树的形状。因为我们对不同元素的访问有偏好性，因此根据访问频率沿着树向上移动元素从而形成一种优先树即自适应树是一个很好的解决方案。</li>
+<li>自适应树的构造策略分为：1）单一旋转：如果访问子节点，则将子节点围绕它的父节点进行旋转。2）移动到根部：重复子节点-父节点的旋转，直至将被访问元素移到根部。</li>
+</ul>
+<h5 id="张开策略"><a href="#张开策略" class="headerlink" title="张开策略"></a>张开策略</h5><h5 id="半长开策略"><a href="#半长开策略" class="headerlink" title="半长开策略"></a>半长开策略</h5><h3 id="treap树"><a href="#treap树" class="headerlink" title="treap树"></a>treap树</h3><ul>
+<li>二叉查找树的操作非常高效，但多次操作时会发生树的不平衡现象，堆是完全平衡树，可以快速访问最大或者最小元素，但是不能立即访问其他元素。如果有一个树同时满足堆的部分性质和二叉查找树的部分性质的树称为他treap树。它有多种实现方式。</li>
+</ul>
+<h5 id="显示优先级实现-笛卡尔树"><a href="#显示优先级实现-笛卡尔树" class="headerlink" title="显示优先级实现-笛卡尔树"></a>显示优先级实现-笛卡尔树</h5><ul>
+<li>对于它的每个节点包含一个键值对，其中键满足二叉树性质，值满足最大堆性质。<br>  在其中插入元素时，首先生成随机的优先级，用键根据二叉查找树性质在树中找到合适的位置插入，再根据值通过旋转二叉树方式来恢复堆属性。<br> 删除元素时将其优先级较高的节点围绕它进行旋转直至被删除的节点只有一个子节点后者没有子节点，此时直接将改元素删除。</li>
+</ul>
+<h5 id="隐式优先级实现"><a href="#隐式优先级实现" class="headerlink" title="隐式优先级实现"></a>隐式优先级实现</h5><ul>
+<li>treap树并不总是需要在每个节点储存其优先级，第一种方法是使用一个散列函数h，将具有键值k的某项优先级设置为h（k），但这种方案暂不讨论。另外一种是通过数组分方式实现treap树，其中数组的序号代表其优先级，这种方式类似于最小堆。但是节点和子节点在数组中序号的对应方式不能套用堆中的公式。<br>  这种方案中插入一个节点，需要随机生成小于等于n的优先级i，如果i&#x3D;n，则直接将节点放在数组末尾，否则需要将数组中占据i位置的项通过一系列的旋转操作变为叶节点，再将需要插入的节点根据二叉树的性质放在合适的位置，再根据其优先级恢复整个的堆性质就能得到新的treap树。在数组中直接插入对应索引即得到新的数组。<br> 删除一个节点时，首先从treap树中删除节点，先通过二叉树删除节点规则将节点删除，然后在数组中将最后一个元素填到当前位置确定新的游优先级，再根据新的优先级恢复堆属性。</li>
+<li></li>
+</ul>
+<h3 id="k-d树"><a href="#k-d树" class="headerlink" title="k-d树"></a>k-d树</h3><ul>
+<li>通常二叉查找树的每个节点只有一个键值，当每个节点拥有多个键值时成为k-d树，k代表每个节点拥有的键值数。k-d树将各个维度在从根到子节点的每一层中有顺序的交替使用。通过这种方式可以在空间中划分很多不同的区域。</li>
+</ul>
+<h2 id="多叉树"><a href="#多叉树" class="headerlink" title="多叉树"></a>多叉树</h2><ul>
+<li>二叉树中每个节点只有两个子节点，当每个节点最多包含m个节点时就是m阶多叉树</li>
+<li>对于m阶的多差查找树有以下四个特性<ul>
+<li>每个节点都可以包含m个子节点和m-1个键值。</li>
+<li>所有节点的键值都按升序排列。</li>
+<li>前i个子节点中的键值都小于第i个键值。</li>
+<li>后m-i个子节点中的键值都大于第i个键值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h3><ul>
+<li>B<strong>树属于多叉树又名平衡多路查找树</strong></li>
+<li>m阶的B树具有以下性质：<ul>
+<li>根节点至少有两个子节点</li>
+<li>每个节点有M-1个key，并且以升序排列</li>
+<li>位于M-1和M key的子节点的值位于M-1 和M key对应的Value之间</li>
+<li>其它节点至少有M&#x2F;2个子节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><ul>
+<li><p>B+树是在B树的基础上又一次的改进，其主要对两个方面进行了提升，一方面是查询的稳定性，另外一方面是在数据排序方面更友好。</p>
+</li>
+<li><p>B+树的<strong>非叶子</strong>节点<strong>不保存具体的数据，而只保存关键字的索引</strong>，而所有的数据最终都会保存到叶子节点。因为所有数据必须要到叶子节点才能获取到，所以每次数据查询的次数都一样，这样一来B+树的查询速度也就会比较稳定，而B树的查找过程中，不同的关键字查找的次数很有可能都是不同的（有的数据可能在根节点，有的数据可能在最下层的叶节点），所以在数据库的应用层面，B+树就显得更合适。</p>
+</li>
+<li><p>B+树叶子节点的关键字从小到大有序排列，左边结尾数据都会保存右边节点开始数据的指针。因为叶子节点都是有序排列的，所以B+树对于数据的排序有着更好的支持。</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201015000336247.png" srcset="/img/loading.gif" lazyload alt="image-20201015000336247" style="zoom:80%;" />
+</li>
+<li><p><strong>B树和B+树的对比</strong></p>
+<ul>
+<li>B+<strong>树查询速度更稳定</strong>：B+所有关键字数据地址都存在<strong>叶子</strong>节点上，所以每次查找的次数都相同所以查询速度要比B树更稳定。</li>
+<li>B+<strong>树天然具备排序功能：</strong>B+树所有的<strong>叶子</strong>节点数据构成了一个有序链表，在查询大小区间的数据时候更方便，数据紧密性很高，缓存的命中率也会比B树高。</li>
+<li>B+<strong>树全节点遍历更快：</strong>B+树遍历整棵树只需要遍历所有的<strong>叶子</strong>节点即可，而不需要像B树一样需要对每一层进行遍历，这有利于数据库做全表扫描。</li>
+<li><strong>B树</strong>相对于<strong>B+树</strong>的优点是，如果经常访问的数据离根节点很近，而<strong>B树</strong>的<strong>非叶子</strong>节点本身存有关键字和数据，所以在查询这种数据检索的时候会要比<strong>B+树</strong>快。</li>
+</ul>
+</li>
+</ul>
+<h3 id="DSW算法"><a href="#DSW算法" class="headerlink" title="DSW算法"></a>DSW算法</h3><ul>
+<li>DSW算法构建平衡二叉树：TODO</li>
+</ul>
+<h3 id="Trie-前缀树字典树"><a href="#Trie-前缀树字典树" class="headerlink" title="Trie 前缀树字典树"></a>Trie 前缀树字典树</h3><ul>
+<li><p><code>Trie树</code>又被称为前缀树、字典树，把单词字母一条一条灌进一棵树中，每个节点是<code>a-z</code>之间的字母，对于都是数字的字符串，字符集就是<code>0-9</code>， 每一个节点包含三个元素，分别是节点对应的<code>字符name</code>，存储的子节点信息<code>Map(name -&gt; 节点对象)</code>, 是否是 <code>词尾标志end</code>。 词尾标志可以记录到中间任一节点位置，词尾标志还能记录数量，为多少个字符串的结尾 </p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/22206660-ae8616fb4bba1249.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p><strong>字母应该放在边上，而不是节点上，放到节点上会增加实现难度</strong></p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95/" class="category-chain-item">02数据结构及算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>二叉树</div>
+      <div>https://x-leonidas.github.io/2022/02/01/02数据结构及算法/二叉树/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年3月1日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95/DP/" title="DP">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">DP</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97(%E5%A0%86)/" title="优先队列(堆)">
+                        <span class="hidden-mobile">优先队列(堆)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
