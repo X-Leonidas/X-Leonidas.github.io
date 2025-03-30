@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="博客推荐 https://martinfowler.com/articles/continuousIntegration.html   个人博客 个人博客有很多中方式布置，目前选择的是 github page 方式部署 使用hexo框架构建  一、前置准备 github 账号 – https://github.com/ git工具– https://git-scm.com/ nodeJS环境—ht">
+    <meta name="description" content="WSL发行版迁移下面是操作方法：  首先关闭docker 关闭所有发行版：wsl --shutdown 将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）wsl --export docker-desktop-data D:">
   
   
   
-  <title>博客 - 夜坐听风</title>
+  <title>Docker Desktop - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="博客"></span>
+            <span id="subtitle" data-typed-text="Docker Desktop"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-20 21:00" pubdate>
-          2024-02-20 21:00:49
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:10
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          929 字
+          115 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          8 分钟
+          1 分钟
         
       </span>
     
@@ -253,94 +253,18 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">博客</h1>
+            <h1 id="seo-header">Docker Desktop</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="博客推荐"><a href="#博客推荐" class="headerlink" title="博客推荐"></a>博客推荐</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://martinfowler.com/articles/continuousIntegration.html">https://martinfowler.com/articles/continuousIntegration.html</a></li>
-<li></li>
-</ul>
-<h1 id="个人博客"><a href="#个人博客" class="headerlink" title="个人博客"></a>个人博客</h1><ul>
-<li>个人博客有很多中方式布置，目前选择的是 github page 方式部署 使用hexo框架构建</li>
-</ul>
-<h2 id="一、前置准备"><a href="#一、前置准备" class="headerlink" title="一、前置准备"></a>一、前置准备</h2><ul>
-<li>github 账号 – <a target="_blank" rel="noopener" href="https://github.com/">https://github.com/</a></li>
-<li>git工具– <a target="_blank" rel="noopener" href="https://git-scm.com/">https://git-scm.com/</a></li>
-<li>nodeJS环境—<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn">https://nodejs.org/zh-cn</a></li>
-</ul>
-<h2 id="二、创建github仓库"><a href="#二、创建github仓库" class="headerlink" title="二、创建github仓库"></a>二、创建github仓库</h2><ul>
-<li>在github上创建一个新的代码仓库用于保存我们的博客<ul>
-<li>注意仓库名字的格式为用户名.github.io</li>
-</ul>
-</li>
-</ul>
-<h2 id="三、hexo"><a href="#三、hexo" class="headerlink" title="三、hexo"></a>三、hexo</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></li>
-</ul>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li><pre><code class="shell"># 安装hexo
-npm install -g hexo-cli
-# 初始化 文件夹 为hexo-blog的博客
-hexo init hexo-blog
-# 安装
-cd hexo-blog
-npm install
-# 本地编译及启动
-hexo g
-hexo server
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment">### 更换主题</span><br>+ https:<span class="hljs-regexp">//</span>hexo.io<span class="hljs-regexp">/themes/</span><br>+ 推荐主题：<br>  +  fluid(https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/fluid-dev/</span>hexo-theme-fluid)<br>    + 用户手册：https:<span class="hljs-regexp">//</span>hexo.fluid-dev.com<span class="hljs-regexp">/docs/</span><br>  + <span class="hljs-keyword">next</span>:(https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/next-theme/</span>hexo-theme-<span class="hljs-keyword">next</span>)<br>+ 安装过程：<br>  <span class="hljs-number">1</span>. Hexo <span class="hljs-number">5.0</span>.<span class="hljs-number">0</span> 版本以上，推荐通过 npm 直接安装，进入博客目录执行命令：<br>     ```shell<br>     npm install --save hexo-theme-fluid<br></code></pre></td></tr></table></figure>
-   然后在博客目录下创建 `_config.fluid.yml`，将主题的 [_config.yml](https://github.com/fluid-dev/hexo-theme-fluid/blob/master/_config.yml) 内容复制进去。
-2. 下载最新release解压到 themes 目录，并将解压出的文件夹重命名为 `themsName`
-</code></pre>
-</li>
-<li>指定主题:<ul>
-<li>如下修改 Hexo 博客目录中的 <code>_config.yml</code>：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">theme: themsName  # 指定主题<br>language: zh-CN  # 指定语言，会影响主题显示的语言，按需修改<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h3 id="发布到github-page"><a href="#发布到github-page" class="headerlink" title="发布到github page"></a>发布到github page</h3><h4 id="方式一、安装hexo-deployer-git"><a href="#方式一、安装hexo-deployer-git" class="headerlink" title="方式一、安装hexo-deployer-git"></a>方式一、安装hexo-deployer-git</h4><ul>
-<li>安装hexo-deployer-git<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install hexo-deployer-git --save<br></code></pre></td></tr></table></figure></li>
-<li>修改根目录下的 <code>_config.yml</code>，配置 <code>GitHub</code> 相关信息<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">deploy:</span><br>  <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>  <span class="hljs-attr">repo:</span> <span class="hljs-string">git@github.com:X-Leonidas/X-Leonidas.github.io.git</span><br>  <span class="hljs-attr">branch:</span> <span class="hljs-string">main</span><br>  <span class="hljs-attr">token:</span> <span class="hljs-string">token</span> <span class="hljs-string">为</span> <span class="hljs-string">GitHub</span> <span class="hljs-string">的</span> <span class="hljs-string">Personal</span> <span class="hljs-string">access</span> <span class="hljs-string">tokens</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="方式二、-直接提交到github"><a href="#方式二、-直接提交到github" class="headerlink" title="方式二、 直接提交到github"></a>方式二、 直接提交到github</h4><ul>
-<li>直接将 <code>public</code> 目录中的文件和目录推送至 <code>GitHub</code> 仓库和分支中。</li>
-</ul>
-<h2 id="部署到服务器"><a href="#部署到服务器" class="headerlink" title="部署到服务器"></a>部署到服务器</h2><ul>
-<li>TODO</li>
-</ul>
-<h1 id="提交到google-收录"><a href="#提交到google-收录" class="headerlink" title="提交到google 收录"></a>提交到google 收录</h1><ol>
-<li>确认是否被收录<ul>
-<li>以本网站为例，打开Google，输入<code>site: XXXXXXX.github.io</code>,如果Google提示“找不到相符的内容”，则说明你的网站尚未被Google收录。如果网站已经被收录，Google会自动查询和网站有关的内容</li>
-</ul>
-</li>
-<li>验证网站所有者<ul>
-<li>只有向搜索引擎添加并认证网站，证明自己是该域名的拥有者和管理者后，搜索引擎可以快速批量添加该域名下的所有子站点，而无需一一验证。认证完成后还可以使用Google Console查看并管理网站的访问统计等</li>
-<li>前往<a target="_blank" rel="noopener" href="https://www.google.com/webmasters/tools/home?hl=zh-CN">Google Console</a><ul>
-<li>选择<strong>网页前缀</strong>资源类型</li>
-<li>验证方式选择：HTML文件验证</li>
-<li>下载HTML文件后，对于Hexo，将该文件放在Hexo根目录下<code>/source</code>文件中。然后<code>hexo g -d</code>，等待部署。当你能够在浏览器中输入<code>https://XXXXXX/googleXXXXXXX.html</code>并成功跳转时，说明该文件已经添加成功。<strong>注意</strong>：  跳转后必须是原始的html页面才算成功，对于hexo下的fluid，要在googleXXXXXXX.html添加如下字段<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">layout:</span> <span class="hljs-literal">false</span><br><span class="hljs-meta">---</span><br><span class="hljs-string">此处需要空一行</span><br><span class="hljs-attr">google-site-verification:</span> <span class="hljs-string">xxxxx.html</span><br></code></pre></td></tr></table></figure></li>
-<li>添加后部署到线上，部署完成后在Google Console中点击验证</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>添加站点地图<ul>
-<li><p>为启用站点地图，首先要在Hexo根目录中Git Bash来安装插件：</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-generator-sitemap <span class="hljs-comment">--save</span><br><br>ADA<br></code></pre></td></tr></table></figure>
-<p>在<strong>站点配置文件</strong>（不是主题配置文件！）<code>_config.yml</code>中添加：</p>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-meta"># Auto Generate sitemap</span><br><span class="hljs-symbol">sitemap:</span><br><span class="hljs-symbol">path:</span> sitemap.xml<br></code></pre></td></tr></table></figure></li>
-<li><p>然后<code>hexo g -d</code>，若<code>/public</code>文件夹下生成了<code>sitemap.xml</code>，并且浏览器能够访问<code>https://XXXXX/sitemap.xml</code>，说明创建成功。</p>
-</li>
-<li><p>注意： 生成sitemap.xml 如果文件名中包含**&amp;** ，会生成失败</p>
-</li>
-<li><p>在Google Console中，左侧栏选择“站点地图”，在“添加新的站点地图”中，输入你的站点地图网址，比如<code>sitemap.xml</code>。</p>
-</li>
-<li><p>提交成功后，Google会在“已提交的站点地图”中显示该sitemap。索引需要一段时间编制并生效。通常情况下，48小时内Google即可完成收录。</p>
-</li>
-</ul>
-</li>
+                <h2 id="WSL发行版迁移"><a href="#WSL发行版迁移" class="headerlink" title="WSL发行版迁移"></a>WSL发行版迁移</h2><p>下面是操作方法：</p>
+<ol>
+<li>首先关闭docker</li>
+<li>关闭所有发行版：<br><code>wsl --shutdown</code></li>
+<li>将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）<br><code>wsl --export docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar</code></li>
+<li>注销docker-desktop-data：<br><code>wsl --unregister docker-desktop-data</code></li>
+<li>重新导入docker-desktop-data到要存放的文件夹：D:\SoftwareData\wsl\docker-desktop-data\：<br><code>wsl --import docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\ D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar --version 2</code></li>
 </ol>
 
                 
@@ -360,7 +284,7 @@ hexo server
     
       <span class="category-chain">
         
-  <a href="/categories/22tool/" class="category-chain-item">22tool</a>
+  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
   
   
 
@@ -380,8 +304,8 @@ hexo server
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>博客</div>
-      <div>https://x-leonidas.github.io/2024/02/20/22tool/博客/</div>
+      <div>Docker Desktop</div>
+      <div>https://x-leonidas.github.io/2022/02/01/15云和容器/Docker Desktop/</div>
     </div>
     <div class="license-meta">
       
@@ -393,13 +317,13 @@ hexo server
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月20日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2024年2月5日</div>
         </div>
       
       
@@ -436,9 +360,9 @@ hexo server
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/20/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/Docker%20Desktop/" title="Docker Desktop">
+                      <a href="/2022/02/09/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/10-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" title="10-分布式缓存">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Docker Desktop</span>
+                        <span class="hidden-mobile">10-分布式缓存</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -446,7 +370,7 @@ hexo server
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/20/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
                         <span class="hidden-mobile">5.mysql8新特性</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>

@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="WSL发行版迁移下面是操作方法：  首先关闭docker 关闭所有发行版：wsl --shutdown 将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）wsl --export docker-desktop-data D:">
+    <meta name="description" content="跳跃索引 MySQL 8.0.13 版本对于range查询，引入了索引跳跃扫描（Index Skip Scan）优化，支持不符合组合索引最左前缀原则条件下的SQL，依然能够使用组合索引，减少不必要的扫描。 MySQL 8.0推出的适合联合索引左边列唯一值较少的情况的一种优化策略。 限制条件 查询只能涉及一张表，多表关联无法使用该特性 查询SQL不能使用 GROUP BY 或者 DISTINCT子句">
   
   
   
-  <title>Docker Desktop - 夜坐听风</title>
+  <title>5.mysql8新特性 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Docker Desktop"></span>
+            <span id="subtitle" data-typed-text="5.mysql8新特性"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-20 21:00" pubdate>
-          2024-02-20 21:00:49
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:10
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          115 字
+          167 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          1 分钟
+          2 分钟
         
       </span>
     
@@ -253,19 +253,22 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Docker Desktop</h1>
+            <h1 id="seo-header">5.mysql8新特性</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="WSL发行版迁移"><a href="#WSL发行版迁移" class="headerlink" title="WSL发行版迁移"></a>WSL发行版迁移</h2><p>下面是操作方法：</p>
-<ol>
-<li>首先关闭docker</li>
-<li>关闭所有发行版：<br><code>wsl --shutdown</code></li>
-<li>将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）<br><code>wsl --export docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar</code></li>
-<li>注销docker-desktop-data：<br><code>wsl --unregister docker-desktop-data</code></li>
-<li>重新导入docker-desktop-data到要存放的文件夹：D:\SoftwareData\wsl\docker-desktop-data\：<br><code>wsl --import docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\ D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar --version 2</code></li>
-</ol>
+                <h1 id="跳跃索引"><a href="#跳跃索引" class="headerlink" title="跳跃索引"></a>跳跃索引</h1><ul>
+<li>MySQL 8.0.13 版本对于range查询，引入了索引跳跃扫描（Index Skip Scan）优化，支持不符合组合索引最左前缀原则条件下的SQL，依然能够使用组合索引，减少不必要的扫描。</li>
+<li>MySQL 8.0推出的适合联合索引左边列唯一值较少的情况的一种优化策略。</li>
+<li>限制条件<ul>
+<li>查询只能涉及一张表，多表关联无法使用该特性</li>
+<li>查询SQL不能使用 GROUP BY 或者 DISTINCT子句</li>
+<li>查询字段必须是索引中的字段</li>
+<li>组合索引形式：([A_1, …, A_k,] B_1, …, B_m, C [, D_1, …, D_n])，A，D 可以为空，但是B ,C 不能为空</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -284,8 +287,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-1关系型数据库</a>
+  
+  
+
   
 
       </span>
@@ -304,8 +314,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Docker Desktop</div>
-      <div>https://x-leonidas.github.io/2024/02/20/15云和容器/Docker Desktop/</div>
+      <div>5.mysql8新特性</div>
+      <div>https://x-leonidas.github.io/2022/02/01/05数据库/05-1关系型数据库/5.mysql8新特性/</div>
     </div>
     <div class="license-meta">
       
@@ -317,13 +327,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月20日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2022年5月5日</div>
         </div>
       
       
@@ -360,9 +370,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/21/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/1.%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" title="1.系统设计">
+                      <a href="/2022/02/01/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/Docker%20Desktop/" title="Docker Desktop">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">1.系统设计</span>
+                        <span class="hidden-mobile">Docker Desktop</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -370,8 +380,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/20/22tool/%E5%8D%9A%E5%AE%A2/" title="博客">
-                        <span class="hidden-mobile">博客</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/20-Kafka/" title="20-Kafka">
+                        <span class="hidden-mobile">20-Kafka</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

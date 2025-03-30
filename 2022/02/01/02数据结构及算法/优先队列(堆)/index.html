@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="系统架构的一些原则 原则一：关注于真正的收益而不是技术本身 关于收益的定义 是否可以降低技术门槛加快整个团队的开发流程 是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA 是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本     原则二：以应用服务和API为视角，而不是以资源和技术为视角 现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并">
+    <meta name="description" content="优先队列(堆) 堆就是用数组实现的完全二叉树 所以在堆中，在当前层级所有的节点都已经填满之前不允许开是下一层的填充，所以堆总是有这样的形状  堆和二叉搜索树的区别 节点的顺序。在二叉搜索树中，左子节点必须比父节点小，右子节点必须必比父节点大。但是在堆中并非如此。在最大堆中两个子节点都必须比父节点小，而在最小堆中，它们都必须比父节点大。 内存占用。普通树占用的内存空间比它们存储的数据要多。你必须为节">
   
   
   
-  <title>系统架构 - 夜坐听风</title>
+  <title>优先队列(堆) - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="系统架构"></span>
+            <span id="subtitle" data-typed-text="优先队列(堆)"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-20 21:00" pubdate>
-          2024-02-20 21:00:49
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:10
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          418 字
+          496 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -253,45 +253,29 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">系统架构</h1>
+            <h1 id="seo-header">优先队列(堆)</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="系统架构的一些原则"><a href="#系统架构的一些原则" class="headerlink" title="系统架构的一些原则"></a>系统架构的一些原则</h2><ul>
-<li>原则一：关注于真正的收益而不是技术本身<ul>
-<li>关于收益的定义<ul>
-<li>是否可以降低技术门槛加快整个团队的开发流程</li>
-<li>是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA</li>
-<li>是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本</li>
+                <h3 id="优先队列-堆"><a href="#优先队列-堆" class="headerlink" title="优先队列(堆)"></a>优先队列(堆)</h3><ul>
+<li>堆就是用数组实现的<strong>完全二叉树</strong></li>
+<li>所以在堆中，在当前层级所有的节点都已经填满之前不允许开是下一层的填充，所以堆总是有这样的形状</li>
+</ul>
+<h4 id="堆和二叉搜索树的区别"><a href="#堆和二叉搜索树的区别" class="headerlink" title="堆和二叉搜索树的区别"></a>堆和二叉搜索树的区别</h4><ul>
+<li><strong>节点的顺序。</strong>在二叉搜索树中，左子节点必须比父节点小，右子节点必须必比父节点大。但是在堆中并非如此。在最大堆中两个子节点都必须比父节点小，而在最小堆中，它们都必须比父节点大。</li>
+<li><strong>内存占用。</strong>普通树占用的内存空间比它们存储的数据要多。你必须为节点对象以及左&#x2F;右子节点指针分配内存。堆仅仅使用一个数据来存储数组，且不使用指针。</li>
+<li><strong>平衡。</strong>二叉搜索树必须是“平衡”的情况下，其大部分操作的复杂度才能达到<strong>O(log n)<strong>。你可以按任意顺序位置插入&#x2F;删除数据，或者使用 AVL 树或者红黑树，但是在堆中实际上不需要整棵树都是有序的。我们只需要满足堆属性即可，所以在堆中平衡不是问题。因为堆中数据的组织方式可以保证</strong>O(log n)</strong> 的性能。</li>
+<li><strong>搜索。</strong>在二叉树中搜索会很快，但是在堆中搜索会很慢。在堆中搜索不是第一优先级，因为使用堆的目的是将最大（或者最小）的节点放在最前面，从而快速的进行相关插入、删除操作。</li>
+</ul>
+<h4 id="用数组构建堆"><a href="#用数组构建堆" class="headerlink" title="用数组构建堆"></a>用数组构建堆</h4><ul>
+<li>规律(N为当前节点的索引)<ul>
+<li>头节点： $\frac {N-1}{2}$</li>
+<li>节点高度为: $\log_2 N$</li>
+<li>左子节点和右子节点： 2N+1  2N+2</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>原则二：以应用服务和API为视角，而不是以资源和技术为视角<ul>
-<li>现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并Dev和Ops</li>
-</ul>
-</li>
-<li>原则三: 选择最主流和成熟的技术</li>
-<li>原则四：完备性比性能更重要<ul>
-<li>使用最科学严谨的技术模型为主，并以不严谨的模型作为补充</li>
-<li>性能上的东西都是多解的</li>
-</ul>
-</li>
-<li>原则五：制定并遵循服从标准、规范和最佳实践</li>
-<li>原则六：重视架构扩展性和可运维性<ul>
-<li>微服务架构的一些建议<ul>
-<li>所有团队的程序模块都要以通过Service Interface方式将其数据与功能开放出来。</li>
-<li>团队间的程序模块的新系通信都要通过这些接口</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>原则七：对控制逻辑进行全面收口</li>
-<li>原则八：不要迁就老旧系统的技术债务</li>
-<li>原则九：不要依赖自己的经验，要依赖于经验和学习</li>
-<li>原则十：千万要小心X - Y问题，要追原始需求</li>
-<li>原则十一： 激进胜于保守，创新与使用并不冲突</li>
+<li>如果最下面的一层已经填满，那么那一层包含 <em>2^h</em> 个节点。树中这一层以上所有的节点数目为 <em>2^h - 1</em></li>
 </ul>
 
                 
@@ -311,7 +295,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">23系统设计</a>
+  <a href="/categories/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95/" class="category-chain-item">02数据结构及算法</a>
   
   
 
@@ -331,8 +315,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>系统架构</div>
-      <div>https://x-leonidas.github.io/2024/02/20/23系统设计/系统架构/</div>
+      <div>优先队列(堆)</div>
+      <div>https://x-leonidas.github.io/2022/02/01/02数据结构及算法/优先队列(堆)/</div>
     </div>
     <div class="license-meta">
       
@@ -344,13 +328,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月20日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2022年5月19日</div>
         </div>
       
       
@@ -387,9 +371,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/20/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/20-Kafka/" title="20-Kafka">
+                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/00-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84/" title="00-分布式架构">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">20-Kafka</span>
+                        <span class="hidden-mobile">00-分布式架构</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -397,8 +381,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/24/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
-                        <span class="hidden-mobile">4. 实践</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/01-ActiveMQ/" title="01-ActiveMQ">
+                        <span class="hidden-mobile">01-ActiveMQ</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -452,6 +436,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -614,6 +604,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
 
 
