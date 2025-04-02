@@ -21,7 +21,7 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Java内存区域及溢出异常运行时数据区域      程序计数器 当前线程所执行的字节码的行号指示器。如果执行的是本地方法，计数器为空。每条线程都需要一个独立的程序计数器  唯一一个没有规定任何OutOfMemoryError情况的区域 为0时，可能在执行本地方法。   Java虚拟机栈 Java方法执行的内存模型：每个方法在执行的同时，都会创建一个栈帧(Stack Frame：方法运行时的基础数据">
+    <meta name="description" content="Java内存区域运行时数据区域      程序计数器 当前线程所执行的字节码的行号指示器。如果执行的是本地方法，计数器为空。每条线程都需要一个独立的程序计数器  唯一一个没有规定任何OutOfMemoryError情况的区域 为0时，可能在执行本地方法。  Java虚拟机栈 Java方法执行的内存模型：每个方法在执行的同时，都会创建一个栈帧(Stack Frame：方法运行时的基础数据结构)用于存">
   
   
   
@@ -258,7 +258,7 @@
             
               <div class="markdown-body">
                 
-                <h2 id="Java内存区域及溢出异常"><a href="#Java内存区域及溢出异常" class="headerlink" title="Java内存区域及溢出异常"></a>Java内存区域及溢出异常</h2><h3 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h3><ul>
+                <h2 id="Java内存区域"><a href="#Java内存区域" class="headerlink" title="Java内存区域"></a>Java内存区域</h2><h3 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA1.7.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
 
 </li>
@@ -268,7 +268,6 @@
 <li>当前线程所执行的字节码的行号指示器。如果执行的是本地方法，计数器为空。每条线程都需要一个独立的程序计数器 </li>
 <li>唯一一个没有规定任何OutOfMemoryError情况的区域</li>
 <li>为0时，可能在执行本地方法。</li>
-<li></li>
 </ul>
 <h4 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h4><ul>
 <li>Java方法执行的内存模型：<strong>每个方法</strong>在执行的同时，都会创建一个<strong>栈帧</strong>(Stack Frame：方法运行时的基础数据结构)用于存储<strong>局部变量表、操作数栈、动态链接、方法出口</strong>等信息。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</li>
@@ -336,8 +335,7 @@
 <li>1.7位于方法区，1.8位于元空间。</li>
 <li>具有动态性，</li>
 </ul>
-<h4 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h4><p>+ </p>
-<ul>
+<h4 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h4><ul>
 <li>如果启动时未设置则默认为最大堆内存大小</li>
 </ul>
 <h5 id="堆外内存的回收"><a href="#堆外内存的回收" class="headerlink" title="堆外内存的回收"></a>堆外内存的回收</h5><ul>
@@ -588,7 +586,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月19日</div>
+          <div>2025年4月3日</div>
         </div>
       
       

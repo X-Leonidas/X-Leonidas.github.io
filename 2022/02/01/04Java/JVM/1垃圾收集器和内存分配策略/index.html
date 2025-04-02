@@ -21,7 +21,7 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="垃圾收集器与内存分配策略对象存活的条件引用的概念 如果reference类型的数据中存储的数值代表的是另外一块内存的起始地址，就称这块内存代表着一个引用。引用不等同于对象本身，根据虚拟机种类的不同，可能是一个指向对象起始地址的引用指针，也可能是指向一个代表对象的句柄或其他与此对象相关的位置。  引用计数算法 给对象添加一个引用计数器，每当有一个地方引用它时，计数器值就加1；当引用失效时，计数器值就">
+    <meta name="description" content="垃圾收集器与内存分配策略对象存活的条件 对象的存活条件取决于其是否被可达性分析（Reachability Analysis）判定为“可达” JVM通过GC Roots作为起点，遍历对象引用链。若某个对象能被GC Roots直接或间接引用，则视为存活；否则，将被标记为可回收。  引用的概念 如果reference类型的数据中存储的数值代表的是另外一块内存的起始地址，就称这块内存代表着一个引用。引用不">
   
   
   
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.7k 字
+          8.6k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          65 分钟
+          73 分钟
         
       </span>
     
@@ -258,66 +258,62 @@
             
               <div class="markdown-body">
                 
-                <h2 id="垃圾收集器与内存分配策略"><a href="#垃圾收集器与内存分配策略" class="headerlink" title="垃圾收集器与内存分配策略"></a>垃圾收集器与内存分配策略</h2><h3 id="对象存活的条件"><a href="#对象存活的条件" class="headerlink" title="对象存活的条件"></a>对象存活的条件</h3><h4 id="引用的概念"><a href="#引用的概念" class="headerlink" title="引用的概念"></a>引用的概念</h4><ul>
+                <h1 id="垃圾收集器与内存分配策略"><a href="#垃圾收集器与内存分配策略" class="headerlink" title="垃圾收集器与内存分配策略"></a>垃圾收集器与内存分配策略</h1><h2 id="对象存活的条件"><a href="#对象存活的条件" class="headerlink" title="对象存活的条件"></a>对象存活的条件</h2><ul>
+<li><strong>对象的存活条件</strong>取决于其是否被<strong>可达性分析（Reachability Analysis）</strong>判定为“可达”</li>
+<li>JVM通过<strong>GC Roots</strong>作为起点，遍历对象引用链。若某个对象能被GC Roots直接或间接引用，则视为存活；否则，将被标记为可回收。</li>
+</ul>
+<h3 id="引用的概念"><a href="#引用的概念" class="headerlink" title="引用的概念"></a>引用的概念</h3><ul>
 <li>如果reference类型的数据中存储的数值代表的是另外一块内存的起始地址，就称这块内存代表着一个引用。引用不等同于对象本身，根据虚拟机种类的不同，可能是一个指向对象起始地址的引用指针，也可能是指向一个代表对象的句柄或其他与此对象相关的位置。</li>
 </ul>
-<h4 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h4><ul>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><ul>
 <li>给对象添加一个引用计数器，每当有一个地方引用它时，计数器值就加1；当引用失效时，计数器值就减一；任何时刻计数器为0的对象就是不可能在被使用的。</li>
 <li>对象之间相互循环引用的问题无法解决</li>
 </ul>
-<h4 id="引用的分类"><a href="#引用的分类" class="headerlink" title="引用的分类"></a>引用的分类</h4><ul>
+<h3 id="引用的分类"><a href="#引用的分类" class="headerlink" title="引用的分类"></a>引用的分类</h3><ul>
 <li>1.2后对引用的概念进行了扩充</li>
 </ul>
-<h5 id="强引用-Strong-Reference"><a href="#强引用-Strong-Reference" class="headerlink" title="强引用(Strong Reference)"></a>强引用(Strong Reference)</h5><ul>
+<h4 id="强引用-Strong-Reference"><a href="#强引用-Strong-Reference" class="headerlink" title="强引用(Strong Reference)"></a>强引用(Strong Reference)</h4><ul>
 <li>类似(Object object &#x3D; new Object()),只要强引用还存在，垃圾收集器永远不会回收掉被引用的对象。</li>
 </ul>
-<h5 id="软引用-Soft-Reference"><a href="#软引用-Soft-Reference" class="headerlink" title="软引用(Soft Reference)"></a>软引用(Soft Reference)</h5><ul>
+<h4 id="软引用-Soft-Reference"><a href="#软引用-Soft-Reference" class="headerlink" title="软引用(Soft Reference)"></a>软引用(Soft Reference)</h4><ul>
 <li>用来描述还有用但并非必需对象，在系统见要发生内存溢出之前，将会把这些对象列进回收范围之中进行二次回收。进行二次回收之后还没有足够的内存，才会抛出内存溢出异常。</li>
 <li>Srping配置文件，只有在启动时加载，所以使用软引用</li>
 </ul>
-<h5 id="弱引用-Weak-Reference"><a href="#弱引用-Weak-Reference" class="headerlink" title="弱引用(Weak Reference)"></a>弱引用(Weak Reference)</h5><ul>
+<h4 id="弱引用-Weak-Reference"><a href="#弱引用-Weak-Reference" class="headerlink" title="弱引用(Weak Reference)"></a>弱引用(Weak Reference)</h4><ul>
 <li>用来描述非必需对象的，被弱引用关联的对象只能存活到下一次垃圾收集发生之前。当垃圾收集器工作时，无论内存是否够用，都会回收掉只被弱引用关联的对象。</li>
 </ul>
-<h5 id="虚引用-Phanton-Reference"><a href="#虚引用-Phanton-Reference" class="headerlink" title="虚引用(Phanton Reference)"></a>虚引用(Phanton Reference)</h5><ul>
+<h4 id="虚引用-Phanton-Reference"><a href="#虚引用-Phanton-Reference" class="headerlink" title="虚引用(Phanton Reference)"></a>虚引用(Phanton Reference)</h4><ul>
 <li>幽灵应用或幻影引用，一个对象是否有虚引用，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象的实例。为一个对象设置虚引用关联的唯一作用就是能在这个对象被收集器回收时收到一个系统通知。</li>
 <li>虚引用通常用来跟踪对象被垃圾回收的活动，虚引用的存在意义就是监控对象是否存活。</li>
 </ul>
-<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><ul>
+<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><ul>
 <li>通过一系列的称为”GC Roots”的对象作为起始点。从这些结点开始向下搜索，搜索所走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连，则此对象为不可用</li>
 <li>GC Roots举例：<ul>
-<li>线程栈变量</li>
-<li>静态变量</li>
-<li>常量池</li>
-<li>JNI指针：调用c或c艹引用到的对象</li>
+<li><strong>线程栈帧中的局部变量</strong>（Java方法栈、Native方法栈中的对象引用）。</li>
+<li><strong>类的静态变量</strong>（如<code>public static Object obj;</code>）。</li>
+<li><strong>JNI（Java Native Interface）引用</strong>（本地代码持有的对象）。</li>
+<li><strong>已启动且未终止的线程对象</strong>（<code>Thread</code>实例）。</li>
+<li><strong>系统类加载器加载的类</strong>（如<code>java.lang.Class</code>对象）。</li>
+<li><strong>被同步锁（Monitor）持有的对象</strong>（如<code>synchronized</code>锁对象）。</li>
 </ul>
 </li>
 </ul>
-<h5 id="可作为GC-Roots对象的条件"><a href="#可作为GC-Roots对象的条件" class="headerlink" title="可作为GC Roots对象的条件"></a>可作为GC Roots对象的条件</h5><ul>
+<h4 id="可作为GC-Roots对象的条件"><a href="#可作为GC-Roots对象的条件" class="headerlink" title="可作为GC Roots对象的条件"></a>可作为GC Roots对象的条件</h4><ul>
 <li>虚拟机栈(栈帧中的本地变量表)中引用的对象</li>
 <li>方法区中类静态属性引用的对象</li>
 <li>方法区中常量引用的对象</li>
 <li>本地方法栈中JNI(即一般说的Native方法)引用的对象</li>
 </ul>
-<h4 id="宣告对象死亡的两次标记"><a href="#宣告对象死亡的两次标记" class="headerlink" title="宣告对象死亡的两次标记"></a>宣告对象死亡的两次标记</h4><ul>
+<h3 id="宣告对象死亡的两次标记"><a href="#宣告对象死亡的两次标记" class="headerlink" title="宣告对象死亡的两次标记"></a>宣告对象死亡的两次标记</h3><ul>
 <li>两次标记和一次筛选</li>
 </ul>
 <p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E4%B8%A4%E6%AC%A1%E6%A0%87%E5%BF%97%E5%92%8C%E4%B8%80%E6%AC%A1%E7%AD%9B%E9%80%89.png" srcset="/img/loading.gif" lazyload alt="两次标志和一次筛选"></p>
-<h5 id="finalize-方法"><a href="#finalize-方法" class="headerlink" title="finalize()方法"></a>finalize()方法</h5><ul>
+<h4 id="finalize-方法"><a href="#finalize-方法" class="headerlink" title="finalize()方法"></a>finalize()方法</h4><ul>
 <li>被放在F-Queue队列的对象的finalize()，虚拟机只会触发这个方法，但并不承诺会等待它运行结束。</li>
 <li>任何一个对象的finalize方法只会被系统自动调用一次。</li>
 <li>该方法不建议使用，不确定性太大。</li>
 </ul>
-<h4 id="回收方法区"><a href="#回收方法区" class="headerlink" title="回收方法区"></a>回收方法区</h4><ul>
-<li>永生代的垃圾收集分为两部分：<ul>
-<li>废弃常量</li>
-<li>无用的类</li>
-</ul>
-</li>
-</ul>
-<h5 id="永生代的废弃常量回收"><a href="#永生代的废弃常量回收" class="headerlink" title="永生代的废弃常量回收"></a>永生代的废弃常量回收</h5><ul>
-<li>系统中没有任何地方引用了进入了常量池的常量，这个常量就会被清理出常量池，常量池中的其他类(接口),方法，字段的符号引用也与此类似。</li>
-</ul>
-<h5 id="永生代的无用的类的回收"><a href="#永生代的无用的类的回收" class="headerlink" title="永生代的无用的类的回收"></a>永生代的无用的类的回收</h5><ul>
+<h3 id="永生代的无用的类的回收"><a href="#永生代的无用的类的回收" class="headerlink" title="永生代的无用的类的回收"></a>永生代的无用的类的回收</h3><ul>
 <li>回收条件<ul>
 <li>该类所有的实例已经被回收，Java堆中不存在该类的任何实例</li>
 <li>加载该类的ClassLoader已经被回收。</li>
@@ -326,7 +322,11 @@
 </li>
 <li>虚拟机可以对满足上述三个条件的类进行回收，但不是必然的。</li>
 </ul>
-<h3 id="JVM内存分代模型"><a href="#JVM内存分代模型" class="headerlink" title="JVM内存分代模型"></a>JVM内存分代模型</h3><h4 id="年轻代"><a href="#年轻代" class="headerlink" title="年轻代"></a>年轻代</h4><ul>
+<h2 id="JVM内存分代模型"><a href="#JVM内存分代模型" class="headerlink" title="JVM内存分代模型"></a>JVM内存分代模型</h2><ul>
+<li><strong>内存分代模型</strong>是基于<strong>对象生命周期差异</strong>设计的一种内存管理策略，旨在优化垃圾回收（GC）效率</li>
+<li>JVM堆内存主要划分为<strong>年轻代（Young Generation）</strong>、<strong>老年代（Old Generation）</strong>，以及<strong>元空间（Metaspace，方法区的实现）</strong></li>
+</ul>
+<h3 id="年轻代"><a href="#年轻代" class="headerlink" title="年轻代"></a>年轻代</h3><ul>
 <li>新创建的对象都会被分配到Eden区(如果该对象占用内存非常大，则直接分配到老年代区), 当Eden区内存不够的时候就会触发MinorGC（Survivor满不会引发MinorGC，而是将对象移动到老年代中）</li>
 <li>新生代：1&#x2F;3的堆内存空间<ul>
 <li>eden区： 8&#x2F;10 的新生代空间</li>
@@ -343,26 +343,71 @@
 </li>
 <li>一般使用复制算法</li>
 </ul>
-<h4 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h4><ul>
+<h3 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h3><ul>
 <li>一般使用<strong>标记清除（回收）算法</strong>或者<strong>标记压缩算法</strong></li>
 <li>对象在Survivor区中每熬过一次Minor GC，年龄就会+1岁，当年龄达到一定值(年龄阈值，可以通过-XX:MaxTenuringThreshold来设置，默认是15)的对象会被移动到年老代中</li>
 <li>虚拟机并不是永远要求对象的年龄必须达到 MaxTenuringThreshold 才能晋升老年代，如果在 Survivor 中相同年龄所有对象大小的总和大于 Survivor 空间的一半，则年龄大于或等于该年龄的对象可以直接进入老年代，无需等到 MaxTenuringThreshold 中要求的年龄。</li>
 <li>如果该对象占用内存非常大，则直接分配到老年代区</li>
 </ul>
-<h4 id="方法区-元空间，永久代"><a href="#方法区-元空间，永久代" class="headerlink" title="方法区(元空间，永久代)"></a>方法区(元空间，永久代)</h4><ul>
-<li>元空间和永久代的区别<ul>
-<li>​	永久代只能在jvm启动前设置大小，元空间可以动态调整大小(受限于物理内存)</li>
+<h3 id="元空间-Metaspace，方法区"><a href="#元空间-Metaspace，方法区" class="headerlink" title="元空间(Metaspace，方法区)"></a>元空间(Metaspace，方法区)</h3><ul>
+<li><strong>元空间（Metaspace）</strong> 是用于存储类元数据的内存区域，取代了早期的永久代（PermGen）</li>
+<li><strong>存储内容</strong>：<ul>
+<li>类结构信息（如类名、方法、字段、访问修饰符）</li>
+<li>方法字节码</li>
+<li>常量池（Constant Pool）</li>
+<li>注解信息</li>
+<li>类加载器引用等</li>
+</ul>
+</li>
+<li>使用<strong>本地内存（Native Memory）</strong>而非JVM堆内存，其大小仅受操作系统可用内存限制。</li>
+<li><table>
+<thead>
+<tr>
+<th align="left"><strong>特性</strong></th>
+<th align="left"><strong>永久代（PermGen）</strong></th>
+<th align="left"><strong>元空间（Metaspace）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>内存位置</strong></td>
+<td align="left">JVM堆内存</td>
+<td align="left">本地内存（Native Memory）</td>
+</tr>
+<tr>
+<td align="left"><strong>大小限制</strong></td>
+<td align="left">固定（需手动设置<code>-XX:MaxPermSize</code>）</td>
+<td align="left">默认无上限（可设<code>-XX:MaxMetaspaceSize</code>）</td>
+</tr>
+<tr>
+<td align="left"><strong>垃圾回收机制</strong></td>
+<td align="left">Full GC时回收，效率低</td>
+<td align="left">独立GC周期，更高效</td>
+</tr>
+<tr>
+<td align="left"><strong>内存碎片问题</strong></td>
+<td align="left">容易产生碎片</td>
+<td align="left">分块（Chunk）管理，减少碎片</td>
+</tr>
+<tr>
+<td align="left"><strong>类卸载</strong></td>
+<td align="left">困难，易内存泄漏</td>
+<td align="left">支持高效卸载未使用的类</td>
+</tr>
+</tbody></table>
+</li>
+<li>元空间的应用场景<ul>
+<li><strong>动态类加载</strong>：<br>如OSGi框架、热部署（HotSwap）场景，需频繁加载&#x2F;卸载类。</li>
+<li><strong>反射与动态代理</strong>：<br>生成代理类（如Spring AOP、Java动态代理）时，元空间高效管理类元数据。</li>
+<li><strong>大型应用</strong>：<br>微服务架构中多个应用共享JVM时，合理分配元空间防止冲突。</li>
 </ul>
 </li>
 </ul>
-<h4 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h4><ul>
-<li>新生代：复制算法</li>
-<li>老年代：标志整理，标记清除</li>
-</ul>
-<h4 id="对象分配过程图"><a href="#对象分配过程图" class="headerlink" title="对象分配过程图"></a>对象分配过程图</h4><ul>
+<h3 id="对象分配过程图"><a href="#对象分配过程图" class="headerlink" title="对象分配过程图"></a>对象分配过程图</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3.png" srcset="/img/loading.gif" lazyload alt="对象分配过程详解" style="zoom:80%;" /></li>
 </ul>
-<h3 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h3><h4 id="标记-清除算法-Mark-Sweep"><a href="#标记-清除算法-Mark-Sweep" class="headerlink" title="标记-清除算法(Mark-Sweep)"></a>标记-清除算法(Mark-Sweep)</h4><ul>
+<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="标记-清除算法-Mark-Sweep"><a href="#标记-清除算法-Mark-Sweep" class="headerlink" title="标记-清除算法(Mark-Sweep)"></a>标记-清除算法(Mark-Sweep)</h3><ul>
+<li><p>一般作用于老年代</p>
+</li>
 <li><p>首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象。</p>
 </li>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A41.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
@@ -377,27 +422,51 @@
 </ul>
 </li>
 </ul>
-<h4 id="复制算法-Copying"><a href="#复制算法-Copying" class="headerlink" title="复制算法(Copying)"></a>复制算法(Copying)</h4><ul>
+<h3 id="复制算法-Copying"><a href="#复制算法-Copying" class="headerlink" title="复制算法(Copying)"></a>复制算法(Copying)</h3><ul>
+<li><p>一般作用于年轻代</p>
+</li>
 <li><p>将可用内存按容量划分为大小相等的两块，每次只使用其中的一块，当这一块的内存用完了，就将还存活着的对象复制到另外一块上面。然后再把已使用过的内存空间一次清理掉。</p>
 </li>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" />
 </li>
-<li><p>商业做法</p>
+<li><p>将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。当回收时，将Eden和刚才使用过的Survivor还存活的对象一次性复制到另外一个Survivor空间上，最后清理掉Eden和刚才使用过的Survivor空间。比例是Eden:Survivor0:Survivor  &#x3D; 8:1:1,但是无法保证每次回收都只有不多于10%的对象存活，当Survivor空间不够用时，需要依赖其他内存(老年代)进行分配担保(<strong>Handle Promotion</strong>)</p>
+</li>
+<li><p>分配担保</p>
 <ul>
-<li>将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。当回收时，将Eden和刚才使用过的Survivor还存活的对象一次性复制到另外一个Survivor空间上，最后清理掉Eden和刚才使用过的Survivor空间。比例是Eden:Survivor0:Survivor  &#x3D; 8:1:1,但是无法保证每次回收都只有不多于10%的对象存活，当Survivor空间不够用时，需要依赖其他内存(老年代)进行分配担保(<strong>Handle Promotion</strong>)</li>
+<li>先检查老年代的可用空间是否能够兜底，有以下两种方案<ul>
+<li>乐观策略：老年代的<strong>最大连续可用空间</strong> &gt; <strong>新生代所有对象总大小</strong>（包括存活对象和未回收的垃圾）<ul>
+<li>若成立：认为Minor GC是安全的，直接触发Minor GC。</li>
+<li>若不成立：进一步判断是否允许担保失败（需启用<code>-XX:+HandlePromotionFailure</code>参数，但该参数在JDK 6之后已逐渐废弃）。<ul>
+<li>若允许，则继续检查老年代最大连续空间是否 &gt; <strong>历次晋升到老年代对象的平均大小</strong>。<ul>
+<li>是：尝试Minor GC（但存在风险，可能导致Full GC）。</li>
+<li>否：直接触发Full GC（回收整个堆）。</li>
 </ul>
 </li>
 </ul>
-<h4 id="标记整理算法-Mark-Compact"><a href="#标记整理算法-Mark-Compact" class="headerlink" title="标记整理算法(Mark-Compact)"></a>标记整理算法(Mark-Compact)</h4><ul>
+</li>
+</ul>
+</li>
+<li>保守策略：若未启用担保失败（或老年代空间不足），直接触发Full GC，确保老年代有足够空间接收晋升对象。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="标记整理算法-Mark-Compact"><a href="#标记整理算法-Mark-Compact" class="headerlink" title="标记整理算法(Mark-Compact)"></a>标记整理算法(Mark-Compact)</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86%E7%AE%97%E6%B3%95.png" srcset="/img/loading.gif" lazyload style="zoom:90%;" />
 </li>
-<li><p>适用于老年代</p>
+<li><p>一般作用于老年代</p>
 </li>
 </ul>
-<h3 id="HotSpot算法实现"><a href="#HotSpot算法实现" class="headerlink" title="HotSpot算法实现"></a>HotSpot算法实现</h3><h4 id="枚举根节点"><a href="#枚举根节点" class="headerlink" title="枚举根节点"></a>枚举根节点</h4><ul>
+<h2 id="HotSpot"><a href="#HotSpot" class="headerlink" title="HotSpot"></a>HotSpot</h2><ul>
+<li>最知名的JVM实现，核心设计思想：<strong>通过动态监控识别代码中的“热点”（频繁执行的代码段）并对其进行深度优化</strong></li>
+</ul>
+<h4 id="枚举根节点"><a href="#枚举根节点" class="headerlink" title="枚举根节点"></a>枚举根节点</h4><ul>
+<li>枚举根节点（Enumeration of GC Roots）是垃圾回收（Garbage Collection, GC）过程中可达性分析（Reachability Analysis）的关键步骤，其目的是快速、准确地找出所有GC Roots对象。</li>
 <li>枚举根节点时，会发生Stop The Word</li>
 <li>HotSpot通过OopMap的数据结构来确定哪些地方存放着对象引用，在类加载完成的时候，HotSpot就把对象内什么偏移量时什么类型的数据计算出来，在JIT编译过程中，也会在特定的位置(<em>安全点</em>)记录下栈和寄存器中那些地方是引用。</li>
-<li>OopMap是一种空间换时间的策略，当JVM到达安全点时，会更新自己的OopMap,记录哪些栈中代表着内存引用，枚举根节点时，从OopMap中拿取引用，这比查找内存先判断是否是一个引用要快很多</li>
+<li><strong>OopMap</strong>是一种空间换时间的策略，当JVM到达安全点时，会更新自己的OopMap,记录哪些栈中代表着内存引用，枚举根节点时，从OopMap中拿取引用，这比查找内存先判断是否是一个引用要快很多</li>
+<li><strong>枚举根节点是垃圾回收的基石</strong>，通过OopMap和安全点机制，实现了对GC Roots的高效定位，确保可达性分析的准确性与性能。这一过程的优化直接关系到GC的停顿时间，是JVM低延迟设计的关键环节。理解其原理有助于开发者在代码中避免创建不必要的根引用，从而提升垃圾回收效率。</li>
 </ul>
 <h4 id="安全点"><a href="#安全点" class="headerlink" title="安全点"></a>安全点</h4><ul>
 <li>程序执行时并非在所有地方都能停顿进行GC，只有到达安全点才可以</li>
@@ -423,7 +492,7 @@
 <li>safePoint机制保证了程序执行时，在不太长的时间内就会遇到可进入GC的SafePoint，但是程序不执行的情况没有考虑（程序不执行就是没有分配CPU时间，典型例子就是线程处于Sleep状态或者Blocked状态）</li>
 <li>当线程执行到Safe Region中的代码时，首先标识自己已经进入到了sqfe Region，当在这段时间里JVM要发起GC时，就可以忽略SafePoint的标识状态。当线程要离开SafeRegion时，要检查系统是否已经完成了根节点枚举（或者整个GC过程），直到收到可以安全离开的信号才可以离开。</li>
 </ul>
-<h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><ul>
+<h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h2><ul>
 <li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 <li><p>可以搭配使用</p>
@@ -439,7 +508,7 @@
 <li><p>其中Serial Old作为CMS出现”Concurrent Mode Failure”失败的后备预案</p>
 </li>
 </ul>
-<h4 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h4><ul>
+<h3 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/Serial%E6%94%B6%E9%9B%86%E5%99%A8.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
 </li>
 <li><p>特征</p>
@@ -454,7 +523,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="ParNew收集器-Parallel-New"><a href="#ParNew收集器-Parallel-New" class="headerlink" title="ParNew收集器(Parallel New)"></a>ParNew收集器(Parallel New)</h4><ul>
+<h3 id="ParNew收集器-Parallel-New"><a href="#ParNew收集器-Parallel-New" class="headerlink" title="ParNew收集器(Parallel New)"></a>ParNew收集器(Parallel New)</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ParNew%E6%94%B6%E9%9B%86%E5%99%A8.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
 </li>
 <li><p>特征</p>
@@ -466,7 +535,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="Parallel-Scavenge收集器"><a href="#Parallel-Scavenge收集器" class="headerlink" title="Parallel Scavenge收集器"></a>Parallel Scavenge收集器</h4><ul>
+<h3 id="Parallel-Scavenge收集器"><a href="#Parallel-Scavenge收集器" class="headerlink" title="Parallel Scavenge收集器"></a>Parallel Scavenge收集器</h3><ul>
 <li>特征<ul>
 <li>新生代收集器，与ParNew很相似</li>
 <li>主要关注点在<strong>达到一个可控制的吞吐量</strong>，吞吐量：CPU用于运行用户代码的时间与CPU总消耗时间的比值。吞吐量优先收集器</li>
@@ -474,7 +543,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="Serial-Old收集器"><a href="#Serial-Old收集器" class="headerlink" title="Serial Old收集器"></a>Serial Old收集器</h4><ul>
+<h3 id="Serial-Old收集器"><a href="#Serial-Old收集器" class="headerlink" title="Serial Old收集器"></a>Serial Old收集器</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/SerialOld%E6%94%B6%E9%9B%86%E5%99%A8.png" srcset="/img/loading.gif" lazyload  />
 </li>
 <li><p>特征</p>
@@ -490,7 +559,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="Parallel-Old收集器"><a href="#Parallel-Old收集器" class="headerlink" title="Parallel Old收集器"></a>Parallel Old收集器</h4><ul>
+<h3 id="Parallel-Old收集器"><a href="#Parallel-Old收集器" class="headerlink" title="Parallel Old收集器"></a>Parallel Old收集器</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ParallelOld.png" srcset="/img/loading.gif" lazyload style="zoom:90%;" />
 </li>
 <li><p>特征</p>
@@ -500,23 +569,26 @@
 </ul>
 </li>
 </ul>
-<h4 id="CMS收集器-Concurrent-Mark-Sweep"><a href="#CMS收集器-Concurrent-Mark-Sweep" class="headerlink" title="CMS收集器(Concurrent Mark Sweep)"></a>CMS收集器(Concurrent Mark Sweep)</h4><ul>
+<h3 id="CMS收集器-Concurrent-Mark-Sweep"><a href="#CMS收集器-Concurrent-Mark-Sweep" class="headerlink" title="CMS收集器(Concurrent Mark Sweep)"></a>CMS收集器(Concurrent Mark Sweep)</h3><ul>
 <li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/CMS.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 <li><p>并发低停顿收集器，以实现最短 STW 时间为目标的收集器</p>
 </li>
-</ul>
-<h5 id="收集步骤"><a href="#收集步骤" class="headerlink" title="收集步骤"></a>收集步骤</h5><ul>
+<li><p>收集步骤</p>
+<ul>
 <li>初始标记(CMS inital mark)————-<strong>stop the word</strong><ul>
-<li>标记GC Roots能直接关联到的对象，速度很快</li>
-</ul>
+<li><p>标记GC Roots能直接关联到的对象，速度很快</p>
 </li>
-<li>并发标记(CMS concurrent mark)——-与用户线程并发执行<ul>
+<li><p>并发标记(CMS concurrent mark)——-与用户线程并发执行</p>
+<ul>
 <li>进行GC Roots Tracing过程</li>
 </ul>
 </li>
-<li>重新标记(CMS mark)——————-<strong>stop the word</strong><ul>
+<li><p>重新标记(CMS mark)——————-<strong>stop the word</strong></p>
+<ul>
 <li>修正并发标记期间因用户程序继续运行而导致标记变动的那一部分对象的标记记录</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>并发清除(CMS concurrent sweep)—–与用户线程并发执行<ul>
@@ -524,37 +596,49 @@
 </ul>
 </li>
 </ul>
-<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><ul>
+</li>
+<li><p>缺点</p>
+<ul>
 <li>CPU资源敏感<ul>
-<li>默认启动的回收线程数是  (CPU数量+3)&#x2F;4<ul>
+<li><p>默认启动的回收线程数是  (CPU数量+3)&#x2F;4</p>
+<ul>
 <li>隐含：当处理器核心不足4个时，CMS对用户程序的印象可能会很大</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>无法处理浮动垃圾，可能出现Concurrent Mode Failure <ul>
+<li><p>无法处理浮动垃圾，可能出现Concurrent Mode Failure </p>
+<ul>
 <li>浮动垃圾：并发清理过程中产生的垃圾。</li>
 <li>基于以上原因，无法等到老年代被填满在进行垃圾清理，需要预留空间给浮动垃圾。1.6后，是92%，预留8%的空间</li>
 <li><strong>预留内存无法满足需要会启用Serial Old来重新进行老年代的垃圾收集</strong></li>
 </ul>
 </li>
+</ul>
+</li>
 <li>CMS 采用的是标记清除法，上文我们已经提到这种方法会产生大量的内存碎片，这样会给大内存分配带来很大的麻烦，如果无法找到足够大的连续空间来分配对象，将会触发 Full GC，这会影响应用的性能。当然我们可以开启 -XX:+UseCMSCompactAtFullCollection（默认是开启的），用于在 CMS 收集器顶不住要进行 FullGC 时开启内存碎片的合并整理过程，内存整理会导致 STW，停顿时间会变长，还可以用另一个参数 -XX:CMSFullGCsBeforeCompation 用来设置执行多少次不压缩的 Full GC 后跟着带来一次带压缩的。</li>
 </ul>
-<h5 id="ParNew-CMS如何让系统基本不产生FGC？"><a href="#ParNew-CMS如何让系统基本不产生FGC？" class="headerlink" title="ParNew + CMS如何让系统基本不产生FGC？"></a>ParNew + CMS如何让系统基本不产生FGC？</h5><ol>
+</li>
+<li><p>ParNew + CMS如何让系统基本不产生FGC？</p>
+<ul>
 <li>加大JVM内存</li>
 <li>加大Young的比例</li>
 <li>提高Y-O的年龄</li>
 <li>提高S区比例</li>
 <li>避免代码内存泄漏</li>
-</ol>
-<h5 id="CMS用到的的垃圾回收算法"><a href="#CMS用到的的垃圾回收算法" class="headerlink" title="CMS用到的的垃圾回收算法"></a>CMS用到的的垃圾回收算法</h5><ul>
+</ul>
+</li>
+<li><p>CMS用到的的垃圾回收算法</p>
+<ul>
 <li>三色标记 + Incremental Update</li>
 </ul>
-<h5 id="CMS日志"><a href="#CMS日志" class="headerlink" title="CMS日志"></a>CMS日志</h5><ul>
+</li>
+<li><p>CMS日志</p>
+<ul>
 <li>执行命令：java -Xms20M -Xmx20M -XX:+PrintGCDetails -XX:+UseConcMarkSweepGC com.mashibing.jvm.gc.T15_FullGC_Problem01</li>
 <li>[GC (Allocation Failure) [ParNew: 6144K-&gt;640K(6144K), 0.0265885 secs] 6585K-&gt;2770K(19840K), 0.0268035 secs] [Times: user&#x3D;0.02 sys&#x3D;0.00, real&#x3D;0.02 secs] <blockquote>
 <p>   ParNew：年轻代收集器<br>      6144-&gt;640：收集前后的对比</p>
 </blockquote>
+</li>
+</ul>
 </li>
 </ul>
 <blockquote>
@@ -564,6 +648,7 @@
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java">[GC (CMS Initial Mark) [<span class="hljs-number">1</span> CMS-initial-mark: 8511K(13696K)] 9866K(19840K), <span class="hljs-number">0.0040321</span> secs] [Times: user=<span class="hljs-number">0.01</span> sys=<span class="hljs-number">0.00</span>, real=<span class="hljs-number">0.00</span> secs] <br>  <span class="hljs-comment">//8511 (13696) : 老年代使用（最大)</span><br>  <span class="hljs-comment">//9866 (19840) : 整个堆使用（最大)</span><br>[CMS-concurrent-mark-start]<br>[CMS-concurrent-mark: <span class="hljs-number">0.018</span>/<span class="hljs-number">0.018</span> secs] [Times: user=<span class="hljs-number">0.01</span> sys=<span class="hljs-number">0.00</span>, real=<span class="hljs-number">0.02</span> secs] <br>  <span class="hljs-comment">//这里的时间意义不大，因为是并发执行*</span><br>[CMS-concurrent-preclean-start]<br>[CMS-concurrent-preclean: <span class="hljs-number">0.000</span>/<span class="hljs-number">0.000</span> secs] [Times: user=<span class="hljs-number">0.00</span> sys=<span class="hljs-number">0.00</span>, real=<span class="hljs-number">0.00</span> secs] <br>  <span class="hljs-comment">//标记Card为Dirty，也称为Card Marking*</span><br>[GC (CMS Final Remark) [YG occupancy: <span class="hljs-number">1597</span> K (<span class="hljs-number">6144</span> K)][Rescan (parallel) , <span class="hljs-number">0.0008396</span> secs][weak refs processing, <span class="hljs-number">0.0000138</span> secs][<span class="hljs-keyword">class</span> <span class="hljs-title class_">unloading</span>, <span class="hljs-number">0.0005404</span> secs][scrub symbol table, <span class="hljs-number">0.0006169</span> secs][scrub string table, <span class="hljs-number">0.0004903</span> secs][<span class="hljs-number">1</span> CMS-remark: 8511K(13696K)] 10108K(19840K), <span class="hljs-number">0.0039567</span> secs] [Times: user=<span class="hljs-number">0.00</span> sys=<span class="hljs-number">0.00</span>, real=<span class="hljs-number">0.00</span> secs] <br>  <span class="hljs-comment">//STW阶段，YG occupancy:年轻代占用及容量</span><br>  <span class="hljs-comment">//[Rescan (parallel)：STW下的存活对象标记</span><br>  <span class="hljs-comment">//weak refs processing: 弱引用处理</span><br>  <span class="hljs-comment">//class unloading: 卸载用不到的class</span><br>  <span class="hljs-comment">//scrub symbol(string) table:</span><br>  <span class="hljs-comment">//cleaning up symbol and string tables which hold class-level metadata and</span><br>  <span class="hljs-comment">//internalized string respectively</span><br>  <span class="hljs-comment">//CMS-remark: 8511K(13696K): 阶段过后的老年代占用及容量</span><br>  <span class="hljs-comment">//10108K(19840K): 阶段过后的堆占用及容量</span><br>[CMS-concurrent-sweep-start]<br>[CMS-concurrent-sweep: <span class="hljs-number">0.005</span>/<span class="hljs-number">0.005</span> secs] [Times: user=<span class="hljs-number">0.00</span> sys=<span class="hljs-number">0.00</span>, real=<span class="hljs-number">0.01</span> secs] <br>  *<span class="hljs-comment">//标记已经完成，进行并发清理</span><br>[CMS-concurrent-reset-start]<br>[CMS-concurrent-reset: <span class="hljs-number">0.000</span>/<span class="hljs-number">0.000</span> secs] [Times: user=<span class="hljs-number">0.00</span> sys=<span class="hljs-number">0.00</span>, real=<span class="hljs-number">0.00</span> secs]<br>  *<span class="hljs-comment">//重置内部结构，为下次GC做准备</span><br></code></pre></td></tr></table></figure>
 <h4 id="三色标记算法"><a href="#三色标记算法" class="headerlink" title="三色标记算法"></a>三色标记算法</h4><ul>
+<li><strong>三色标记算法（Tri-color Marking）</strong> 是一种用于<strong>垃圾回收（GC）过程中追踪对象存活状态的核心算法</strong>，尤其在<strong>并发标记阶段</strong>（Concurrent Marking）中发挥关键作用。它的核心目标是通过颜色标记对象的状态，高效且安全地识别存活对象，同时支持垃圾回收器与应用程序线程的并发执行，减少停顿时间（STW）。</li>
 <li>颜色分类<ul>
 <li>白色：表示对象没有被垃圾收集器访问过，在可达性分析的开始阶段，所有的对象都是白色的，若在分析结束阶段仍是白色的，则说明不可达</li>
 <li>灰色：表示对象已经被垃圾收集器访问过，但这个对象上至少存在一个引用没有被扫描过</li>
@@ -583,7 +668,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="G1-收集器-Garbage-First"><a href="#G1-收集器-Garbage-First" class="headerlink" title="G1 收集器(Garbage-First)"></a>G1 收集器(Garbage-First)</h4><ul>
+<h3 id="G1-收集器-Garbage-First"><a href="#G1-收集器-Garbage-First" class="headerlink" title="G1 收集器(Garbage-First)"></a>G1 收集器(Garbage-First)</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/G1.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
 </li>
 <li><p>关键概念</p>
@@ -592,7 +677,7 @@
 <li>region是把连续的Java堆划分为多大大小相等的独立区域</li>
 <li>每一个region都可以根据需要，扮演新生代的Edoen空间、Survivor空间或者老年代空间。收集器对扮演不同角色的Region采用不同的策略去处理</li>
 <li>大小通过参数可以设定，范围是1MB到32MB，且应为2的N次幂</li>
-<li>单词回收的最小单元</li>
+<li>内存回收的最小单元，优先回收垃圾最多的Region（“Garbage-First”名称的由来）</li>
 <li>有两个TAMS指针，用于并发回收过程中的新对象分配，并发回收时新分配的对象地址都必须在这两个指针位置上</li>
 <li>每个Region上都维护有一份卡表，导致内存占用比其他收集器较高，6到8GB以上在考虑使用G1</li>
 </ul>
@@ -657,7 +742,6 @@
 <li>XX:InitiatingHeapOccupacyPercent<ul>
 <li>默认值45%, 对象占用堆的百分比</li>
 <li>当O超出这个值时，启动MixedGC</li>
-<li>TODO</li>
 </ul>
 </li>
 </ul>
@@ -715,7 +799,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="ZGC"><a href="#ZGC" class="headerlink" title="ZGC"></a>ZGC</h4><ul>
+<h3 id="ZGC"><a href="#ZGC" class="headerlink" title="ZGC"></a>ZGC</h3><ul>
 <li>目标<ul>
 <li>尽可能对吞吐量影响不太大的前提下， 实现在任意堆内存大小下都可以把垃圾收集的停顿时间限制在十毫秒以内的低延迟</li>
 </ul>
@@ -731,10 +815,10 @@
 </ul>
 </li>
 </ul>
-<h5 id="堆内存布局"><a href="#堆内存布局" class="headerlink" title="堆内存布局"></a>堆内存布局</h5><ul>
+<h4 id="堆内存布局"><a href="#堆内存布局" class="headerlink" title="堆内存布局"></a>堆内存布局</h4><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ZGC%E5%A0%86%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png" srcset="/img/loading.gif" lazyload alt="ZGC堆内存布局" style="zoom:80%;" /></li>
 </ul>
-<h5 id="染色指针"><a href="#染色指针" class="headerlink" title="染色指针"></a>染色指针</h5><ul>
+<h4 id="染色指针"><a href="#染色指针" class="headerlink" title="染色指针"></a>染色指针</h4><ul>
 <li><p>Colored Pointer （Tag Pointer \ Version Pointer)</p>
 </li>
 <li><p>直接把标记信息记在引用对象的指针上</p>
@@ -747,7 +831,7 @@
 <li><p>因为压缩了地址空间，所以<strong>ZGC能够管理的内存不可以超过4T</strong>B（2的42次幂），也不支持压缩指针</p>
 </li>
 </ul>
-<h5 id="ZGC运行过程"><a href="#ZGC运行过程" class="headerlink" title="ZGC运行过程"></a>ZGC运行过程</h5><ul>
+<h4 id="ZGC运行过程"><a href="#ZGC运行过程" class="headerlink" title="ZGC运行过程"></a>ZGC运行过程</h4><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ZGC%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="ZGC运行过程" style="zoom: 80%;" />
 </li>
 <li><p>并发标记（Concurrent Mark） ： 与G1、 Shenandoah一样， 并发标记是遍历对象图做可达性分析的阶段， 前后也要经过类似于G1、 Shenandoah的初始标记、 最终标记（尽管ZGC中的名字不叫这些） 的短暂停顿， 而且这些停顿阶段所做的事情在目标上也是相类似的。 与G1、 Shenandoah不同的是， ZGC的标记是在指针上而不是在对象上进行的， 标记阶段会更新染色指针中的Marked 0、 Marked 1标志位。</p>
@@ -759,7 +843,7 @@
 <li><p>并发重映射（Concurrent Remap） ： 重映射所做的就是修正整个堆中指向重分配集中旧对象的所有引用， 这一点从目标角度看是与Shenandoah并发引用更新阶段一样的， 但是ZGC的并发重映射并不是一个必须要“迫切”去完成的任务， 因为前面说过， 即使是旧引用， 它也是可以自愈的， 最多只是第一次使用时多一次转发和修正操作。 重映射清理这些旧引用的主要目的是为了不变慢（还有清理结束后可以释放转发表这样的附带收益） ， 所以说这并不是很“迫切”。 因此， ZGC很巧妙地把并发重映射阶段要做的工作， 合并到了下一次垃圾收集循环中的并发标记阶段里去完成， 反正它们都是要遍历所有对象的， 这样合并就节省了一次遍历对象图的开销。 一旦所有指针都被修正之后， 原来记录新旧对象关系的转发表就可以释放掉了。</p>
 </li>
 </ul>
-<h5 id="ZGC的算法"><a href="#ZGC的算法" class="headerlink" title="ZGC的算法"></a>ZGC的算法</h5><ul>
+<h4 id="ZGC的算法"><a href="#ZGC的算法" class="headerlink" title="ZGC的算法"></a>ZGC的算法</h4><ul>
 <li>Colored Pointer + 读屏障(LoadBarrier)</li>
 </ul>
 
@@ -826,7 +910,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年7月19日</div>
+          <div>2025年4月3日</div>
         </div>
       
       
