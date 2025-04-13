@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="系统架构的一些原则 原则一：关注于真正的收益而不是技术本身 关于收益的定义 是否可以降低技术门槛加快整个团队的开发流程 是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA 是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本     原则二：以应用服务和API为视角，而不是以资源和技术为视角 现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并">
+    <meta name="description" content="等比数列求和：$S_n &amp;#x3D; a_1&amp;#96;&amp;#96; * \frac{1-q^n}{1-q} &amp;#x3D; \frac{a_n*q - a_1}{q-1}$ 等差数列求和：Sn &amp;#x3D;  $\frac {n (a_1 + a_n)}{2} $  &amp;#x3D;  $n*a_1 + \frac{n(n-1)}{2}*d$ 组合数列公式 $C_n^m &amp;#x3D;\frac{A_n^m">
   
   
   
-  <title>系统架构 - 夜坐听风</title>
+  <title>0-常用数学公式 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="系统架构"></span>
+            <span id="subtitle" data-typed-text="0-常用数学公式"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-02-01 20:00" pubdate>
-          2023-02-01 20:00:09
+        <time datetime="2022-03-16 22:58" pubdate>
+          2022-03-16 22:58:14
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          418 字
+          219 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          4 分钟
+          2 分钟
         
       </span>
     
@@ -253,45 +253,29 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">系统架构</h1>
+            <h1 id="seo-header">0-常用数学公式</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="系统架构的一些原则"><a href="#系统架构的一些原则" class="headerlink" title="系统架构的一些原则"></a>系统架构的一些原则</h2><ul>
-<li>原则一：关注于真正的收益而不是技术本身<ul>
-<li>关于收益的定义<ul>
-<li>是否可以降低技术门槛加快整个团队的开发流程</li>
-<li>是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA</li>
-<li>是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本</li>
+                <h4 id="等比数列"><a href="#等比数列" class="headerlink" title="等比数列"></a>等比数列</h4><p>求和：$S_n &#x3D; a_1&#96;&#96; * \frac{1-q^n}{1-q} &#x3D; \frac{a_n*q - a_1}{q-1}$</p>
+<h4 id="等差数列"><a href="#等差数列" class="headerlink" title="等差数列"></a>等差数列</h4><p>求和：Sn &#x3D;  $\frac {n (a_1 + a_n)}{2} $  &#x3D;  $n*a_1 + \frac{n(n-1)}{2}*d$</p>
+<h4 id="组合数列公式"><a href="#组合数列公式" class="headerlink" title="组合数列公式"></a>组合数列公式</h4><ul>
+<li>$C_n^m &#x3D;\frac{A_n^m}{m!} &#x3D;  \frac{n!}{m!(n-m)!} &#x3D; \frac{A_n^m}{m!}$</li>
+<li>$A(n,m) &#x3D; A_n^m &#x3D; \frac{n!}{(n-m)!} $</li>
+</ul>
+<h4 id="卡特兰数"><a href="#卡特兰数" class="headerlink" title="卡特兰数"></a>卡特兰数</h4><ul>
+<li>第一个性质<ul>
+<li>必须一个有一个出栈，一个入栈，例如左括号数量为n,右括号数量为n，并且左右括号要相互匹配</li>
+<li>合法的排列数量为 $C_{2n}^n - C_{2n}^{n+1}$ &#x3D; $\frac{1}{n+1} * C_{2n}^n$</li>
 </ul>
 </li>
+<li>第二个性质<ul>
+<li>n个无差别的节点构成不同的结构数为f(n)  例如N个节点构成不同结构的二叉树</li>
+<li>且有f(0) &#x3D; 1, f(1)&#x3D;1, f(2)&#x3D;2,  f(3) &#x3D;5 时，</li>
+<li>f(n) &#x3D; $\frac{1}{n+1} * C_2n^n$</li>
 </ul>
 </li>
-<li>原则二：以应用服务和API为视角，而不是以资源和技术为视角<ul>
-<li>现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并Dev和Ops</li>
-</ul>
-</li>
-<li>原则三: 选择最主流和成熟的技术</li>
-<li>原则四：完备性比性能更重要<ul>
-<li>使用最科学严谨的技术模型为主，并以不严谨的模型作为补充</li>
-<li>性能上的东西都是多解的</li>
-</ul>
-</li>
-<li>原则五：制定并遵循服从标准、规范和最佳实践</li>
-<li>原则六：重视架构扩展性和可运维性<ul>
-<li>微服务架构的一些建议<ul>
-<li>所有团队的程序模块都要以通过Service Interface方式将其数据与功能开放出来。</li>
-<li>团队间的程序模块的新系通信都要通过这些接口</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>原则七：对控制逻辑进行全面收口</li>
-<li>原则八：不要迁就老旧系统的技术债务</li>
-<li>原则九：不要依赖自己的经验，要依赖于经验和学习</li>
-<li>原则十：千万要小心X - Y问题，要追原始需求</li>
-<li>原则十一： 激进胜于保守，创新与使用并不冲突</li>
 </ul>
 
                 
@@ -311,7 +295,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">23系统设计</a>
+  <a href="/categories/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95/" class="category-chain-item">02数据结构及算法</a>
   
   
 
@@ -331,8 +315,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>系统架构</div>
-      <div>https://x-leonidas.github.io/2023/02/01/23系统设计/系统架构/</div>
+      <div>0-常用数学公式</div>
+      <div>https://x-leonidas.github.io/2022/03/16/02数据结构及算法/0-常用数学公式/</div>
     </div>
     <div class="license-meta">
       
@@ -344,7 +328,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年2月1日</div>
+          <div>2022年3月16日</div>
         </div>
       
       
@@ -387,9 +371,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
+                      <a href="/2022/03/16/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/1redis%E5%9F%BA%E7%A1%80/" title="1redis基础">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">4. 实践</span>
+                        <span class="hidden-mobile">1redis基础</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -397,8 +381,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/01/16/04Java/java%E5%9F%BA%E7%A1%80/04%E5%BA%8F%E5%88%97%E5%8C%96/" title="04序列化">
-                        <span class="hidden-mobile">04序列化</span>
+                      <a href="/2022/02/09/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" title="系统架构">
+                        <span class="hidden-mobile">系统架构</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -452,6 +436,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -614,6 +604,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
 
 
