@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          10k 字
+          11k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          87 分钟
+          89 分钟
         
       </span>
     
@@ -700,7 +700,7 @@
 <h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><ul>
 <li><p>未提交读(READ UNCOMMITED)<br>事务中的修改，即使不提交，对其他事务也是可见的</p>
 </li>
-<li><p>提交读(READ COMMITED)(默认)<br>一个事务只能读取已经提交的事务所做的修改。换句话说，一个事务所做的修改在提交之前对其它事务是不可见的。</p>
+<li><p>读已提交(READ COMMITED)(默认)<br>一个事务只能读取已经提交的事务所做的修改。换句话说，一个事务所做的修改在提交之前对其它事务是不可见的。</p>
 </li>
 <li><p>可重复读（REPEATABLE  READ）<br>保证在同一个事务中多次读取同一数据的结果是一样的。</p>
 </li>
@@ -894,7 +894,52 @@
 <li><p>undo log是回滚日志，提供回滚操作。</p>
 <ul>
 <li>也是innodb层产生的。</li>
+<li>核心作用<ul>
+<li><strong>事务回滚</strong>：<br>记录事务修改前的旧值，用于回滚未提交的事务（保证原子性）。</li>
+<li><strong>MVCC支持</strong>：<br>为其他事务提供旧版本数据，实现非锁定读（读不阻塞写，写不阻塞读）。</li>
 </ul>
+</li>
+</ul>
+</li>
+<li><table>
+<thead>
+<tr>
+<th align="left"><strong>特性</strong></th>
+<th align="left"><strong>redo log</strong></th>
+<th align="left"><strong>undo log</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>核心目的</strong></td>
+<td align="left">保证事务的<strong>持久性</strong>（Durability）</td>
+<td align="left">支持事务的<strong>原子性</strong>（Atomicity）和<strong>多版本并发控制</strong>（MVCC）</td>
+</tr>
+<tr>
+<td align="left"><strong>日志类型</strong></td>
+<td align="left"><strong>物理日志</strong>（记录数据页的修改）</td>
+<td align="left"><strong>逻辑日志</strong>（记录逆向操作，如SQL的反向逻辑）</td>
+</tr>
+<tr>
+<td align="left"><strong>写入时机</strong></td>
+<td align="left">事务<strong>进行中</strong>实时写入</td>
+<td align="left">事务<strong>修改数据前</strong>记录旧值</td>
+</tr>
+<tr>
+<td align="left"><strong>生命周期</strong></td>
+<td align="left">事务提交后即可覆盖（循环写入）</td>
+<td align="left">保留到没有事务依赖旧版本数据（可能长期存在）</td>
+</tr>
+<tr>
+<td align="left"><strong>恢复作用</strong></td>
+<td align="left">崩溃恢复时<strong>重放未落盘的数据</strong>（前滚）</td>
+<td align="left">回滚未提交事务，或提供MVCC的旧版本数据</td>
+</tr>
+<tr>
+<td align="left"><strong>存储方式</strong></td>
+<td align="left">顺序写入（高效）</td>
+<td align="left">存储在回滚段（undo segments）中</td>
+</tr>
+</tbody></table>
 </li>
 </ul>
 <h2 id="分区表"><a href="#分区表" class="headerlink" title="分区表"></a>分区表</h2><h3 id="分区表的底层原理"><a href="#分区表的底层原理" class="headerlink" title="分区表的底层原理"></a>分区表的底层原理</h3><p>​    分区表由多个相关的底层表实现，这个底层表也是由句柄对象标识，我们可以直接访问各个分区。存储引擎管理分区的各个底层表和管理普通表一样（所有的底层表都必须使用相同的存储引擎），分区表的索引只是在各个底层表上各自加上一个完全相同的索引。从存储引擎的角度来看，底层表和普通表没有任何不同，存储引擎也无须知道这是一个普通表还是一个分区表的一部分。<br>​    分区表的操作按照以下的操作逻辑进行：</p>
@@ -969,7 +1014,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月13日</div>
+          <div>2025年4月18日</div>
         </div>
       
       
@@ -1006,9 +1051,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/2.MySql%E8%BF%9B%E9%98%B6/" title="2.MySql进阶">
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/3.mysql%E8%B0%83%E4%BC%98/" title="3.mysql调优">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2.MySql进阶</span>
+                        <span class="hidden-mobile">3.mysql调优</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -1016,8 +1061,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/03%E7%BD%91%E7%BB%9C/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="01-计算机网络">
-                        <span class="hidden-mobile">01-计算机网络</span>
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/MySql%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="MySql常用命令">
+                        <span class="hidden-mobile">MySql常用命令</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
