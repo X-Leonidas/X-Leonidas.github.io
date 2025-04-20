@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="WSL发行版迁移下面是操作方法：  首先关闭docker 关闭所有发行版：wsl --shutdown 将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）wsl --export docker-desktop-data D:">
+    <meta name="description" content="大版本对应   Spring Boot Spring Cloud    1.2.x Angel版本   1.3.x Brixton版本   1.4.x stripes Camden版本   1.5.x Dalston版本、Edgware版本   2.0.x Finchley版本   2.1.x Greenwich.SR2   详细版本对应   spring-boot-starter-parent">
   
   
   
-  <title>Docker Desktop - 夜坐听风</title>
+  <title>版本对应 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Docker Desktop"></span>
+            <span id="subtitle" data-typed-text="版本对应"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 20:00" pubdate>
-          2022-02-01 20:00:09
+        <time datetime="2023-02-01 19:59" pubdate>
+          2023-02-01 19:59:33
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          115 字
+          303 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -253,19 +253,226 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Docker Desktop</h1>
+            <h1 id="seo-header">版本对应</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="WSL发行版迁移"><a href="#WSL发行版迁移" class="headerlink" title="WSL发行版迁移"></a>WSL发行版迁移</h2><p>下面是操作方法：</p>
-<ol>
-<li>首先关闭docker</li>
-<li>关闭所有发行版：<br><code>wsl --shutdown</code></li>
-<li>将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）<br><code>wsl --export docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar</code></li>
-<li>注销docker-desktop-data：<br><code>wsl --unregister docker-desktop-data</code></li>
-<li>重新导入docker-desktop-data到要存放的文件夹：D:\SoftwareData\wsl\docker-desktop-data\：<br><code>wsl --import docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\ D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar --version 2</code></li>
-</ol>
+                <h4 id="大版本对应"><a href="#大版本对应" class="headerlink" title="大版本对应"></a>大版本对应</h4><table>
+<thead>
+<tr>
+<th align="left">Spring Boot</th>
+<th align="left">Spring Cloud</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1.2.x</td>
+<td align="left">Angel版本</td>
+</tr>
+<tr>
+<td align="left">1.3.x</td>
+<td align="left">Brixton版本</td>
+</tr>
+<tr>
+<td align="left">1.4.x stripes</td>
+<td align="left">Camden版本</td>
+</tr>
+<tr>
+<td align="left">1.5.x</td>
+<td align="left">Dalston版本、Edgware版本</td>
+</tr>
+<tr>
+<td align="left">2.0.x</td>
+<td align="left">Finchley版本</td>
+</tr>
+<tr>
+<td align="left">2.1.x</td>
+<td align="left">Greenwich.SR2</td>
+</tr>
+</tbody></table>
+<h4 id="详细版本对应"><a href="#详细版本对应" class="headerlink" title="详细版本对应"></a>详细版本对应</h4><table>
+<thead>
+<tr>
+<th align="left">spring-boot-starter-parent</th>
+<th align="left">spring-cloud-dependencies</th>
+<th align="left"></th>
+<th align="left"></th>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">版本号</td>
+<td align="left">发布日期</td>
+<td align="left"></td>
+<td align="left">版本号</td>
+<td align="left">发布日期</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">1.5.2.RELEASE</td>
+<td align="left">2017年3月</td>
+<td align="left">稳定版</td>
+<td align="left">Dalston.RC1</td>
+<td align="left">2017年未知月</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">1.5.9.RELEASE</td>
+<td align="left">2017年11月</td>
+<td align="left">稳定版</td>
+<td align="left">Edgware.RELEASE</td>
+<td align="left">2017年11月</td>
+<td align="left">稳定版</td>
+</tr>
+<tr>
+<td align="left">1.5.16.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Edgware.SR5</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">1.5.20.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Edgware.SR5</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M3 and &lt;2.0.0.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M5 and &lt;&#x3D;2.0.0.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M3</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M6 and &lt;&#x3D;2.0.0.M6</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M7 and &lt;&#x3D;2.0.0.M7</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.RC1 and &lt;&#x3D;2.0.0.RC1</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M6</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.RC2 and &lt;&#x3D;2.0.0.RC2</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M7</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.RELEASE and &lt;&#x3D;2.0.0.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M9</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.1.RELEASE and &lt;2.0.2.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.RC1</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.2.RELEASE and &lt;2.0.3.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.RC2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.3.RELEASE and &lt;2.0.999.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.SR4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.999.BUILD-SNAPSHOT and &lt;2.1.0.M3</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.1.0.M3 and &lt;2.1.0.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Greenwich.M1</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.1.0.RELEASE and &lt;2.1.9.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Greenwich.SR2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.1.9.BUILD-SNAPSHOT and &lt;2.2.0.M4</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Greenwich.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.2.0.M4 and &lt;&#x3D;2.2.0.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Hoxton.M2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.2.0.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Hoxton.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h4 id="查询接口"><a href="#查询接口" class="headerlink" title="查询接口"></a>查询接口</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://start.spring.io/actuator/info">https://start.spring.io/actuator/info</a></li>
+</ul>
 
                 
               </div>
@@ -284,8 +491,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/" class="category-chain-item">spring</a>
+  
+  
+
   
 
       </span>
@@ -304,8 +518,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Docker Desktop</div>
-      <div>https://x-leonidas.github.io/2022/02/01/15云和容器/Docker Desktop/</div>
+      <div>版本对应</div>
+      <div>https://x-leonidas.github.io/2023/02/01/11技术栈/spring/版本对应/</div>
     </div>
     <div class="license-meta">
       
@@ -317,13 +531,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2023年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2025年3月1日</div>
         </div>
       
       
@@ -360,9 +574,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/" title="注册中心">
+                      <a href="/2023/02/01/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/Docker%20Desktop/" title="Docker Desktop">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">注册中心</span>
+                        <span class="hidden-mobile">Docker Desktop</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -370,7 +584,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
+                      <a href="/2023/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
                         <span class="hidden-mobile">4. 实践</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
