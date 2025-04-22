@@ -309,7 +309,7 @@
 <li>举个例子，目前交易数据库 trade 中的订单表 orders 已经做了水平分库（位于两个不同RDS实例上），这时发现两个 RDS 写入性能还是不够，需要再扩容一个RDS，同时将 orders 从原来的 20 个子表扩容到 40个（user_id % 40），这就需要迁移数据来实现数据重平衡，既要停机迁移数据，又要修改代码，有点出力不讨好的感觉啦。</li>
 </ul>
 </li>
-<li>跨库Join</li>
+<li><strong>跨库Join</strong></li>
 <li><strong>跨库排序分页</strong><ul>
 <li></li>
 </ul>
@@ -407,7 +407,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年11月29日</div>
+          <div>2025年4月23日</div>
         </div>
       
       

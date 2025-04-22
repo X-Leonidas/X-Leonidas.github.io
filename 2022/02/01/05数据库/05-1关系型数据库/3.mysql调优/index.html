@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.2k 字
         
       </span>
     
@@ -360,7 +360,21 @@
 <h4 id="翻页查询"><a href="#翻页查询" class="headerlink" title="翻页查询"></a>翻页查询</h4><ul>
 <li>对于limit m, n分页查询，越往后面翻页即m越大的情况下SQL的耗时会越来越长，对于这种应该先取出主键id，然后通过主键id跟原表进行Join关联查询。</li>
 </ul>
-<h3 id="慢Sql查询与优化"><a href="#慢Sql查询与优化" class="headerlink" title="慢Sql查询与优化"></a>慢Sql查询与优化</h3><p>+ </p>
+<h3 id="慢Sql查询与优化"><a href="#慢Sql查询与优化" class="headerlink" title="慢Sql查询与优化"></a>慢Sql查询与优化</h3><ul>
+<li>启用慢查询日志</li>
+<li>分析慢查询日志<ul>
+<li><strong>工具推荐：</strong><ul>
+<li><strong>内置工具</strong>：<code>mysqldumpslow</code><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs excel">mysqldumpslow -s <span class="hljs-built_in">t</span> -<span class="hljs-built_in">t</span> <span class="hljs-number">10</span> /<span class="hljs-built_in">var</span>/<span class="hljs-built_in">log</span>/mysql/mysql-slow.log  # 按耗时排序，显示前<span class="hljs-number">10</span>条<br></code></pre></td></tr></table></figure></li>
+<li><strong>高级工具</strong>：<code>pt-query-digest</code>（Percona Toolkit）<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata">pt-<span class="hljs-keyword">query</span>-digest /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/mysql/mysql-slow.<span class="hljs-keyword">log</span> &gt; slow_report.txt<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用EXPLAIN分析执行计划</li>
+<li>索引优化</li>
+<li>表结构与参数调优</li>
+<li>监控和持续优化</li>
+</ul>
 <h3 id="为什么不建议使用UUID作为数据库主键"><a href="#为什么不建议使用UUID作为数据库主键" class="headerlink" title="为什么不建议使用UUID作为数据库主键"></a>为什么不建议使用UUID作为数据库主键</h3><ul>
 <li>写入的目标页很可能已经刷新到磁盘上并且从缓存上移除，或者还没有被加载到缓存中，innodb在插入之前不得不先找到并从磁盘读取目标页到内存中，这将导致大量的随机IO</li>
 <li>因为写入是乱序的,innodb不得不频繁的做页分裂操作,以便为新的行分配空间,页分裂导致移动大量的数据，一次插入最少需要修改三个页以上</li>
@@ -430,7 +444,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月18日</div>
+          <div>2025年4月23日</div>
         </div>
       
       

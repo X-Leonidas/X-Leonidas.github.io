@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k 字
+          1.2k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          20 分钟
+          10 分钟
         
       </span>
     
@@ -267,74 +267,6 @@
 </ul>
 <h2 id="高扩展的实践方案"><a href="#高扩展的实践方案" class="headerlink" title="高扩展的实践方案"></a><strong>高扩展的实践方案</strong></h2><ul>
 <li>1、合理的分层架构：比如上面谈到的互联网最常见的分层架构，另外还能进一步按照数据访问层、业务逻辑层对微服务做更细粒度的分层（但是需要评估性能，会存在网络多一跳的情况）。<br>2、存储层的拆分：按照业务维度做垂直拆分、按照数据特征维度进一步做水平拆分（分库分表）。<br>3、业务层的拆分：最常见的是按照业务维度拆（比如电商场景的商品服务、订单服务等），也可以按照核心接口和非核心接口拆，还可以按照请求源拆（比如To C和To B，APP和H5 ）。</li>
-</ul>
-<h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><h3 id="限流请求头"><a href="#限流请求头" class="headerlink" title="限流请求头"></a>限流请求头</h3><ul>
-<li>X-Ratelimit-Remaining：窗口内允许请求的剩余数量</li>
-<li>X-Ratelimit-limit：它表示客户端在每个时间窗口可以进行多少次调用</li>
-<li>X-Ratelimit-Retry-After：等待的秒数，直到你可以再次提出请求而不被节流。</li>
-</ul>
-<h3 id="限流算法"><a href="#限流算法" class="headerlink" title="限流算法"></a>限流算法</h3><h4 id="漏桶"><a href="#漏桶" class="headerlink" title="漏桶"></a>漏桶</h4><ul>
-<li>漏桶（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Leaky_bucket">Leaky Bucket</a>）算法思路很简单，水（请求）先进入到漏桶里，漏桶以一定的速度出水（接口有响应速率），当水流入速度过大会直接溢出（访问频率超过接口响应速率），然后就拒绝请求，可以看出漏桶算法能强行限制数据的传输速率。</li>
-<li>一般用<strong>FIFO队列</strong>来实现<ul>
-<li>请求到达时，系统会检查队列是否已满。如果队列未满，则将请求添加到队列中。</li>
-<li>否则，将丢弃该请求</li>
-<li>请求会在固定的时间间隔内从队列中取出并进行处理。</li>
-</ul>
-</li>
-<li>两个参数<ul>
-<li>它等于队列的大小。队列容纳了要以固定速度处理的请求。</li>
-<li>定义了在固定速率下可以处理多少请求，通常以秒为单位。</li>
-</ul>
-</li>
-<li>突发的流量使队列中充满了旧的请求，如果这些请求没有得到及时处理，最近的请求将受到速率限制。</li>
-</ul>
-<h4 id="令牌桶"><a href="#令牌桶" class="headerlink" title="令牌桶"></a>令牌桶</h4><ul>
-<li>令牌桶算法（Token Bucket）和 Leaky Bucket 效果一样但方向相反的算法，更加容易理解。随着时间流逝，系统会按恒定 1&#x2F;QPS 时间间隔（如果 QPS&#x3D;100，则间隔是 10ms）往桶里加入 Token（想象和漏洞漏水相反，有个水龙头在不断的加水），如果桶已经满了就不再加了。新请求来临时，会各自拿走一个 Token，如果没有 Token 可拿了就阻塞或者拒绝服务。</li>
-<li>两个参数<ul>
-<li>桶大小：桶内允许的最大令牌数</li>
-<li>填充速率：每秒放入到桶内的令牌数量</li>
-</ul>
-</li>
-<li>令牌桶允许在短时间内进行突发流量。只要有剩余的令牌，请求就可以通过。</li>
-</ul>
-<h4 id="固定窗口计数器"><a href="#固定窗口计数器" class="headerlink" title="固定窗口计数器"></a>固定窗口计数器</h4><ul>
-<li>工作原理<ul>
-<li>该算法将时间轴划分为固定大小的时间窗口，并为每个窗口分配一个计数器</li>
-<li>每个请求将计数器增加一</li>
-<li>一旦计数器达到预定的阈值，新的请求就会被放弃，直到新的时间窗口开始。</li>
-</ul>
-</li>
-<li>缺点：窗口边缘的流量激增可能导致超过允许配额的请求被通过（有突刺）</li>
-</ul>
-<h4 id="滑动窗口日志算法"><a href="#滑动窗口日志算法" class="headerlink" title="滑动窗口日志算法"></a>滑动窗口日志算法</h4><ul>
-<li><p>工作原理</p>
-<ul>
-<li>该算法对请求的时间戳进行跟踪。时间戳数据通常保存在缓存中，如Redis的sorted 。</li>
-<li>当一个新的请求进来时，删除所有过期的时间戳。未过期但已经过时的时间戳被定义为比当前时间窗口的开始时间更早的时间戳</li>
-<li>将新请求的时间戳添加到日志中</li>
-<li>如果日志大小与允许的计数相同或更低，则接受请求。否则，它将被拒绝</li>
-</ul>
-</li>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E9%99%90%E6%B5%81%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%97%A5%E5%BF%97%E7%AE%97%E6%B3%95.png" srcset="/img/loading.gif" lazyload alt="image-20241202233912200" style="zoom: 50%;" />
-</li>
-<li><p>优点：避免了固定窗口计数器的毛刺出现</p>
-</li>
-<li><p>缺点： 该算法消耗了大量的内存，因为即使一个请求被拒绝，其时间戳仍可能被存储在内存中</p>
-</li>
-</ul>
-<h4 id="滑动窗口计数器算法"><a href="#滑动窗口计数器算法" class="headerlink" title="滑动窗口计数器算法"></a>滑动窗口计数器算法</h4><ul>
-<li><p>结合了固定窗口计数器和滑动窗口日志的实现</p>
-</li>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/i%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E8%AE%A1%E6%95%B0%E5%99%A8%E7%AE%97%E6%B3%95.png" srcset="/img/loading.gif" lazyload alt="image-20241202234446069" style="zoom:80%;" />
-</li>
-<li><p>假设限流器允许每分钟最多有7个请求，在上一分钟有5个请求，当前一分钟有3个请求。对于在当前分钟内到达30%位置的新请求，滚动窗口中的请求数用以下公式计算：</p>
-<ul>
-<li>当前窗口中的请求数量 + 上一个窗口中的请求数量 * 滚动窗口和上一个窗口的重叠百分比</li>
-<li>使用这个公式，我们得到3 + 5 * 0.7% &#x3D; 6.5个请求。根据不同的使用情况，这个数字可以向上或向下取整。在我们的例子中，它被向下四舍五入为6。</li>
-</ul>
-</li>
-<li><p>缺点： 它只适用于不太严格的回看窗口。它是实际速率的近似值，因为它假设前一个窗口的请求是均匀分布的。然而，这个问题可能并不像它看起来那么糟糕。 根据Cloudflare[10]所做的实验，在4亿个请求中，只有0.003%的请求被错误地允许或限制速率</p>
-</li>
 </ul>
 
                 
@@ -393,7 +325,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月2日</div>
+          <div>2025年4月23日</div>
         </div>
       
       
@@ -440,8 +372,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Tomcat/" title="Tomcat">
-                        <span class="hidden-mobile">Tomcat</span>
+                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/09-%E6%9C%8D%E5%8A%A1%E5%B9%82%E7%AD%89/" title="09-服务幂等">
+                        <span class="hidden-mobile">09-服务幂等</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
