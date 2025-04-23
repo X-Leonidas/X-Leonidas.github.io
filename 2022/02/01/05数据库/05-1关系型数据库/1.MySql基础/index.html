@@ -748,7 +748,7 @@
 </li>
 </ul>
 <h3 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC(多版本并发控制)"></a>MVCC(多版本并发控制)</h3><ul>
-<li>多版本并发控制（Multi-Version Concurrency Control, MVCC）是 MySQL 的 InnoDB 存储引擎实现隔离级别的一种具体方式，用于实现提交读和可重复读以及<strong>快照读的幻读问题</strong>这两种隔离级别。而未提交读隔离级别总是读取最新的数据行，要求很低，无需使用 MVCC。可串行化隔离级别需要对所有读取的行都加锁，单纯使用 MVCC 无法实现。</li>
+<li>多版本并发控制（Multi-Version Concurrency Control, MVCC）是 MySQL 的 InnoDB 存储引擎实现隔离级别的一种具体方式，用于实现提交读的可重复读以及<strong>快照读的幻读问题</strong>这两种隔离级别。而未提交读隔离级别总是读取最新的数据行，要求很低，无需使用 MVCC。可串行化隔离级别需要对所有读取的行都加锁，单纯使用 MVCC 无法实现。</li>
 <li><strong>读不加锁，读写不冲突。</strong>MVCC 在不加锁的情况下解决了脏读、不可重复读</li>
 </ul>
 <h4 id="MVCC基础概念"><a href="#MVCC基础概念" class="headerlink" title="MVCC基础概念"></a>MVCC基础概念</h4><ul>
@@ -758,9 +758,9 @@
 </ul>
 </li>
 <li>隐藏的列<ul>
-<li>MVCC在每行记录后面都保存着两个隐藏的列，用来存储两个版本号<ul>
-<li>创建版本号：指示创建一个数据行的快照时的系统版本号；</li>
-<li>删除版本号：如果该快照的删除版本号大于当前事务版本号表示该快照有效，否则表示该快照已经被删除了。</li>
+<li>MVCC在每行记录后面都保存着两个隐藏的列，<ul>
+<li>DB_TRX_ID：最后修改改行的事务ID</li>
+<li>DB_ROLL_PTR：指向旧版本数据的指针。</li>
 <li><code>roll_pointer</code>：每次对某条聚簇索引记录进行改动时，都会把旧的版本写入到<code>undo日志</code>中，然后这个隐藏列就相当于一个指针，可以通过它来找到该记录修改前的信息</li>
 </ul>
 </li>
@@ -817,6 +817,11 @@
 <td align="left"><strong>隔离级别依赖</strong></td>
 <td align="left">所有级别（行为一致）</td>
 <td align="left">读已提交和可重复读（行为不同）</td>
+</tr>
+<tr>
+<td align="left"><strong>触发条件</strong></td>
+<td align="left">所有普通 <code>SELECT</code> 语句默认使用快照读。 <br />事务首次读取数据时生成快照，后续读取沿用该快照。</td>
+<td align="left">显式加锁的 <code>SELECT ... FOR UPDATE</code> 或 <code>SELECT ... LOCK IN SHARE MODE</code>。 <br />任何数据修改语句（<code>UPDATE</code>&#x2F;<code>DELETE</code>&#x2F;<code>INSERT</code>）在执行前会隐式触发当前读。</td>
 </tr>
 </tbody></table>
 </li>
@@ -1014,7 +1019,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月18日</div>
+          <div>2025年4月24日</div>
         </div>
       
       
