@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          11k 字
+          10k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          89 分钟
+          88 分钟
         
       </span>
     
@@ -760,8 +760,10 @@
 <li>隐藏的列<ul>
 <li>MVCC在每行记录后面都保存着两个隐藏的列，<ul>
 <li>DB_TRX_ID：最后修改改行的事务ID</li>
-<li>DB_ROLL_PTR：指向旧版本数据的指针。</li>
-<li><code>roll_pointer</code>：每次对某条聚簇索引记录进行改动时，都会把旧的版本写入到<code>undo日志</code>中，然后这个隐藏列就相当于一个指针，可以通过它来找到该记录修改前的信息</li>
+<li>DB_ROLL_PTR(roll_pointer)：指向旧版本数据的指针。<ul>
+<li>每次对某条聚簇索引记录进行改动时，都会把旧的版本写入到<code>undo日志</code>中，然后这个隐藏列就相当于一个指针，可以通过它来找到该记录修改前的信息</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -775,11 +777,14 @@
 </li>
 </ul>
 <h4 id="当前读和快照读"><a href="#当前读和快照读" class="headerlink" title="当前读和快照读"></a>当前读和快照读</h4><ul>
-<li>快照读<ul>
-<li>MVCC 的 SELECT 操作是快照中的数据，不需要进行加锁操作。</li>
+<li><p>快照读</p>
+<ul>
+<li>MVCC 中的 SELECT 操作是快照中的数据，不需要进行加锁操作。</li>
+<li>每一次修改数据都会在undo-log 中存有快照记录，快照读就是读取某一个版本的快照</li>
 </ul>
 </li>
-<li>当前读<ul>
+<li><p>当前读</p>
+<ul>
 <li>当前读是给读操作加上共享锁、排它锁，DML 操作加上排它锁，读取记录的最新版本。</li>
 <li>快照读的前提是隔离级别不是串行级别，串行级别下的快照读会退化成当前读；</li>
 <li>MVCC 其它会对数据库进行修改的操作（INSERT、UPDATE、DELETE）隐式的加上排他锁操作，从而读取最新的数据。可以看到 MVCC 并不是完全不用加锁，而只是避免了 SELECT 的加锁操作。</li>
@@ -810,7 +815,7 @@
 </tr>
 <tr>
 <td align="left"><strong>适用操作</strong></td>
-<td align="left"><code>FOR UPDATE</code>、<code>UPDATE</code>、<code>DELETE</code></td>
+<td align="left"><code>FOR UPDATE</code>、<code>UPDATE</code>、<code>DELETE</code> 、INSERT</td>
 <td align="left">普通<code>SELECT</code></td>
 </tr>
 <tr>
@@ -820,46 +825,51 @@
 </tr>
 <tr>
 <td align="left"><strong>触发条件</strong></td>
-<td align="left">所有普通 <code>SELECT</code> 语句默认使用快照读。 <br />事务首次读取数据时生成快照，后续读取沿用该快照。</td>
 <td align="left">显式加锁的 <code>SELECT ... FOR UPDATE</code> 或 <code>SELECT ... LOCK IN SHARE MODE</code>。 <br />任何数据修改语句（<code>UPDATE</code>&#x2F;<code>DELETE</code>&#x2F;<code>INSERT</code>）在执行前会隐式触发当前读。</td>
+<td align="left">所有普通 <code>SELECT</code> 语句默认使用快照读。 <br />事务首次读取数据时生成快照，后续读取沿用该快照。</td>
+</tr>
+</tbody></table>
+</li>
+<li></li>
+</ul>
+<h4 id="MVCC适用的隔离级别"><a href="#MVCC适用的隔离级别" class="headerlink" title="MVCC适用的隔离级别"></a>MVCC适用的隔离级别</h4><ul>
+<li><table>
+<thead>
+<tr>
+<th align="left"><strong>操作类型</strong></th>
+<th align="left"><strong>RC 隔离级别</strong></th>
+<th align="left"><strong>RR 隔离级别</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>普通 <code>SELECT</code></strong></td>
+<td align="left">动态快照读（每次生成新 <code>Read View</code>）</td>
+<td align="left">固定快照读（复用首次 <code>Read View</code>）</td>
+</tr>
+<tr>
+<td align="left"><strong>写操作&#x2F;加锁读</strong></td>
+<td align="left">当前读（读取最新数据）</td>
+<td align="left">当前读（读取最新数据，加间隙锁防幻读）</td>
 </tr>
 </tbody></table>
 </li>
 </ul>
-<h4 id="MVCC适用的隔离级别"><a href="#MVCC适用的隔离级别" class="headerlink" title="MVCC适用的隔离级别"></a>MVCC适用的隔离级别</h4><ul>
-<li>可重复读（REPEATABLE  READ）<ul>
-<li>SELECT操作，InnoDB会根据以下两个条件检查每行记录：<ul>
-<li>InnoDB只查找创建版本号早于或等于当前系统版本号的数据行，这样可以确保事务读取的行，要么是在事务开始前已经存在的，要么是事务自身插入或者修改过的。</li>
-<li>行的删除版本号要么未定义，要么大于当前的系统版本号(在当前事务开始之后删除的)。这可以确保事务读取到的行，在事务开始之前未被删除。</li>
-</ul>
-</li>
-<li><strong>在RR下快照Read View不是事务发起时创建，而是在第一个SELECT发起后创建。</strong></li>
-<li>为什么rr能实现可重复读而rc不能<ul>
-<li>分两种情况<ul>
-<li>快照读的情况下,rr不能更新事务内的up_limit_id,    而rc每次会把up_limit_id更新为快照读之前最新已提交事务的transaction id,则rc不能可重复读</li>
-<li>当前读的情况下,rr是利用record lock+gap lock来实现的,而rc没有gap,所以rc不能可重复读</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>读已提交(READ COMMITED)<ul>
-<li><strong>READ COMMITTED读取最新的版本号记录，就是所有事务最新提交的结果。</strong></li>
-<li>一致读快照（Read View）是在每次SELECT后都会生成最新的Read View，即每次SELECT都能读取到已COMMIT的数据</li>
-</ul>
-</li>
-</ul>
 <h4 id="read-view"><a href="#read-view" class="headerlink" title="read-view"></a><strong>read-view</strong></h4><ul>
-<li>READ COMMITTD在每一次进行普通SELECT操作前都会生成一个ReadView，而REPEATABLE READ只在第一次进行普通SELECT操作前生成一个ReadView，数据的可重复读其实就是ReadView的重复使用。</li>
-<li>当执行 SQL 语句查询时会产生一致性视图，也就是 read-view，它是由查询的那一时间所有未提交事务 ID 组成的数组，和已经创建的最大事务 ID 组成的。</li>
-<li>在这个数组中最小的事务 ID 被称之为 min_id，最大事务 ID 被称之为 max_id，查询的数据结果要根据 read-view 做对比从而得到快照结果。</li>
-<li>这个规则就是使用当前的记录的 trx_id 跟 read-view 进行对比<ul>
-<li>如果 trx_id&lt;min_id，表示此版本是已经提交的事务生成的，由于事务已经提交所以数据是可见的。</li>
-<li>如果 trx_id&gt;max_id，表示此版本是由将来启动的事务生成的，是肯定不可见的。</li>
-<li>如果 min_id&lt;&#x3D;trx_id&lt;&#x3D;max_id 会存在俩种情况<ul>
-<li>如果 row 的 trx_id 在数组中，表示此版本是由还没提交的事务生成的，不可见，但是当前自己的事务是可见的。</li>
-<li>如果 row 的 trx_id 不在数组中，表明是提交的事务生成了该版本，可见。</li>
+<li>进行快照读时，会产生read-view,RC在每一次进行普通SELECT操作前都会生成一个ReadView，而RR只在第一次进行普通SELECT操作前生成一个ReadView，数据的可重复读其实就是read-view的重复使用</li>
+<li>read-view有四个重要变量<ul>
+<li><code>m_ids</code>：活跃事务id列表，当前系统中所有活跃的（也就是没提交的）事务的事务id列表。</li>
+<li><code>min_trx_id</code>：m_ids 中最小的事务id。</li>
+<li><code>max_trx_id</code>：生成 ReadView 时，系统应该分配给下一个事务的id（注意不是 m_ids 中最大的事务id），也就是m_ids 中的最大事务id + 1 。</li>
+<li><code>creator_trx_id</code>：生成该 read-view 的事务的事务id。</li>
+</ul>
+</li>
+<li>trx_id是版本链中的各个id, 遍历版本链，通过比较trx_id和m_ids中的数的关系来确认当前可见的版本是哪个<ul>
+<li>trx_id &#x3D;&#x3D; creator_trx_id，版本链中的这个版本是当前事务修改的，所以该快照记录对当前事务可见。</li>
+<li>trx_id&lt;min_trx_id，表示此版本是已经提交的事务生成的，由于事务已经提交所以数据是可见的。</li>
+<li>trx_id&gt;max_trx_id，表示此版本是由将来启动的事务生成的，是肯定不可见的。</li>
+<li>min_trx_id&lt;&#x3D;trx_id&lt;&#x3D;max_trx_id会存在俩种情况<ul>
+<li>trx_id 在数组中，表示此版本是由还没提交的事务生成的，不可见，但是当前自己的事务是可见的。</li>
+<li>row 的 trx_id 不在数组中，表明是提交的事务生成了该版本，可见。</li>
 </ul>
 </li>
 </ul>
@@ -1019,7 +1029,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月24日</div>
+          <div>2025年4月25日</div>
         </div>
       
       
