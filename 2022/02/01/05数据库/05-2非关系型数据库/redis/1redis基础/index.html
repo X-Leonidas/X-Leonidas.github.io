@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.2k 字
+          4.1k 字
         
       </span>
     
@@ -267,32 +267,11 @@
 <li>Memcached 将内存分割成特定长度的块来存储数据，以完全解决内存碎片的问题。但是这种方式会使得内存的利用率不高，例如块的大小为 128 bytes，只存储 100 bytes 的数据，那么剩下的 28 bytes 就浪费掉了</li>
 </ul>
 </li>
-<li></li>
 </ul>
 <h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><ul>
 <li>Redis默认有六个数据库，从0-5，每个数据库单例能处理key：2.5亿个，一个key或是value大小最大是512M；Redis性能还是极高的，读的速度是110000次&#x2F;s,写的速度是81000次&#x2F;s 。</li>
 </ul>
 <p>	</p>
-<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><h3 id="计数器"><a href="#计数器" class="headerlink" title="计数器"></a>计数器</h3><ul>
-<li>可以对 String 进行自增自减运算，从而实现计数器功能。</li>
-<li>Redis 这种内存型数据库的读写性能非常高，很适合存储频繁读写的计数量</li>
-</ul>
-<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
-<li>将热点数据放到内存中，设置内存的最大使用量以及淘汰策略来保证缓存的命中率</li>
-</ul>
-<h3 id="查找表"><a href="#查找表" class="headerlink" title="查找表"></a>查找表</h3><ul>
-<li>查找表和缓存类似，也是利用了 Redis 快速的查找特性。但是查找表的内容不能失效，而缓存的内容可以失效，因为缓存不作为可靠的数据来源。</li>
-</ul>
-<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><ul>
-<li>List 是一个双向链表，可以通过 lpush 和 rpop 写入和读取消息</li>
-</ul>
-<h3 id="会话缓存"><a href="#会话缓存" class="headerlink" title="会话缓存"></a>会话缓存</h3><ul>
-<li>使用 Redis 来统一存储多台应用服务器的会话信息。</li>
-<li>当应用服务器不再存储用户的会话信息，也就不再具有状态，一个用户可以请求任意一个应用服务器，从而更容易实现高可用性以及可伸缩性。</li>
-</ul>
-<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><ul>
-<li>可以使用 Redis 自带的 SETNX 命令实现分布式锁，除此之外，还可以使用官方提供的 RedLock 分布式锁实现</li>
-</ul>
 <h2 id="通用命令"><a href="#通用命令" class="headerlink" title="通用命令"></a>通用命令</h2><ul>
 <li>仅当不存在时赋值，两种写法<ul>
 <li>set key value   nx</li>
@@ -345,15 +324,6 @@
 <li>制定步长自增  incrby key  increment(步长）</li>
 <li>递减   decr   decrby</li>
 </ul>
-<h4 id="bitMap"><a href="#bitMap" class="headerlink" title="bitMap"></a>bitMap</h4><ul>
-<li>setbit k1 1 1 :将第一个字节的第二位变为1，默认为0， 0000 0000 -&gt; 0100 0000</li>
-<li>bitcount  k  start end:  统计start end中1出现的次数</li>
-<li>bitpos k  bit start end :  返回位图中第一个值为bit的位置</li>
-<li>bitop  operation  destkey  key1 key2…:对一个或多个保存二进制位的字符串key进行位元操作,并将结果保存到destksy上<ul>
-<li>operation可以是AND、OR、NOT、XOR</li>
-</ul>
-</li>
-</ul>
 <h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><ul>
 <li>存储： hset key filed1 value1  filed2 value2</li>
 <li>获取： hget key filed1</li>
@@ -362,10 +332,11 @@
 <li>判断字段是否存在：HEXISTS key filed</li>
 <li>只获取字段名或字段数量： hkeys key   、hvalues key</li>
 <li>获取字段数量 ： HLEN key</li>
-<li>哈希表中的字段值加上指定增量值： Hincrby key filed1 INCR_BY_NUMBER</li>
+<li>哈希表中的字段值加上指定增量值： Hincrby key filed1 INCR_BY_NUMBER </li>
+<li>应用场景<ul>
+<li>哈希支持单独修改字段，存储那些对象数据，特别是对象属性经常发生增删改操作的数据</li>
 </ul>
-<h4 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
-<li>存储那些对象数据，特别是对象属性经常发生增删改操作的数据</li>
+</li>
 </ul>
 <h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><ul>
 <li><strong>双向链表实现，有序重复，按照出入顺序排序</strong>，可以添加元素到头部和尾部</li>
@@ -414,16 +385,18 @@
 <li>blpop</li>
 </ul>
 </li>
-</ul>
-<h4 id="应用场景-2"><a href="#应用场景-2" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
+<li>应用场景<ul>
 <li><strong>消息队列</strong></li>
+<li>时间线</li>
 <li>文章列表或者数据分页展示的应用。<ul>
 <li>比如，我们常用的博客网站的文章列表，当用户量越来越多时，而且每一个用户都有自己的文章列表，而且当文章多时，都需要分页展示，这时可以考虑使用<strong>Redis</strong>的列表，列表不但有序同时还支持按照范围内获取元素，可以完美解决分页查询功能。大大提高查询效率。</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
 <h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><ul>
-<li>无序，不允许重复元素</li>
+<li>无序，不允许重复元素，内部是hash实现，支持交集操作</li>
 <li>添加<ul>
 <li>sadd key value</li>
 </ul>
@@ -477,7 +450,7 @@
 </li>
 </ul>
 <h3 id="Sortedset"><a href="#Sortedset" class="headerlink" title="Sortedset"></a>Sortedset</h3><ul>
-<li>有序,不允许重复元素，通过散列表实现，排序后的集合中的每个元素都与一个称为得分的浮点值相关联,按照分数进行排序</li>
+<li>有序,不允许重复元素，通过哈希表实现，排序后的集合中的每个元素都与一个称为得分的浮点值相关联,按照分数进行排序</li>
 <li>存储<ul>
 <li>zadd key score value</li>
 </ul>
@@ -530,11 +503,47 @@
 </li>
 </ul>
 <h4 id="排序的数据结构"><a href="#排序的数据结构" class="headerlink" title="排序的数据结构"></a>排序的数据结构</h4><ul>
+<li>元素唯一且按<strong>分数（score）</strong>排序，结合哈希表（快速查找）和跳跃表（范围查询）。</li>
 <li>skip list，类似于数据库的B+树，区别是skip  list是随机选层</li>
 </ul>
-<h4 id="应用场景-3"><a href="#应用场景-3" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
 <li>排行榜：有序集合经典使用场景。例如视频网站需要对用户上传的视频做排行榜，榜单维护可能是多方面：按照时间、按照播放量、按照获得的赞数等</li>
 <li>用<strong>Sorted Sets</strong>来做带权重的队列，比如普通消息的score为1，重要消息的score为2，然后工作线程可以选择按score的倒序来获取工作任务。让重要的任务优先执行。</li>
+</ul>
+<h3 id="bitMap"><a href="#bitMap" class="headerlink" title="bitMap"></a>bitMap</h3><ul>
+<li>基于 String 的位操作，每个 bit 表示 0&#x2F;1。</li>
+<li>setbit k1 1 1 :将第一个字节的第二位变为1，默认为0， 0000 0000 -&gt; 0100 0000</li>
+<li>bitcount  k  start end:  统计start end中1出现的次数</li>
+<li>bitpos k  bit start end :  返回位图中第一个值为bit的位置</li>
+<li>bitop  operation  destkey  key1 key2…:对一个或多个保存二进制位的字符串key进行位元操作,并将结果保存到destksy上<ul>
+<li>operation可以是AND、OR、NOT、XOR</li>
+</ul>
+</li>
+</ul>
+<h3 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a><strong>HyperLogLog</strong></h3><ul>
+<li>基数统计（估算集合中不重复元素数量），误差率约 **0.81%**。</li>
+<li>在 Redis 中实现的 <strong>HyperLoglog</strong> 也只需要 <strong>12 K</strong> 内存，在 <strong>标准误差 0.81%</strong> 的前提下，<strong>能够统计 2的64 次方数据</strong>！</li>
+<li>应用场景<ul>
+<li>统计独立 IP 访问量。</li>
+<li>大型数据集的去重计数（如搜索关键词去重）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Geospatial"><a href="#Geospatial" class="headerlink" title="Geospatial"></a><strong>Geospatial</strong></h3><ul>
+<li>基于 Sorted Set 存储经纬度，使用 GeoHash 编码。</li>
+<li>应用场景<ul>
+<li>配送距离计算</li>
+<li>附近的人&#x2F;地点</li>
+</ul>
+</li>
+</ul>
+<h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><ul>
+<li>Redis 5.0 引入，用于消息队列，支持多消费者组和消息持久化。</li>
+<li>应用场景<ul>
+<li>异步通信系统（类似 Kafka）</li>
+<li>日志收集（支持回溯消费）</li>
+</ul>
+</li>
 </ul>
 <h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><h3 id="SDS"><a href="#SDS" class="headerlink" title="SDS"></a>SDS</h3><ul>
 <li>String键的底层实现 还被用作缓冲区</li>
@@ -567,7 +576,6 @@
 </li>
 <li>SUBSCRIBE channel</li>
 <li>订阅某个channel</li>
-<li></li>
 </ul>
 <h2 id="redis事务"><a href="#redis事务" class="headerlink" title="redis事务"></a>redis事务</h2><ul>
 <li>   Redis的事务是通过MULTI，EXEC，DISCARD和WATCH这四个命令来完成的。</li>
@@ -772,7 +780,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2025年4月29日</div>
         </div>
       
       
@@ -809,9 +817,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/Spirng%E6%BA%90%E7%A0%81/" title="Spirng源码">
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/3.mysql%E8%B0%83%E4%BC%98/" title="3.mysql调优">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Spirng源码</span>
+                        <span class="hidden-mobile">3.mysql调优</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

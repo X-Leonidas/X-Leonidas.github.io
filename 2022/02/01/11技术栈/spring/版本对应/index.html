@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="系统架构的一些原则 原则一：关注于真正的收益而不是技术本身 关于收益的定义 是否可以降低技术门槛加快整个团队的开发流程 是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA 是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本     原则二：以应用服务和API为视角，而不是以资源和技术为视角 现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并">
+    <meta name="description" content="大版本对应   Spring Boot Spring Cloud    1.2.x Angel版本   1.3.x Brixton版本   1.4.x stripes Camden版本   1.5.x Dalston版本、Edgware版本   2.0.x Finchley版本   2.1.x Greenwich.SR2   详细版本对应   spring-boot-starter-parent">
   
   
   
-  <title>系统架构 - 夜坐听风</title>
+  <title>版本对应 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="系统架构"></span>
+            <span id="subtitle" data-typed-text="版本对应"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-10-09 23:55" pubdate>
-          2022-10-09 23:55:39
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:09
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          418 字
+          303 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          4 分钟
+          3 分钟
         
       </span>
     
@@ -253,45 +253,225 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">系统架构</h1>
+            <h1 id="seo-header">版本对应</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="系统架构的一些原则"><a href="#系统架构的一些原则" class="headerlink" title="系统架构的一些原则"></a>系统架构的一些原则</h2><ul>
-<li>原则一：关注于真正的收益而不是技术本身<ul>
-<li>关于收益的定义<ul>
-<li>是否可以降低技术门槛加快整个团队的开发流程</li>
-<li>是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA</li>
-<li>是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>原则二：以应用服务和API为视角，而不是以资源和技术为视角<ul>
-<li>现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并Dev和Ops</li>
-</ul>
-</li>
-<li>原则三: 选择最主流和成熟的技术</li>
-<li>原则四：完备性比性能更重要<ul>
-<li>使用最科学严谨的技术模型为主，并以不严谨的模型作为补充</li>
-<li>性能上的东西都是多解的</li>
-</ul>
-</li>
-<li>原则五：制定并遵循服从标准、规范和最佳实践</li>
-<li>原则六：重视架构扩展性和可运维性<ul>
-<li>微服务架构的一些建议<ul>
-<li>所有团队的程序模块都要以通过Service Interface方式将其数据与功能开放出来。</li>
-<li>团队间的程序模块的新系通信都要通过这些接口</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>原则七：对控制逻辑进行全面收口</li>
-<li>原则八：不要迁就老旧系统的技术债务</li>
-<li>原则九：不要依赖自己的经验，要依赖于经验和学习</li>
-<li>原则十：千万要小心X - Y问题，要追原始需求</li>
-<li>原则十一： 激进胜于保守，创新与使用并不冲突</li>
+                <h4 id="大版本对应"><a href="#大版本对应" class="headerlink" title="大版本对应"></a>大版本对应</h4><table>
+<thead>
+<tr>
+<th align="left">Spring Boot</th>
+<th align="left">Spring Cloud</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1.2.x</td>
+<td align="left">Angel版本</td>
+</tr>
+<tr>
+<td align="left">1.3.x</td>
+<td align="left">Brixton版本</td>
+</tr>
+<tr>
+<td align="left">1.4.x stripes</td>
+<td align="left">Camden版本</td>
+</tr>
+<tr>
+<td align="left">1.5.x</td>
+<td align="left">Dalston版本、Edgware版本</td>
+</tr>
+<tr>
+<td align="left">2.0.x</td>
+<td align="left">Finchley版本</td>
+</tr>
+<tr>
+<td align="left">2.1.x</td>
+<td align="left">Greenwich.SR2</td>
+</tr>
+</tbody></table>
+<h4 id="详细版本对应"><a href="#详细版本对应" class="headerlink" title="详细版本对应"></a>详细版本对应</h4><table>
+<thead>
+<tr>
+<th align="left">spring-boot-starter-parent</th>
+<th align="left">spring-cloud-dependencies</th>
+<th align="left"></th>
+<th align="left"></th>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">版本号</td>
+<td align="left">发布日期</td>
+<td align="left"></td>
+<td align="left">版本号</td>
+<td align="left">发布日期</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">1.5.2.RELEASE</td>
+<td align="left">2017年3月</td>
+<td align="left">稳定版</td>
+<td align="left">Dalston.RC1</td>
+<td align="left">2017年未知月</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">1.5.9.RELEASE</td>
+<td align="left">2017年11月</td>
+<td align="left">稳定版</td>
+<td align="left">Edgware.RELEASE</td>
+<td align="left">2017年11月</td>
+<td align="left">稳定版</td>
+</tr>
+<tr>
+<td align="left">1.5.16.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Edgware.SR5</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">1.5.20.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Edgware.SR5</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M3 and &lt;2.0.0.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M5 and &lt;&#x3D;2.0.0.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M3</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M6 and &lt;&#x3D;2.0.0.M6</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.M7 and &lt;&#x3D;2.0.0.M7</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.RC1 and &lt;&#x3D;2.0.0.RC1</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M6</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.RC2 and &lt;&#x3D;2.0.0.RC2</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M7</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.0.RELEASE and &lt;&#x3D;2.0.0.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.M9</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.1.RELEASE and &lt;2.0.2.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.RC1</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.2.RELEASE and &lt;2.0.3.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.RC2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.3.RELEASE and &lt;2.0.999.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.SR4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.0.999.BUILD-SNAPSHOT and &lt;2.1.0.M3</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Finchley.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.1.0.M3 and &lt;2.1.0.RELEASE</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Greenwich.M1</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.1.0.RELEASE and &lt;2.1.9.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Greenwich.SR2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.1.9.BUILD-SNAPSHOT and &lt;2.2.0.M4</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Greenwich.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.2.0.M4 and &lt;&#x3D;2.2.0.M5</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Hoxton.M2</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Spring Boot &gt;&#x3D;2.2.0.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Hoxton.BUILD-SNAPSHOT</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h4 id="查询接口"><a href="#查询接口" class="headerlink" title="查询接口"></a>查询接口</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://start.spring.io/actuator/info">https://start.spring.io/actuator/info</a></li>
 </ul>
 
                 
@@ -311,8 +491,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">23系统设计</a>
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/" class="category-chain-item">spring</a>
+  
+  
+
   
 
       </span>
@@ -331,8 +518,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>系统架构</div>
-      <div>https://x-leonidas.github.io/2022/10/09/23系统设计/系统架构/</div>
+      <div>版本对应</div>
+      <div>https://x-leonidas.github.io/2022/02/01/11技术栈/spring/版本对应/</div>
     </div>
     <div class="license-meta">
       
@@ -344,13 +531,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年10月9日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2022年5月3日</div>
         </div>
       
       
@@ -387,9 +574,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/10/09/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/Docker%20Desktop/" title="Docker Desktop">
+                      <a href="/2022/02/01/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" title="系统架构">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Docker Desktop</span>
+                        <span class="hidden-mobile">系统架构</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -397,8 +584,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/10/09/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
-                        <span class="hidden-mobile">4. 实践</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/Spirng%E6%BA%90%E7%A0%81/" title="Spirng源码">
+                        <span class="hidden-mobile">Spirng源码</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

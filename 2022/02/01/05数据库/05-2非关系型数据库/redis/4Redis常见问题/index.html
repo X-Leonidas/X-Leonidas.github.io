@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.8k 字
+          3.4k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          32 分钟
+          28 分钟
         
       </span>
     
@@ -289,7 +289,7 @@
 </ul>
 <h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><ul>
 <li>什么叫缓存穿透？<ul>
-<li>一般的缓存系统，都是按照key去缓存查询，如果不存在对应的value，就应该去后端系统查找（比如DB）。<strong>如果key对应的value一定是不存在的，并且对该key并发请求量很大，就会对后端系统造成很大的压力。</strong>这就叫做缓存穿透。</li>
+<li>一般的缓存系统，都是按照key去缓存查询，<strong>如果不存在对应的value</strong>，就应该去后端系统查找（比如DB）。<strong>如果key对应的value一定是不存在的，并且对该key并发请求量很大，就会对后端系统造成很大的压力。</strong>这就叫做缓存穿透。</li>
 </ul>
 </li>
 <li>如何解决？<ul>
@@ -318,11 +318,8 @@
 </li>
 <li>如何解决？<ul>
 <li>使用redis的setnx互斥锁先进行判断，(在指定的 key 不存在时，为 key 设置指定的值。)这样其他线程就处于等待状态，保证不会有大并发操作去操作数据库。</li>
-<li>隐患，当取数据失败，可能会死锁，解决方法：设置锁的过期时间<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-keyword">if</span>(redis.sexnx()==<span class="hljs-number">1</span>)&#123;<br>       <span class="hljs-comment">//查询数据库</span><br>       <span class="hljs-comment">//加入线程</span><br>&#125;<span class="hljs-keyword">else</span>&#123;<br>    <span class="hljs-keyword">return</span> redis.get();  <br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>双重检测锁解决热点缓存(缓存击穿问题)<ul>
-<li>手动</li>
+<li>缓存数据永不过期，但后台异步更新数据，并在 Value 中存储逻辑过期时间</li>
+<li>提前加载热点数据到缓存，并分散过期时间</li>
 </ul>
 </li>
 </ul>
@@ -336,31 +333,6 @@
 </ul>
 <h3 id="使用Zookeeper来解决多发竞争问题"><a href="#使用Zookeeper来解决多发竞争问题" class="headerlink" title="使用Zookeeper来解决多发竞争问题"></a>使用Zookeeper来解决多发竞争问题</h3><ul>
 <li>某个时刻，多个系统实例都去更新某个 key。可以基于 <strong>Zookeeper</strong> 实现分布式锁。每个系统通过 <strong>Zookeeper</strong> 获取分布式锁，确保同一时间，只能有一个系统实例在操作某个 Key，别人都不允许读和写。</li>
-</ul>
-<h2 id="双写一致性-缓存一致性"><a href="#双写一致性-缓存一致性" class="headerlink" title="双写一致性(缓存一致性)"></a>双写一致性(缓存一致性)</h2><ul>
-<li>一般来说，如果允许缓存可以稍微的跟数据库偶尔有不一致的情况，也就是说如果你的系统<strong>不是严格要求</strong> “缓存+数据库” 必须保持一致性的话，最好不要做这个方案，即：<strong>读请求和写请求串行化</strong>，串到一个<strong>内存队列</strong>里去。</li>
-</ul>
-<h3 id="先删缓存，在更新数据库"><a href="#先删缓存，在更新数据库" class="headerlink" title="先删缓存，在更新数据库"></a>先删缓存，在更新数据库</h3><ul>
-<li>先删除缓存，数据库还没有更新成功，此时如果读取缓存，缓存不存在，去数据库中读取到的是旧值，缓存不一致发生，并且还把旧的值作为了新的缓存。</li>
-<li>延时双删<ul>
-<li>为了避免更新数据库的时候，其他线程从缓存中读取不到数据，就在更新完数据库之后，再sleep一段时间，然后再次删除缓存。</li>
-</ul>
-</li>
-<li>延时双删流程<ul>
-<li>线程1删除缓存，然后去更新数据库</li>
-<li>线程2来读缓存，发现缓存已经被删除，所以直接从数据库中读取，这时候由于线程1还没有更新完成，所以读到的是旧值，然后把旧值写入缓存</li>
-<li>线程1，根据估算的时间，sleep，由于sleep的时间大于线程2读数据+写缓存的时间，所以缓存被再次删除</li>
-<li>如果还有其他线程来读取缓存的话，就会再次从数据库中读取到最新值</li>
-</ul>
-</li>
-</ul>
-<h3 id="先更新数据库，再删缓存"><a href="#先更新数据库，再删缓存" class="headerlink" title="先更新数据库，再删缓存"></a>先更新数据库，再删缓存</h3><ul>
-<li>更新数据库成功，如果删除缓存失败或者还没有来得及删除，那么，其他线程从缓存中读取到的就是旧值</li>
-<li>解决方案：先更新数据库，成功后往消息队列发消息，消费到消息后再删除缓存，借助消息队列的重试机制来实现，达到最终一致性的效果。</li>
-</ul>
-<h3 id="为什么是删除而不是更新缓存"><a href="#为什么是删除而不是更新缓存" class="headerlink" title="为什么是删除而不是更新缓存"></a>为什么是删除而不是更新缓存</h3><ul>
-<li>每次更新数据后，删除缓存，不更新缓存，等到下次数据来读取的时候，没有命中缓存，去数据库里取出数据在放入缓存中。</li>
-<li>如果是更新缓存，如果数据库1小时内更新了1000次，那么缓存也要更新1000次，但是这个缓存可能在1小时内只被读取了1次，有可能缓存是多个表进行连表查询出来的，更新操作消耗很大</li>
 </ul>
 <h2 id="Redis性能调优"><a href="#Redis性能调优" class="headerlink" title="Redis性能调优"></a>Redis性能调优</h2><ul>
 <li>redis-cli -h 127.0.0.1 -p 6379 –intrinsic-latency 60  得到这个实例60S内的最大响应延迟</li>
@@ -425,7 +397,32 @@
 </li>
 </ul>
 <h4 id="碎片整理"><a href="#碎片整理" class="headerlink" title="碎片整理"></a>碎片整理</h4><h4 id="网络带宽过载"><a href="#网络带宽过载" class="headerlink" title="网络带宽过载"></a>网络带宽过载</h4><h2 id="Redis大key问题"><a href="#Redis大key问题" class="headerlink" title="Redis大key问题"></a>Redis大key问题</h2><ul>
-<li>TODO</li>
+<li>定义标准<ul>
+<li><strong>字符串类型（String）</strong>：通常认为 Value 超过 10KB（高并发场景）或 1MB（普通场景）。</li>
+<li><strong>集合类型（Hash&#x2F;List&#x2F;Set&#x2F;ZSet）</strong>：元素数量超过 5000 个，或总内存占用超过 10MB。</li>
+<li><strong>其他场景</strong>：如集群中某个分片的内存占用显著高于其他节点。</li>
+</ul>
+</li>
+<li>主要影响<ul>
+<li><strong>服务阻塞</strong>：单线程模型下，大 Key 的读写操作会阻塞主线程，导致客户端超时。</li>
+<li><strong>内存不均衡</strong>：集群模式下，大 Key 会导致数据分片的内存和 QPS 倾斜。</li>
+<li><strong>网络拥塞</strong>：大 Key 传输占用高带宽，可能打满网卡。</li>
+<li><strong>主从同步异常</strong>：大 Key 同步延迟可能引发主从数据不一致。</li>
+</ul>
+</li>
+<li>解决方案<ul>
+<li>数据拆分<ul>
+<li>按照业务逻辑拆分</li>
+<li>按照时间&#x2F;范围拆分</li>
+</ul>
+</li>
+<li>优化数据结构及存储<ul>
+<li>用 Bitmap 替代 String 记录布尔值（如用户签到）7。</li>
+<li>用 HyperLogLog 替代 Set 统计独立访客</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
                 
@@ -498,7 +495,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2025年4月29日</div>
         </div>
       
       
@@ -535,9 +532,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/2redis%E8%BF%9B%E9%98%B6/" title="2redis进阶">
+                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/12-%E4%B8%80%E8%87%B4%E6%80%A7hash/" title="12-一致性hash">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">2redis进阶</span>
+                        <span class="hidden-mobile">12-一致性hash</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

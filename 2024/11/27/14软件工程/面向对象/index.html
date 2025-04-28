@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="网络IOBIO 同步阻塞IO 应用进程被阻塞，直到数据从内核缓冲区复制到应用进程缓冲区中才返回。应该注意到，在阻塞的过程中，其它应用进程还可以执行，因此阻塞不意味着整个操作系统都被阻塞。因为其它应用进程还可以执行，所以不消耗 CPU 时间，这种模型的 CPU 利用率会比较高。  NIO 同步非阻塞 服务器实现一个连接一个线程，即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I&amp;">
+    <meta name="description" content="面向对象编程什么是面向对象 面向对象编程是一种编程范式或编程风格。它以类或对象作为组织代码的基本单元，并将封装、抽象、继承、多态四个特性，作为代码设计和实现的基石  封装、抽象、继承、多态分别可以解决哪些编程问题？ 封装 封装也叫作信息隐藏或者数据访问保护。类通过暴露有限的访问接口，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。 封装后的类，可以提高类的易用性，提高代码的可读性">
   
   
   
-  <title>IO基础 - 夜坐听风</title>
+  <title>面向对象 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="IO基础"></span>
+            <span id="subtitle" data-typed-text="面向对象"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:30
+        <time datetime="2024-11-27 00:50" pubdate>
+          2024-11-27 00:50:50
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          802 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          16 分钟
+          7 分钟
         
       </span>
     
@@ -253,112 +253,54 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">IO基础</h1>
+            <h1 id="seo-header">面向对象</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="网络IO"><a href="#网络IO" class="headerlink" title="网络IO"></a>网络IO</h1><h2 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2><ul>
-<li>同步阻塞IO</li>
-<li>应用进程被阻塞，直到数据从内核缓冲区复制到应用进程缓冲区中才返回。<br>应该注意到，在阻塞的过程中，其它应用进程还可以执行，因此阻塞不意味着整个操作系统都被阻塞。因为其它应用进程还可以执行，所以不消耗 CPU 时间，这种模型的 CPU 利用率会比较高。</li>
+                <h1 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h1><h2 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h2><ul>
+<li>面向对象编程是一种<strong>编程范式或编程风格</strong>。它以<strong>类</strong>或<strong>对象</strong>作为组织代码的基本单元，并将<code>封装</code>、<code>抽象</code>、<code>继承</code>、<code>多态</code>四个特性，作为代码设计和实现的基石</li>
 </ul>
-<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><ul>
-<li>同步非阻塞</li>
-<li>服务器实现一个连接一个线程，即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I&#x2F;O请求时才启动一个线程进行处理。NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，<strong>JDK1.4</strong>之后开始支持。</li>
-</ul>
-<h3 id="Channel-通道"><a href="#Channel-通道" class="headerlink" title="Channel(通道)"></a>Channel(通道)</h3><ul>
-<li>Channel是一个对象，可以通过它读取和写入数据。通常我们都是将数据写入包含一个或者多个字节的缓冲区，然后再将缓存区的数据写入到通道中，将数据从通道读入缓冲区，再从缓冲区获取数据。</li>
-<li>Channel 类似于原I&#x2F;O中的流（Stream），但有所区别：流是单向的，通道是双向的，可读可写。流读写是阻塞的，通道可以异步读写。</li>
-</ul>
-<h3 id="多路复用器"><a href="#多路复用器" class="headerlink" title="多路复用器"></a>多路复用器</h3><ul>
-<li>IO多路复用属于阻塞IO，但可以对多个文件描述符进行阻塞监听，所以效率较阻塞IO的高。</li>
-<li>select：<ul>
-<li>第一步：老师轮询把所有学生（最多1024个）问了个遍哪些做好作业了；</li>
-<li>第二步：如果第一步没有人，继续轮询，如果有人，就拿着箩筐下去收作业，也是重新一个一个问</li>
+<h2 id="封装、抽象、继承、多态分别可以解决哪些编程问题？"><a href="#封装、抽象、继承、多态分别可以解决哪些编程问题？" class="headerlink" title="封装、抽象、继承、多态分别可以解决哪些编程问题？"></a>封装、抽象、继承、多态分别可以解决哪些编程问题？</h2><ul>
+<li>封装<ul>
+<li>封装也叫作信息隐藏或者数据访问保护。类通过暴露<strong>有限的访问接口</strong>，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。</li>
+<li>封装后的类，可以提高类的易用性，提高代码的可读性和可维护性</li>
 </ul>
 </li>
-<li>poll：跟select一样，没有了1024个学生的限制</li>
-<li>epoll：让做好作业的学生做好了举手，老师下去收</li>
-</ul>
-<h4 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h4><ul>
-<li>监视的是文件描述符，所以有最大限制。select 的描述符类型使用数组实现，FD_SETSIZE 大小默认为 1024，因此默认只能监听少于 1024 个描述符。如果要监听更多描述符的话，需要修改 FD_SETSIZE 之后重新编译；而 poll 没有描述符数量的限制；</li>
-<li>Selector可以称他为通道的集合，每次客户端来了之后我们会把Channel注册到Selector中并且我们给他一个状态，在用死循环来环判断(判断是否做完某个操作，完成某个操作后改变不一样的状态)状态是否发生变化，直到IO操作完成后在退出死循环</li>
-<li>Selector与Channel是相互配合使用的，将Channel注册在Selector上之后，才可以正确的使用Selector，但此时Channel必须为非阻塞模式。Selector可以监听Channel的四种状态（Connect、Accept、Read、Write），当监听到某一Channel的某个状态时，才允许对Channel进行相应的操作。</li>
-</ul>
-<h4 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h4><ul>
-<li>poll的机制与select类似，与select在本质上没有多大差别，管理多个描述符也是进行轮询，根据描述符的状态进行处理，但是<strong>poll没有最大文件描述符数量的限制</strong>。poll和select同样存在一个缺点就是，包含大量文件描述符的数组被整体复制于用户态和内核的地址空间之间，而不论这些文件描述符是否就绪，它的开销随着文件描述符数量的增加而线性增大。</li>
-<li>poll 提供了更多的事件类型，并且对描述符的重复利用上比 select 高。</li>
-</ul>
-<h4 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h4><ul>
-<li>使用了内核文件级别的回调机制O(1)，epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。</li>
-</ul>
-<h5 id="水平触发和边沿触发"><a href="#水平触发和边沿触发" class="headerlink" title="水平触发和边沿触发"></a>水平触发和边沿触发</h5><ul>
-<li>水平触发(Level Tigger）<ul>
-<li>默认的模式，poll也使用的这个模式</li>
-<li>信号只需要处于水平，就一直会触发</li>
+<li>抽象<ul>
+<li>封装主要讲的是如何隐藏信息、保护数据。而抽象讲的是如何<strong>隐藏方法的具体实现</strong>，让调用者只需要关心方法提供了哪些功能，并不需要知道这些功能是如何实现的。</li>
+<li>在面对复杂系统的时候，人脑能承受的信息复杂程度是有限的，所以我们必须忽略掉一些非关键性的实现细节。而抽象作为一种<strong>只关注功能点不关注实现的设计思路</strong>，正好帮我们的大脑过滤掉许多非必要的信息。</li>
 </ul>
 </li>
-<li>边缘触发(Edge Tigger)<ul>
-<li>信号为上升沿或者下降沿时触发</li>
+<li>继承<ul>
+<li>分为单继承和多继承</li>
+<li>继承最大的一个好处就是<strong>代码复用</strong></li>
+<li>过度使用继承，继承层次过深过复杂，就会导致代码可读性、可维护性变差。</li>
 </ul>
 </li>
-<li>对于读操作<ul>
-<li>LT<ul>
-<li>只要缓冲内容不为空，LT模式返回读就绪。</li>
+<li>多态<ul>
+<li>多态是指，子类可以替换父类，在实际的代码运行过程中，调用子类的方法实现。</li>
+<li>多态特性能提高代码的<strong>可扩展性和复用性</strong></li>
 </ul>
 </li>
-<li>ET<ul>
-<li>当缓冲区由不可读变为可读的时候，即缓冲区由空变为不空的时候。</li>
-<li>当有新数据到达时，即缓冲区中的待读数据变多的时候。</li>
-<li>当缓冲区有数据可读，且应用进程对相应的描述符进行<code>EPOLL_CTL_MOD</code> 修改<code>EPOLLIN</code>事件时。</li>
+</ul>
+<h2 id="面向对象比面向过程有哪些优势？"><a href="#面向对象比面向过程有哪些优势？" class="headerlink" title="面向对象比面向过程有哪些优势？"></a>面向对象比面向过程有哪些优势？</h2><ul>
+<li>什么是面向过程编程？<ul>
+<li>面向过程编程也是一种编程范式或编程风格。它以过程（可以理解为方法、函数、操作）作为组织代码的基本单元，以数据（可以理解为成员变量、属性）与方法相分离为最主要的特点。面向过程风格是一种<strong>流程化的编程风格</strong>，通过拼接一组顺序执行的方法来操作数据完成一项功能。</li>
+<li>面向过程编程语言首先是一种编程语言。它最大的特点是<strong>不支持类和对象</strong>两个语法概念，不支持丰富的面向对象编程特性（比如继承、多态、封装），仅支持面向过程编程。</li>
+<li>面向过程和面向对象最基本的区别就是，<strong>代码的组织方式不同</strong><ul>
+<li>面向过程风格的代码被组织成了一组方法集合及其数据结构（struct User），方法和数据结构的定义是分开的</li>
+<li>面向对象风格的代码被组织成一组类，方法和数据结构被绑定一起，定义在类中。</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>对于写操作<ul>
-<li>LT<ul>
-<li>只要缓冲区还不满，LT模式会返回写就绪。</li>
+<li>优势<ul>
+<li>OOP 更加能够应对大规模复杂程序的开发</li>
+<li>OOP 风格的代码更易复用、易扩展、易维护</li>
+<li>OOP 语言更加人性化、更加高级、更加智能</li>
 </ul>
 </li>
-<li>ET<ul>
-<li>当缓冲区由不可写变为可写时。</li>
-<li>当有旧数据被发送走，即缓冲区中的内容变少的时候。</li>
-<li>当缓冲区有空间可写，且应用进程对相应的描述符进行<code>EPOLL_CTL_MOD</code> 修改<code>EPOLLOUT</code>事件时。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Buffer-缓冲区"><a href="#Buffer-缓冲区" class="headerlink" title="Buffer(缓冲区)"></a>Buffer(缓冲区)</h3><ul>
-<li>Buffer 是一个缓冲数据的对象， 它包含一些要写入或者刚读出的数据。</li>
-<li>在普通的面向流的 I&#x2F;O 中，一般将数据直接写入或直接读到 Stream 对象中。当是有了Buffer（缓冲区）后，数据第一步到达的是Buffer（缓冲区）中</li>
-<li>缓冲区实质上是一个数组(底层完全是数组实现的，感兴趣可以去看一下)。通常它是一个字节数组，内部维护几个状态变量，可以实现在同一块缓冲区上反复读写（不用清空数据再写)</li>
-</ul>
-<h4 id="capacity"><a href="#capacity" class="headerlink" title="capacity"></a>capacity</h4><ul>
-<li>作为一个内存块，Buffer有固定的大小值，也叫作“capacity”，只能往其中写入capacity个byte、long、char等类型。一旦Buffer满了，需要将其清空（通过读数据或者清楚数据）才能继续写数据。</li>
-</ul>
-<h4 id="position"><a href="#position" class="headerlink" title="position"></a>position</h4><ul>
-<li>当你写数据到Buffer中时，position表示当前的位置。初始的position值为0，当写入一个字节数据到Buffer中后，position会向前移动到下一个可插入数据的Buffer单元。position最大可为capacity-1。当读取数据时，也是从某个特定位置读，将Buffer从写模式切换到读模式，position会被重置为0。当从Buffer的position处读取一个字节数据后，position向前移动到下一个可读的位置。</li>
-</ul>
-<h4 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h4><ul>
-<li>在写模式下，Buffer的limit表示你最多能往Buffer里写多少数据。 写模式下，limit等于Buffer的capacity。当切换Buffer到读模式时， limit表示你最多能读到多少数据。因此，当切换Buffer到读模式时，limit会被设置成写模式下的position值。换句话说，你能读到之前写入的所有数据（limit被设置成已写数据的数量，这个值在写模式下就是position）</li>
-</ul>
-<h3 id="filp函数"><a href="#filp函数" class="headerlink" title="filp函数"></a>filp函数</h3><ul>
-<li><pre><code class="java">limit = position;
-position = 0;
-</code></pre>
-</li>
-</ul>
-<h4 id="Epoll-Bug-sellect空轮询"><a href="#Epoll-Bug-sellect空轮询" class="headerlink" title="Epoll Bug sellect空轮询"></a>Epoll Bug sellect空轮询</h4><p>+ </p>
-<h2 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h2><ul>
-<li><p>异步非阻塞</p>
-</li>
-<li><p>服务器实现模式为一个有效请求一个线程，客户端的I&#x2F;O请求都是由操作系统先完成了再通知服务器应用去启动线程进行处理，AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用操作系统参与并发操作，编程比较复杂，<strong>JDK1.7</strong>之后开始支持。.</p>
-</li>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AIO.png" srcset="/img/loading.gif" lazyload alt="image-20240225163910748" style="zoom:80%;" /></li>
-</ul>
-<h1 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h1><ul>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E6%96%87%E4%BB%B6IO.png" srcset="/img/loading.gif" lazyload /></li>
 </ul>
 
                 
@@ -378,7 +320,7 @@ position = 0;
     
       <span class="category-chain">
         
-  <a href="/categories/07IO/" class="category-chain-item">07IO</a>
+  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
   
   
 
@@ -398,8 +340,8 @@ position = 0;
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>IO基础</div>
-      <div>https://x-leonidas.github.io/2022/02/01/07IO/IO基础/</div>
+      <div>面向对象</div>
+      <div>https://x-leonidas.github.io/2024/11/27/14软件工程/面向对象/</div>
     </div>
     <div class="license-meta">
       
@@ -411,13 +353,13 @@ position = 0;
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2024年11月27日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年2月25日</div>
+          <div>2024年11月27日</div>
         </div>
       
       
@@ -454,9 +396,9 @@ position = 0;
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Tomcat/" title="Tomcat">
+                      <a href="/2024/12/03/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/13-%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86/" title="13-故障处理">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Tomcat</span>
+                        <span class="hidden-mobile">13-故障处理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -464,8 +406,8 @@ position = 0;
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/nginx/" title="nginx">
-                        <span class="hidden-mobile">nginx</span>
+                      <a href="/2024/11/27/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%B8%B8%E7%94%A8%E7%9A%84%E5%85%B3%E7%B3%BB%E5%9B%BE/" title="常用的关系图">
+                        <span class="hidden-mobile">常用的关系图</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

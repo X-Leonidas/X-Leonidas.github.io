@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          1.9k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          15 分钟
+          17 分钟
         
       </span>
     
@@ -351,6 +351,50 @@
 <h5 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h5><ul>
 <li>redis集群需要使用集群管理脚本redis-trib.rb，它的执行相应依赖ruby环境</li>
 </ul>
+<h4 id="哨兵和集群模式对比"><a href="#哨兵和集群模式对比" class="headerlink" title="哨兵和集群模式对比"></a>哨兵和集群模式对比</h4><table>
+<thead>
+<tr>
+<th align="left"><strong>维度</strong></th>
+<th align="left"><strong>哨兵模式</strong></th>
+<th align="left"><strong>集群模式</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>设计目标</strong></td>
+<td align="left">高可用性（主从故障转移）</td>
+<td align="left">高可用性 + 数据分片（分布式存储与扩展）</td>
+</tr>
+<tr>
+<td align="left"><strong>数据分片</strong></td>
+<td align="left">不支持，数据集中存储于主节点</td>
+<td align="left">支持，数据按哈希槽分布到多个节点</td>
+</tr>
+<tr>
+<td align="left"><strong>读写能力</strong></td>
+<td align="left">仅主节点可写，从节点只读</td>
+<td align="left">所有节点均可读写，负载均衡</td>
+</tr>
+<tr>
+<td align="left"><strong>扩展性</strong></td>
+<td align="left">垂直扩展（增加从节点实现读分离）</td>
+<td align="left">水平扩展（通过增加节点提升整体容量与性能）</td>
+</tr>
+<tr>
+<td align="left"><strong>配置复杂度</strong></td>
+<td align="left">简单，仅需配置哨兵节点与主从关系</td>
+<td align="left">复杂，需管理分片、节点间通信及数据迁移</td>
+</tr>
+<tr>
+<td align="left"><strong>故障恢复</strong></td>
+<td align="left">主节点故障时切换从节点，可能短暂不可用</td>
+<td align="left">节点故障时自动迁移数据，服务持续（可能数据不一致）</td>
+</tr>
+<tr>
+<td align="left"><strong>客户端支持</strong></td>
+<td align="left">需适配哨兵协议获取主节点地址</td>
+<td align="left">需支持集群协议，直接路由到对应节点</td>
+</tr>
+</tbody></table>
 <h4 id="Redis消息模式"><a href="#Redis消息模式" class="headerlink" title="Redis消息模式"></a>Redis消息模式</h4><h5 id="队列模式"><a href="#队列模式" class="headerlink" title="队列模式"></a>队列模式</h5><ul>
 <li><p>使用list类型的lpush和rpop实现消息队列</p>
 </li>
@@ -364,7 +408,6 @@
 </ul>
 <h5 id="发布订阅模式"><a href="#发布订阅模式" class="headerlink" title="发布订阅模式"></a>发布订阅模式</h5><ul>
 <li>发布消息</li>
-<li></li>
 </ul>
 
                 
@@ -437,7 +480,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年10月31日</div>
+          <div>2025年4月29日</div>
         </div>
       
       

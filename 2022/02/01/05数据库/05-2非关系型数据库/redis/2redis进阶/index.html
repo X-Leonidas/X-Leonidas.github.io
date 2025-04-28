@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.7k 字
+          3.6k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          32 分钟
+          31 分钟
         
       </span>
     
@@ -266,16 +266,6 @@
 <li>所有的客户端的队列中的指令或者响应，redis 每次都只能处理一个，同一时间绝对不会处理超过一个指令或者响应。</li>
 <li><strong>利用了NIO模型保证了IO效率，使用单线程保证了运行效率</strong></li>
 </ul>
-<h2 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h2><ul>
-<li><strong>估算基数的近似最优算法</strong>,概率算法 <strong>不直接存储</strong> 数据集合本身，通过一定的 <strong>概率统计方法预估基数值</strong>，</li>
-<li>在 Redis 中实现的 <strong>HyperLoglog</strong> 也只需要 <strong>12 K</strong> 内存，在 <strong>标准误差 0.81%</strong> 的前提下，<strong>能够统计 264 个数据</strong>！</li>
-<li><strong>基数统计(Cardinality Counting)</strong> 通常是用来统计一个集合中不重复的元素个数。</li>
-<li>例如：网站日活</li>
-</ul>
-<h3 id="HyperLogLog使用"><a href="#HyperLogLog使用" class="headerlink" title="HyperLogLog使用"></a>HyperLogLog使用</h3><ul>
-<li>PFADD k v: 增加元素</li>
-<li>PFCOUNT k: 获取计数</li>
-</ul>
 <h2 id="redis分布式锁"><a href="#redis分布式锁" class="headerlink" title="redis分布式锁"></a>redis分布式锁</h2><ul>
 <li>需要设置一个过期时间，防止锁住后挂掉了，导致锁无法别释放。</li>
 </ul>
@@ -300,7 +290,7 @@
 <li>方式1：del实现<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">releaseLock</span><span class="hljs-params">(String lockKey,String requestId)</span> &#123;<br>    <span class="hljs-keyword">if</span> (requestId.equals(jedis.get(lockKey))) &#123;<br>        jedis.del(lockKey);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 <li>方式2： redis+lus脚本实现<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">releaseLock</span><span class="hljs-params">(String lockKey, String requestId)</span> &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">script</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;if redis.call(&#x27;get&#x27;, KEYS[1]) == ARGV[1] then return redis.call(&#x27;del&#x27;, KEYS[1]) else return 0 end&quot;</span>;<br>    <span class="hljs-type">Object</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> jedis.eval(script,Collections.singletonList(lockKey),                                               Collections.singletonList(requestId));<br>    <span class="hljs-keyword">if</span> (result.equals(<span class="hljs-number">1L</span>)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
-<h3 id="利用redicok实现分布式锁"><a href="#利用redicok实现分布式锁" class="headerlink" title="利用redicok实现分布式锁"></a>利用redicok实现分布式锁</h3><ul>
+<h3 id="利用redisson实现分布式锁"><a href="#利用redisson实现分布式锁" class="headerlink" title="利用redisson实现分布式锁"></a>利用redisson实现分布式锁</h3><ul>
 <li>依赖redisson</li>
 <li>尝试从 N 个互相独立 Redis 实例获取锁；</li>
 <li>计算获取锁消耗的时间，只有时间小于锁的过期时间，并且从大多数（N &#x2F; 2 + 1）实例上获取了锁，才认为获取锁成功；</li>
@@ -349,7 +339,7 @@
 </ul>
 </li>
 <li>优缺点<ul>
-<li>使用RDB方式实现持久化，一旦Redis异常退出，就会丢失最后一次快照以后更改的所有数据。这个时候我们就需要根据具体的应用场景，通过组合设置自动快照条件的方式来将可能发生的数据损失控制在能够接受范围。如果数据相对来说比较重要，希望将损失降到最小，则可以使用AOF方式进行持久化</li>
+<li>使用RDB方式实现持久化，<strong>一旦Redis异常退出，就会丢失最后一次快照以后更改的所有数据</strong>。这个时候我们就需要根据具体的应用场景，通过组合设置自动快照条件的方式来将可能发生的数据损失控制在能够接受范围。如果数据相对来说比较重要，希望将损失降到最小，则可以使用AOF方式进行持久化</li>
 <li>RDB可以最大化Redis的性能：父进程在保存RDB文件时唯一要做的就是fork出一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无序执行任何磁盘I&#x2F;O操作。同时这个也是一个缺点，如果数据集比较大的时候，fork可以能比较耗时，造成服务器在一段时间内停止处理客户端的请求；</li>
 </ul>
 </li>
@@ -560,7 +550,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年10月30日</div>
+          <div>2025年4月29日</div>
         </div>
       
       
@@ -597,9 +587,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MongoDB/MongoDB/" title="MongoDB">
+                      <a href="/2022/02/01/13Linux/Linux%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/" title="Linux问题排查步骤">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">MongoDB</span>
+                        <span class="hidden-mobile">Linux问题排查步骤</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -607,8 +597,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/4Redis%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="4Redis常见问题">
-                        <span class="hidden-mobile">4Redis常见问题</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/jmh/" title="jmh">
+                        <span class="hidden-mobile">jmh</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

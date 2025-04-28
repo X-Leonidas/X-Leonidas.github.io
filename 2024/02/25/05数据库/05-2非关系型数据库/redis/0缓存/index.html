@@ -21,7 +21,7 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="常见的缓存更新策略Cache Aside Pattern（旁路缓存模式） 比较适合读请求比较多的场景  写 先更新DB 直接删除cache  读 先从cache中读取数据，读取到就直接返回 cache读取不到的话，就从DB中读取返回 再把DB中读取到的数据放到cache中  为什么是删除cache而不是更新cache？ 对服务端资源造成浪费，因为cache中的数据可能需要经过服务端大量的计算才能拿">
+    <meta name="description" content="常见的缓存更新策略Cache Aside Pattern（旁路缓存模式） 应用直接管理缓存，缓存层独立于数据库 比较适合读请求比较多的场景  写 先更新DB 直接删除cache  读 先从cache中读取数据，读取到就直接返回 cache读取不到的话，就从DB中读取返回 再把DB中读取到的数据放到cache中  写操作为什么是删除cache而不是更新cache？ 对服务端资源造成浪费，因为cach">
   
   
   
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          701 字
+          852 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          6 分钟
+          8 分钟
         
       </span>
     
@@ -259,6 +259,7 @@
               <div class="markdown-body">
                 
                 <h1 id="常见的缓存更新策略"><a href="#常见的缓存更新策略" class="headerlink" title="常见的缓存更新策略"></a>常见的缓存更新策略</h1><h2 id="Cache-Aside-Pattern（旁路缓存模式）"><a href="#Cache-Aside-Pattern（旁路缓存模式）" class="headerlink" title="Cache Aside Pattern（旁路缓存模式）"></a>Cache Aside Pattern（旁路缓存模式）</h2><ul>
+<li>应用直接管理缓存，缓存层独立于数据库</li>
 <li>比较适合<strong>读请求比较多的场景</strong></li>
 </ul>
 <h3 id="写"><a href="#写" class="headerlink" title="写"></a>写</h3><ul>
@@ -270,24 +271,22 @@
 <li>cache读取不到的话，就从DB中读取返回</li>
 <li>再把DB中读取到的数据放到cache中</li>
 </ul>
-<h3 id="为什么是删除cache而不是更新cache？"><a href="#为什么是删除cache而不是更新cache？" class="headerlink" title="为什么是删除cache而不是更新cache？"></a>为什么是删除cache而不是更新cache？</h3><ul>
+<h3 id="写操作为什么是删除cache而不是更新cache？"><a href="#写操作为什么是删除cache而不是更新cache？" class="headerlink" title="写操作为什么是删除cache而不是更新cache？"></a>写操作为什么是删除cache而不是更新cache？</h3><ul>
 <li>对服务端资源造成浪费，因为cache中的数据可能需要经过服务端大量的计算才能拿到，对于服务端来说更新cache是一笔开销，如果频繁修改DB，而需要频繁计算，但是并不能保证计算出来的cache一定被使用，造成资源的浪费<ul>
-<li>举例： cache A： 需要数据 DATA A 和 DATAB 计算得出，DATA A 每天一个时间段内更新一万次，但是cachaA 每天均匀的读取100次，</li>
+<li>举例： cache A： 需要数据 DATA  B 和 DATA C 计算得出，DATA B 每天一个时间段内更新一万次，但是cacha A 每天均匀的读取100次，</li>
 </ul>
 </li>
 <li>产生数据不一致的问题，并发场景下，更新cache产生数据不一致的概率会更大。</li>
 </ul>
-<h3 id="为什么不先删除cache在更新DB？"><a href="#为什么不先删除cache在更新DB？" class="headerlink" title="为什么不先删除cache在更新DB？"></a>为什么不先删除cache在更新DB？</h3><ul>
-<li>会造成数据库和缓存不一致的情况<ul>
+<h3 id="写操作为什么不先删除cache在更新DB？"><a href="#写操作为什么不先删除cache在更新DB？" class="headerlink" title="写操作为什么不先删除cache在更新DB？"></a>写操作为什么不先删除cache在更新DB？</h3><ul>
+<li>会造成数据库和缓存不一致的情况</li>
 <li>先写DB在删除cache不会出现数据不一致的问题嘛？<ul>
 <li>会的，但是因为写入缓存的速度比写入DB的速度快很多，所以概率比较小</li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 <h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
-<li>首次请求数据一定不在cache中的问题<ul>
+<li>首次请求数据一定不在cache中的问题，缓存穿透的问题<ul>
 <li>缓存热点数据</li>
 </ul>
 </li>
@@ -314,7 +313,7 @@
 </ul>
 <h2 id="Write-Behind-pattern-异步缓存写入"><a href="#Write-Behind-pattern-异步缓存写入" class="headerlink" title="Write Behind pattern (异步缓存写入)"></a>Write Behind pattern (异步缓存写入)</h2><ul>
 <li>和Read&#x2F;Write Through Pattern 很相似，都是cache服务来负责cache和DB的读写</li>
-<li>不同的是 Read&#x2F;Write Through Pattern 是同步更新cache和db，而Write Behind 则是只更新缓存，不直接更新DB，而是改为异步批量的方式来更新DB</li>
+<li>不同的是 Read&#x2F;Write Through Pattern 是同步更新cache和db，而Write Behind 则是只更新缓存，不直接更新DB，而是改为<strong>异步批量</strong>的方式来更新DB</li>
 <li>应用场景<ul>
 <li>消息队列中消息的异步写入磁盘</li>
 <li>MySql的Innodb buffer  Pool机制</li>
@@ -322,6 +321,18 @@
 </li>
 <li>写性能非常高，非常适合数据经常变化但是对数据一致性要求没那么高的场景</li>
 </ul>
+<h2 id="Refresh-Ahead（预刷新）"><a href="#Refresh-Ahead（预刷新）" class="headerlink" title="Refresh-Ahead（预刷新）"></a><strong>Refresh-Ahead（预刷新）</strong></h2><ul>
+<li>在缓存过期前自动刷新数据。</li>
+</ul>
+<h2 id="基于事件的更新（如-Binlog-消息队列）"><a href="#基于事件的更新（如-Binlog-消息队列）" class="headerlink" title="基于事件的更新（如 Binlog + 消息队列）"></a><strong>基于事件的更新（如 Binlog + 消息队列）</strong></h2><ul>
+<li>通过数据库变更事件触发缓存更新。</li>
+</ul>
+<h2 id="选择策略的考量因素"><a href="#选择策略的考量因素" class="headerlink" title="选择策略的考量因素"></a><strong>选择策略的考量因素</strong></h2><ol>
+<li><strong>一致性需求</strong>：强一致性选 Write-Through，最终一致性可选 Write-Behind。</li>
+<li><strong>性能要求</strong>：高并发写入场景适合 Write-Behind。</li>
+<li><strong>实现复杂度</strong>：Cache-Aside 最简单，Write-Behind 最复杂。</li>
+<li><strong>数据冷热</strong>：热点数据适合预加载（Refresh-Ahead）。</li>
+</ol>
 
                 
               </div>
@@ -393,7 +404,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年2月25日</div>
+          <div>2025年4月28日</div>
         </div>
       
       

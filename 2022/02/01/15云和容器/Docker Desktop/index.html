@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="面向对象编程什么是面向对象 面向对象编程是一种编程范式或编程风格。它以类或对象作为组织代码的基本单元，并将封装、抽象、继承、多态四个特性，作为代码设计和实现的基石  封装、抽象、继承、多态分别可以解决哪些编程问题？ 封装 封装也叫作信息隐藏或者数据访问保护。类通过暴露有限的访问接口，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。 封装后的类，可以提高类的易用性，提高代码的可读性">
+    <meta name="description" content="WSL发行版迁移下面是操作方法：  首先关闭docker 关闭所有发行版：wsl --shutdown 将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）wsl --export docker-desktop-data D:">
   
   
   
-  <title>面向对象 - 夜坐听风</title>
+  <title>Docker Desktop - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="面向对象"></span>
+            <span id="subtitle" data-typed-text="Docker Desktop"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-21 23:53" pubdate>
-          2024-02-21 23:53:14
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:09
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          802 字
+          115 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          7 分钟
+          1 分钟
         
       </span>
     
@@ -253,55 +253,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">面向对象</h1>
+            <h1 id="seo-header">Docker Desktop</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h1><h2 id="什么是面向对象"><a href="#什么是面向对象" class="headerlink" title="什么是面向对象"></a>什么是面向对象</h2><ul>
-<li>面向对象编程是一种<strong>编程范式或编程风格</strong>。它以<strong>类</strong>或<strong>对象</strong>作为组织代码的基本单元，并将<code>封装</code>、<code>抽象</code>、<code>继承</code>、<code>多态</code>四个特性，作为代码设计和实现的基石</li>
-</ul>
-<h2 id="封装、抽象、继承、多态分别可以解决哪些编程问题？"><a href="#封装、抽象、继承、多态分别可以解决哪些编程问题？" class="headerlink" title="封装、抽象、继承、多态分别可以解决哪些编程问题？"></a>封装、抽象、继承、多态分别可以解决哪些编程问题？</h2><ul>
-<li>封装<ul>
-<li>封装也叫作信息隐藏或者数据访问保护。类通过暴露<strong>有限的访问接口</strong>，授权外部仅能通过类提供的方式（或者叫函数）来访问内部信息或者数据。</li>
-<li>封装后的类，可以提高类的易用性，提高代码的可读性和可维护性</li>
-</ul>
-</li>
-<li>抽象<ul>
-<li>封装主要讲的是如何隐藏信息、保护数据。而抽象讲的是如何<strong>隐藏方法的具体实现</strong>，让调用者只需要关心方法提供了哪些功能，并不需要知道这些功能是如何实现的。</li>
-<li>在面对复杂系统的时候，人脑能承受的信息复杂程度是有限的，所以我们必须忽略掉一些非关键性的实现细节。而抽象作为一种<strong>只关注功能点不关注实现的设计思路</strong>，正好帮我们的大脑过滤掉许多非必要的信息。</li>
-</ul>
-</li>
-<li>继承<ul>
-<li>分为单继承和多继承</li>
-<li>继承最大的一个好处就是<strong>代码复用</strong></li>
-<li>过度使用继承，继承层次过深过复杂，就会导致代码可读性、可维护性变差。</li>
-</ul>
-</li>
-<li>多态<ul>
-<li>多态是指，子类可以替换父类，在实际的代码运行过程中，调用子类的方法实现。</li>
-<li>多态特性能提高代码的<strong>可扩展性和复用性</strong></li>
-</ul>
-</li>
-</ul>
-<h2 id="面向对象比面向过程有哪些优势？"><a href="#面向对象比面向过程有哪些优势？" class="headerlink" title="面向对象比面向过程有哪些优势？"></a>面向对象比面向过程有哪些优势？</h2><ul>
-<li>什么是面向过程编程？<ul>
-<li>面向过程编程也是一种编程范式或编程风格。它以过程（可以理解为方法、函数、操作）作为组织代码的基本单元，以数据（可以理解为成员变量、属性）与方法相分离为最主要的特点。面向过程风格是一种<strong>流程化的编程风格</strong>，通过拼接一组顺序执行的方法来操作数据完成一项功能。</li>
-<li>面向过程编程语言首先是一种编程语言。它最大的特点是<strong>不支持类和对象</strong>两个语法概念，不支持丰富的面向对象编程特性（比如继承、多态、封装），仅支持面向过程编程。</li>
-<li>面向过程和面向对象最基本的区别就是，<strong>代码的组织方式不同</strong><ul>
-<li>面向过程风格的代码被组织成了一组方法集合及其数据结构（struct User），方法和数据结构的定义是分开的</li>
-<li>面向对象风格的代码被组织成一组类，方法和数据结构被绑定一起，定义在类中。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>优势<ul>
-<li>OOP 更加能够应对大规模复杂程序的开发</li>
-<li>OOP 风格的代码更易复用、易扩展、易维护</li>
-<li>OOP 语言更加人性化、更加高级、更加智能</li>
-</ul>
-</li>
-</ul>
+                <h2 id="WSL发行版迁移"><a href="#WSL发行版迁移" class="headerlink" title="WSL发行版迁移"></a>WSL发行版迁移</h2><p>下面是操作方法：</p>
+<ol>
+<li>首先关闭docker</li>
+<li>关闭所有发行版：<br><code>wsl --shutdown</code></li>
+<li>将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）<br><code>wsl --export docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar</code></li>
+<li>注销docker-desktop-data：<br><code>wsl --unregister docker-desktop-data</code></li>
+<li>重新导入docker-desktop-data到要存放的文件夹：D:\SoftwareData\wsl\docker-desktop-data\：<br><code>wsl --import docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\ D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar --version 2</code></li>
+</ol>
 
                 
               </div>
@@ -320,7 +284,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
+  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
   
   
 
@@ -340,8 +304,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>面向对象</div>
-      <div>https://x-leonidas.github.io/2024/02/21/14软件工程/面向对象/</div>
+      <div>Docker Desktop</div>
+      <div>https://x-leonidas.github.io/2022/02/01/15云和容器/Docker Desktop/</div>
     </div>
     <div class="license-meta">
       
@@ -353,13 +317,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月21日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月23日</div>
+          <div>2022年12月3日</div>
         </div>
       
       
@@ -396,9 +360,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/21/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/1.%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" title="1.系统设计">
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/Zookeeper/" title="Zookeeper">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">1.系统设计</span>
+                        <span class="hidden-mobile">Zookeeper</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -406,8 +370,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/20/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
-                        <span class="hidden-mobile">5.mysql8新特性</span>
+                      <a href="/2022/02/01/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" title="系统架构">
+                        <span class="hidden-mobile">系统架构</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="ReactorWeb请求的两种体系结构thread-based architecture（基于线程） 基于线程的体系结构通常会使用多线程来处理客户端的请求，每当接收到一个请求，便开启一个独立的线程来处理。这种方式虽然是直观的，但是仅适用于并发访问量不大的场景，因为线程需要占用一定的内存资源，且操作系统在线程之间的切换也需要一定的开销，当线程数过多时显然会降低web服务器的性能。并且，当线程在处理I">
+    <meta name="description" content="10亿数据如何插入Mysql，10连问，你想到了几个？ TODO">
   
   
   
-  <title>Reactor - 夜坐听风</title>
+  <title>4. 实践 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Reactor"></span>
+            <span id="subtitle" data-typed-text="4. 实践"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:30
+        <time datetime="2023-10-24 22:14" pubdate>
+          2023-10-24 22:14:55
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          18 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          12 分钟
+          1 分钟
         
       </span>
     
@@ -253,64 +253,15 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Reactor</h1>
+            <h1 id="seo-header">4. 实践</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Reactor"><a href="#Reactor" class="headerlink" title="Reactor"></a>Reactor</h1><h3 id="Web请求的两种体系结构"><a href="#Web请求的两种体系结构" class="headerlink" title="Web请求的两种体系结构"></a>Web请求的两种体系结构</h3><h4 id="thread-based-architecture（基于线程）"><a href="#thread-based-architecture（基于线程）" class="headerlink" title="thread-based architecture（基于线程）"></a>thread-based architecture（基于线程）</h4><ul>
-<li>基于线程的体系结构通常会使用多线程来处理客户端的请求，每当接收到一个请求，便开启一个独立的线程来处理。这种方式虽然是直观的，但是仅适用于并发访问量不大的场景，因为线程需要占用一定的内存资源，且操作系统在线程之间的切换也需要一定的开销，当线程数过多时显然会降低web服务器的性能。并且，当线程在处理I&#x2F;O操作，在等待输入的这段时间线程处于空闲的状态，同样也会造成cpu资源的浪费</li>
+                <h1 id="10亿数据如何插入Mysql，10连问，你想到了几个？"><a href="#10亿数据如何插入Mysql，10连问，你想到了几个？" class="headerlink" title="10亿数据如何插入Mysql，10连问，你想到了几个？"></a>10亿数据如何插入Mysql，10连问，你想到了几个？</h1><ul>
+<li>TODO</li>
 </ul>
-<h4 id="event-driven-architecture（事件驱动）"><a href="#event-driven-architecture（事件驱动）" class="headerlink" title="event-driven architecture（事件驱动）"></a>event-driven architecture（事件驱动）</h4><ul>
-<li><p>事件驱动体系结构是目前比较广泛使用的一种。这种方式会定义一系列的事件处理器来响应事件的发生，并且将服务端接受连接与对事件的处理分离。其中，事件是一种状态的改变。比如，tcp中socket的new incoming connection、ready for read、ready for write。</p>
-</li>
-<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/Reactor%E5%9B%BE%E7%A4%BA.png" srcset="/img/loading.gif" lazyload alt="Reactor图示"></p>
-</li>
-</ul>
-<h3 id="reactor构成角色"><a href="#reactor构成角色" class="headerlink" title="reactor构成角色"></a>reactor构成角色</h3><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/Reactor%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="Reactor结构" style="zoom:60%;" />
 
-<h4 id="Handle"><a href="#Handle" class="headerlink" title="Handle"></a>Handle</h4><ul>
-<li>handle在linux中一般称为文件描述符，而在window称为句柄，两者的含义一样。本质上表示一种资源(比如说文件描述符，或是针对网络编程中的socket描述符)，是由操作系统提供的；该资源用于表示一个个的事件，事件既可以来自于外部，也可以来自于内部；外部事件比如说客户端的连接请求，客户端发送过来的数据等；内部事件比如说操作系统产生的定时事件等。它本质上就是一个文件描述符，Handle是事件产生的发源地。比如一个网络socket、磁盘文件等。而发生在handle上的事件可以有connection、ready for read、ready for write等。</li>
-</ul>
-<h4 id="Synchronous-Event-Demultiplexer"><a href="#Synchronous-Event-Demultiplexer" class="headerlink" title="Synchronous Event Demultiplexer"></a>Synchronous Event Demultiplexer</h4><ul>
-<li>同步事件分离器，本质上是系统调用。用于等待事件的发生(事件可能是一个，也可能是多个)。调用方在调用它的时候会被阻塞，一直阻塞到同步事件分离器上有事件产生为止。对于Linux来说，同步事件分离器指的就是常用的I&#x2F;O多路复用机制，比如说select、poll、epoll等。在Java NIO领域中，同步事件分离器对应的组件就是Selector；对应的阻塞方法就是select方法。</li>
-</ul>
-<h4 id="Event-Handler"><a href="#Event-Handler" class="headerlink" title="Event Handler"></a>Event Handler</h4><ul>
-<li>事件处理器，其会定义一些回调方法或者称为钩子函数，当handle上有事件发生时，回调方法便会执行，一种事件处理机制。这些回调方法构成了与应用相关的对于某个事件的反馈机制。在Java NIO领域中并没有提供事件处理器机制让我们调用或去进行回调，是由我们自己编写代码完成的。Netty相比于Java NIO来说，在事件处理器这个角色上进行了一个升级，它为我们开发者提供了大量的回调方法，供我们在特定事件产生时实现相应的回调方法进行业务逻辑的处理，即，ChannelHandler。ChannelHandler中的方法对应的都是一个个事件的回调。</li>
-</ul>
-<h4 id="Concrete-Event-Handler"><a href="#Concrete-Event-Handler" class="headerlink" title="Concrete Event Handler"></a>Concrete Event Handler</h4><ul>
-<li>具体的事件处理器，实现了Event Handler。在回调方法中会实现具体的业务逻辑。它本质上就是我们所编写的一个个的处理器实现。</li>
-</ul>
-<h4 id="Initiation-Dispatcher"><a href="#Initiation-Dispatcher" class="headerlink" title="Initiation Dispatcher"></a>Initiation Dispatcher</h4><ul>
-<li>初始分发器，也是reactor角色，它本身定义了一些规范，这些规范用于控制事件的调度方式，同时又提供了注册、删除与转发event handler的方法。Initiation Dispatcher会通过Synchronous Event Demultiplexer来等待事件的发生。一旦事件发生，Initiation Dispatcher首先会分离出每一个事件，然后调用事件处理器，最后调用相关的回调方法来处理这些事件。Netty中ChannelHandler里的一个个回调方法都是由bossGroup或workGroup中的某个EventLoop来调用的。</li>
-</ul>
-<h4 id="reactor处理流程"><a href="#reactor处理流程" class="headerlink" title="reactor处理流程"></a>reactor处理流程</h4><ol>
-<li>当应用向Initiation Dispatcher注册Concrete Event Handler时，应用会标识出该事件处理器希望Initiation Dispatcher在某种类型的事件发生发生时向其通知，事件与handle关联</li>
-<li>Initiation Dispatcher要求注册在其上面的Concrete Event Handler传递内部关联的handle，该handle会向操作系统标识</li>
-<li>当所有的Concrete Event Handler都注册到 Initiation Dispatcher上后，应用会调用handle_events方法来启动Initiation Dispatcher的事件循环，这时Initiation Dispatcher会将每个Concrete Event Handler关联的handle合并，并使用Synchronous Event Demultiplexer来等待这些handle上事件的发生</li>
-<li>当与某个事件源对应的handle变为ready时，Synchronous Event Demultiplexer便会通知 Initiation Dispatcher。比如tcp的socket变为ready for reading</li>
-<li>Initiation Dispatcher会触发事件处理器的回调方法。当事件发生时， Initiation Dispatcher会将被一个“key”（表示一个激活的handle）定位和分发给特定的Event Handler的回调方法</li>
-<li>Initiation Dispatcher调用特定的Concrete Event Handler的回调方法来响应其关联的handle上发生的事件</li>
-</ol>
-<h3 id="reactor分类"><a href="#reactor分类" class="headerlink" title="reactor分类"></a>reactor分类</h3><h4 id="单reactor单线程"><a href="#单reactor单线程" class="headerlink" title="单reactor单线程"></a>单reactor单线程</h4><ul>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20210406113146187.png" srcset="/img/loading.gif" lazyload alt="image-20210406113146187" style="zoom:50%;" />
-</li>
-<li><p>可靠性问题， 线程意外终止， 或者进入死循环， 会导致整个系统通信模块不可用， 不能接收和处理外部消息， 造成节点故障 ，无法发挥出多核CPU的性能</p>
-</li>
-</ul>
-<h4 id="单reactor多线程"><a href="#单reactor多线程" class="headerlink" title="单reactor多线程"></a>单reactor多线程</h4><ul>
-<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%8D%95reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="单reactor多线程"></p>
-</li>
-<li><p>reactor在单线程中运行，高并发场景下容易成为性能瓶颈</p>
-</li>
-</ul>
-<h4 id="主从reactor多线程"><a href="#主从reactor多线程" class="headerlink" title="主从reactor多线程"></a>主从reactor多线程</h4><ul>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/13587608-0ba6e4aaea75f0c6.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom: 100%;" />
-</li>
-<li><p>Nginx和netty都使用了这种模型</p>
-</li>
-</ul>
-<h3 id="拆包粘包"><a href="#拆包粘包" class="headerlink" title="拆包粘包"></a>拆包粘包</h3><h4 id="ReplayingDecoder"><a href="#ReplayingDecoder" class="headerlink" title="ReplayingDecoder"></a>ReplayingDecoder</h4>
                 
               </div>
             
@@ -328,8 +279,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/07IO/" class="category-chain-item">07IO</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-1关系型数据库</a>
+  
+  
+
   
 
       </span>
@@ -348,8 +306,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Reactor</div>
-      <div>https://x-leonidas.github.io/2022/02/01/07IO/Reactor/</div>
+      <div>4. 实践</div>
+      <div>https://x-leonidas.github.io/2023/10/24/05数据库/05-1关系型数据库/4. 实践/</div>
     </div>
     <div class="license-meta">
       
@@ -361,13 +319,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2023年10月24日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2024年10月30日</div>
         </div>
       
       
@@ -404,9 +362,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/jmh/" title="jmh">
+                      <a href="/2024/02/20/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">jmh</span>
+                        <span class="hidden-mobile">5.mysql8新特性</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -414,8 +372,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Mybatis/" title="Mybatis">
-                        <span class="hidden-mobile">Mybatis</span>
+                      <a href="/2023/03/26/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/win11ForDocker%E9%97%AE%E9%A2%98/" title="win11ForDocker问题">
+                        <span class="hidden-mobile">win11ForDocker问题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

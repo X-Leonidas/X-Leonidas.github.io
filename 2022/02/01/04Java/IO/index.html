@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="WSL发行版迁移下面是操作方法：  首先关闭docker 关闭所有发行版：wsl --shutdown 将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）wsl --export docker-desktop-data D:">
+    <meta name="description" content="网络IOBIO 同步阻塞IO 每连接一线程：每个客户端连接需要一个独立的线程处理，线程的创建和销毁开销较大。 应用进程被阻塞，直到数据从内核缓冲区复制到应用进程缓冲区中才返回。在阻塞的过程中，其它应用进程还可以执行，因此阻塞不意味着整个操作系统都被阻塞。因为其它应用进程还可以执行，所以不消耗 CPU 时间，这种模型的 CPU 利用率会比较高。  NIO 同步非阻塞模型 单线程处理多连接：基于Sel">
   
   
   
-  <title>Docker Desktop - 夜坐听风</title>
+  <title>IO - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Docker Desktop"></span>
+            <span id="subtitle" data-typed-text="IO"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-10-09 23:55" pubdate>
-          2022-10-09 23:55:39
+        <time datetime="2022-02-01 19:59" pubdate>
+          2022-02-01 19:59:30
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          115 字
+          2.1k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          1 分钟
+          18 分钟
         
       </span>
     
@@ -253,19 +253,160 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Docker Desktop</h1>
+            <h1 id="seo-header">IO</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="WSL发行版迁移"><a href="#WSL发行版迁移" class="headerlink" title="WSL发行版迁移"></a>WSL发行版迁移</h2><p>下面是操作方法：</p>
-<ol>
-<li>首先关闭docker</li>
-<li>关闭所有发行版：<br><code>wsl --shutdown</code></li>
-<li>将docker-desktop-data导出到D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar（注意，原有的docker images不会一起导出）<br><code>wsl --export docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar</code></li>
-<li>注销docker-desktop-data：<br><code>wsl --unregister docker-desktop-data</code></li>
-<li>重新导入docker-desktop-data到要存放的文件夹：D:\SoftwareData\wsl\docker-desktop-data\：<br><code>wsl --import docker-desktop-data D:\SoftwareData\wsl\docker-desktop-data\ D:\SoftwareData\wsl\docker-desktop-data\docker-desktop-data.tar --version 2</code></li>
-</ol>
+                <h1 id="网络IO"><a href="#网络IO" class="headerlink" title="网络IO"></a>网络IO</h1><h2 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2><ul>
+<li>同步阻塞IO</li>
+<li><strong>每连接一线程</strong>：每个客户端连接需要一个独立的线程处理，线程的创建和销毁开销较大。</li>
+<li>应用进程被阻塞，直到数据从内核缓冲区复制到应用进程缓冲区中才返回。在阻塞的过程中，其它应用进程还可以执行，因此阻塞不意味着整个操作系统都被阻塞。因为其它应用进程还可以执行，所以不消耗 CPU 时间，这种模型的 CPU 利用率会比较高。</li>
+</ul>
+<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><ul>
+<li>同步非阻塞模型</li>
+<li><strong>单线程处理多连接</strong>：基于<code>Selector</code>（选择器）实现多路复用，一个线程可监控多个通道（Channel）的就绪事件。</li>
+<li><strong>面向缓冲区（Buffer）</strong>：数据通过缓冲区（<code>ByteBuffer</code>）进行块传输，支持双向读写。</li>
+<li>服务器实现一个连接一个线程，即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I&#x2F;O请求时才启动一个线程进行处理。NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，<strong>JDK1.4</strong>之后开始支持。</li>
+</ul>
+<h3 id="Channel-通道"><a href="#Channel-通道" class="headerlink" title="Channel(通道)"></a>Channel(通道)</h3><ul>
+<li>Channel是一个对象，可以通过它读取和写入数据。通常我们都是将数据写入包含一个或者多个字节的缓冲区，然后再将缓存区的数据写入到通道中，将数据从通道读入缓冲区，再从缓冲区获取数据。</li>
+<li>Channel 类似于原I&#x2F;O中的流（Stream），但有所区别：流是单向的，通道是双向的，可读可写。流读写是阻塞的，通道可以异步读写。</li>
+</ul>
+<h3 id="多路复用器"><a href="#多路复用器" class="headerlink" title="多路复用器"></a>多路复用器</h3><ul>
+<li>IO多路复用属于阻塞IO，但可以对多个文件描述符进行阻塞监听，所以效率较阻塞IO的高。</li>
+<li>select：<ul>
+<li>第一步：老师轮询把所有学生（最多1024个）问了个遍哪些做好作业了；</li>
+<li>第二步：如果第一步没有人，继续轮询，如果有人，就拿着箩筐下去收作业，也是重新一个一个问</li>
+</ul>
+</li>
+<li>poll：跟select一样，没有了1024个学生的限制</li>
+<li>epoll：让做好作业的学生做好了举手，老师下去收</li>
+<li><table>
+<thead>
+<tr>
+<th align="left"><strong>特性</strong></th>
+<th align="left"><strong>select</strong></th>
+<th align="left"><strong>poll</strong></th>
+<th align="left"><strong>epoll</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>FD 数量限制</strong></td>
+<td align="left">1024（可调整，但需重新编译）</td>
+<td align="left">无限制</td>
+<td align="left">无限制</td>
+</tr>
+<tr>
+<td align="left"><strong>时间复杂度</strong></td>
+<td align="left">O(n)</td>
+<td align="left">O(n)</td>
+<td align="left">O(1)（仅处理就绪 FD）</td>
+</tr>
+<tr>
+<td align="left"><strong>数据拷贝</strong></td>
+<td align="left">每次调用需全量拷贝 FD 集合</td>
+<td align="left">同 select</td>
+<td align="left">通过 <code>mmap</code> 共享内存减少拷贝</td>
+</tr>
+<tr>
+<td align="left"><strong>触发模式</strong></td>
+<td align="left">水平触发</td>
+<td align="left">水平触发</td>
+<td align="left">支持水平触发（LT）和边缘触发（ET）</td>
+</tr>
+<tr>
+<td align="left"><strong>跨平台支持</strong></td>
+<td align="left">所有系统</td>
+<td align="left">所有系统</td>
+<td align="left">仅 Linux</td>
+</tr>
+<tr>
+<td align="left"><strong>适用场景</strong></td>
+<td align="left">低并发、简单应用</td>
+<td align="left">中低并发</td>
+<td align="left">高并发、高性能网络服务</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h4><ul>
+<li>监视的是文件描述符，所以有最大限制。select 的描述符类型使用数组实现，FD_SETSIZE 大小默认为 1024，因此默认只能监听少于 1024 个描述符。如果要监听更多描述符的话，需要修改 FD_SETSIZE 之后重新编译；而 poll 没有描述符数量的限制；</li>
+<li>Selector可以称为通道的集合，每次客户端来了之后我们会把Channel注册到Selector中并且我们给他一个状态，在用死循环来环判断(判断是否做完某个操作，完成某个操作后改变不一样的状态)状态是否发生变化，直到IO操作完成后在退出死循环</li>
+<li>Selector与Channel是相互配合使用的，将Channel注册在Selector上之后，才可以正确的使用Selector，但此时Channel必须为非阻塞模式。Selector可以监听Channel的四种状态（Connect、Accept、Read、Write），当监听到某一Channel的某个状态时，才允许对Channel进行相应的操作。</li>
+</ul>
+<h4 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h4><ul>
+<li>poll的机制与select类似，与select在本质上没有多大差别，管理多个描述符也是进行轮询，根据描述符的状态进行处理，但是<strong>poll没有最大文件描述符数量的限制</strong>。poll和select同样存在一个缺点就是，包含大量文件描述符的数组被整体复制于用户态和内核的地址空间之间，而不论这些文件描述符是否就绪，它的开销随着文件描述符数量的增加而线性增大。</li>
+<li>poll 提供了更多的事件类型，并且对描述符的重复利用上比 select 高。</li>
+</ul>
+<h4 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h4><ul>
+<li>使用了内核文件级别的回调机制O(1)，epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。</li>
+</ul>
+<h4 id="水平触发和边沿触发"><a href="#水平触发和边沿触发" class="headerlink" title="水平触发和边沿触发"></a>水平触发和边沿触发</h4><ul>
+<li>水平触发(Level Tigger）<ul>
+<li>默认的模式，poll也使用的这个模式</li>
+<li>信号只需要处于水平，就一直会触发</li>
+</ul>
+</li>
+<li>边缘触发(Edge Tigger)<ul>
+<li>信号为上升沿或者下降沿时触发</li>
+</ul>
+</li>
+<li>对于读操作<ul>
+<li>LT<ul>
+<li>只要缓冲内容不为空，LT模式返回读就绪。</li>
+</ul>
+</li>
+<li>ET<ul>
+<li>当缓冲区由不可读变为可读的时候，即缓冲区由空变为不空的时候。</li>
+<li>当有新数据到达时，即缓冲区中的待读数据变多的时候。</li>
+<li>当缓冲区有数据可读，且应用进程对相应的描述符进行<code>EPOLL_CTL_MOD</code> 修改<code>EPOLLIN</code>事件时。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对于写操作<ul>
+<li>LT<ul>
+<li>只要缓冲区还不满，LT模式会返回写就绪。</li>
+</ul>
+</li>
+<li>ET<ul>
+<li>当缓冲区由不可写变为可写时。</li>
+<li>当有旧数据被发送走，即缓冲区中的内容变少的时候。</li>
+<li>当缓冲区有空间可写，且应用进程对相应的描述符进行<code>EPOLL_CTL_MOD</code> 修改<code>EPOLLOUT</code>事件时。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Buffer-缓冲区"><a href="#Buffer-缓冲区" class="headerlink" title="Buffer(缓冲区)"></a>Buffer(缓冲区)</h3><ul>
+<li>Buffer 是一个缓冲数据的对象， 它包含一些要写入或者刚读出的数据。</li>
+<li>在普通的面向流的 I&#x2F;O 中，一般将数据直接写入或直接读到 Stream 对象中。当是有了Buffer（缓冲区）后，数据第一步到达的是Buffer（缓冲区）中</li>
+<li>缓冲区实质上是一个数组(底层完全是数组实现的，感兴趣可以去看一下)。通常它是一个字节数组，内部维护几个状态变量，可以实现在同一块缓冲区上反复读写（不用清空数据再写)</li>
+</ul>
+<h4 id="capacity"><a href="#capacity" class="headerlink" title="capacity"></a>capacity</h4><ul>
+<li>作为一个内存块，Buffer有固定的大小值，也叫作“capacity”，只能往其中写入capacity个byte、long、char等类型。一旦Buffer满了，需要将其清空（通过读数据或者清楚数据）才能继续写数据。</li>
+</ul>
+<h4 id="position"><a href="#position" class="headerlink" title="position"></a>position</h4><ul>
+<li>当你写数据到Buffer中时，position表示当前的位置。初始的position值为0，当写入一个字节数据到Buffer中后，position会向前移动到下一个可插入数据的Buffer单元。position最大可为capacity-1。当读取数据时，也是从某个特定位置读，将Buffer从写模式切换到读模式，position会被重置为0。当从Buffer的position处读取一个字节数据后，position向前移动到下一个可读的位置。</li>
+</ul>
+<h4 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h4><ul>
+<li>在写模式下，Buffer的limit表示你最多能往Buffer里写多少数据。 写模式下，limit等于Buffer的capacity。当切换Buffer到读模式时， limit表示你最多能读到多少数据。因此，当切换Buffer到读模式时，limit会被设置成写模式下的position值。换句话说，你能读到之前写入的所有数据（limit被设置成已写数据的数量，这个值在写模式下就是position）</li>
+</ul>
+<h2 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h2><ul>
+<li><p><strong>异步非阻塞模型</strong>：Java 7引入，基于事件回调或<code>Future</code>机制，I&#x2F;O操作完成后系统主动通知线程。</p>
+</li>
+<li><p><strong>底层依赖操作系统支持</strong>（如Linux的epoll或Windows的IOCP）。</p>
+</li>
+<li><p><strong>适用场景</strong>：适用于文件I&#x2F;O或超大规模并发，但实际应用较少（NIO已能满足多数需求）。</p>
+</li>
+<li><p>服务器实现模式为一个有效请求一个线程，客户端的I&#x2F;O请求都是由操作系统先完成了再通知服务器应用去启动线程进行处理，AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用操作系统参与并发操作，编程比较复杂，<strong>JDK1.7</strong>之后开始支持。.</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AIO.png" srcset="/img/loading.gif" lazyload alt="image-20240225163910748" style="zoom:80%;" /></li>
+</ul>
+<h1 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h1><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E6%96%87%E4%BB%B6IO.png" srcset="/img/loading.gif" lazyload /></li>
+</ul>
 
                 
               </div>
@@ -284,7 +425,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
+  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
   
   
 
@@ -304,8 +445,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Docker Desktop</div>
-      <div>https://x-leonidas.github.io/2022/10/09/15云和容器/Docker Desktop/</div>
+      <div>IO</div>
+      <div>https://x-leonidas.github.io/2022/02/01/04Java/IO/</div>
     </div>
     <div class="license-meta">
       
@@ -317,13 +458,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年10月9日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2025年4月29日</div>
         </div>
       
       
@@ -360,9 +501,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/16/04Java/java%E5%9F%BA%E7%A1%80/04%E5%BA%8F%E5%88%97%E5%8C%96/" title="04序列化">
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/netty/" title="netty">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">04序列化</span>
+                        <span class="hidden-mobile">netty</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -370,8 +511,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/10/09/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" title="系统架构">
-                        <span class="hidden-mobile">系统架构</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Reactor/" title="Reactor">
+                        <span class="hidden-mobile">Reactor</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
