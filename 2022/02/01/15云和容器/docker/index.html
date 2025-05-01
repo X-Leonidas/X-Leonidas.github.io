@@ -435,18 +435,93 @@
 <li>在查找的时候通过 <code>--filter=stars=N</code> 参数可以指定仅显示收藏数量为 <code>N</code> 以上的镜像。</li>
 </ul>
 </li>
-<li>docker pull 拉取到本地</li>
-<li><pre><code class="shell">$ docker search centos
-NAME                               DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
-centos                             The official build of CentOS.                   6449      [OK]
-ansible/centos7-ansible            Ansible on Centos7                              132                  [OK]
-consol/centos-xfce-vnc             Centos container with &quot;headless&quot; VNC session…   126                  [OK]
-jdeathe/centos-ssh                 OpenSSH / Supervisor / EPEL/IUS/SCL Repos - …   117                  [OK]
-centos/systemd                     systemd enabled base container.             
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">+</span> 括镜像名字、描述、收藏数（表示该镜像的受关注程度）、是否官方创建（<span class="hljs-code">`OFFICIAL`</span>）、是否自动构建 （<span class="hljs-code">`AUTOMATED`</span>）。<br><span class="hljs-bullet">+</span> 根据是否是官方提供，可将镜像分为两类<br><span class="hljs-bullet">  +</span> 一种是类似 <span class="hljs-code">`centos`</span> 这样的镜像，被称为基础镜像或根镜像。这些基础镜像由 Docker 公司创建、验证、支持、提供。这样的镜像往往使用单个单词作为名字。<br><span class="hljs-bullet">  +</span> 还有一种类型，比如 <span class="hljs-code">`ansible/centos7-ansible`</span> 镜像，它是由 Docker Hub 的注册用户创建并维护的，往往带有用户名称前缀。可以通过前缀 <span class="hljs-code">`username/`</span> 来指定使用某个用户提供的镜像，比如 ansible 用户。<br><span class="hljs-section">### 推送镜像</span><br><span class="hljs-bullet">+</span> 用户也可以在登录后通过 <span class="hljs-code">`docker push`</span> 命令来将自己的镜像推送到 Docker Hub。<br><span class="hljs-bullet">+</span> docker tag ubuntu:18.04 username/ubuntu:18.04   <span class="hljs-code">`username`</span> 请替换为你的 Docker 账号用户名。<br><span class="hljs-section">### 自行构建</span><br><span class="hljs-bullet">+</span> 2021 年 6 月 18 日之后，该项功能仅限[<span class="hljs-string">付费用户</span>](<span class="hljs-link">https://www.docker.com/blog/changes-to-docker-hub-autobuilds/</span>)使用。<br><span class="hljs-bullet">+</span> 自动构建（<span class="hljs-code">`Automated Builds`</span>）功能对于需要经常升级镜像内程序来说，十分方便。自动构建允许用户通过 Docker Hub 指定跟踪一个目标网站（支持 [<span class="hljs-string">GitHub</span>](<span class="hljs-link">https://github.com/</span>) 或 [<span class="hljs-string">BitBucket</span>](<span class="hljs-link">https://bitbucket.org/</span>)）上的项目，一旦项目发生新的提交 （<span class="hljs-code">`commit`</span>）或者创建了新的标签（<span class="hljs-code">`tag`</span>），Docker Hub 会自动构建镜像并推送到 Docker Hub 中。<br><span class="hljs-bullet">+</span> 配置自动构建<br><span class="hljs-bullet">  +</span> 登录 Docker Hub；<br><span class="hljs-bullet">  +</span> 在 Docker Hub 点击右上角头像，在账号设置（<span class="hljs-code">`Account Settings`</span>）中关联（<span class="hljs-code">`Linked Accounts`</span>）目标网站；<br><span class="hljs-bullet">  +</span> 在 Docker Hub 中新建或选择已有的仓库，在 <span class="hljs-code">`Builds`</span> 选项卡中选择 <span class="hljs-code">`Configure Automated Builds`</span>；<br><span class="hljs-bullet">  +</span> 选取一个目标网站中的项目（需要含 <span class="hljs-code">`Dockerfile`</span>）和分支；<br><span class="hljs-bullet">  +</span> 指定 <span class="hljs-code">`Dockerfile`</span> 的位置，并保存。<br><span class="hljs-bullet">+</span> 配置完成之后可以在 Docker Hub 的仓库页面的 <span class="hljs-code">`Timeline`</span> 选项卡中查看每次构建的状态。<br><span class="hljs-section">### 私有仓库</span><br><span class="hljs-section">#### docker-registry</span><br>[<span class="hljs-string">`docker-registry`</span>](<span class="hljs-link">https://docs.docker.com/registry/</span>) 是官方提供的工具，可以用于构建私有的镜像仓库<br><span class="hljs-section">#### Nexus</span><br><span class="hljs-section">## 数据管理</span><br><span class="hljs-bullet">+</span> ，在容器中管理数据主要有两种方式:<br><span class="hljs-section">### 数据卷</span><br><span class="hljs-bullet">+</span> <span class="hljs-code">`数据卷`</span> 是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性：<br><span class="hljs-bullet">  +</span> <span class="hljs-code">`数据卷`</span> 可以在容器之间共享和重用<br><span class="hljs-bullet">  +</span> 对 <span class="hljs-code">`数据卷`</span> 的修改会立马生效<br><span class="hljs-bullet">  +</span> 对 <span class="hljs-code">`数据卷`</span> 的更新，不会影响镜像<br><span class="hljs-bullet">  +</span> <span class="hljs-code">`数据卷`</span> 默认会一直存在，即使容器被删除<br><span class="hljs-bullet">+</span> 注意：<span class="hljs-code">`数据卷`</span> 的使用，类似于 Linux 下对目录或文件进行 mount，镜像中的被指定为挂载点的目录中的文件会复制到数据卷中（仅数据卷为空时会复制）。<br><span class="hljs-bullet">+</span> 在wsl2模式的win下，所有的数据在以下目录中，通过浏览器访问<br><span class="hljs-bullet">  +</span> \\wsl$\docker-desktop-data  <br><span class="hljs-bullet">  +</span> \\wsl$\docker-desktop<br><span class="hljs-bullet">  +</span> file://wsl%24/docker-desktop-data/version-pack-data/community/docker/volumes/  <br><span class="hljs-section">#### 数据卷的操作</span><br><span class="hljs-bullet">+</span> 创建<br><span class="hljs-bullet">  +</span> docker volume create my-vol<br><span class="hljs-bullet">+</span> 查看所有的数据卷<br><span class="hljs-bullet">  +</span> docker volume ls<br><span class="hljs-bullet">+</span> 在主机中查看指定数据卷的信息<br><span class="hljs-bullet">  +</span> docker volume inspect my-vol<br><span class="hljs-bullet">+</span> 启动一个挂载数据卷的容器<br><span class="hljs-bullet">  +</span> 在用 <span class="hljs-code">`docker run`</span> 命令的时候，使用 <span class="hljs-code">`--mount`</span> 标记来将 <span class="hljs-code">`数据卷`</span> 挂载到容器里。在一次 <span class="hljs-code">`docker run`</span> 中可以挂载多个 <span class="hljs-code">`数据卷`</span>。<br><span class="hljs-bullet">  +</span> 下面创建一个名为 <span class="hljs-code">`web`</span> 的容器，并加载一个 <span class="hljs-code">`数据卷`</span> 到容器的 <span class="hljs-code">`/usr/share/nginx/html`</span> 目录。<br><span class="hljs-bullet">    +</span>  docker run -d -P \<br><span class="hljs-code">      ​    --name web \</span><br><span class="hljs-code">      ​    \# -v my-vol:/usr/share/nginx/html \</span><br><span class="hljs-code">      ​    --mount source=my-vol,target=/usr/share/nginx/html \</span><br><span class="hljs-code">      ​    nginx:alpine</span><br><span class="hljs-code">+ 查看数据卷的具体信息</span><br><span class="hljs-code">  + 在主机中使用 docker inspect   [name]  来查看指定容器的信息</span><br><span class="hljs-code">  + `数据卷` 信息在 &quot;Mounts&quot; Key 下面</span><br><span class="hljs-code">+ 删除数据卷</span><br><span class="hljs-code">  + `数据卷` 是被设计用来持久化数据的，它的生命周期独立于容器，Docker 不会在容器被删除后自动删除 `数据卷`，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的 `数据卷`。如果需要在删除容器的同时移除数据卷。可以在删除容器的时候使用 `docker rm -v` 这个命令。</span><br><span class="hljs-code">  + 无主的数据卷可能会占据很多空间，要清理请使用以下命令</span><br><span class="hljs-code">    + docker volume prune</span><br><span class="hljs-code">###  挂载主机目录</span><br><span class="hljs-code">+ 使用 `--mount` 标记可以指定挂载一个本地主机的目录到容器中去。也可以挂载单个文件</span><br><span class="hljs-code">  + ```shell</span><br><span class="hljs-code">    $ docker run -d -P \</span><br><span class="hljs-code">        --name web \</span><br><span class="hljs-code">        # -v /src/webapp:/usr/share/nginx/html \</span><br><span class="hljs-code">        --mount type=bind,source=/src/webapp,target=/usr/share/nginx/html ,readonly（只读操作）\</span><br><span class="hljs-code">        nginx:alpine</span><br></code></pre></td></tr></table></figure>
-+ 上面的命令加载主机的 `/src/webapp` 目录到容器的 `/usr/share/nginx/html`目录。这个功能在进行测试的时候十分方便，比如用户可以放置一些程序到本地目录中，来查看容器是否正常工作。本地目录的路径必须是绝对路径，以前使用 `-v` 参数时如果本地目录不存在 Docker 会自动为你创建一个文件夹，现在使用 `--mount` 参数时如果本地目录不存在，Docker 会报错
-+ Docker 挂载主机目录的默认权限是 `读写`，用户也可以通过增加 `readonly` 指定为 `只读`
-</code></pre>
+<li>docker pull 拉取到本地<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker search centos</span><br>NAME                               DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED<br>centos                             The official build of CentOS.                   6449      [OK]<br>ansible/centos7-ansible            Ansible on Centos7                              132                  [OK]<br>consol/centos-xfce-vnc             Centos container with &quot;headless&quot; VNC session…   126                  [OK]<br>jdeathe/centos-ssh                 OpenSSH / Supervisor / EPEL/IUS/SCL Repos - …   117                  [OK]<br>centos/systemd                     systemd enabled base container.             <br></code></pre></td></tr></table></figure></li>
+<li>括镜像名字、描述、收藏数（表示该镜像的受关注程度）、是否官方创建（<code>OFFICIAL</code>）、是否自动构建 （<code>AUTOMATED</code>）。</li>
+<li>根据是否是官方提供，可将镜像分为两类<ul>
+<li>一种是类似 <code>centos</code> 这样的镜像，被称为基础镜像或根镜像。这些基础镜像由 Docker 公司创建、验证、支持、提供。这样的镜像往往使用单个单词作为名字。</li>
+<li>还有一种类型，比如 <code>ansible/centos7-ansible</code> 镜像，它是由 Docker Hub 的注册用户创建并维护的，往往带有用户名称前缀。可以通过前缀 <code>username/</code> 来指定使用某个用户提供的镜像，比如 ansible 用户。</li>
+</ul>
+</li>
+</ul>
+<h3 id="推送镜像"><a href="#推送镜像" class="headerlink" title="推送镜像"></a>推送镜像</h3><ul>
+<li>用户也可以在登录后通过 <code>docker push</code> 命令来将自己的镜像推送到 Docker Hub。</li>
+<li>docker tag ubuntu:18.04 username&#x2F;ubuntu:18.04   <code>username</code> 请替换为你的 Docker 账号用户名。</li>
+</ul>
+<h3 id="自行构建"><a href="#自行构建" class="headerlink" title="自行构建"></a>自行构建</h3><ul>
+<li>2021 年 6 月 18 日之后，该项功能仅限<a target="_blank" rel="noopener" href="https://www.docker.com/blog/changes-to-docker-hub-autobuilds/">付费用户</a>使用。</li>
+<li>自动构建（<code>Automated Builds</code>）功能对于需要经常升级镜像内程序来说，十分方便。自动构建允许用户通过 Docker Hub 指定跟踪一个目标网站（支持 <a target="_blank" rel="noopener" href="https://github.com/">GitHub</a> 或 <a target="_blank" rel="noopener" href="https://bitbucket.org/">BitBucket</a>）上的项目，一旦项目发生新的提交 （<code>commit</code>）或者创建了新的标签（<code>tag</code>），Docker Hub 会自动构建镜像并推送到 Docker Hub 中。</li>
+<li>配置自动构建<ul>
+<li>登录 Docker Hub；</li>
+<li>在 Docker Hub 点击右上角头像，在账号设置（<code>Account Settings</code>）中关联（<code>Linked Accounts</code>）目标网站；</li>
+<li>在 Docker Hub 中新建或选择已有的仓库，在 <code>Builds</code> 选项卡中选择 <code>Configure Automated Builds</code>；</li>
+<li>选取一个目标网站中的项目（需要含 <code>Dockerfile</code>）和分支；</li>
+<li>指定 <code>Dockerfile</code> 的位置，并保存。</li>
+</ul>
+</li>
+<li>配置完成之后可以在 Docker Hub 的仓库页面的 <code>Timeline</code> 选项卡中查看每次构建的状态。</li>
+</ul>
+<h3 id="私有仓库"><a href="#私有仓库" class="headerlink" title="私有仓库"></a>私有仓库</h3><h4 id="docker-registry"><a href="#docker-registry" class="headerlink" title="docker-registry"></a>docker-registry</h4><p><a target="_blank" rel="noopener" href="https://docs.docker.com/registry/"><code>docker-registry</code></a> 是官方提供的工具，可以用于构建私有的镜像仓库</p>
+<h4 id="Nexus"><a href="#Nexus" class="headerlink" title="Nexus"></a>Nexus</h4><h2 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h2><ul>
+<li>，在容器中管理数据主要有两种方式:</li>
+</ul>
+<h3 id="数据卷"><a href="#数据卷" class="headerlink" title="数据卷"></a>数据卷</h3><ul>
+<li><code>数据卷</code> 是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性：<ul>
+<li><code>数据卷</code> 可以在容器之间共享和重用</li>
+<li>对 <code>数据卷</code> 的修改会立马生效</li>
+<li>对 <code>数据卷</code> 的更新，不会影响镜像</li>
+<li><code>数据卷</code> 默认会一直存在，即使容器被删除</li>
+</ul>
+</li>
+<li>注意：<code>数据卷</code> 的使用，类似于 Linux 下对目录或文件进行 mount，镜像中的被指定为挂载点的目录中的文件会复制到数据卷中（仅数据卷为空时会复制）。</li>
+<li>在wsl2模式的win下，所有的数据在以下目录中，通过浏览器访问<ul>
+<li>\wsl$\docker-desktop-data  </li>
+<li>\wsl$\docker-desktop</li>
+<li>file:&#x2F;&#x2F;wsl%24&#x2F;docker-desktop-data&#x2F;version-pack-data&#x2F;community&#x2F;docker&#x2F;volumes&#x2F;</li>
+</ul>
+</li>
+</ul>
+<h4 id="数据卷的操作"><a href="#数据卷的操作" class="headerlink" title="数据卷的操作"></a>数据卷的操作</h4><ul>
+<li>创建<ul>
+<li>docker volume create my-vol</li>
+</ul>
+</li>
+<li>查看所有的数据卷<ul>
+<li>docker volume ls</li>
+</ul>
+</li>
+<li>在主机中查看指定数据卷的信息<ul>
+<li>docker volume inspect my-vol</li>
+</ul>
+</li>
+<li>启动一个挂载数据卷的容器<ul>
+<li>在用 <code>docker run</code> 命令的时候，使用 <code>--mount</code> 标记来将 <code>数据卷</code> 挂载到容器里。在一次 <code>docker run</code> 中可以挂载多个 <code>数据卷</code>。</li>
+<li>下面创建一个名为 <code>web</code> 的容器，并加载一个 <code>数据卷</code> 到容器的 <code>/usr/share/nginx/html</code> 目录。<ul>
+<li>docker run -d -P <br>  ​    –name web \</li>
+</ul>
+<p>  ​    # -v my-vol:&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html <br>  ​    –mount source&#x3D;my-vol,target&#x3D;&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html <br>  ​    nginx:alpine</p>
+</li>
+</ul>
+</li>
+<li>查看数据卷的具体信息<ul>
+<li>在主机中使用 docker inspect   [name]  来查看指定容器的信息</li>
+<li><code>数据卷</code> 信息在 “Mounts” Key 下面</li>
+</ul>
+</li>
+<li>删除数据卷<ul>
+<li><code>数据卷</code> 是被设计用来持久化数据的，它的生命周期独立于容器，Docker 不会在容器被删除后自动删除 <code>数据卷</code>，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的 <code>数据卷</code>。如果需要在删除容器的同时移除数据卷。可以在删除容器的时候使用 <code>docker rm -v</code> 这个命令。</li>
+<li>无主的数据卷可能会占据很多空间，要清理请使用以下命令<ul>
+<li>docker volume prune</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="挂载主机目录"><a href="#挂载主机目录" class="headerlink" title="挂载主机目录"></a>挂载主机目录</h3><ul>
+<li>使用 <code>--mount</code> 标记可以指定挂载一个本地主机的目录到容器中去。也可以挂载单个文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker run -d -P \</span><br><span class="language-bash">    --name web \</span><br><span class="language-bash">    <span class="hljs-comment"># -v /src/webapp:/usr/share/nginx/html \</span></span><br><span class="language-bash">    --mount <span class="hljs-built_in">type</span>=<span class="hljs-built_in">bind</span>,<span class="hljs-built_in">source</span>=/src/webapp,target=/usr/share/nginx/html ,<span class="hljs-built_in">readonly</span>（只读操作）\</span><br><span class="language-bash">    nginx:alpine</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>上面的命令加载主机的 <code>/src/webapp</code> 目录到容器的 <code>/usr/share/nginx/html</code>目录。这个功能在进行测试的时候十分方便，比如用户可以放置一些程序到本地目录中，来查看容器是否正常工作。本地目录的路径必须是绝对路径，以前使用 <code>-v</code> 参数时如果本地目录不存在 Docker 会自动为你创建一个文件夹，现在使用 <code>--mount</code> 参数时如果本地目录不存在，Docker 会报错</li>
+<li>Docker 挂载主机目录的默认权限是 <code>读写</code>，用户也可以通过增加 <code>readonly</code> 指定为 <code>只读</code></li>
+</ul>
 </li>
 <li>查看挂在目录的具体信息<ul>
 <li>docker inspect web</li>
@@ -612,51 +687,55 @@ centos/systemd                     systemd enabled base container.
 </ul>
 </li>
 </ul>
-<h3 id="示例文件"><a href="#示例文件" class="headerlink" title="示例文件"></a>示例文件</h3><ul>
-<li><pre><code class="dockerfile">#
-# NOTE: THIS DOCKERFILE IS GENERATED VIA &quot;apply-templates.sh&quot;
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
-
-FROM amazoncorretto:8-al2-jdk
-
-ENV CATALINA_HOME /usr/local/tomcat
-ENV PATH $CATALINA_HOME/bin:$PATH
-RUN mkdir -p &quot;$CATALINA_HOME&quot;
-WORKDIR $CATALINA_HOME
-
-# let &quot;Tomcat Native&quot; live somewhere isolated
-ENV TOMCAT_NATIVE_LIBDIR $CATALINA_HOME/native-jni-lib
-ENV LD_LIBRARY_PATH $&#123;LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:&#125;$TOMCAT_NATIVE_LIBDIR
-
-# see https://www.apache.org/dist/tomcat/tomcat-9/KEYS
-# see also &quot;versions.sh&quot; (https://github.com/docker-library/tomcat/blob/master/versions.sh)
-ENV GPG_KEYS 48F8E69F6390C9F25CFEDCD268248959359E722B A9C5DF4D22E99998D9875A5110C01C5A2F6059E7 DCFD35E0BF8CA7344752DE8B6FB21E8933C60243
-
-ENV TOMCAT_MAJOR 9
-ENV TOMCAT_VERSION 9.0.73
-ENV TOMCAT_SHA512 d43fbd6c5ae00bc0ffc2559743f91abd3547c827426cb0acdc8428e060e8659b6bb41b3877deb061ab6202980de39b9558525a4256725b647d5bff93e47a5664
-
-# smoke test
-    catalina.sh version
-
-# verify Tomcat Native is working properly
-RUN set -eux; \
-    nativeLines=&quot;$(catalina.sh configtest 2&gt;&amp;1)&quot;; \
-    nativeLines=&quot;$(echo &quot;$nativeLines&quot; | grep &#39;Apache Tomcat Native&#39;)&quot;; \
-    nativeLines=&quot;$(echo &quot;$nativeLines&quot; | sort -u)&quot;; \
-    if ! echo &quot;$nativeLines&quot; | grep -E &#39;INFO: Loaded( APR based)? Apache Tomcat Native library&#39; &gt;&amp;2; then \
-        echo &gt;&amp;2 &quot;$nativeLines&quot;; \
-        exit 1; \
-    fi
-
-EXPOSE 8080
-CMD [&quot;catalina.sh&quot;, &quot;run&quot;]
-<figure class="highlight nestedtext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs nestedtext">  <br><span class="hljs-comment">## docker compose</span><br><span class="hljs-comment">### 核心概念</span><br><span class="hljs-attribute">+ 一个文件</span><br><span class="hljs-attribute">  + docker-compose.yml</span><br><span class="hljs-attribute">+ 两个要素</span><br><span class="hljs-attribute">  + 服务</span><br><span class="hljs-attribute">    + 一个个应用容器实例，比如订单微服务、库存微服务、mysql容器或者redis</span><br><span class="hljs-attribute">  + 工程</span><br><span class="hljs-attribute">    + 由一组关联的应用容器组成的一个完整的业务单元，在docker-compose.yml文件中定义</span><br><span class="hljs-attribute">### 常用命令</span><br><span class="hljs-attribute">+ docker compose up</span><br><span class="hljs-attribute">  + -d 后台运行</span><br><span class="hljs-attribute">  + 启动所有的docker compose 服务</span><br><span class="hljs-attribute">+ docker compose down </span><br><span class="hljs-attribute">  + 停止并删除容器、网络、卷、镜像</span><br><span class="hljs-attribute">+ docker compose exec yml中的服务id</span><br><span class="hljs-attribute">  + 进入容器实例内部</span><br><span class="hljs-attribute">+ docker compose ps                     </span><br><span class="hljs-attribute">  +   展示当前docker-compose编排过的运行的所有容器</span><br><span class="hljs-attribute">+ docker compose top</span><br><span class="hljs-attribute">  + 展示当前docker-compose编排过的容器进程</span><br><span class="hljs-attribute">+ docker-compose config -q  </span><br><span class="hljs-attribute">  + 检查配置，有问题才有输出</span><br><span class="hljs-attribute">+ docker-compose restart   # 重启服务</span><br><span class="hljs-attribute">+ docker-compose start     # 启动服务</span><br><span class="hljs-attribute">+ docker-compose stop      # 停止服务</span><br><span class="hljs-attribute">### 文件示例</span><br><span class="hljs-attribute">+ </span><br><span class="hljs-attribute">  ```yaml</span><br><span class="hljs-attribute">  # 版本</span><br><span class="hljs-attribute">  version</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;3&quot;</span><br>  <span class="hljs-comment"># 要启动的容器</span><br>  <span class="hljs-attribute">services</span><span class="hljs-punctuation">:</span><br>    <span class="hljs-attribute">microService</span><span class="hljs-punctuation">:</span><br>      <span class="hljs-attribute">image</span><span class="hljs-punctuation">:</span> <span class="hljs-string">zzyy_docker:1.6</span><br>      <span class="hljs-attribute">container_name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">ms01</span><br>      <span class="hljs-attribute">ports</span><span class="hljs-punctuation">:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;6001:6001&quot;</span><br>      <span class="hljs-attribute">volumes</span><span class="hljs-punctuation">:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">/app/microService:/data</span><br>      <span class="hljs-attribute">networks</span><span class="hljs-punctuation">: </span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net </span><br>      <span class="hljs-attribute">depends_on</span><span class="hljs-punctuation">: </span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">redis</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">mysql</span><br>   <br>    <span class="hljs-attribute">redis</span><span class="hljs-punctuation">:</span><br>      <span class="hljs-attribute">image</span><span class="hljs-punctuation">:</span> <span class="hljs-string">redis:6.0.8</span><br>      <span class="hljs-attribute">ports</span><span class="hljs-punctuation">:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;6379:6379&quot;</span><br>      <span class="hljs-attribute">volumes</span><span class="hljs-punctuation">:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">/app/redis/redis.conf:/etc/redis/redis.conf</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">/app/redis/data:/data</span><br>      <span class="hljs-attribute">networks</span><span class="hljs-punctuation">: </span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span><br>      <span class="hljs-attribute">command</span><span class="hljs-punctuation">:</span> <span class="hljs-string">redis-server /etc/redis/redis.conf</span><br>   <br>    <span class="hljs-attribute">mysql</span><span class="hljs-punctuation">:</span><br>      <span class="hljs-attribute">image</span><span class="hljs-punctuation">:</span> <span class="hljs-string">mysql:5.7</span><br>      <span class="hljs-attribute">environment</span><span class="hljs-punctuation">:</span><br>        <span class="hljs-attribute">MYSQL_ROOT_PASSWORD</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#x27;123456&#x27;</span><br>        <span class="hljs-attribute">MYSQL_ALLOW_EMPTY_PASSWORD</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#x27;no&#x27;</span><br>        <span class="hljs-attribute">MYSQL_DATABASE</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#x27;db2021&#x27;</span><br>        <span class="hljs-attribute">MYSQL_USER</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#x27;zzyy&#x27;</span><br>        <span class="hljs-attribute">MYSQL_PASSWORD</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&#x27;zzyy123&#x27;</span><br>      <span class="hljs-attribute">ports</span><span class="hljs-punctuation">:</span><br>         <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;3306:3306&quot;</span><br>      <span class="hljs-attribute">volumes</span><span class="hljs-punctuation">:</span><br>         <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/db:/var/lib/mysql</span><br>         <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/conf/my.cnf:/etc/my.cnf</span><br>         <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/init:/docker-entrypoint-initdb.d</span><br>      <span class="hljs-attribute">networks</span><span class="hljs-punctuation">:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span><br>      <span class="hljs-attribute">command</span><span class="hljs-punctuation">:</span> <span class="hljs-string">--default-authentication-plugin=mysql_native_password #解决外部无法访问</span><br>  <span class="hljs-comment"># 定义网络模式</span><br>  <span class="hljs-attribute">networks</span><span class="hljs-punctuation">: </span><br>     <span class="hljs-attribute">atguigu_net</span><span class="hljs-punctuation">: </span><br><span class="hljs-punctuation">   </span><br><span class="hljs-punctuation">  </span><br></code></pre></td></tr></table></figure>
-</code></pre>
+<h3 id="docker示例文件"><a href="#docker示例文件" class="headerlink" title="docker示例文件"></a>docker示例文件</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment">#</span><br><span class="hljs-comment"># <span class="hljs-doctag">NOTE:</span> THIS DOCKERFILE IS GENERATED VIA &quot;apply-templates.sh&quot;</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment"># PLEASE DO NOT EDIT IT DIRECTLY.</span><br><span class="hljs-comment">#</span><br><span class="hljs-keyword">FROM</span> amazoncorretto:<span class="hljs-number">8</span>-al2-jdk<br><span class="hljs-keyword">ENV</span> CATALINA_HOME /usr/local/tomcat<br><span class="hljs-keyword">ENV</span> PATH $CATALINA_HOME/bin:$PATH<br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> -p <span class="hljs-string">&quot;<span class="hljs-variable">$CATALINA_HOME</span>&quot;</span></span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> <span class="hljs-variable">$CATALINA_HOME</span></span><br><span class="hljs-comment"># let &quot;Tomcat Native&quot; live somewhere isolated</span><br><span class="hljs-keyword">ENV</span> TOMCAT_NATIVE_LIBDIR $CATALINA_HOME/native-jni-lib<br><span class="hljs-keyword">ENV</span> LD_LIBRARY_PATH $&#123;LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:&#125;$TOMCAT_NATIVE_LIBDIR<br><span class="hljs-comment"># see https://www.apache.org/dist/tomcat/tomcat-9/KEYS</span><br><span class="hljs-comment"># see also &quot;versions.sh&quot; (https://github.com/docker-library/tomcat/blob/master/versions.sh)</span><br><span class="hljs-keyword">ENV</span> GPG_KEYS <span class="hljs-number">48</span>F8E69F6390C9F25CFEDCD268248959359E722B A9C5DF4D22E99998D9875A5110C01C5A2F6059E7 DCFD35E0BF8CA7344752DE8B6FB21E8933C60243<br><span class="hljs-keyword">ENV</span> TOMCAT_MAJOR <span class="hljs-number">9</span><br><span class="hljs-keyword">ENV</span> TOMCAT_VERSION <span class="hljs-number">9.0</span>.<span class="hljs-number">73</span><br><span class="hljs-keyword">ENV</span> TOMCAT_SHA512 d43fbd6c5ae00bc0ffc2559743f91abd3547c827426cb0acdc8428e060e8659b6bb41b3877deb061ab6202980de39b9558525a4256725b647d5bff93e47a5664<br><span class="hljs-comment"># smoke test</span><br>	catalina.sh version<br><span class="hljs-comment"># verify Tomcat Native is working properly</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">set</span> -eux; \</span><br><span class="language-bash">	nativeLines=<span class="hljs-string">&quot;<span class="hljs-subst">$(catalina.sh configtest 2&gt;&amp;1)</span>&quot;</span>; \</span><br><span class="language-bash">	nativeLines=<span class="hljs-string">&quot;<span class="hljs-subst">$(echo <span class="hljs-string">&quot;<span class="hljs-variable">$nativeLines</span>&quot;</span> | grep &#x27;Apache Tomcat Native&#x27;)</span>&quot;</span>; \</span><br><span class="language-bash">	nativeLines=<span class="hljs-string">&quot;<span class="hljs-subst">$(echo <span class="hljs-string">&quot;<span class="hljs-variable">$nativeLines</span>&quot;</span> | sort -u)</span>&quot;</span>; \</span><br><span class="language-bash">	<span class="hljs-keyword">if</span> ! <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$nativeLines</span>&quot;</span> | grep -E <span class="hljs-string">&#x27;INFO: Loaded( APR based)? Apache Tomcat Native library&#x27;</span> &gt;&amp;2; <span class="hljs-keyword">then</span> \</span><br><span class="language-bash">		<span class="hljs-built_in">echo</span> &gt;&amp;2 <span class="hljs-string">&quot;<span class="hljs-variable">$nativeLines</span>&quot;</span>; \</span><br><span class="language-bash">		<span class="hljs-built_in">exit</span> 1; \</span><br><span class="language-bash">	<span class="hljs-keyword">fi</span></span><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;catalina.sh&quot;</span>, <span class="hljs-string">&quot;run&quot;</span>]</span><br></code></pre></td></tr></table></figure>
+<h2 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker compose"></a>docker compose</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
+<li>一个文件<ul>
+<li>docker-compose.yml</li>
+</ul>
+</li>
+<li>两个要素<ul>
+<li>服务<ul>
+<li>一个个应用容器实例，比如订单微服务、库存微服务、mysql容器或者redis</li>
+</ul>
+</li>
+<li>工程<ul>
+<li>由一组关联的应用容器组成的一个完整的业务单元，在docker-compose.yml文件中定义</li>
+</ul>
 </li>
 </ul>
+</li>
+</ul>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li>docker compose up<ul>
+<li>-d 后台运行</li>
+<li>启动所有的docker compose 服务</li>
+</ul>
+</li>
+<li>docker compose down <ul>
+<li>停止并删除容器、网络、卷、镜像</li>
+</ul>
+</li>
+<li>docker compose exec yml中的服务id<ul>
+<li>进入容器实例内部</li>
+</ul>
+</li>
+<li>docker compose ps                     <ul>
+<li>展示当前docker-compose编排过的运行的所有容器</li>
+</ul>
+</li>
+<li>docker compose top<ul>
+<li>展示当前docker-compose编排过的容器进程</li>
+</ul>
+</li>
+<li>docker-compose config -q  <ul>
+<li>检查配置，有问题才有输出</li>
+</ul>
+</li>
+<li>docker-compose restart   # 重启服务</li>
+<li>docker-compose start     # 启动服务</li>
+<li>docker-compose stop      # 停止服务</li>
+</ul>
+<h3 id="compos0e"><a href="#compos0e" class="headerlink" title="compos0e"></a>compos0e</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 版本</span><br><span class="hljs-attr">version:</span> <span class="hljs-string">&quot;3&quot;</span><br><span class="hljs-comment"># 要启动的容器</span><br><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">microService:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">zzyy_docker:1.6</span><br>    <span class="hljs-attr">container_name:</span> <span class="hljs-string">ms01</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;6001:6001&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/app/microService:/data</span><br>    <span class="hljs-attr">networks:</span> <br>      <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span> <br>    <span class="hljs-attr">depends_on:</span> <br>      <span class="hljs-bullet">-</span> <span class="hljs-string">redis</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">mysql</span><br> <br>  <span class="hljs-attr">redis:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">redis:6.0.8</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;6379:6379&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/app/redis/redis.conf:/etc/redis/redis.conf</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/app/redis/data:/data</span><br>    <span class="hljs-attr">networks:</span> <br>      <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span><br>    <span class="hljs-attr">command:</span> <span class="hljs-string">redis-server</span> <span class="hljs-string">/etc/redis/redis.conf</span><br> <br>  <span class="hljs-attr">mysql:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">mysql:5.7</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">MYSQL_ROOT_PASSWORD:</span> <span class="hljs-string">&#x27;123456&#x27;</span><br>      <span class="hljs-attr">MYSQL_ALLOW_EMPTY_PASSWORD:</span> <span class="hljs-string">&#x27;no&#x27;</span><br>      <span class="hljs-attr">MYSQL_DATABASE:</span> <span class="hljs-string">&#x27;db2021&#x27;</span><br>      <span class="hljs-attr">MYSQL_USER:</span> <span class="hljs-string">&#x27;zzyy&#x27;</span><br>      <span class="hljs-attr">MYSQL_PASSWORD:</span> <span class="hljs-string">&#x27;zzyy123&#x27;</span><br>    <span class="hljs-attr">ports:</span><br>       <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;3306:3306&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>       <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/db:/var/lib/mysql</span><br>       <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/conf/my.cnf:/etc/my.cnf</span><br>       <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/init:/docker-entrypoint-initdb.d</span><br>    <span class="hljs-attr">networks:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span><br>    <span class="hljs-attr">command:</span> <span class="hljs-string">--default-authentication-plugin=mysql_native_password</span> <span class="hljs-comment">#解决外部无法访问</span><br><span class="hljs-comment"># 定义网络模式</span><br><span class="hljs-attr">networks:</span> <br>   <span class="hljs-attr">atguigu_net:</span> <br> <br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -714,7 +793,7 @@ CMD [&quot;catalina.sh&quot;, &quot;run&quot;]
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年4月2日</div>
+          <div>2025年5月1日</div>
         </div>
       
       
