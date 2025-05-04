@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          11k 字
+          12k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          90 分钟
+          97 分钟
         
       </span>
     
@@ -314,7 +314,107 @@
 </li>
 </ul>
 <h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><ul>
-<li><code>Future</code> 是<strong>异步计算结果的容器接口</strong>，它提供了在等待异步计算完成时检查计算是否完成的状态，并在异步计算完成后获取计算结果而且只能通过 <code>get</code> 方法获取结果，如果异步计算没有完成则阻塞，当然你可以在异步计算完成前通过 <code>cancel</code> 方法取消，如果异步计算被取消则标记一个取消的状态。如果希望异步计算可以被取消而且不提供可用的计算结果，如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 <code>Future&lt;?&gt;</code> 形式类型、并返回 <code>null</code> 作为底层任务的结果。</li>
+<li><p><code>Future</code> 是<strong>异步计算结果的容器接口</strong></p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/JavaJUCFuture.png" srcset="/img/loading.gif" lazyload alt="Future"></p>
+</li>
+</ul>
+<h3 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h3><ul>
+<li>get() &#x2F; get(long timeout, TimeUnit unit)<ul>
+<li><strong>阻塞获取异步任务的结果</strong>，直到任务完成。</li>
+<li>支持超时机制</li>
+</ul>
+</li>
+<li>cancel(boolean mayInterruptIfRunning)<ul>
+<li>尝试取消任务</li>
+<li><code>mayInterruptIfRunning</code>：为 <code>true</code> 时，会尝试中断正在执行的任务；为 <code>false</code> 时，允许正在运行的任务完成</li>
+<li>如果任务尚未开始，调用 <code>cancel(true)</code> 会直接取消任务。</li>
+<li>如果任务已经在运行，是否能中断取决于任务是否响应中断</li>
+</ul>
+</li>
+<li>isDone()<ul>
+<li>检查任务是否已经完成(正常完成、被取消或抛出异常)</li>
+</ul>
+</li>
+<li>isCancelled()<ul>
+<li>检查任务是否被取消</li>
+</ul>
+</li>
+</ul>
+<h3 id="RunnableFuture"><a href="#RunnableFuture" class="headerlink" title="RunnableFuture"></a>RunnableFuture</h3><ul>
+<li>典型实现：FutureTask</li>
+<li>将 <code>Callable</code> 或 <code>Runnable</code> 包装成一个可执行的任务，并通过线程执行。</li>
+</ul>
+<h3 id="SchedualedFuture"><a href="#SchedualedFuture" class="headerlink" title="SchedualedFuture"></a>SchedualedFuture</h3><ul>
+<li>支持任务在指定延迟后执行（一次）。</li>
+<li>支持周期性执行任务（固定速率或固定延迟）。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">ScheduledExecutorService</span> <span class="hljs-variable">scheduler</span> <span class="hljs-operator">=</span> Executors.newScheduledThreadPool(<span class="hljs-number">1</span>);<br><span class="hljs-comment">// 延迟执行一次</span><br>ScheduledFuture&lt;?&gt; future = scheduler.schedule(<br>    () -&gt; System.out.println(<span class="hljs-string">&quot;任务在 3 秒后执行&quot;</span>),<br>    <span class="hljs-number">3</span>, TimeUnit.SECONDS<br>);<br><span class="hljs-comment">// 周期性任务（固定速率）</span><br>ScheduledFuture&lt;?&gt; periodicFuture = scheduler.scheduleAtFixedRate(<br>    () -&gt; System.out.println(<span class="hljs-string">&quot;每 5 秒执行一次&quot;</span>),<br>    <span class="hljs-number">0</span>, <span class="hljs-number">5</span>, TimeUnit.SECONDS<br>);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="CompletableFuture"><a href="#CompletableFuture" class="headerlink" title="CompletableFuture"></a>CompletableFuture</h3><ul>
+<li>是future在java8的增强实现、支持异步任务的链式调用、组合和回调</li>
+</ul>
+<h4 id="Future的缺点"><a href="#Future的缺点" class="headerlink" title="Future的缺点"></a>Future的缺点</h4><ul>
+<li>回调地狱，必须在每一个 Future 完成后启动另一个 Future，这使得代码看起来像是在不断嵌套回调</li>
+<li>阻塞操作，它会阻止当前线程的执行，直到异步操作完成</li>
+<li>复杂的错误处理</li>
+<li>无法表示任务间的复杂关联<ul>
+<li>无法使用 Future 来表示某个任务需要在另外两个任务都完成后才能开始，或者表示多个任务可以并行执行但是必须在一个共同的任务之前完成</li>
+</ul>
+</li>
+</ul>
+<h4 id="核心原理-1"><a href="#核心原理-1" class="headerlink" title="核心原理"></a>核心原理</h4><ul>
+<li>状态机和观察者模式<ul>
+<li>通过状态机管理异步任务的生命周期</li>
+<li>每个 CompletableFuture 实例作为<strong>被观察者</strong>，维护一个 <code>Completion</code> 类型的链表（<code>stack</code>），用于存储注册的观察者（回调函数）。当任务完成时，通过回调链触发后续操作，类似观察者模式</li>
+<li></li>
+</ul>
+</li>
+<li>依赖链和流水线执行<ul>
+<li>通过链式调用（如 <code>thenApply</code>、<code>thenCompose</code>），任务被分解为多个阶段（Stage），每个阶段的结果作为下一阶段的输入。依赖链通过 <code>Completion</code> 对象构建，确保任务按顺序或并行执行</li>
+</ul>
+</li>
+</ul>
+<h4 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h4><ul>
+<li>任务创建<ul>
+<li><strong>无返回值任务</strong>：<code>runAsync(Runnable)</code>，适用于日志记录等场景</li>
+<li><strong>有返回值任务</strong>：<code>supplyAsync(Supplier)</code>，返回 <code>CompletableFuture&lt;T&gt;</code>，支持结果传递</li>
+<li><strong>手动完成任务</strong>：<code>complete(T)</code> 或 <code>completeExceptionally(Throwable)</code>，允许强制设置结果或异常</li>
+</ul>
+</li>
+<li>结果处理及转换<ul>
+<li><strong>转换结果</strong>：<code>thenApply(Function)</code>，将结果映射为另一种类型</li>
+<li><strong>消费结果</strong>：<code>thenAccept(Consumer)</code>，处理结果但无返回值</li>
+<li><strong>组合任务</strong>：<ul>
+<li><strong>串联</strong>：<code>thenCompose()</code>，将两个依赖任务串联（前一个结果作为后一个输入）</li>
+<li><strong>并行合并</strong>：<code>thenCombine()</code>，合并两个独立任务的结果</li>
+</ul>
+</li>
+<li>回调<ul>
+<li>全部计算完成后： <code> CompletableFuture&lt;Void&gt; allOf(CompletableFuture&lt;?&gt;... cfs)</code></li>
+<li>任一计算完成后：<code>CompletableFuture&lt;Object&gt; anyOf(CompletableFuture&lt;?&gt;... cfs)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>完成回调<ul>
+<li><strong>完成时处理</strong>：<code>CompletableFuture&lt;T&gt; whenComplete(BiConsumer&lt;? super T,? super Throwable&gt; action)</code></li>
+<li><strong>完成时交给其他线程处理</strong>：<code>CompletableFuture&lt;T&gt; whenCompleteAsync(BiConsumer&lt;? super T,? super Throwable&gt; action)</code></li>
+<li><strong>统一处理</strong>：<code>handle(BiFunction)</code>，无论成功或异常均可处理</li>
+</ul>
+</li>
+<li>异常处理<ul>
+<li><strong>捕获异常</strong>：<code>exceptionally(Function)</code>，返回备选值</li>
+</ul>
+</li>
+<li>超时及竞态控制<ul>
+<li><strong>超时机制</strong>：<code>orTimeout(long, TimeUnit)</code>，超时后抛出 <code>TimeoutException</code></li>
+<li><strong>竞态选择</strong>：<code>anyOf(CompletableFuture...)</code>，返回最快完成的任务结果</li>
+</ul>
+</li>
+<li>默认使用 <code>ForkJoinPool.commonPool()</code> 执行异步任务，可自定义线程池</li>
+</ul>
+<h3 id="ForkJoinFuture"><a href="#ForkJoinFuture" class="headerlink" title="ForkJoinFuture"></a>ForkJoinFuture</h3><ul>
+<li><code>ForkJoinTask</code> 是 <code>Future</code> 的子类，专为 <code>ForkJoinPool</code> 设计，用于实现分治（Divide-and-Conquer）任务</li>
+<li><code>ForkJoinFuture</code> 是 <code>ForkJoinTask</code> 的子类，但通常直接使用 <code>ForkJoinTask</code> 的 <code>invoke()</code> 或 <code>fork()</code>&#x2F;<code>join()</code> 方法</li>
 </ul>
 <h2 id="LOCK"><a href="#LOCK" class="headerlink" title="LOCK"></a>LOCK</h2><ul>
 <li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/ReentrantLock%20%E7%9A%84%E7%9F%A5%E8%AF%86%E9%93%BE.png" srcset="/img/loading.gif" lazyload alt="ReentrantLock 的知识链"></p>
@@ -833,7 +933,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年5月1日</div>
+          <div>2025年5月4日</div>
         </div>
       
       
