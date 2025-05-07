@@ -1,0 +1,767 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式事务 符合 ACID 特性的事务称为“刚性事务”，把后面将要介绍的可靠事件队列、TCC、Saga 实现的事务，统称为“柔性事务”。  2PC事务流程 协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了  同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。  假如在第一阶段所有参与者都返回准备成功，那么协调者则">
+  
+  
+  
+  <title>04-分布式事务 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="04-分布式事务"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 19:59" pubdate>
+          2022-02-01 19:59:31
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">04-分布式事务</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><ul>
+<li>符合 ACID 特性的事务称为“刚性事务”，把后面将要介绍的可靠事件队列、TCC、Saga 实现的事务，统称为“柔性事务”。</li>
+</ul>
+<h3 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h3><h4 id="事务流程"><a href="#事务流程" class="headerlink" title="事务流程"></a>事务流程</h4><ul>
+<li><p>协调者会给各参与者发送准备命令，你可以把准备命令理解成除了提交事务之外啥事都做完了</p>
+</li>
+<li><p>同步等待所有资源的响应之后就进入第二阶段即提交阶段（注意提交阶段不一定是提交事务，也可能是回滚事务）。</p>
+</li>
+<li><p>假如在第一阶段所有参与者都返回准备成功，那么协调者则向所有参与者发送提交事务命令，然后等待所有事务都提交成功之后，返回事务执行成功。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/2PC%E5%87%86%E5%A4%87%E6%88%90%E5%8A%9F.png" srcset="/img/loading.gif" lazyload alt="image-20210315115401682"></p>
+</li>
+<li><p>假如在第一阶段有一个参与者返回失败，那么协调者就会向所有参与者发送回滚事务的请求，即分布式事务执行失败。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/2PC%E5%87%86%E5%A4%87%E5%A4%B1%E8%B4%A5.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>二阶段提交失败</p>
+<ul>
+<li><strong>第二阶段执行的是回滚事务操作</strong>，那么答案是不断重试，直到所有参与者都回滚了，不然那些在第一阶段准备成功的参与者会一直阻塞着。</li>
+<li><strong>第二阶段执行的是提交事务操作</strong>，那么答案也是不断重试，因为有可能一些参与者的事务已经提交成功了，这个时候只有一条路，就是头铁往前冲，不断的重试，直到提交成功，到最后真的不行只能人工介入处理。</li>
+</ul>
+</li>
+<li><p>2PC 是一个<strong>同步阻塞协议</strong>，像第一阶段协调者会等待所有参与者响应才会进行下一步操作，当然第一阶段的<strong>协调者有超时机制</strong>，假设因为网络原因没有收到某参与者的响应或某参与者挂了，那么超时后就会判断事务失败，向所有参与者发送回滚命令。</p>
+</li>
+</ul>
+<h4 id="协调者故障"><a href="#协调者故障" class="headerlink" title="协调者故障"></a>协调者故障</h4><ul>
+<li><strong>协调者是一个单点，存在单点故障问题</strong>。<ul>
+<li>协调者在<strong>发送准备命令之前</strong>挂了，等于事务还没开始。</li>
+<li>协调者在<strong>发送准备命令之后</strong>挂了，有些参与者等于都执行了处于事务资源锁定的状态。不仅事务执行不下去，还会因为锁定了一些公共资源而阻塞系统其它操作。</li>
+<li>协调者在<strong>发送回滚事务命令之前</strong>挂了，那么事务也是执行不下去，且在第一阶段那些准备成功参与者都阻塞着。</li>
+<li>协调者在<strong>发送回滚事务命令之后</strong>挂了，很大的概率都会回滚成功，资源都会释放。但是如果出现网络分区问题，某些参与者将因为收不到命令而阻塞着。</li>
+<li>协调者在<strong>发送提交事务命令之前</strong>挂了，所有资源都阻塞着。</li>
+<li>协调者在<strong>发送提交事务命令之后</strong>挂了，很大概率都会提交成功，然后释放资源，但是如果出现网络分区问题某些参与者将因为收不到命令而阻塞着。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2PC总结"><a href="#2PC总结" class="headerlink" title="2PC总结"></a>2PC总结</h4><ul>
+<li>2PC 是一种<strong>尽量保证强一致性</strong>的分布式事务，因此它是<strong>同步阻塞</strong>的，而同步阻塞就导致长久的资源锁定问题，<strong>总体而言效率低</strong>，并且存在<strong>单点故障</strong>问题，在极端条件下存在<strong>数据不一致</strong>的风险。</li>
+<li>2PC 适用于<strong>数据库层面的分布式事务场景</strong></li>
+<li>缺点<ul>
+<li>性能差，在准备阶段，同步阻塞，要等待所有的参与者返回，才能进入阶段二，在这期间，各个参与者上面的相关资源被排他地锁住，参与者上面意图使用这些资源的本地事务只能等待。因为存在这种同步阻塞问题，所以影响了各个参与者的本地事务并发度；</li>
+<li>准备阶段完成后，如果协调者宕机，所有的参与者都收不到提交或回滚指令，导致所有参与者“不知所措”；</li>
+<li>在提交阶段，协调者向所有的参与者发送了提交指令，如果一个参与者未返回 ACK，那么协调者不知道这个参与者内部发生了什么（由于网络二将军问题的存在，这个参与者可能根本没收到提交指令，一直处于等待接收提交指令的状态；也可能收到了，并成功执行了本地提交，但返回的 ACK 由于网络故障未送到协调者上），也就无法决定下一步是否进行全体参与者的回滚。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3PC"><a href="#3PC" class="headerlink" title="3PC"></a>3PC</h3><ul>
+<li><p>分为三个阶段：<strong>准备阶段，预提交阶段，提交阶段</strong>  CanCommit、PreCommit 和 DoCommit</p>
+<ul>
+<li>准备阶段：询问参与者的状况<ul>
+<li><strong>准备阶段的变更成不会直接执行事务</strong>，而是会先去询问此时的参与者是否有条件接这个事务，因此<strong>不会一来就干活直接锁资源</strong>，使得在某些资源不可用的情况下所有参与者都阻塞着。</li>
+</ul>
+</li>
+<li>预提交阶段： 与2PC的准备阶段相识，除了事务的提交，该做的都做了<ul>
+<li><strong>预提交阶段的引入起到了一个统一状态的作用</strong>，它像一道栅栏，表明在预提交阶段前所有参与者其实还未都回应，在预处理阶段表明所有参与者都已经回应了。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/3PC%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<h4 id="3PC总结"><a href="#3PC总结" class="headerlink" title="3PC总结"></a>3PC总结</h4><ul>
+<li>3PC 相对于 2PC 做了一定的改进：<strong>引入了参与者超时机制</strong>，并且增加了预提交阶段使得故障恢复之后协调者的决策复杂度降低，但整体的交互过程更长了，性能有所下降，并且还是会存在数据不一致问题。所以 2PC 和 3PC 都不能保证数据100%一致，因此一般都需要有定时扫描补偿机制。</li>
+<li><ul>
+<li></li>
+</ul>
+</li>
+</ul>
+<h3 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h3><ul>
+<li><strong>2PC 和 3PC 都是数据库层面的，而 TCC 是业务层面的分布式事务</strong></li>
+<li>TCC 是一种服务层面上的 2PC，它是如何解决 2PC 无法应对宕机问题的缺陷的呢？答案是不断重试。由于 try 操作锁住了全局事务涉及的所有资源，保证了业务操作的所有前置条件得到满足，因此无论是 confirm 阶段失败还是 cancel 阶段失败都能通过不断重试直至 confirm 或 cancel 成功（所谓成功就是所有的服务都对 confirm 或者 cancel 返回了 ACK）。</li>
+</ul>
+<h4 id="Try-Confirm-Cancel"><a href="#Try-Confirm-Cancel" class="headerlink" title="Try - Confirm - Cancel"></a>Try - Confirm - Cancel</h4><ul>
+<li><p>try： 指的是预留，即资源的预留和锁定，<strong>注意是预留</strong>（锁资源）</p>
+</li>
+<li><p>Confirm 指的是确认操作，这一步其实就是真正的执行了。</p>
+</li>
+<li><p>Cancel 指的是撤销操作，可以理解为把预留阶段的动作撤销了。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/TCC%E4%BA%8B%E5%8A%A1%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p><strong>TCC 对业务的侵入较大和业务紧耦合</strong>，需要根据特定的场景和业务逻辑来设计相应的操作。</p>
+</li>
+<li><p>撤销和确认操作的执行可能需要重试，因此还需要保证<strong>操作的幂等</strong>。</p>
+</li>
+<li><p><strong>TCC可以跨数据库、跨不同的业务系统来实现事务</strong>。</p>
+</li>
+</ul>
+<h3 id="Saga"><a href="#Saga" class="headerlink" title="Saga"></a>Saga</h3><ul>
+<li>属于长事务解决方案，将长事务拆分为多个本地短事务<ul>
+<li><strong>将大事务 T 拆分成若干小事务</strong>，命名为 T1，T2，Tn，每个子事务都具备原子性。如果分布式事务 T 能够正常提交，那么它对数据的影响应该与连续按顺序成功提交子事务 Ti 等价。</li>
+<li>每个短事务都有一个补偿动作 ——&gt; C1,C2,……..Cn</li>
+<li>如果T1，T2~ Tn 这些短事务顺利完成的话，则整个事务结束，否则将采取回复模式</li>
+</ul>
+</li>
+<li>Saga 非常适合处理流程较长、且需要保证事务最终一致性的业务场景。例如，在一个旅游预订平台中，用户可能同时预订机票、酒店和租车服务，这些服务可能由不同的微服务或第三方供应商提供。在这种场景下，Saga 事务模型允许系统逐步执行每个操作，并在任一步骤失败时有序地执行补偿操作，从而确保系统的一致性并提升用户体验。</li>
+<li>与 TCC 相比，Saga 通常采用事件驱动设计，即每个服务都是异步执行的，无需设计资源的冻结状态或处理撤销冻结的操作。但缺点是不具备隔离性，多个 Saga 小事务操作同一数据源时，无法保证操作的原子性，可能出现数据被覆盖的情况。</li>
+<li>尽管补偿操作较易实现，但确保正向操作与补偿操作的严格执行仍需要大量精力。因此，Saga 事务通常不通过裸编码实现，而是在事务中间件的支持下完成。前面提到的 Seata 中间件也支持 Saga 事务模型。</li>
+</ul>
+<h3 id="GASA"><a href="#GASA" class="headerlink" title="GASA"></a>GASA</h3><ul>
+<li>有补偿</li>
+</ul>
+<h3 id="事务状态表"><a href="#事务状态表" class="headerlink" title="事务状态表"></a>事务状态表</h3><ul>
+<li>扫描这张表中事务的状态，如果一个分布式事务一直（设置一个事务周期阈值）未到状态 3，说明这条事务没有成功执行，于是可以重新调用 repo-service 扣减库存、调用 order-service 生成订单。直至所有的调用成功，事务状态到 3。<br>如果多次重试仍未使得状态到 3，可以将事务状态置为 error，通过人工介入进行干预。</li>
+</ul>
+<h3 id="基于消息中间件的最终一致性事务方案"><a href="#基于消息中间件的最终一致性事务方案" class="headerlink" title="基于消息中间件的最终一致性事务方案"></a>基于消息中间件的最终一致性事务方案</h3><h3 id="Seata"><a href="#Seata" class="headerlink" title="Seata"></a>Seata</h3><ul>
+<li>Seata 为用户提供了 AT、TCC、SAGA 和 XA 事务模式。其中 AT 模式是 Seata 主推的事务模式，因此本章分析 Seata in AT mode 的实现。<strong>使用 AT 有一个前提，那就是微服务使用的数据库必须是支持事务的关系型数据库。</strong></li>
+</ul>
+<h4 id="AT、TCC、Saga、XA-模式分析"><a href="#AT、TCC、Saga、XA-模式分析" class="headerlink" title="AT、TCC、Saga、XA 模式分析"></a>AT、TCC、Saga、XA 模式分析</h4><ul>
+<li><table>
+<thead>
+<tr>
+<th>分布式事务模式</th>
+<th>介绍</th>
+<th>技术栈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>AT 模式</strong></td>
+<td>无侵入的分布式事务解决方案，适用于不希望对业务进行改造的场景，几乎0学习成本（sql都由框架托管统一执行，会存在<strong>脏写</strong>问题）</td>
+<td>seata、shardingsphere</td>
+</tr>
+<tr>
+<td><strong>TCC 模式</strong></td>
+<td>高性能分布式事务解决方案，适用于核心系统等对性能有很高要求的场景（第一阶段会产生行锁，事务执行太久会<strong>锁行很久</strong>）</td>
+<td>seata、service-comb</td>
+</tr>
+<tr>
+<td><strong>Saga 模式</strong></td>
+<td>长事务解决方案，适用于业务流程长且需要保证事务最终一致性的业务系统（第一阶段就操作DB，会存在<strong>脏读</strong>问题）</td>
+<td>seata、shardingsphere、service-comb</td>
+</tr>
+<tr>
+<td><strong>XA模式</strong></td>
+<td>分布式强一致性的解决方案，但<strong>性能低</strong>而使用较少。</td>
+<td>seata、shardingsphere</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="Seata的工作流程"><a href="#Seata的工作流程" class="headerlink" title="Seata的工作流程"></a>Seata的工作流程</h4><ul>
+<li>Seata 的 AT 模式建立在关系型数据库的本地事务特性的基础之上，通过数据源代理类拦截并解析数据库执行的 SQL，记录自定义的回滚日志，如需回滚，则重放这些自定义的回滚日志即可。AT 模式虽然是根据 XA 事务模型（2PC）演进而来的，但是 AT 打破了 XA 协议的阻塞性制约，在一致性和性能上取得了平衡。</li>
+<li>AT 模式是基于 XA 事务模型演进而来的，它的整体机制也是一个改进版本的两阶段提交协议。AT 模式的两个基本阶段是：<ul>
+<li>第一阶段：首先获取本地锁，执行本地事务，业务数据操作和记录回滚日志在同一个本地事务中提交，最后释放本地锁；</li>
+<li>第二阶段：如需全局提交，异步删除回滚日志即可，这个过程很快就能完成。如需要回滚，则通过第一阶段的回滚日志进行反向补偿。</li>
+</ul>
+</li>
+</ul>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%94%B5%E5%95%86%E6%A8%A1%E5%9E%8B1.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+</li>
+<li><p>协调者 shopping-service 先调用参与者 repo-service 扣减库存，后调用参与者 order-service 生成订单。这个业务流使用 Seata in XA mode 后的全局事务流程如下图所示：</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/AT%E6%B5%81%E7%A8%8B1.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li>shopping-service 向 Seata 注册全局事务，并产生一个全局事务标识 XID</li>
+<li>将 repo-service.repo_db、order-service.order_db 的本地事务执行到待提交阶段，事务内容包含对 repo-service.repo_db、order-service.order_db 进行的查询操作以及写每个库的 undo_log 记录</li>
+<li>repo-service.repo_db、order-service.order_db 向 Seata 注册分支事务，并将其纳入该 XID 对应的全局事务范围</li>
+<li>提交 repo-service.repo_db、order-service.order_db 的本地事务</li>
+<li>repo-service.repo_db、order-service.order_db 向 Seata 汇报分支事务的提交状态</li>
+<li>Seata 汇总所有的 DB 的分支事务的提交状态，决定全局事务是该提交还是回滚</li>
+<li>Seata 通知 repo-service.repo_db、order-service.order_db 提交&#x2F;回滚本地事务，若需要回滚，采取的是补偿式方法</li>
+<li>1）2）3）4）5）属于第一阶段，6）7）属于第二阶段。</li>
+</ol>
+</li>
+<li><p>分支的本地事务在第一阶段提交完成之后，就会释放掉本地事务锁定的本地记录。这是 AT 模式和 XA 最大的不同点</p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">12分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>04-分布式事务</div>
+      <div>https://x-leonidas.github.io/2022/02/01/12分布式系统/04-分布式事务/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年3月6日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/01-%E6%A6%82%E5%BF%B5/" title="01-概念">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">01-概念</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/03-%E9%AB%98%E5%B9%B6%E5%8F%91/" title="03-高并发">
+                        <span class="hidden-mobile">03-高并发</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
