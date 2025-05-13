@@ -365,7 +365,7 @@
 <li>扫描这张表中事务的状态，如果一个分布式事务一直（设置一个事务周期阈值）未到状态 3，说明这条事务没有成功执行，于是可以重新调用 repo-service 扣减库存、调用 order-service 生成订单。直至所有的调用成功，事务状态到 3。<br>如果多次重试仍未使得状态到 3，可以将事务状态置为 error，通过人工介入进行干预。</li>
 </ul>
 <h3 id="基于消息中间件的最终一致性事务方案"><a href="#基于消息中间件的最终一致性事务方案" class="headerlink" title="基于消息中间件的最终一致性事务方案"></a>基于消息中间件的最终一致性事务方案</h3><h3 id="Seata"><a href="#Seata" class="headerlink" title="Seata"></a>Seata</h3><ul>
-<li>Seata 为用户提供了 AT、TCC、SAGA 和 XA 事务模式。其中 AT 模式是 Seata 主推的事务模式，因此本章分析 Seata in AT mode 的实现。<strong>使用 AT 有一个前提，那就是微服务使用的数据库必须是支持事务的关系型数据库。</strong></li>
+<li>Seata 为用户提供了 AT、TCC、SAGA 和 XA 事务模式。其中 AT 模式是 Seata 主推的事务模式，使用 AT 有一个前提，那就是微服务使用的数据库必须是支持事务的关系型数据库。**</li>
 </ul>
 <h4 id="AT、TCC、Saga、XA-模式分析"><a href="#AT、TCC、Saga、XA-模式分析" class="headerlink" title="AT、TCC、Saga、XA 模式分析"></a>AT、TCC、Saga、XA 模式分析</h4><ul>
 <li><table>
@@ -484,7 +484,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年3月6日</div>
+          <div>2025年5月14日</div>
         </div>
       
       
