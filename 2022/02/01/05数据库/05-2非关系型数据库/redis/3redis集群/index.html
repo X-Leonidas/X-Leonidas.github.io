@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          2.1k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          17 分钟
+          18 分钟
         
       </span>
     
@@ -305,7 +305,15 @@
 </li>
 </ul>
 <h5 id="分区原理"><a href="#分区原理" class="headerlink" title="分区原理"></a>分区原理</h5><ul>
-<li><strong>带有虚拟节点的一致性哈希分区</strong></li>
+<li><strong>带有虚拟节点的一致性哈希分区</strong>，Redis Cluster 将数据划分为 <strong>16384 个哈希槽（Hash Slot）</strong>，每个键根据哈希算法分配到特定的槽</li>
+<li>默认情况下，Redis 使用键的<strong>完整字符串</strong>计算哈希值（CRC16算法），决定键属于哪个槽。</li>
+</ul>
+<h5 id="故障检测及转移"><a href="#故障检测及转移" class="headerlink" title="故障检测及转移"></a>故障检测及转移</h5><ul>
+<li>Cluster 节点之间通过 <strong>Gossip 协议</strong>通信，持续交换节点状态信息。当某个主节点被大多数节点判定为不可达时，其对应的从节点会自动触发故障转移（<code>failover</code>），提升为新的主节点。</li>
+</ul>
+<h5 id="hash-tag"><a href="#hash-tag" class="headerlink" title="hash tag"></a>hash tag</h5><ul>
+<li>用于<strong>控制键（Key）的分片规则</strong>，确保某些相关联的键被分配到同一个哈希槽（Hash Slot）中</li>
+<li>所有包含相同 Hash Tag 的键，无论其他部分如何变化，都会被分配到<strong>同一个哈希槽</strong>，从而存储在同一节点。</li>
 </ul>
 <h5 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h5><ul>
 <li>优点<ul>
@@ -480,7 +488,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月29日</div>
+          <div>2025年5月14日</div>
         </div>
       
       
@@ -517,9 +525,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/1redis%E5%9F%BA%E7%A1%80/" title="1redis基础">
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/2redis%E8%BF%9B%E9%98%B6/" title="2redis进阶">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">1redis基础</span>
+                        <span class="hidden-mobile">2redis进阶</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -527,8 +535,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/2redis%E8%BF%9B%E9%98%B6/" title="2redis进阶">
-                        <span class="hidden-mobile">2redis进阶</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/14-RocketMQFAQ/" title="14-RocketMQFAQ">
+                        <span class="hidden-mobile">14-RocketMQFAQ</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

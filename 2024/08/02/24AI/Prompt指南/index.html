@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="系统设计的步骤 系统设计面试：内幕指南链接  1.系统的需求 功能性需求 系统包含哪些功能   非功能性需求 性能和QPS，TPS等    2.对系统进行抽象设计3. 考虑系统目前需要优化的点系统设计三要素 高性能架构设计：熟悉系统常见性能优化手段比如引入读写分离、缓存、负载均衡、异步等 高可用架构设计：CAP理论和BASE理论，通过集群来提高系统的稳定性、超时和重试机制、应对接口级的故障：降级、">
+    <meta name="description" content="Prompt指南Write clear instructions（写出清晰的指令） 把话说的尽量的详细，尽量多的提供任何重要的详细信息和上下文 让模型充当某个角色 使用分隔符清楚地指示输入的不同部分 例如：总结下列三引号分割的文本 “”“文本”“”   指定完成任务所需的步骤 例如：使用以下分步说明来响应用户输入。步骤 1 - 用户将为您提供三引号中的文本。用一个句子总结这段文字，并加上前缀「Su">
   
   
   
-  <title>1.系统设计 - 夜坐听风</title>
+  <title>Prompt指南 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="1.系统设计"></span>
+            <span id="subtitle" data-typed-text="Prompt指南"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-21 23:53" pubdate>
-          2024-02-21 23:53:14
+        <time datetime="2024-08-02 21:58" pubdate>
+          2024-08-02 21:58:03
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          543 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          11 分钟
+          5 分钟
         
       </span>
     
@@ -253,116 +253,57 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">1.系统设计</h1>
+            <h1 id="seo-header">Prompt指南</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="系统设计的步骤"><a href="#系统设计的步骤" class="headerlink" title="系统设计的步骤"></a>系统设计的步骤</h1><ul>
-<li>系统设计面试：内幕指南<a target="_blank" rel="noopener" href="https://github.com/Admol/SystemDesign">链接</a></li>
-</ul>
-<h2 id="1-系统的需求"><a href="#1-系统的需求" class="headerlink" title="1.系统的需求"></a>1.系统的需求</h2><ul>
-<li>功能性需求<ul>
-<li>系统包含哪些功能</li>
-</ul>
-</li>
-<li>非功能性需求<ul>
-<li>性能和QPS，TPS等</li>
+                <h1 id="Prompt指南"><a href="#Prompt指南" class="headerlink" title="Prompt指南"></a>Prompt指南</h1><h3 id="Write-clear-instructions（写出清晰的指令）"><a href="#Write-clear-instructions（写出清晰的指令）" class="headerlink" title="Write clear instructions（写出清晰的指令）"></a>Write clear instructions（写出清晰的指令）</h3><ul>
+<li>把话说的尽量的详细，尽量多的提供任何重要的详细信息和上下文</li>
+<li>让模型充当某个角色</li>
+<li>使用分隔符清楚地指示输入的不同部分<ul>
+<li>例如：总结下列三引号分割的文本 “”“文本”“”</li>
 </ul>
 </li>
-</ul>
-<h2 id="2-对系统进行抽象设计"><a href="#2-对系统进行抽象设计" class="headerlink" title="2.对系统进行抽象设计"></a>2.对系统进行抽象设计</h2><h2 id="3-考虑系统目前需要优化的点"><a href="#3-考虑系统目前需要优化的点" class="headerlink" title="3. 考虑系统目前需要优化的点"></a>3. 考虑系统目前需要优化的点</h2><h3 id="系统设计三要素"><a href="#系统设计三要素" class="headerlink" title="系统设计三要素"></a>系统设计三要素</h3><ul>
-<li>高性能架构设计：熟悉系统常见性能优化手段比如引入<strong>读写分离</strong>、<strong>缓存</strong>、<strong>负载均衡</strong>、<strong>异步</strong>等</li>
-<li>高可用架构设计：CAP理论和BASE理论，通过集群来提高系统的稳定性、超时和重试机制、应对接口级的故障：降级、熔断、限流、排队</li>
-<li>高扩展架构设计：如何拆分系统和模块，尽可能做到低耦合高内聚</li>
-</ul>
-<h3 id="一些常见软件的QPS"><a href="#一些常见软件的QPS" class="headerlink" title="一些常见软件的QPS"></a>一些常见软件的QPS</h3><ul>
-<li>Nginx： 30w+</li>
-<li>redis : 单机QPS 8W+</li>
-<li>mysql： 单机QPS 4k</li>
-<li>Tomcat： 单机 2w</li>
-</ul>
-<h2 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h2><h3 id="热点数据的处理"><a href="#热点数据的处理" class="headerlink" title="热点数据的处理"></a>热点数据的处理</h3><ul>
-<li>热点数据的分类<ul>
-<li>静态热点数据：可以提前预测到的热点数据比如要秒杀的商品</li>
-<li>动态热点数据： 不能够提前预测的热点数据，需要通过一些手段动态监测系统运行情况产生</li>
+<li>指定完成任务所需的步骤<ul>
+<li>例如：使用以下分步说明来响应用户输入。步骤 1 - 用户将为您提供三引号中的文本。用一个句子总结这段文字，并加上前缀「Summary:」。步骤 2 - 将步骤 1 中的摘要翻译成西班牙语，并添加前缀「翻译：」。</li>
 </ul>
 </li>
-<li>问题的关键在于如何找到这些热点数据，然后将它们存在jvm内存中。</li>
-</ul>
-<h3 id="静态资源的处理"><a href="#静态资源的处理" class="headerlink" title="静态资源的处理"></a>静态资源的处理</h3><ul>
-<li>CND</li>
-</ul>
-<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><ul>
-<li>集群化</li>
-<li>限流<ul>
-<li>接口限流</li>
-<li>对用户、IP限流</li>
+<li>提供例子<ul>
+<li>按这句话的风格来写 XX 文章：”””落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨”””</li>
 </ul>
 </li>
-<li>问题，验证码<ul>
-<li>降低用户的请求频率</li>
+<li>指定所输出的长度</li>
 </ul>
-</li>
-<li>提前预约</li>
-<li>流量削峰</li>
-<li>降级<ul>
-<li>根据当前业务情况，对一些服务和页面进行有策略的降级</li>
-</ul>
-</li>
-<li>熔断</li>
-</ul>
-<h3 id="高可用的七大原则"><a href="#高可用的七大原则" class="headerlink" title="高可用的七大原则"></a>高可用的七大原则</h3><ul>
-<li>少依赖原则：能不依赖的，尽可能不依赖，越少越好</li>
-<li>弱依赖原则： 一定要依赖的，尽可能弱依赖，越弱越好</li>
-<li>分散原则：鸡蛋不要放一个篮子，分散风险</li>
-<li>均衡原则： 均匀分散风险，避免不均衡</li>
-<li>隔离原则： 控制风险不扩散，不放大<ul>
-<li>隔离是有级别的，隔离级别越高，风险传播扩散的难度就越大，容灾能力越强</li>
-<li>是以上原则的前提，隔离没做好，上面四个原则都是收效甚若的</li>
-</ul>
-</li>
-<li>无单点原则: 要有冗余或其他版本,做到有路可退<ul>
-<li>快速止血的方式是切换，回滚，扩容等；回滚和扩容属于特殊的切换，回滚指的是切换到某个版本，扩容指的是将流量切换到新扩容的机器上。</li>
-<li>无单点原则和分散原则的区别：<ul>
-<li>当节点无状态的情况下，打散拆分成N份，每份都是相同的功能，互为冗余，即：节点无状态情况下，分散原则和无单点原则等价，满足一个即可。</li>
-<li>当节点有状态的情况下，打散拆分成N份，每份都是不相同的，每份都没有冗余，需要针对每份再做冗余，即：节点有状态情况下，既要满足分散原则又要满足单点原则</li>
+<h3 id="Provide-reference-text（提供参考文本）"><a href="#Provide-reference-text（提供参考文本）" class="headerlink" title="Provide reference text（提供参考文本）"></a>Provide reference text（提供参考文本）</h3><ul>
+<li>让模型使用参考文本作答<ul>
+<li>使用提供的由三重引号引起来的文章来回答问题。</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>自我保护原则： 少流血，牺牲一部分，保护另外一部分</li>
+<h3 id="Split-complex-tasks-into-simpler-subtasks（将复杂的任务拆分为更简单的子任务）"><a href="#Split-complex-tasks-into-simpler-subtasks（将复杂的任务拆分为更简单的子任务）" class="headerlink" title="Split complex tasks into simpler subtasks（将复杂的任务拆分为更简单的子任务）"></a>Split complex tasks into simpler subtasks（将复杂的任务拆分为更简单的子任务）</h3><ul>
+<li>使用意图分类来识别与用户查询最相关的指令</li>
+<li>对于需要很长对话的对话应用，总结或过滤之前的对话</li>
+<li>分段总结长文档并递归构建完整总结</li>
 </ul>
-<h3 id="软件系统风险的来源"><a href="#软件系统风险的来源" class="headerlink" title="软件系统风险的来源"></a>软件系统风险的来源</h3><ul>
-<li>系统资源的变化<ul>
-<li>系统运行所依赖的服务器资源（如CPU，MEM，IO等），应用资源（RPC线程数，DB连接数等），业务资源（业务ID满了，余额不足，业务额度不够等）的负载等都会影响系统运行的风险期望。</li>
-</ul>
-</li>
-<li>存储系统变化<ul>
-<li>系统运行所依赖的服务器资源（如CPU，MEM，IO等），存储资源（并发数等），数据资源（单库容量，单表容量等）的负载和数据一致性等都会影响存储系统运行的风险期望。</li>
-</ul>
-</li>
-<li>人的变化：变更出错</li>
-<li>硬件变化：损坏</li>
-<li>上游变化：请求变化<ul>
-<li>网络流量过大会造成网络堵塞，影响网络通道中的所有网络流量请求</li>
-<li>API请求过大会造成对应服务集群过载，影响整个服务机器上的所有API请求，甚至往外传播。</li>
-<li>KEY请求过大（俗称“热点KEY”）会造成单机过载，影响单机上所有KEY请求，甚至往外传播。</li>
+<h3 id="Give-the-model-time-to-“think”（给模型时间「思考」）"><a href="#Give-the-model-time-to-“think”（给模型时间「思考」）" class="headerlink" title="Give the model time to “think”（给模型时间「思考」）"></a>Give the model time to “think”（给模型时间「思考」）</h3><ul>
+<li>一步步思考</li>
+<li>让模型在急于得出结论之前找出自己的解决方案<ul>
+<li>例如：首先制定自己的问题解决方案。然后将你的解决方案与学生的解决方案进行比较，并评估学生的解决方案是否正确。在你自己完成问题之前，不要决定学生的解决方案是否正确。</li>
 </ul>
 </li>
-<li>下游变化： 响应变慢，响应错误<ul>
-<li>下游服务的数量，服务等级，服务可用率等影响下游服务的风险期望。下游响应变慢可能会拖慢上游，下游响应错误可能会影响上游运行结果。</li>
+<li>使用内心独白来隐藏模型的推理过程<ul>
+<li>Deepseek 已经实现</li>
 </ul>
 </li>
-<li>时间变化：<ul>
-<li>时间到期往往被人忽视，但它往往具有突然性和全局破坏性，一旦时间到期触发故障会导致非常被动，所以要提前识别，尽早预警，如：<strong>秘钥到期，证书到期，费用到期，跨时区，跨年，跨月，跨日等</strong>。</li>
+<li>询问模型在之前的过程中是否遗漏了什么内容</li>
 </ul>
-</li>
+<h3 id="Use-external-tools（使用外部工具）"><a href="#Use-external-tools（使用外部工具）" class="headerlink" title="Use external tools（使用外部工具）"></a>Use external tools（使用外部工具）</h3><ul>
+<li>使用基于嵌入的搜索实现高效的知识检索</li>
+<li>使用代码执行来进行更准确的计算或调用外部API</li>
+<li>给模型提供特定的功能</li>
 </ul>
-<h2 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h2><ul>
-<li>接口幂等</li>
-</ul>
-
+<h3 id="Test-changes-systematically（系统地测试变更）"><a href="#Test-changes-systematically（系统地测试变更）" class="headerlink" title="Test changes systematically（系统地测试变更）"></a>Test changes systematically（系统地测试变更）</h3>
                 
               </div>
             
@@ -380,7 +321,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">23系统设计</a>
+  <a href="/categories/24AI/" class="category-chain-item">24AI</a>
   
   
 
@@ -400,8 +341,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>1.系统设计</div>
-      <div>https://x-leonidas.github.io/2024/02/21/23系统设计/1.系统设计/</div>
+      <div>Prompt指南</div>
+      <div>https://x-leonidas.github.io/2024/08/02/24AI/Prompt指南/</div>
     </div>
     <div class="license-meta">
       
@@ -413,13 +354,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月21日</div>
+          <div>2024年8月2日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2022年5月5日</div>
         </div>
       
       
@@ -456,9 +397,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/09/22tool/%E5%8D%9A%E5%AE%A2/" title="博客">
+                      <a href="/2024/08/02/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/1.%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" title="1.系统设计">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">博客</span>
+                        <span class="hidden-mobile">1.系统设计</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
