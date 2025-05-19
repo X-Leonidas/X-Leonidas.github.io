@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="EXPLAIN ID:执行编号，标识select所属的行。如果在语句中没子查询或关联查询，只有唯一的select，每行都将显示1。否则，内层的select语句一般会顺序编号，对应于其在原始语句中的位置  select_type:显示本行是简单或复杂select。如果查询有任何复杂的子查询，则最外层标记为PRIMARY（DERIVED、UNION、UNION RESUlT）  simple 简单子查">
+    <meta name="description" content="系统设计的步骤 系统设计面试：内幕指南链接  1.系统的需求 功能性需求 系统包含哪些功能   非功能性需求 性能和QPS，TPS等    2.对系统进行抽象设计3. 考虑系统目前需要优化的点系统设计三要素 高性能架构设计：熟悉系统常见性能优化手段比如引入读写分离、缓存、负载均衡、异步等 高可用架构设计：CAP理论和BASE理论，通过集群来提高系统的稳定性、超时和重试机制、应对接口级的故障：降级、">
   
   
   
-  <title>MySql常用命令 - 夜坐听风</title>
+  <title>1.系统设计 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="MySql常用命令"></span>
+            <span id="subtitle" data-typed-text="1.系统设计"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:29
+        <time datetime="2024-02-21 23:53" pubdate>
+          2024-02-21 23:53:14
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          1.2k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          15 分钟
+          11 分钟
         
       </span>
     
@@ -253,85 +253,114 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">MySql常用命令</h1>
+            <h1 id="seo-header">1.系统设计</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="EXPLAIN"><a href="#EXPLAIN" class="headerlink" title="EXPLAIN"></a>EXPLAIN</h3><ul>
-<li><p>ID:执行编号，标识select所属的行。如果在语句中没子查询或关联查询，只有唯一的select，每行都将显示1。否则，内层的select语句一般会顺序编号，对应于其在原始语句中的位置</p>
-</li>
-<li><p>select_type:显示本行是简单或复杂select。如果查询有任何复杂的子查询，则最外层标记为PRIMARY（DERIVED、UNION、UNION RESUlT）</p>
-<ul>
-<li>simple 简单子查询，不包含子查询和union  </li>
-<li>primary 包含union或者子查询，最外层的部分标记为primary  </li>
-<li>subquery 一般子查询中的子查询被标记为subquery，也就是位于select列表中的查询  </li>
-<li>derived 派生表——该临时表是从子查询派生出来的，位于form中的子查询  </li>
-<li>union 位于union中第二个及其以后的子查询被标记为union，第一个就被标记为primary如果是union位于from中则标记为derived  </li>
-<li>union result 用来从匿名临时表里检索结果的select被标记为union result  </li>
-<li>dependent union 顾名思义，首先需要满足UNION的条件，及UNION中第二个以及后面的SELECT语句，同时该语句依赖外部的查询  </li>
-<li>subquery 子查询中第一个SELECT语句  </li>
-<li>dependent subquery 和DEPENDENT UNION相对UNION一样</li>
+                <h1 id="系统设计的步骤"><a href="#系统设计的步骤" class="headerlink" title="系统设计的步骤"></a>系统设计的步骤</h1><ul>
+<li>系统设计面试：内幕指南<a target="_blank" rel="noopener" href="https://github.com/Admol/SystemDesign">链接</a></li>
+</ul>
+<h2 id="1-系统的需求"><a href="#1-系统的需求" class="headerlink" title="1.系统的需求"></a>1.系统的需求</h2><ul>
+<li>功能性需求<ul>
+<li>系统包含哪些功能</li>
 </ul>
 </li>
-<li><p>table:访问引用哪个表(引用某个查询)</p>
-</li>
-<li><p>type:数据访问&#x2F;读取操作类型</p>
-<ul>
-<li>（ALL、index、range、ref、eq_ref、const&#x2F;system、NULL ） <strong>从左到右，性能从差到好</strong>，要尽可能满足到range阶段</li>
-<li>All 最坏的情况,全表扫描  </li>
-<li>index 和全表扫描一样。只是扫描表的时候按照索引次序进行而不是行。主要优点就是避免了排序, 但是开销仍然非常大。如在Extra列看到Using index，说明正在使用覆盖索引，只扫描索引的数据，它比按索引次序全表扫描的开销要小很多  </li>
-<li>range 范围扫描，一个有限制的索引扫描。key 列显示使用了哪个索引。当使用&#x3D;、&lt;&gt;、&gt;、&gt;&#x3D;、&lt;、&lt;&#x3D;、IS NULL、&lt;&#x3D;&gt;、BETWEEN 或者 IN 操作符,用常量比较关键字列时,可以使用 range </li>
-<li>ref 一种索引访问，它返回所有匹配某个单个值的行。此类索引访问只有当使用非唯一性索引或唯一性索引非唯一性前缀时才会发生。这个类型跟eq_ref不同的是，它用在关联操作只使用了索引的最左前缀，或者索引不是UNIQUE和PRIMARY KEY。ref可以用于使用&#x3D;或&lt;&#x3D;&gt;操作符的带索引的列。  </li>
-<li>eq_ref 最多只返回一条符合条件的记录。使用唯一性索引或主键查找时会发生 （高效）  </li>
-<li>const 当确定最多只会有一行匹配的时候，MySQL优化器会在查询前读取它而且只读取一次，因此非常快。当主键放入where子句时，mysql把这个查询转为一个常量（高效）  </li>
-<li>system 这是const连接类型的一种特例，表仅有一行满足条件。  </li>
-<li>Null 意味说mysql能在优化阶段分解查询语句，在执行阶段甚至用不到访问表或索引（高效）</li>
-</ul>
-</li>
-<li><p>possible_keys:揭示哪一些索引可能有利于高效的查找</p>
-<ul>
-<li>显示查询使用了哪些索引，表示该索引可以进行高效地查找，但是列出来的索引对于后续优化过程可能是没有用到的</li>
-</ul>
-</li>
-<li><p>key:显示mysql决定采用哪个索引来优化查询</p>
-<ul>
-<li>key列显示MySQL实际决定使用的键（索引）。如果没有选择索引，键是NULL。要想强制MySQL使用或忽视possible_keys列中的索引，在查询中使用FORCE INDEX、USE INDEX或者IGNORE INDEX。</li>
-</ul>
-</li>
-<li><p>key_len:显示mysql在索引里使用的字节数</p>
-<ul>
-<li>key_len列显示MySQL决定使用的键长度。如果键是NULL，则长度为NULL。使用的索引的长度。在不损失精确性的情况下，长度越短越好 。</li>
-</ul>
-</li>
-<li><p>ref:显示了之前的表在key列记录的索引中查找值所用的列或常量</p>
-<ul>
-<li>ref列显示使用哪个列或常数与key一起从表中选择行。</li>
-</ul>
-</li>
-<li><p>rows:为了找到所需的行而需要读取的行数，估算值，不精确。通过把所有rows列值相乘，可粗略估算整个查询会检查的行数</p>
-<ul>
-<li>rows列显示MySQL认为它执行查询时必须检查的行数。注意这是一个预估值。</li>
-</ul>
-</li>
-<li><p>Extra:额外信息，如using index、filesort等</p>
-<ul>
-<li>Extra是EXPLAIN输出中另外一个很重要的列，该列显示MySQL在查询过程中的一些详细信息，MySQL查询优化器执行查询的过程中对查询计划的重要补充信息。</li>
-<li>Using filesort MySQL有两种方式可以生成有序的结果，通过排序操作或者使用索引，当Extra中出现了Using filesort 说明MySQL使用了后者，但注意虽然叫filesort但并不是说明就是用了文件来进行排序，只要可能排序都是在内存里完成的。大部分情况下利用索引排序更快，所以一般这时也要考虑优化查询了。使用文件完成排序操作，这是可能是ordery by，group by语句的结果，这可能是一个CPU密集型的过程，可以通过选择合适的索引来改进性能，用索引来为查询结果排序。 </li>
-<li>Using temporary 用临时表保存中间结果，常用于GROUP BY 和 ORDER BY操作中，一般看到它说明查询需要优化了，就算避免不了临时表的使用也要尽量避免硬盘临时表的使用。 </li>
-<li>Not exists MYSQL优化了LEFT JOIN，一旦它找到了匹配LEFT JOIN标准的行， 就不再搜索了。  </li>
-<li>Using index 说明查询是覆盖了索引的，不需要读取数据文件，从索引树（索引文件）中即可获得信息。如果同时出现using where，表明索引被用来执行索引键值的查找，没有using where，表明索引用来读取数据而非执行查找动作。这是MySQL服务层完成的，但无需再回表查询记录。  </li>
-<li>Using index condition 这是MySQL 5.6出来的新特性，叫做“索引条件推送”。简单说一点就是MySQL原来在索引上是不能执行如like这样的操作的，但是现在可以了，这样减少了不必要的IO操作，但是只能用在二级索引上。  </li>
-<li>Using where 使用了WHERE从句来限制哪些行将与下一张表匹配或者是返回给用户。<strong>注意</strong>：Extra列出现Using where表示MySQL服务器将存储引擎返回服务层以后再应用WHERE条件过滤。  </li>
-<li>Using join buffer 使用了连接缓存：<strong>Block Nested Loop</strong>，连接算法是块嵌套循环连接;<strong>Batched Key Access</strong>，连接算法是批量索引连接  </li>
-<li>impossible where where子句的值总是false，不能用来获取任何元组  </li>
-<li>select tables optimized away 在没有GROUP BY子句的情况下，基于索引优化MIN&#x2F;MAX操作，或者对于MyISAM存储引擎优化COUNT(*)操作，不必等到执行阶段再进行计算，查询执行计划生成的阶段即完成优化。  </li>
-<li>distinct 优化distinct操作，在找到第一匹配的元组后即停止找同样值的动作</li>
+<li>非功能性需求<ul>
+<li>性能和QPS，TPS等</li>
 </ul>
 </li>
 </ul>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
-<li>查看空闲连接列表：<strong>show processlist</strong></li>
+<h2 id="2-对系统进行抽象设计"><a href="#2-对系统进行抽象设计" class="headerlink" title="2.对系统进行抽象设计"></a>2.对系统进行抽象设计</h2><h2 id="3-考虑系统目前需要优化的点"><a href="#3-考虑系统目前需要优化的点" class="headerlink" title="3. 考虑系统目前需要优化的点"></a>3. 考虑系统目前需要优化的点</h2><h3 id="系统设计三要素"><a href="#系统设计三要素" class="headerlink" title="系统设计三要素"></a>系统设计三要素</h3><ul>
+<li>高性能架构设计：熟悉系统常见性能优化手段比如引入<strong>读写分离</strong>、<strong>缓存</strong>、<strong>负载均衡</strong>、<strong>异步</strong>等</li>
+<li>高可用架构设计：CAP理论和BASE理论，通过集群来提高系统的稳定性、超时和重试机制、应对接口级的故障：降级、熔断、限流、排队</li>
+<li>高扩展架构设计：如何拆分系统和模块，尽可能做到低耦合高内聚</li>
+</ul>
+<h3 id="一些常见软件的QPS"><a href="#一些常见软件的QPS" class="headerlink" title="一些常见软件的QPS"></a>一些常见软件的QPS</h3><ul>
+<li>Nginx： 30w+</li>
+<li>redis : 单机QPS 8W+</li>
+<li>mysql： 单机QPS 4k</li>
+<li>Tomcat： 单机 2w</li>
+</ul>
+<h2 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h2><h3 id="热点数据的处理"><a href="#热点数据的处理" class="headerlink" title="热点数据的处理"></a>热点数据的处理</h3><ul>
+<li>热点数据的分类<ul>
+<li>静态热点数据：可以提前预测到的热点数据比如要秒杀的商品</li>
+<li>动态热点数据： 不能够提前预测的热点数据，需要通过一些手段动态监测系统运行情况产生</li>
+</ul>
+</li>
+<li>问题的关键在于如何找到这些热点数据，然后将它们存在jvm内存中。</li>
+</ul>
+<h3 id="静态资源的处理"><a href="#静态资源的处理" class="headerlink" title="静态资源的处理"></a>静态资源的处理</h3><ul>
+<li>CND</li>
+</ul>
+<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><ul>
+<li>集群化</li>
+<li>限流<ul>
+<li>接口限流</li>
+<li>对用户、IP限流</li>
+</ul>
+</li>
+<li>问题，验证码<ul>
+<li>降低用户的请求频率</li>
+</ul>
+</li>
+<li>提前预约</li>
+<li>流量削峰</li>
+<li>降级<ul>
+<li>根据当前业务情况，对一些服务和页面进行有策略的降级</li>
+</ul>
+</li>
+<li>熔断</li>
+</ul>
+<h3 id="高可用的七大原则"><a href="#高可用的七大原则" class="headerlink" title="高可用的七大原则"></a>高可用的七大原则</h3><ul>
+<li>少依赖原则：能不依赖的，尽可能不依赖，越少越好</li>
+<li>弱依赖原则： 一定要依赖的，尽可能弱依赖，越弱越好</li>
+<li>分散原则：鸡蛋不要放一个篮子，分散风险</li>
+<li>均衡原则： 均匀分散风险，避免不均衡</li>
+<li>隔离原则： 控制风险不扩散，不放大<ul>
+<li>隔离是有级别的，隔离级别越高，风险传播扩散的难度就越大，容灾能力越强</li>
+<li>是以上原则的前提，隔离没做好，上面四个原则都是收效甚若的</li>
+</ul>
+</li>
+<li>无单点原则: 要有冗余或其他版本,做到有路可退<ul>
+<li>快速止血的方式是切换，回滚，扩容等；回滚和扩容属于特殊的切换，回滚指的是切换到某个版本，扩容指的是将流量切换到新扩容的机器上。</li>
+<li>无单点原则和分散原则的区别：<ul>
+<li>当节点无状态的情况下，打散拆分成N份，每份都是相同的功能，互为冗余，即：节点无状态情况下，分散原则和无单点原则等价，满足一个即可。</li>
+<li>当节点有状态的情况下，打散拆分成N份，每份都是不相同的，每份都没有冗余，需要针对每份再做冗余，即：节点有状态情况下，既要满足分散原则又要满足单点原则</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>自我保护原则： 少流血，牺牲一部分，保护另外一部分</li>
+</ul>
+<h3 id="软件系统风险的来源"><a href="#软件系统风险的来源" class="headerlink" title="软件系统风险的来源"></a>软件系统风险的来源</h3><ul>
+<li>系统资源的变化<ul>
+<li>系统运行所依赖的服务器资源（如CPU，MEM，IO等），应用资源（RPC线程数，DB连接数等），业务资源（业务ID满了，余额不足，业务额度不够等）的负载等都会影响系统运行的风险期望。</li>
+</ul>
+</li>
+<li>存储系统变化<ul>
+<li>系统运行所依赖的服务器资源（如CPU，MEM，IO等），存储资源（并发数等），数据资源（单库容量，单表容量等）的负载和数据一致性等都会影响存储系统运行的风险期望。</li>
+</ul>
+</li>
+<li>人的变化：变更出错</li>
+<li>硬件变化：损坏</li>
+<li>上游变化：请求变化<ul>
+<li>网络流量过大会造成网络堵塞，影响网络通道中的所有网络流量请求</li>
+<li>API请求过大会造成对应服务集群过载，影响整个服务机器上的所有API请求，甚至往外传播。</li>
+<li>KEY请求过大（俗称“热点KEY”）会造成单机过载，影响单机上所有KEY请求，甚至往外传播。</li>
+</ul>
+</li>
+<li>下游变化： 响应变慢，响应错误<ul>
+<li>下游服务的数量，服务等级，服务可用率等影响下游服务的风险期望。下游响应变慢可能会拖慢上游，下游响应错误可能会影响上游运行结果。</li>
+</ul>
+</li>
+<li>时间变化：<ul>
+<li>时间到期往往被人忽视，但它往往具有突然性和全局破坏性，一旦时间到期触发故障会导致非常被动，所以要提前识别，尽早预警，如：<strong>秘钥到期，证书到期，费用到期，跨时区，跨年，跨月，跨日等</strong>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h2><ul>
+<li>接口幂等</li>
 </ul>
 
                 
@@ -351,15 +380,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  <a href="/categories/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">23系统设计</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-1关系型数据库</a>
-  
-  
-
   
 
       </span>
@@ -378,8 +400,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>MySql常用命令</div>
-      <div>https://x-leonidas.github.io/2022/02/01/05数据库/05-1关系型数据库/MySql常用命令/</div>
+      <div>1.系统设计</div>
+      <div>https://x-leonidas.github.io/2024/02/21/23系统设计/1.系统设计/</div>
     </div>
     <div class="license-meta">
       
@@ -391,13 +413,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2024年2月21日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月10日</div>
+          <div>2024年12月23日</div>
         </div>
       
       
@@ -434,9 +456,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/1.MySql%E5%9F%BA%E7%A1%80/" title="1.MySql基础">
+                      <a href="/2024/11/27/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%B8%B8%E7%94%A8%E7%9A%84%E5%85%B3%E7%B3%BB%E5%9B%BE/" title="常用的关系图">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">1.MySql基础</span>
+                        <span class="hidden-mobile">常用的关系图</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -444,8 +466,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/02%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95/%E5%93%88%E5%B8%8C/" title="哈希">
-                        <span class="hidden-mobile">哈希</span>
+                      <a href="/2023/10/24/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
+                        <span class="hidden-mobile">4. 实践</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

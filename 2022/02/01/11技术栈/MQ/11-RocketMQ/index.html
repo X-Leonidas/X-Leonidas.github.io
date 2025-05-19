@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.3k 字
+          3.2k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          28 分钟
+          27 分钟
         
       </span>
     
@@ -372,26 +372,20 @@
 <li>消息发送中进入同步等待状态，可以保证消息投递一定到达</li>
 </ul>
 <h5 id="异步方式"><a href="#异步方式" class="headerlink" title="异步方式"></a>异步方式</h5><ul>
-<li>想要快速发送消息，又不想丢失的时候可以使用异步消息</li>
-<li><pre><code class="java">     producer.send(message,new SendCallback() &#123;
-          
-          public void onSuccess(SendResult sendResult) &#123;
-              
-              System.out.println(&quot;ok&quot;);
-          &#125;
-          
-          public void onException(Throwable e) &#123;
-            
-              e.printStackTrace();
-              System.out.println(&quot;err&quot;);
-          &#125;
-      &#125;);
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs clean">##### 单向消息<br>+ 只发送消息，不等待服务器响应，只发送请求不等待应答。此方式发送消息的过程耗时非常短，一般在微秒级别。<br>+  producer.sendOneway(message);<br>##### 批量发送<br>+ 可以多条消息打包一起发送，减少网络传输次数提高效率。<br>  `producer.send(Collection c) `方法可以接受一个集合 实现批量发送<br>  ```java<br>   public SendResult send(Collection&lt;Message&gt; msgs) &#123;<br>          return this.defaultMQProducerImpl.send(batch(msgs));<br>   &#125;<br></code></pre></td></tr></table></figure>
-- 批量消息要求必要具有同一topic、相同消息配置
-- 不支持延时消息
-- 建议一个批量消息最好不要超过1MB大小
-- 如果不确定是否超过限制，可以手动计算大小分批发送
-</code></pre>
+<li>想要快速发送消息，又不想丢失的时候可以使用异步消息 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">producer.send(message,<span class="hljs-keyword">new</span> <span class="hljs-title class_">SendCallback</span>() &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onSuccess</span><span class="hljs-params">(SendResult sendResult)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;ok&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onException</span><span class="hljs-params">(Throwable e)</span> &#123;<br>        e.printStackTrace();<br>        System.out.println(<span class="hljs-string">&quot;err&quot;</span>);<br>    &#125;<br>&#125;);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="单向消息"><a href="#单向消息" class="headerlink" title="单向消息"></a>单向消息</h5><ul>
+<li>只发送消息，不等待服务器响应，只发送请求不等待应答。此方式发送消息的过程耗时非常短，一般在微秒级别。</li>
+<li>producer.sendOneway(message);</li>
+</ul>
+<h5 id="批量发送"><a href="#批量发送" class="headerlink" title="批量发送"></a>批量发送</h5><ul>
+<li>可以多条消息打包一起发送，减少网络传输次数提高效率。<br><code>producer.send(Collection c) </code>方法可以接受一个集合 实现批量发送<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> SendResult <span class="hljs-title function_">send</span><span class="hljs-params">(Collection&lt;Message&gt; msgs)</span> &#123;<br>       <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.defaultMQProducerImpl.send(batch(msgs));<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>批量消息要求必要具有同一topic、相同消息配置</li>
+<li>不支持延时消息</li>
+<li>建议一个批量消息最好不要超过1MB大小</li>
+<li>如果不确定是否超过限制，可以手动计算大小分批发送</li>
+</ul>
 </li>
 </ul>
 <h4 id="消息查询"><a href="#消息查询" class="headerlink" title="消息查询"></a>消息查询</h4><h4 id="按照MessageId查询消息"><a href="#按照MessageId查询消息" class="headerlink" title="按照MessageId查询消息"></a>按照MessageId查询消息</h4><p>+ </p>
@@ -418,14 +412,60 @@
 <li>.&#x2F;mqbroker -n 192.168.150.113:9876  -c broker.conf</li>
 </ul>
 <h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><ul>
-<li><p>创建selector来使用</p>
-<ul>
-<li><pre><code class="java">MessageSelector selector = MessageSelector.bySql(&quot;order &gt; 5&quot;);
-   consumer.subscribe(&quot;xxoo3&quot;, selector);
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section">##### 语法</span><br>RocketMQ只定义了一些基本的语法来支持这个功能。 你也可以很容易地扩展它.<br><span class="hljs-bullet">1.</span> 数字比较, 像 <span class="hljs-code">`&gt;`</span>, <span class="hljs-code">`&gt;=`</span>, <span class="hljs-code">`&lt;`</span>, <span class="hljs-code">`&lt;=`</span>, <span class="hljs-code">`BETWEEN`</span>, <span class="hljs-code">`=`</span>;<br><span class="hljs-bullet">2.</span> 字符比较, 像 <span class="hljs-code">`=`</span>, <span class="hljs-code">`&lt;&gt;`</span>, <span class="hljs-code">`IN`</span>;<br><span class="hljs-bullet">3.</span> <span class="hljs-code">`IS NULL`</span> 或者 <span class="hljs-code">`IS NOT NULL`</span>;<br><span class="hljs-bullet">4.</span> 逻辑运算<span class="hljs-code">`AND`</span>, <span class="hljs-code">`OR`</span>, <span class="hljs-code">`NOT`</span>;<br>常量类型是:<br><span class="hljs-bullet">1.</span> 数字, 像123, 3.1415;<br><span class="hljs-bullet">2.</span> 字符串, 像‘abc’,必须使用单引号;<br><span class="hljs-bullet">3.</span> <span class="hljs-code">`NULL`</span>, 特殊常数;<br><span class="hljs-bullet">4.</span> 布尔常量, <span class="hljs-code">`TRUE`</span> 或<span class="hljs-code">`FALSE`</span>;<br><span class="hljs-section">#### 延迟消息</span><br><span class="hljs-bullet">+</span> RocketMQ使用<span class="hljs-strong">**messageDelayLevel**</span>可以设置延迟投递<br><span class="hljs-bullet">  +</span> <span class="hljs-strong">**默认配置为**</span> ：  messageDelayLevel	1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h<br><span class="hljs-bullet">+</span> 在<span class="hljs-code">`broker.conf `</span>中添加配置<br><span class="hljs-bullet">  +</span> messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h<br><span class="hljs-bullet">  +</span> 这个配置项配置了从1级开始，各级延时的时间，可以修改这个指定级别的延时时间；<br><span class="hljs-bullet">+</span> 发送消息时设置：<br><span class="hljs-bullet">  +</span> message.setDelayTimeLevel(1); 消息会暂存在SCHEDULE<span class="hljs-emphasis">_TOPIC_</span>XXXX的topic中<br><span class="hljs-section">#### 顺序消费</span><br><span class="hljs-bullet">+</span> 队列先天支持FIFO模型，单一生产和消费者下只要保证使用<span class="hljs-code">`MessageListenerOrderly`</span>监听器即可<br><span class="hljs-bullet">+</span> 顺序消费表示消息消费的顺序同生产者为每个消息队列发送的顺序一致，所以如果正在处理全局顺序是强制性的场景，需要确保使用的主题只有一个消息队列。<br><span class="hljs-bullet">+</span> 并行消费不再保证消息顺序，消费的最大并行数量受每个消费者客户端指定的线程池限制。<br><span class="hljs-bullet">+</span> 跟普通消息相比，顺序消息的使用需要在producer的send()方法中添加MessageQueueSelector接口的实现类，并重写select选择使用的队列，因为顺序消息局部顺序，需要将所有消息指定发送到同一队列中。<br><span class="hljs-section">##### 全局顺序消费</span><br><span class="hljs-bullet">+</span> 全局顺序是指某个Topic下的所有消息都要保证顺序<br><span class="hljs-bullet">+</span> 全局顺序 对于指定的一个 Topic，所有消息按照严格的先入先出（FIFO）的顺序进行发布和消费。 适用场景：性能要求不高，所有的消息严格按照 FIFO 原则进行消息发布和消费的场景<br><span class="hljs-section">##### 分区顺序消费</span><br><span class="hljs-bullet">+</span> 部分顺序消息只要保证每一组消息被顺序消费即可。<br><span class="hljs-bullet">+</span> 分区顺序 对于指定的一个 Topic，所有消息根据 sharding key 进行区块分区。 同一个分区内的消息按照严格的 FIFO 顺序进行发布和消费。 Sharding key 是顺序消息中用来区分不同分区的关键字段，和普通消息的 Key 是完全不同的概念。 适用场景：性能要求高，以 sharding key 作为分区字段，在同一个区块中严格的按照 FIFO 原则进行消息发布和消费的场景。<br><span class="hljs-section">##### 如何保证顺序消费</span><br><span class="hljs-bullet">+</span> 同一topic<br><span class="hljs-bullet">+</span> 同一个QUEUE<br><span class="hljs-bullet">+</span> 发消息的时候一个线程去发送消息<br><span class="hljs-bullet">+</span> 消费的时候 一个线程 消费一个queue里的消息或者使用MessageListenerOrderly<br><span class="hljs-bullet">+</span> 多个queue 只能保证单个queue里的顺序<br><span class="hljs-section">#### 消息重投</span><br><span class="hljs-bullet">+</span> 生产者在发送消息时，同步消息失败会重投，异步消息有重试，oneway没有任何保证<br><span class="hljs-bullet">+</span> <span class="hljs-strong">**producer**</span>设置发送超时时间<br><span class="hljs-bullet">  +</span> <span class="hljs-code">```java</span><br><span class="hljs-code">        // 异步发送时 重试次数，默认 2</span><br><span class="hljs-code">    	producer.setRetryTimesWhenSendAsyncFailed(1);</span><br><span class="hljs-code">    	// 同步发送时 重试次数，默认 2</span><br><span class="hljs-code">    	producer.setRetryTimesWhenSendFailed(1);	</span><br><span class="hljs-code">    	// 是否向其他broker发送请求 默认false</span><br><span class="hljs-code">    	producer.setRetryAnotherBrokerWhenNotStoreOK(true);</span><br></code></pre></td></tr></table></figure>
-</code></pre>
+<li>创建selector来使用<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">MessageSelector</span> <span class="hljs-variable">selector</span> <span class="hljs-operator">=</span> MessageSelector.bySql(<span class="hljs-string">&quot;order &gt; 5&quot;</span>);<br>consumer.subscribe(<span class="hljs-string">&quot;xxoo3&quot;</span>, selector);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><p>RocketMQ只定义了一些基本的语法来支持这个功能。 你也可以很容易地扩展它.</p>
+<ol>
+<li>数字比较, 像 <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>BETWEEN</code>, <code>=</code>;</li>
+<li>字符比较, 像 <code>=</code>, <code>&lt;&gt;</code>, <code>IN</code>;</li>
+<li><code>IS NULL</code> 或者 <code>IS NOT NULL</code>;</li>
+<li>逻辑运算<code>AND</code>, <code>OR</code>, <code>NOT</code>;<br>常量类型是:</li>
+<li>数字, 像123, 3.1415;</li>
+<li>字符串, 像‘abc’,必须使用单引号;</li>
+<li><code>NULL</code>, 特殊常数;</li>
+<li>布尔常量, <code>TRUE</code> 或<code>FALSE</code>;</li>
+</ol>
+<h4 id="延迟消息"><a href="#延迟消息" class="headerlink" title="延迟消息"></a>延迟消息</h4><ul>
+<li>RocketMQ使用<strong>messageDelayLevel</strong>可以设置延迟投递<ul>
+<li><strong>默认配置为</strong> ：  messageDelayLevel	1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h</li>
+</ul>
+</li>
+<li>在<code>broker.conf </code>中添加配置<ul>
+<li>messageDelayLevel&#x3D;1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h</li>
+<li>这个配置项配置了从1级开始，各级延时的时间，可以修改这个指定级别的延时时间；</li>
+</ul>
+</li>
+<li>发送消息时设置：<ul>
+<li>message.setDelayTimeLevel(1); 消息会暂存在SCHEDULE_TOPIC_XXXX的topic中</li>
+</ul>
 </li>
 </ul>
+<h4 id="顺序消费"><a href="#顺序消费" class="headerlink" title="顺序消费"></a>顺序消费</h4><ul>
+<li>队列先天支持FIFO模型，单一生产和消费者下只要保证使用<code>MessageListenerOrderly</code>监听器即可</li>
+<li>顺序消费表示消息消费的顺序同生产者为每个消息队列发送的顺序一致，所以如果正在处理全局顺序是强制性的场景，需要确保使用的主题只有一个消息队列。</li>
+<li>并行消费不再保证消息顺序，消费的最大并行数量受每个消费者客户端指定的线程池限制。</li>
+<li>跟普通消息相比，顺序消息的使用需要在producer的send()方法中添加MessageQueueSelector接口的实现类，并重写select选择使用的队列，因为顺序消息局部顺序，需要将所有消息指定发送到同一队列中。</li>
+</ul>
+<h5 id="全局顺序消费"><a href="#全局顺序消费" class="headerlink" title="全局顺序消费"></a>全局顺序消费</h5><ul>
+<li>全局顺序是指某个Topic下的所有消息都要保证顺序</li>
+<li>全局顺序 对于指定的一个 Topic，所有消息按照严格的先入先出（FIFO）的顺序进行发布和消费。 适用场景：性能要求不高，所有的消息严格按照 FIFO 原则进行消息发布和消费的场景</li>
+</ul>
+<h5 id="分区顺序消费"><a href="#分区顺序消费" class="headerlink" title="分区顺序消费"></a>分区顺序消费</h5><ul>
+<li>部分顺序消息只要保证每一组消息被顺序消费即可。</li>
+<li>分区顺序 对于指定的一个 Topic，所有消息根据 sharding key 进行区块分区。 同一个分区内的消息按照严格的 FIFO 顺序进行发布和消费。 Sharding key 是顺序消息中用来区分不同分区的关键字段，和普通消息的 Key 是完全不同的概念。 适用场景：性能要求高，以 sharding key 作为分区字段，在同一个区块中严格的按照 FIFO 原则进行消息发布和消费的场景。</li>
+</ul>
+<h5 id="如何保证顺序消费"><a href="#如何保证顺序消费" class="headerlink" title="如何保证顺序消费"></a>如何保证顺序消费</h5><ul>
+<li>同一topic</li>
+<li>同一个QUEUE</li>
+<li>发消息的时候一个线程去发送消息</li>
+<li>消费的时候 一个线程 消费一个queue里的消息或者使用MessageListenerOrderly</li>
+<li>多个queue 只能保证单个queue里的顺序</li>
+</ul>
+<h4 id="消息重投"><a href="#消息重投" class="headerlink" title="消息重投"></a>消息重投</h4><ul>
+<li><p>生产者在发送消息时，同步消息失败会重投，异步消息有重试，oneway没有任何保证</p>
+</li>
+<li><p><strong>producer</strong>设置发送超时时间</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 异步发送时 重试次数，默认 2</span><br>producer.setRetryTimesWhenSendAsyncFailed(<span class="hljs-number">1</span>);<br><span class="hljs-comment">// 同步发送时 重试次数，默认 2</span><br>producer.setRetryTimesWhenSendFailed(<span class="hljs-number">1</span>);	<br><span class="hljs-comment">// 是否向其他broker发送请求 默认false</span><br>producer.setRetryAnotherBrokerWhenNotStoreOK(<span class="hljs-literal">true</span>);<br></code></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Consumer</strong></p>
 <ul>
@@ -528,7 +568,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2025年5月20日</div>
         </div>
       
       
@@ -565,9 +605,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/20-Kafka/" title="20-Kafka">
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/10-RocketMQ%E5%AE%89%E8%A3%85/" title="10-RocketMQ安装">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">20-Kafka</span>
+                        <span class="hidden-mobile">10-RocketMQ安装</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -575,8 +615,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MongoDB/MongoDB/" title="MongoDB">
-                        <span class="hidden-mobile">MongoDB</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/12-RocketMQ%E5%AD%98%E5%82%A8/" title="12-RocketMQ存储">
+                        <span class="hidden-mobile">12-RocketMQ存储</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

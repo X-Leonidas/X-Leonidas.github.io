@@ -375,20 +375,25 @@
 <li>first-come-first-served 先来先得</li>
 </ul>
 </li>
-<li>投票的消息</li>
-<li><pre><code class="json">// 投票的消息
+<li>投票的消息<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// 投票的消息</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// 候选者的当前任期号，用于通知接收方当前选举属于哪个任期。</span><br>  <span class="hljs-attr">&quot;candidateId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// 候选者的节点 ID，标识请求投票的节点。</span><br>  <span class="hljs-attr">&quot;lastLogIndex&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">12</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">// 候选者日志的最后一条日志的索引，用于比较日志的完整性。</span><br>  <span class="hljs-attr">&quot;lastLogTerm&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-comment">//候选者日志的最后一条日志的任期号，用于进一步比较日志的新旧程度。</span><br><span class="hljs-punctuation">&#125;</span><br><span class="hljs-comment">// 响应投票的消息</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;term&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span> <span class="hljs-comment">//接收方的当前任期号，用于告知候选者最新的任期号。如果候选者发现该值比自己大，会转为跟随者。</span><br>  <span class="hljs-attr">&quot;voteGranted&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-comment">//是否投票给候选者，true 表示同意，false 表示拒绝。</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="log-replication"><a href="#log-replication" class="headerlink" title="log replication"></a>log replication</h3><ul>
+<li><strong>指令</strong>: 表示客户端请求的具体操作内容，也就是待“状态机”（State Machine）执行的操作。</li>
+<li><strong>索引值</strong>：日志条目在仓库中的索引值，是单调递增的数字。</li>
+<li><strong>任期编号</strong>：日志条目是在哪个任期中创建的，用于解决“脑裂”或日志不一致问题</li>
+<li>当有了leader，系统应该进入对外工作期了。客户端的一切请求来发送到leader，leader来调度这些并发请求的顺序，并且保证leader与followers状态的一致性。raft中的做法是，将这些请求以及执行顺序告知followers。leader和followers以相同的顺序来执行这些请求，保证状态一致。</li>
+<li>来自客户端的修改都会被传入 Leader。注意该修改还未被提交，只是写入日志中。Leader会把修改复制到所有Follower,Leader 会等待大多数的 Follower 也进行了修改，然后才将修改提交,此时Leader会通知所有Follower 让它们也提交修改，此时所有节点的值达到一致。</li>
+<li><pre><code class="json">// 领导者的广播消息
 &#123;
-  &quot;term&quot;: 5, // 候选者的当前任期号，用于通知接收方当前选举属于哪个任期。
-  &quot;candidateId&quot;: 3, // 候选者的节点 ID，标识请求投票的节点。
-  &quot;lastLogIndex&quot;: 12, // 候选者日志的最后一条日志的索引，用于比较日志的完整性。
-  &quot;lastLogTerm&quot;: 4//候选者日志的最后一条日志的任期号，用于进一步比较日志的新旧程度。
+  &quot;term&quot;: 5, // 领导者的任期号
+  &quot;leaderId&quot;: &quot;leader-123&quot;,
+  &quot;prevLogIndex&quot;: 8, // 前一日志条目的索引
+  &quot;prevLogTerm&quot;: 4, // 前一日志条目的任期
+  &quot;entries&quot;: [
+    &#123; &quot;index&quot;: 9, &quot;term&quot;: 5, &quot;command&quot;: &quot;set x=4&quot; &#125;, // 要复制的日志条目
+  ],
+  &quot;leaderCommit&quot;: 7// Leader 的“已提交”状态的日志条目索引号
 &#125;
-// 响应投票的消息
-&#123;
-  &quot;term&quot;: 5, //接收方的当前任期号，用于告知候选者最新的任期号。如果候选者发现该值比自己大，会转为跟随者。
-  &quot;voteGranted&quot;: true//是否投票给候选者，true 表示同意，false 表示拒绝。
-&#125;
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs sqf">##<span class="hljs-meta"># log replication</span><br>+ **指令**: 表示客户端请求的具体操作内容，也就是待“状态机”（State Machine）执行的操作。<br>+ **索引值**：日志条目在仓库中的索引值，是单调递增的数字。<br>+ **任期编号**：日志条目是在哪个任期中创建的，用于解决“脑裂”或日志不一致问题<br>+ 当有了<span class="hljs-built_in">leader</span>，系统应该进入对外工作期了。客户端的一切请求来发送到<span class="hljs-built_in">leader</span>，<span class="hljs-built_in">leader</span>来调度这些并发请求的顺序，并且保证<span class="hljs-built_in">leader</span>与followers状态的一致性。raft中的做法是，将这些请求以及执行顺序告知followers。<span class="hljs-built_in">leader</span>和followers以相同的顺序来执行这些请求，保证状态一致。<br>+ 来自客户端的修改都会被传入 <span class="hljs-built_in">Leader</span>。注意该修改还未被提交，只是写入日志中。<span class="hljs-built_in">Leader</span>会把修改复制到所有Follower,<span class="hljs-built_in">Leader</span> 会等待大多数的 Follower 也进行了修改，然后才将修改提交,此时<span class="hljs-built_in">Leader</span>会通知所有Follower 让它们也提交修改，此时所有节点的值达到一致。<br>+ ```json<br>  <span class="hljs-comment">// 领导者的广播消息</span><br>  &#123;<br>    <span class="hljs-string">&quot;term&quot;</span>: <span class="hljs-number">5</span>, <span class="hljs-comment">// 领导者的任期号</span><br>    <span class="hljs-string">&quot;leaderId&quot;</span>: <span class="hljs-string">&quot;leader-123&quot;</span>,<br>    <span class="hljs-string">&quot;prevLogIndex&quot;</span>: <span class="hljs-number">8</span>, <span class="hljs-comment">// 前一日志条目的索引</span><br>    <span class="hljs-string">&quot;prevLogTerm&quot;</span>: <span class="hljs-number">4</span>, <span class="hljs-comment">// 前一日志条目的任期</span><br>    <span class="hljs-string">&quot;entries&quot;</span>: [<br>      &#123; <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-number">9</span>, <span class="hljs-string">&quot;term&quot;</span>: <span class="hljs-number">5</span>, <span class="hljs-string">&quot;command&quot;</span>: <span class="hljs-string">&quot;set x=4&quot;</span> &#125;, <span class="hljs-comment">// 要复制的日志条目</span><br>    ],<br>    <span class="hljs-string">&quot;leaderCommit&quot;</span>: <span class="hljs-number">7</span><span class="hljs-comment">// Leader 的“已提交”状态的日志条目索引号</span><br>  &#125;<br></code></pre></td></tr></table></figure>
 </code></pre>
 </li>
 <li>日志复制过程<ul>
@@ -477,7 +482,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年3月20日</div>
+          <div>2025年5月20日</div>
         </div>
       
       
@@ -514,9 +519,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/01-%E6%A6%82%E5%BF%B5/" title="01-概念">
+                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" title="07-分布式Session">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">01-概念</span>
+                        <span class="hidden-mobile">07-分布式Session</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -524,8 +529,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/03-%E9%AB%98%E5%B9%B6%E5%8F%91/" title="03-高并发">
-                        <span class="hidden-mobile">03-高并发</span>
+                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/05-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="05-分布式锁">
+                        <span class="hidden-mobile">05-分布式锁</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

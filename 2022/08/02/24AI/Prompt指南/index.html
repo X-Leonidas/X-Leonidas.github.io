@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="跳跃索引 MySQL 8.0.13 版本对于range查询，引入了索引跳跃扫描（Index Skip Scan）优化，支持不符合组合索引最左前缀原则条件下的SQL，依然能够使用组合索引，减少不必要的扫描。 MySQL 8.0推出的适合联合索引左边列唯一值较少的情况的一种优化策略。 限制条件 查询只能涉及一张表，多表关联无法使用该特性 查询SQL不能使用 GROUP BY 或者 DISTINCT子句">
+    <meta name="description" content="Prompt指南Write clear instructions（写出清晰的指令） 把话说的尽量的详细，尽量多的提供任何重要的详细信息和上下文 让模型充当某个角色 使用分隔符清楚地指示输入的不同部分 例如：总结下列三引号分割的文本 “”“文本”“”   指定完成任务所需的步骤 例如：使用以下分步说明来响应用户输入。步骤 1 - 用户将为您提供三引号中的文本。用一个句子总结这段文字，并加上前缀「Su">
   
   
   
-  <title>5.mysql8新特性 - 夜坐听风</title>
+  <title>Prompt指南 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="5.mysql8新特性"></span>
+            <span id="subtitle" data-typed-text="Prompt指南"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-20 21:00" pubdate>
-          2024-02-20 21:00:49
+        <time datetime="2022-08-02 21:58" pubdate>
+          2022-08-02 21:58:03
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          167 字
+          543 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          2 分钟
+          5 分钟
         
       </span>
     
@@ -253,23 +253,57 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">5.mysql8新特性</h1>
+            <h1 id="seo-header">Prompt指南</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="跳跃索引"><a href="#跳跃索引" class="headerlink" title="跳跃索引"></a>跳跃索引</h1><ul>
-<li>MySQL 8.0.13 版本对于range查询，引入了索引跳跃扫描（Index Skip Scan）优化，支持不符合组合索引最左前缀原则条件下的SQL，依然能够使用组合索引，减少不必要的扫描。</li>
-<li>MySQL 8.0推出的适合联合索引左边列唯一值较少的情况的一种优化策略。</li>
-<li>限制条件<ul>
-<li>查询只能涉及一张表，多表关联无法使用该特性</li>
-<li>查询SQL不能使用 GROUP BY 或者 DISTINCT子句</li>
-<li>查询字段必须是索引中的字段</li>
-<li>组合索引形式：([A_1, …, A_k,] B_1, …, B_m, C [, D_1, …, D_n])，A，D 可以为空，但是B ,C 不能为空</li>
+                <h1 id="Prompt指南"><a href="#Prompt指南" class="headerlink" title="Prompt指南"></a>Prompt指南</h1><h3 id="Write-clear-instructions（写出清晰的指令）"><a href="#Write-clear-instructions（写出清晰的指令）" class="headerlink" title="Write clear instructions（写出清晰的指令）"></a>Write clear instructions（写出清晰的指令）</h3><ul>
+<li>把话说的尽量的详细，尽量多的提供任何重要的详细信息和上下文</li>
+<li>让模型充当某个角色</li>
+<li>使用分隔符清楚地指示输入的不同部分<ul>
+<li>例如：总结下列三引号分割的文本 “”“文本”“”</li>
+</ul>
+</li>
+<li>指定完成任务所需的步骤<ul>
+<li>例如：使用以下分步说明来响应用户输入。步骤 1 - 用户将为您提供三引号中的文本。用一个句子总结这段文字，并加上前缀「Summary:」。步骤 2 - 将步骤 1 中的摘要翻译成西班牙语，并添加前缀「翻译：」。</li>
+</ul>
+</li>
+<li>提供例子<ul>
+<li>按这句话的风格来写 XX 文章：”””落霞与孤鹜齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡之滨”””</li>
+</ul>
+</li>
+<li>指定所输出的长度</li>
+</ul>
+<h3 id="Provide-reference-text（提供参考文本）"><a href="#Provide-reference-text（提供参考文本）" class="headerlink" title="Provide reference text（提供参考文本）"></a>Provide reference text（提供参考文本）</h3><ul>
+<li>让模型使用参考文本作答<ul>
+<li>使用提供的由三重引号引起来的文章来回答问题。</li>
 </ul>
 </li>
 </ul>
-
+<h3 id="Split-complex-tasks-into-simpler-subtasks（将复杂的任务拆分为更简单的子任务）"><a href="#Split-complex-tasks-into-simpler-subtasks（将复杂的任务拆分为更简单的子任务）" class="headerlink" title="Split complex tasks into simpler subtasks（将复杂的任务拆分为更简单的子任务）"></a>Split complex tasks into simpler subtasks（将复杂的任务拆分为更简单的子任务）</h3><ul>
+<li>使用意图分类来识别与用户查询最相关的指令</li>
+<li>对于需要很长对话的对话应用，总结或过滤之前的对话</li>
+<li>分段总结长文档并递归构建完整总结</li>
+</ul>
+<h3 id="Give-the-model-time-to-“think”（给模型时间「思考」）"><a href="#Give-the-model-time-to-“think”（给模型时间「思考」）" class="headerlink" title="Give the model time to “think”（给模型时间「思考」）"></a>Give the model time to “think”（给模型时间「思考」）</h3><ul>
+<li>一步步思考</li>
+<li>让模型在急于得出结论之前找出自己的解决方案<ul>
+<li>例如：首先制定自己的问题解决方案。然后将你的解决方案与学生的解决方案进行比较，并评估学生的解决方案是否正确。在你自己完成问题之前，不要决定学生的解决方案是否正确。</li>
+</ul>
+</li>
+<li>使用内心独白来隐藏模型的推理过程<ul>
+<li>Deepseek 已经实现</li>
+</ul>
+</li>
+<li>询问模型在之前的过程中是否遗漏了什么内容</li>
+</ul>
+<h3 id="Use-external-tools（使用外部工具）"><a href="#Use-external-tools（使用外部工具）" class="headerlink" title="Use external tools（使用外部工具）"></a>Use external tools（使用外部工具）</h3><ul>
+<li>使用基于嵌入的搜索实现高效的知识检索</li>
+<li>使用代码执行来进行更准确的计算或调用外部API</li>
+<li>给模型提供特定的功能</li>
+</ul>
+<h3 id="Test-changes-systematically（系统地测试变更）"><a href="#Test-changes-systematically（系统地测试变更）" class="headerlink" title="Test changes systematically（系统地测试变更）"></a>Test changes systematically（系统地测试变更）</h3>
                 
               </div>
             
@@ -287,15 +321,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  <a href="/categories/24AI/" class="category-chain-item">24AI</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-1关系型数据库</a>
-  
-  
-
   
 
       </span>
@@ -314,8 +341,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>5.mysql8新特性</div>
-      <div>https://x-leonidas.github.io/2024/02/20/05数据库/05-1关系型数据库/5.mysql8新特性/</div>
+      <div>Prompt指南</div>
+      <div>https://x-leonidas.github.io/2022/08/02/24AI/Prompt指南/</div>
     </div>
     <div class="license-meta">
       
@@ -327,13 +354,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月20日</div>
+          <div>2022年8月2日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年2月20日</div>
+          <div>2025年3月1日</div>
         </div>
       
       
@@ -370,9 +397,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/08/02/24AI/Prompt%E6%8C%87%E5%8D%97/" title="Prompt指南">
+                      <a href="/2022/08/02/22tool/%E6%95%88%E7%8E%87%E6%B2%9F%E9%80%9A%E6%96%B9%E6%B3%95/" title="效率沟通方法">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Prompt指南</span>
+                        <span class="hidden-mobile">效率沟通方法</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -380,8 +407,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/24/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/4.%20%E5%AE%9E%E8%B7%B5/" title="4. 实践">
-                        <span class="hidden-mobile">4. 实践</span>
+                      <a href="/2022/08/02/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
+                        <span class="hidden-mobile">5.mysql8新特性</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

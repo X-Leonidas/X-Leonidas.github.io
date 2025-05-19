@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.4k 字
+          3.3k 字
         
       </span>
     
@@ -283,11 +283,7 @@
 <li><strong>使用多路I&#x2F;O复用模型，非阻塞IO</strong></li>
 <li>使用底层模型不同，它们之间底层实现方式以及与客户端之间通信的应用协议不一样，<strong>Redis</strong>直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求；swap的基本单位是page,Redis的消息达不到那么大，</li>
 </ul>
-<h2 id="缓存穿透、缓存击穿、缓存失效"><a href="#缓存穿透、缓存击穿、缓存失效" class="headerlink" title="缓存穿透、缓存击穿、缓存失效"></a>缓存穿透、缓存击穿、缓存失效</h2><h3 id="获取缓存数据的步骤"><a href="#获取缓存数据的步骤" class="headerlink" title="获取缓存数据的步骤"></a>获取缓存数据的步骤</h3><ul>
-<li>查询缓存，如果没有数据，则查询数据库</li>
-<li>查询数据库，如果数据不为空，将结果写入缓存</li>
-</ul>
-<h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><ul>
+<h2 id="缓存穿透、缓存击穿、缓存失效"><a href="#缓存穿透、缓存击穿、缓存失效" class="headerlink" title="缓存穿透、缓存击穿、缓存失效"></a>缓存穿透、缓存击穿、缓存失效</h2><h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><ul>
 <li>什么叫缓存穿透？<ul>
 <li>一般的缓存系统，都是按照key去缓存查询，<strong>如果不存在对应的value</strong>，就应该去后端系统查找（比如DB）。<strong>如果key对应的value一定是不存在的，并且对该key并发请求量很大，就会对后端系统造成很大的压力。</strong>这就叫做缓存穿透。</li>
 </ul>
@@ -495,7 +491,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月29日</div>
+          <div>2025年5月20日</div>
         </div>
       
       
@@ -532,9 +528,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/14-RocketMQFAQ/" title="14-RocketMQFAQ">
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/3redis%E9%9B%86%E7%BE%A4/" title="3redis集群">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">14-RocketMQFAQ</span>
+                        <span class="hidden-mobile">3redis集群</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
