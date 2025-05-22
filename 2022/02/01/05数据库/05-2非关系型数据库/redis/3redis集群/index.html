@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.1k 字
+          2.7k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          18 分钟
+          23 分钟
         
       </span>
     
@@ -417,6 +417,40 @@
 <h5 id="发布订阅模式"><a href="#发布订阅模式" class="headerlink" title="发布订阅模式"></a>发布订阅模式</h5><ul>
 <li>发布消息</li>
 </ul>
+<h2 id="分布式锁Redisson"><a href="#分布式锁Redisson" class="headerlink" title="分布式锁Redisson"></a>分布式锁Redisson</h2><h3 id="Redlock"><a href="#Redlock" class="headerlink" title="Redlock"></a>Redlock</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://redis.io/docs/latest/develop/use/patterns/distributed-locks/">https://redis.io/docs/latest/develop/use/patterns/distributed-locks/</a></li>
+<li>在分布式系统中，传统的Redis单节点或主从架构下实现分布式锁存在<strong>异步复制导致锁失效</strong>的风险。例如：客户端A在主节点加锁成功后，若主节点宕机且数据未同步到从节点，此时新主节点无锁记录，客户端B可能再次加锁成功，导致两个客户端同时持有锁</li>
+<li><strong>RedLock</strong>是Redis作者Antirez提出的分布式锁算法，旨在通过<strong>多独立Redis主节点协作</strong>解决这一问题。其核心思想是：<ul>
+<li><strong>多数派原则</strong>：客户端需在超过半数（N&#x2F;2+1）的独立Redis主节点上成功加锁，才算全局加锁成功。</li>
+<li><strong>时钟同步</strong>：通过时间戳控制锁的有效期，避免因网络延迟或节点故障导致锁超时失效</li>
+</ul>
+</li>
+</ul>
+<h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><ul>
+<li><strong>获取时间戳</strong>：客户端记录当前时间戳T1，作为加锁起始时间。</li>
+<li><strong>依次加锁</strong>：向N个独立的Redis主节点发送加锁请求，每个请求包含：<ul>
+<li><strong>唯一键值对</strong>：锁的Key和全局唯一值（如UUID+线程ID）。</li>
+<li><strong>超时时间</strong>：锁的自动释放时间（如30秒）。</li>
+<li><strong>网络超时</strong>：单节点加锁的超时时间（如5-50ms）。</li>
+</ul>
+</li>
+<li><strong>校验结果</strong>：<ul>
+<li><strong>成功条件</strong>：在N&#x2F;2+1个节点加锁成功，且总耗时小于锁的超时时间（即T2-T1 &lt; TTL）。</li>
+<li><strong>失败处理</strong>：若未满足条件，立即向所有节点发送解锁请求。</li>
+</ul>
+</li>
+<li><strong>锁续期</strong>：若业务执行时间较长，需通过后台线程（如Redisson的看门狗机制）定期续期锁。</li>
+</ul>
+<h3 id="Redisson"><a href="#Redisson" class="headerlink" title="Redisson"></a>Redisson</h3><ul>
+<li>Redisson是Java中广泛使用的Redis客户端，其<code>RedissonRedLock</code>类封装了RedLock算法，并扩展了可重入锁、自动续期等特性。</li>
+</ul>
+<h4 id="分布式读写锁"><a href="#分布式读写锁" class="headerlink" title="分布式读写锁"></a>分布式读写锁</h4><ul>
+<li>基于 Redis 的 Redisson 分布式可重入读写锁<code>RReadWriteLock</code> Java 对象实现了<code>java.util.concurrent.locks.ReadWriteLock</code>接口。其中读锁和写锁都继承了 <code>RLock</code>接口</li>
+</ul>
+<h4 id="看门狗自动续期"><a href="#看门狗自动续期" class="headerlink" title="看门狗自动续期"></a><strong>看门狗自动续期</strong></h4><ul>
+<li><strong>续期机制</strong>：默认每10秒检查锁状态，若业务未完成，将锁的TTL重置为30秒37。</li>
+<li><strong>避免锁超时</strong>：防止因业务执行时间过长导致锁提前释放。</li>
+</ul>
 
                 
               </div>
@@ -488,7 +522,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年5月14日</div>
+          <div>2025年5月23日</div>
         </div>
       
       

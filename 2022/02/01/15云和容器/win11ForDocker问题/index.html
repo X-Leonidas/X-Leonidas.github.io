@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Caffeine 将对数据的读写看到是日志的提交过程，设由专门的环形缓冲区来记录由于数据读取而产生的状态变动日志。为进一步减少竞争，caffeine对每条线程（对线程取hash，哈希值相同的使用同一个缓冲区）都设置一个专用的环形缓冲 环形缓冲：它是一种拥有读、写两个指针的数据复用结构，在计算机科学中有非常广泛的应用。举个具体例子，譬如一台计算机通过键盘输入，并通过 CPU 读取“HELLO WIK">
+    <meta name="description" content="错误 error from sender: open System Volume Information: Access is denied. 获取Dockerfile所在文件夹的System Volume Information的访问权限 cacls “D:&amp;#x2F;System Volume Information” &amp;#x2F;E &amp;#x2F;G  用户名:F D:&amp;#x2F; 构建Doc">
   
   
   
-  <title>Caffeine - 夜坐听风</title>
+  <title>win11ForDocker问题 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -182,7 +182,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Caffeine"></span>
+            <span id="subtitle" data-typed-text="win11ForDocker问题"></span>
           
         </div>
 
@@ -193,8 +193,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-05-12 22:35" pubdate>
-          2025-05-12 22:35:06
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:09
         </time>
       </span>
     
@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          558 字
+          95 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          5 分钟
+          1 分钟
         
       </span>
     
@@ -253,19 +253,34 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Caffeine</h1>
+            <h1 id="seo-header">win11ForDocker问题</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="Caffeine"><a href="#Caffeine" class="headerlink" title="Caffeine"></a>Caffeine</h2><ul>
-<li>将对数据的读写看到是日志的提交过程，设由专门的环形缓冲区来记录由于数据读取而产生的状态变动日志。为进一步减少竞争，caffeine对每条线程（对线程取hash，哈希值相同的使用同一个缓冲区）都设置一个专用的环形缓冲<ul>
-<li>环形缓冲：它是一种拥有读、写两个指针的数据复用结构，在计算机科学中有非常广泛的应用。举个具体例子，譬如一台计算机通过键盘输入，并通过 CPU 读取“HELLO WIKIPEDIA”这个长 14 字节的单词，通常需要一个至少 14 字节以上的缓冲区才行。但如果是环形缓冲结构，读取和写入就应当一起进行，在读取指针之前的位置均可以重复使用，理想情况下，只要读取指针不落后于写入指针一整圈，这个缓冲区就可以持续工作下去，能容纳无限多个新字符。否则，就必须阻塞写入操作去等待读取清空缓冲区。</li>
+                <h3 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h3><ul>
+<li>error from sender: open System Volume Information: Access is denied.<ul>
+<li>获取Dockerfile所在文件夹的System Volume Information的访问权限<ul>
+<li>cacls “D:&#x2F;System Volume Information” &#x2F;E &#x2F;G  用户名:F<ul>
+<li>D:&#x2F; 构建Dockerfile所在的文件夹</li>
 </ul>
 </li>
-<li>读写性能<ul>
-<li>从 Caffeine 读取数据时，数据本身会在其内部的 ConcurrentHashMap 中直接返回，而数据的状态信息变更就存入环形缓冲中，由后台线程异步处理。如果异步处理的速度跟不上状态变更的速度，导致缓冲区满了，那此后接收的状态的变更信息就会直接被丢弃掉，直至缓冲区重新富余。通过环形缓冲和容忍有损失的状态变更，Caffeine 大幅降低了由于数据读取而导致的垃圾收集和锁竞争，因此 Caffeine 的读取性能几乎能与 ConcurrentHashMap 的读取性能相同。</li>
-<li>写数据时，将使用传统的有界队列来存放状态变更信息，写入带来的状态更是无损的，不允许丢失任何状态，这是考虑到许多状态的默认值必须通过写入操作来完成初始化，因此写入会有一定的性能损失，相比 ConcurrentHashMap，Caffeine 在写入时大约会慢 10%左右。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>open Config.Msi: Access is denied.<ul>
+<li>控制台用管理员身份启动</li>
+</ul>
+</li>
+<li>failed to compute cache key: “&#x2F;jdk-8u181-linux-x64.tar.gz” not found: not found<ul>
+<li>去Dockerfile目录下执行命令</li>
+</ul>
+</li>
+<li>Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:3306 -&gt; 0.0.0.0:0: listen tcp 0.0.0.0:3306: bind: An attempt was made to access a socket in a way forbidden by its access permissions.<ul>
+<li>重启网络</li>
+<li>net stop winnat </li>
+<li>net start winnat</li>
 </ul>
 </li>
 </ul>
@@ -287,7 +302,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
   
   
 
@@ -307,8 +322,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Caffeine</div>
-      <div>https://x-leonidas.github.io/2025/05/12/11技术栈/Caffeine/</div>
+      <div>win11ForDocker问题</div>
+      <div>https://x-leonidas.github.io/2022/02/01/15云和容器/win11ForDocker问题/</div>
     </div>
     <div class="license-meta">
       
@@ -320,13 +335,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年5月12日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年5月12日</div>
+          <div>2023年4月25日</div>
         </div>
       
       
@@ -363,12 +378,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">正则表达式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/05/07/24AI/RAG/" title="RAG">
-                        <span class="hidden-mobile">RAG</span>
+                      <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" title="软件设计原则">
+                        <span class="hidden-mobile">软件设计原则</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
