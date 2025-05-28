@@ -205,7 +205,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.4k 字
+          3.8k 字
         
       </span>
     
@@ -216,7 +216,7 @@
         
         
         
-          29 分钟
+          32 分钟
         
       </span>
     
@@ -370,11 +370,63 @@
 <li>Saga 非常适合处理流程较长、且需要保证事务最终一致性的业务场景。例如，在一个旅游预订平台中，用户可能同时预订机票、酒店和租车服务，这些服务可能由不同的微服务或第三方供应商提供。在这种场景下，Saga 事务模型允许系统逐步执行每个操作，并在任一步骤失败时有序地执行补偿操作，从而确保系统的一致性并提升用户体验。</li>
 <li>与 TCC 相比，Saga 通常采用事件驱动设计，即每个服务都是异步执行的，无需设计资源的冻结状态或处理撤销冻结的操作。但缺点是不具备隔离性，多个 Saga 小事务操作同一数据源时，无法保证操作的原子性，可能出现数据被覆盖的情况。</li>
 <li>尽管补偿操作较易实现，但确保正向操作与补偿操作的严格执行仍需要大量精力。因此，Saga 事务通常不通过裸编码实现，而是在事务中间件的支持下完成。前面提到的 Seata 中间件也支持 Saga 事务模型。</li>
+<li></li>
 </ul>
-<h2 id="本地消息表"><a href="#本地消息表" class="headerlink" title="本地消息表"></a>本地消息表</h2><ul>
-<li>扫描这张表中事务的状态，如果一个分布式事务一直（设置一个事务周期阈值）未到状态 3，说明这条事务没有成功执行，于是可以重新调用 repo-service 扣减库存、调用 order-service 生成订单。直至所有的调用成功，事务状态到 3。<br>如果多次重试仍未使得状态到 3，可以将事务状态置为 error，通过人工介入进行干预。</li>
+<h2 id="基于消息中间件的最终一致性事务方案"><a href="#基于消息中间件的最终一致性事务方案" class="headerlink" title="基于消息中间件的最终一致性事务方案"></a>基于消息中间件的最终一致性事务方案</h2><ul>
+<li>通过<strong>解耦事务参与者</strong>、<strong>异步化处理</strong>和<strong>消息可靠性保证</strong>来实现数据的最终一致</li>
 </ul>
-<h2 id="基于消息中间件的最终一致性事务方案"><a href="#基于消息中间件的最终一致性事务方案" class="headerlink" title="基于消息中间件的最终一致性事务方案"></a>基于消息中间件的最终一致性事务方案</h2><h2 id="Seata"><a href="#Seata" class="headerlink" title="Seata"></a>Seata</h2><ul>
+<h3 id="本地消息表"><a href="#本地消息表" class="headerlink" title="本地消息表"></a>本地消息表</h3><ul>
+<li><strong>适用场景</strong>：所有服务可访问同一数据库（如单体数据库拆分的微服务）。</li>
+<li>流程<pre><code class=" mermaid">graph LR
+A[业务服务] --&gt; B[执行业务操作]
+B --&gt; C[写入本地事务表]
+C --&gt; D[提交本地事务]
+D --&gt; E[异步发送消息到MQ]
+E --&gt; F[消息消费者处理下游事务]
+</code></pre></li>
+<li>业务服务在本地事务中：<ol>
+<li>执行业务SQL（如扣减库存）。</li>
+<li>插入一条消息到本地消息表（含业务ID、状态<code>待发送</code>）。</li>
+</ol>
+</li>
+<li>后台线程轮询消息表，将<code>待发送</code>消息投递到MQ。</li>
+<li>下游服务消费消息并处理业务（如创建订单），完成后发送ACK。</li>
+<li>生产者收到ACK后更新本地消息状态为<code>已发送</code>。</li>
+</ul>
+<h3 id="MQ事务消息"><a href="#MQ事务消息" class="headerlink" title="MQ事务消息"></a><strong>MQ事务消息</strong></h3><ul>
+<li><strong>适用场景</strong>：支持事务消息的MQ（如RocketMQ、Kafka）。</li>
+<li>流程<pre><code class=" mermaid">graph LR
+A[生产者] --&gt; B[发送Half Message]
+B --&gt; C[MQ持久化消息]
+C --&gt; D[执行本地事务]
+D --&gt; E&#123;事务成功？&#125;
+E --&gt;|是| F[提交消息]
+E --&gt;|否| G[回滚消息]
+F --&gt; H[消息对消费者可见]
+H --&gt; I[消费者处理业务]
+</code></pre></li>
+<li>关键步骤<ul>
+<li><strong>Half Message</strong>：生产者发送半消息（对消费者不可见）。</li>
+<li><strong>执行本地事务</strong>：生产者执行业务逻辑（如冻结库存）。</li>
+<li><strong>Commit&#x2F;Rollback</strong>：<ul>
+<li>成功 → MQ提交消息（消费者可见）。</li>
+<li>失败 → MQ丢弃消息。</li>
+</ul>
+</li>
+<li><strong>事务回查</strong>（RocketMQ特有）：若生产者未响应，MQ回调生产者确认事务状态。</li>
+</ul>
+</li>
+</ul>
+<h3 id="最大努力通知"><a href="#最大努力通知" class="headerlink" title="最大努力通知"></a>最大努力通知</h3><ul>
+<li><strong>适用场景</strong>：对一致性要求较低的场景（如支付结果通知）。</li>
+<li><strong>流程</strong>：<ul>
+<li>生产者完成本地事务后，<strong>异步通知</strong>消费者（通过MQ&#x2F;HTTP）。</li>
+<li>若消费者处理失败，生产者按策略<strong>重试通知</strong>（如间隔1s、5s、10s）。</li>
+<li>达到重试上限后，触发人工干预。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Seata"><a href="#Seata" class="headerlink" title="Seata"></a>Seata</h2><ul>
 <li>Seata 为用户提供了 AT、TCC、SAGA 和 XA 事务模式。其中 AT 模式是 Seata 主推的事务模式，使用 AT 有一个前提，那就是微服务使用的数据库必须是支持事务的关系型数据库。**</li>
 </ul>
 <h3 id="AT、TCC、Saga、XA-模式分析"><a href="#AT、TCC、Saga、XA-模式分析" class="headerlink" title="AT、TCC、Saga、XA 模式分析"></a>AT、TCC、Saga、XA 模式分析</h3><ul>
@@ -494,7 +546,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年5月23日</div>
+          <div>2025年5月29日</div>
         </div>
       
       
