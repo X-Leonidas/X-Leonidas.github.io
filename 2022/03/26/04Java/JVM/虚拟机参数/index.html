@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="正则表达式匹配规则 \w: 可以匹配一个字母、数字或下划线 \W：匹配\w匹配不到的字符 \d: 匹配任意数字 \D: 匹配非数字 \s : 匹配空格 \S：匹配非空格 [1234567]: 简写[1-7] 匹配一个字符为1-7之中的任一字符 ^表示开头： $表示结尾：^A\d{3,}$  开头为A,至少三位数据结尾  | ： 或  重复匹配 * ：匹配多个符合规则的字符 例如：&amp;#x2F;d*">
+    <meta name="description" content="虚拟机运行参数 -Xms100m -Xmx100m ：  jvm的堆的最大最小限制，通常相同，其目的是为了能够在java垃圾回收机制清理完堆区后不需要重新分隔计算堆区的大小而浪费资源。 -Xmn:年轻代大小 -XX:+PrintFlagsFinal -version : 打印所有的虚拟机参数 -XX:SurvivorRatio  ：老年代和新生代的所占内存比例 -XX:Newratio ： old">
   
   
   
-  <title>正则表达式 - 夜坐听风</title>
+  <title>虚拟机参数 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="正则表达式"></span>
+            <span id="subtitle" data-typed-text="虚拟机参数"></span>
           
         </div>
 
@@ -195,8 +195,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:27
+        <time datetime="2022-03-26 16:08" pubdate>
+          2022-03-26 16:08:41
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          179 字
+          273 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          2 分钟
+          3 分钟
         
       </span>
     
@@ -255,30 +255,28 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">正则表达式</h1>
+            <h1 id="seo-header">虚拟机参数</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><h4 id="匹配规则"><a href="#匹配规则" class="headerlink" title="匹配规则"></a>匹配规则</h4><ul>
-<li>\w: 可以匹配一个字母、数字或下划线</li>
-<li>\W：匹配\w匹配不到的字符</li>
-<li>\d: 匹配任意数字</li>
-<li>\D: 匹配非数字</li>
-<li>\s : 匹配空格</li>
-<li>\S：匹配非空格</li>
-<li>[1234567]: 简写[1-7] 匹配一个字符为1-7之中的任一字符</li>
-<li>^表示开头：</li>
-<li>$表示结尾：^A\d{3,}$  开头为A,至少三位数据结尾 </li>
-<li>| ： 或</li>
+                <h2 id="虚拟机运行参数"><a href="#虚拟机运行参数" class="headerlink" title="虚拟机运行参数"></a>虚拟机运行参数</h2><ul>
+<li>-Xms100m -Xmx100m ：  jvm的堆的最大最小限制，通常相同，其目的是为了能够在java垃圾回收机制清理完堆区后不需要重新分隔计算堆区的大小而浪费资源。</li>
+<li>-Xmn:年轻代大小</li>
+<li>-XX:+PrintFlagsFinal -version : 打印所有的虚拟机参数</li>
+<li>-XX:SurvivorRatio  ：老年代和新生代的所占内存比例</li>
+<li>-XX:Newratio ： old和Yong的比</li>
+<li>-XX:MaxPermSize&#x3D;10m -XX:PermSize&#x3D;10m ： 永生带对象的内存限制</li>
+<li>-Xss1M ：为jvm启动的每个线程分配的内存大小</li>
+<li>MetaspaceSize&#x3D;8m MaxMetaspaceSize&#x3D;50m : 限制元空间的大小</li>
+<li>MaxDirectMemorySize ： 直接内存大小，如果启动时未设置则默认为最大堆内存大小</li>
+<li>+&#x2F;-UserTLAB ： 是否启用本地线程分配缓冲</li>
+<li>+&#x2F;- HeapDumpOnOutOfMemoryError : 内存溢出时Dump出当前的内存堆转储快照</li>
+<li>MaxGCPauseMillis  最大垃圾收集停顿时间，Parallel Scanvenge</li>
+<li>GCTimeRatio 吞吐量大小</li>
+<li>-XX:PermSize：表示非堆区初始内存(永生代)分配大小，其缩写为permanent size（持久化内存）</li>
+<li>-XX:MaxPermSize：表示对非堆区分配的内存的最大上限</li>
 </ul>
-<h4 id="重复匹配"><a href="#重复匹配" class="headerlink" title="重复匹配"></a>重复匹配</h4><ul>
-<li>* ：匹配多个符合规则的字符 例如：&#x2F;d* 匹配0个或多个数字</li>
-<li>+:  匹配至少一个字符</li>
-<li>？：匹配0个或一个字符</li>
-<li>{n,m} : 精确匹配n到m个的字符，{n} 匹配n个字符，{n,} 至少n个字符</li>
-</ul>
-<h4 id="分组匹配"><a href="#分组匹配" class="headerlink" title="分组匹配"></a>分组匹配</h4><p>+ </p>
 
                 
               </div>
@@ -297,8 +295,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/04Java/" class="category-chain-item">04Java</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/04Java/JVM/" class="category-chain-item">JVM</a>
+  
+  
+
   
 
       </span>
@@ -317,8 +322,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>正则表达式</div>
-      <div>https://x-leonidas.github.io/2022/02/01/11技术栈/正则表达式/</div>
+      <div>虚拟机参数</div>
+      <div>https://x-leonidas.github.io/2022/03/26/04Java/JVM/虚拟机参数/</div>
     </div>
     <div class="license-meta">
       
@@ -330,13 +335,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2022年3月26日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年3月1日</div>
+          <div>2022年5月5日</div>
         </div>
       
       
@@ -373,9 +378,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/22tool/%E5%8D%9A%E5%AE%A2/" title="博客">
+                      <a href="/2022/03/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/0.MySql%E8%AF%AD%E5%8F%A5/" title="0.MySql语句">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">博客</span>
+                        <span class="hidden-mobile">0.MySql语句</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -383,8 +388,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/22tool/%E6%95%88%E7%8E%87%E6%B2%9F%E9%80%9A%E6%96%B9%E6%B3%95/" title="效率沟通方法">
-                        <span class="hidden-mobile">效率沟通方法</span>
+                      <a href="/2022/02/09/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" title="系统架构">
+                        <span class="hidden-mobile">系统架构</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -441,12 +446,6 @@
 
 
   
-
-
-  
-  
-
-
 
 
 
@@ -617,49 +616,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
 
 
