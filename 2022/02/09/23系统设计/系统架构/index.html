@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="START 法则 situation: 描述问题的背景，这个问题是什么，以及你为什么需要做这个事情 task: 你具体的任务是什么，你需要做什么 action: 你做了什么事情？你的行动是什么. result: 结果如何，你得出的结论是什么? tinking： 反思，不足的地方，可以复用的地方  4W1H “4W1H”法则是一种用于分析问题和制定计划的思维工具，它帮助人们更全面地考虑问题的各个方面">
+    <meta name="description" content="系统架构的一些原则 原则一：关注于真正的收益而不是技术本身 关于收益的定义 是否可以降低技术门槛加快整个团队的开发流程 是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA 是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本     原则二：以应用服务和API为视角，而不是以资源和技术为视角 现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并">
   
   
   
-  <title>效率沟通方法 - 夜坐听风</title>
+  <title>系统架构 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="效率沟通方法"></span>
+            <span id="subtitle" data-typed-text="系统架构"></span>
           
         </div>
 
@@ -195,8 +195,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:30
+        <time datetime="2022-02-09 22:53" pubdate>
+          2022-02-09 22:53:51
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          267 字
+          418 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -255,25 +255,45 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">效率沟通方法</h1>
+            <h1 id="seo-header">系统架构</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="START-法则"><a href="#START-法则" class="headerlink" title="START 法则"></a>START 法则</h2><ul>
-<li>situation: 描述问题的背景，这个问题是什么，以及你为什么需要做这个事情</li>
-<li>task: 你具体的任务是什么，你需要做什么</li>
-<li>action: 你做了什么事情？你的行动是什么.</li>
-<li>result: 结果如何，你得出的结论是什么?</li>
-<li>tinking： 反思，不足的地方，可以复用的地方</li>
+                <h2 id="系统架构的一些原则"><a href="#系统架构的一些原则" class="headerlink" title="系统架构的一些原则"></a>系统架构的一些原则</h2><ul>
+<li>原则一：关注于真正的收益而不是技术本身<ul>
+<li>关于收益的定义<ul>
+<li>是否可以降低技术门槛加快整个团队的开发流程</li>
+<li>是否可以让整个系统运行的更稳定，是否可以提升真个系统的SLA</li>
+<li>是否可以通过简化和自动化降低成本，成本关注度从高到低分别为人力成本，时间成本，资金成本</li>
 </ul>
-<h2 id="4W1H"><a href="#4W1H" class="headerlink" title="4W1H"></a>4W1H</h2><ul>
-<li>“4W1H”法则是一种用于分析问题和制定计划的思维工具，它帮助人们更全面地考虑问题的各个方面，从而得出更有效的解决方案</li>
-<li>What（是什么）：问题或任务的具体内容是什么？需要解决的问题是什么？</li>
-<li>Why（为什么）：为什么要解决这个问题？了解解决问题的原因和目的。</li>
-<li>Who（谁）：涉及到哪些人或群体？谁负责处理这个问题？</li>
-<li>When（何时）：什么时候需要解决这个问题？时间节点和截止日期是什么？</li>
-<li>How（如何）：如何解决这个问题？具体的解决步骤和方法是什么？</li>
+</li>
+</ul>
+</li>
+<li>原则二：以应用服务和API为视角，而不是以资源和技术为视角<ul>
+<li>现在很多技术和组件已经分不清是dev还是Ops了，所以需要合并Dev和Ops</li>
+</ul>
+</li>
+<li>原则三: 选择最主流和成熟的技术</li>
+<li>原则四：完备性比性能更重要<ul>
+<li>使用最科学严谨的技术模型为主，并以不严谨的模型作为补充</li>
+<li>性能上的东西都是多解的</li>
+</ul>
+</li>
+<li>原则五：制定并遵循服从标准、规范和最佳实践</li>
+<li>原则六：重视架构扩展性和可运维性<ul>
+<li>微服务架构的一些建议<ul>
+<li>所有团队的程序模块都要以通过Service Interface方式将其数据与功能开放出来。</li>
+<li>团队间的程序模块的新系通信都要通过这些接口</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>原则七：对控制逻辑进行全面收口</li>
+<li>原则八：不要迁就老旧系统的技术债务</li>
+<li>原则九：不要依赖自己的经验，要依赖于经验和学习</li>
+<li>原则十：千万要小心X - Y问题，要追原始需求</li>
+<li>原则十一： 激进胜于保守，创新与使用并不冲突</li>
 </ul>
 
                 
@@ -293,7 +313,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/22tool/" class="category-chain-item">22tool</a>
+  <a href="/categories/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">23系统设计</a>
   
   
 
@@ -313,8 +333,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>效率沟通方法</div>
-      <div>https://x-leonidas.github.io/2022/02/01/22tool/效率沟通方法/</div>
+      <div>系统架构</div>
+      <div>https://x-leonidas.github.io/2022/02/09/23系统设计/系统架构/</div>
     </div>
     <div class="license-meta">
       
@@ -326,13 +346,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2022年2月9日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月27日</div>
+          <div>2022年5月5日</div>
         </div>
       
       
@@ -369,9 +389,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/24AI/Prompt%E6%8C%87%E5%8D%97/" title="Prompt指南">
+                      <a href="/2022/08/02/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/11-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%92%8C%E4%BB%A3%E7%90%86/" title="11-负载均衡和代理">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Prompt指南</span>
+                        <span class="hidden-mobile">11-负载均衡和代理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -379,8 +399,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%B5%8B%E8%AF%95/jmh/" title="jmh">
-                        <span class="hidden-mobile">jmh</span>
+                      <a href="/2022/02/09/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/10-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" title="10-分布式缓存">
+                        <span class="hidden-mobile">10-分布式缓存</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

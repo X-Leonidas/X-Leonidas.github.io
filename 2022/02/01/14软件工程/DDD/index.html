@@ -196,7 +196,7 @@
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
         <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:30
+          2022-02-01 19:59:32
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6k 字
+          8k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          51 分钟
+          67 分钟
         
       </span>
     
@@ -274,6 +274,108 @@
 <li>围绕聚合的操作引入工厂和资源库。工厂负责复杂聚合的创建，资源库负责聚合的加载、添加、修改、删除。聚合内的实体状态变更通过领域事件来推动;</li>
 <li><em><strong>应用服务处于应用层，对领域逻辑编排、封装之后对上层接口层暴露。一次编排就是一个用户用例</strong></em>。</li>
 </ul>
+<h1 id="战略设计"><a href="#战略设计" class="headerlink" title="战略设计"></a>战略设计</h1><ul>
+<li>战略设计：主要从业务视角出发，建立业务领域模型，划分领域边界，建立通用语言的限界上下文，限界上下文可以作为微服务设计的参考边界。</li>
+</ul>
+<h3 id="Bounded-Context（限界上下文）"><a href="#Bounded-Context（限界上下文）" class="headerlink" title="Bounded Context（限界上下文）"></a><strong>Bounded Context（限界上下文）</strong></h3><ul>
+<li>限界上下文是围绕应用程序和&#x2F;或项目部分的概念边界，涉及业务领域、团队和代码。<em><strong>它将相关组件和概念分组，避免歧义，因为其中一些可能在没有明确上下文的情况下具有相似的含义</strong></em>。</li>
+<li>比如电商领域的商品，商品在不同的阶段有不同的术语，在销售阶段是商品，而在运输阶段则变成了货物。同样的一个东西，由于业务领域的不同，赋予了这些术语不同的涵义和职责边界，这个边界就可能会成为未来微服务设计的边界。领域边界就是通过限界上下文来定义的。</li>
+<li>限界上下文定义了解决方案的明显边界，边界里的每一个领域概念，包括领域概念内的属性和行为都有特殊含义。<em><strong>出了限界上下文这个边界这层含义就不复存在。</strong></em></li>
+<li>如何划分限界上下文？<ul>
+<li>根据相关性做归类。一般是优先考虑功能相关性而不是语义相关性，比如创建订单和支付订单都是订单语义，但功能相差比较大，应该划分为两个限界上下文。</li>
+<li>根据团队粒度做裁剪、根据技术特点做裁剪。<strong>一些通用的技术功能应该尽可能归拢到一个限界上下文</strong>，比如每个业务限界上下文都有监控，但监控能力应该归拢到监控限界上下文。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Context-Mapping（上下文映射）"><a href="#Context-Mapping（上下文映射）" class="headerlink" title="Context Mapping（上下文映射）"></a>Context Mapping（上下文映射）</h3><ul>
+<li>识别并以图形方式记录项目中的每个限界上下文称为上下文映射。上下文映射有助于更好地理解有界上下文和团队如何相互关联和沟通。它们给出了实际边界的清晰概念，并帮助团队直观地描述系统设计的概念细分。</li>
+</ul>
+<h3 id="上下文映射的关系"><a href="#上下文映射的关系" class="headerlink" title="上下文映射的关系"></a>上下文映射的关系</h3><ul>
+<li><strong>Anti-corruption Layer 防腐层</strong><ul>
+<li>下游限界上下文实现了一个转换来自上游上下文的数据或对象的层，确保它支持内部模型</li>
+</ul>
+</li>
+<li><strong>Conformist 跟随者关系</strong><ul>
+<li>下游有界上下文符合并适应上游上下文，如果需要，必须进行更改。在这种情况下，上游环境对满足下游需求不关心。</li>
+</ul>
+</li>
+<li><strong>Customer&#x2F;Supplier 客户&#x2F;供应商关系</strong><ul>
+<li>上游向下游提供服务，下游上下文充当客户，确定需求并向上游请求更改以满足其需求。</li>
+</ul>
+</li>
+<li><strong>Shared kernel  共享内核</strong><ul>
+<li>有时，两个（或更多）上下文不可避免地重叠，最终共享资源或组件。这种关系要求两个上下文在需要更改时保持连续同步，因此如果可能的话应该避免。</li>
+</ul>
+</li>
+</ul>
+<h1 id="战术设计"><a href="#战术设计" class="headerlink" title="战术设计"></a>战术设计</h1><ul>
+<li>战术设计：从技术视角出发，侧重于领域模型的技术实现，完成软件开发和落地，包括：聚合根、实体、值对象、领域服务、应用服务和资源库等代码逻辑的设计和实现。</li>
+</ul>
+<h2 id="服务架构"><a href="#服务架构" class="headerlink" title="服务架构"></a>服务架构</h2><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/DDD%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="image-20250606220530060" style="zoom:60%;" />
+
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>名称</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>应用层</td>
+<td>应用服务</td>
+<td>钱包充值应用服务，该服务会编排客户校验、钱包聚合创建、主钱包扣款、子钱包充值、充值已完成领域事件发送等行为</td>
+</tr>
+<tr>
+<td>领域层</td>
+<td>实体</td>
+<td>主钱包&#x2F;子钱包是个实体，主钱包&#x2F;子钱包的状态随着跟进活动推进需随时变化，需要根据唯一标识来追踪变化</td>
+</tr>
+<tr>
+<td>领域层</td>
+<td>值对象</td>
+<td>钱包上的客户联系方式信息是值对象，不需要唯一标识去追踪联系方式的变化过程</td>
+</tr>
+<tr>
+<td>领域层</td>
+<td>聚合</td>
+<td>钱包是个聚合，主钱包实体是该聚合的根实体，状态信息、联系方式信息等是聚合的附属</td>
+</tr>
+<tr>
+<td>领域层</td>
+<td>领域事件</td>
+<td>钱包创建后会产生钱包已创建领域事件，后续的赠送优惠券、应收应付等功能可以监听该事件启动相应操作</td>
+</tr>
+<tr>
+<td>领域层</td>
+<td>领域服务</td>
+<td>钱包的还款行为属于领域服务，涉及到主钱包和子钱包的余额计算，单独某个钱包自身没法完成还款行为</td>
+</tr>
+<tr>
+<td>基础层</td>
+<td>资源库</td>
+<td>钱包这个聚合的访问通过钱包资源库提供，资源库的实现因技术选型不同而不同，可以是数据库、文件等</td>
+</tr>
+</tbody></table>
+<h3 id="应用层（application）"><a href="#应用层（application）" class="headerlink" title="应用层（application）"></a>应用层（application）</h3><ul>
+<li>应用服务位于应用层。用来表述应用和用户行为，负责服务的组合、编排和转发，负责处理业务用例的执行顺序以及结果的拼装。</li>
+<li>应用层的服务包括应用服务和领域事件相关服务。</li>
+<li>应用服务可对微服务内的领域服务以及微服务外的应用服务进行组合和编排，或者对基础层如文件、缓存等数据直接操作形成应用服务，对外提供粗粒度的服务。</li>
+<li>领域事件服务包括两类：领域事件的发布和订阅。通过事件总线和消息队列实现异步数据传输，实现微服务之间的解耦。</li>
+</ul>
+<h3 id="领域层（domain）"><a href="#领域层（domain）" class="headerlink" title="领域层（domain）"></a>领域层（domain）</h3><ul>
+<li>领域服务位于领域层，为完成领域中跨实体或值对象的操作转换而封装的服务，领域服务以与实体和值对象相同的方式参与实施过程。</li>
+<li>领域服务对同一个实体的一个或多个方法进行组合和封装，或对多个不同实体的操作进行组合或编排，对外暴露成领域服务。领域服务封装了核心的业务逻辑。实体自身的行为在实体类内部实现，向上封装成领域服务暴露。</li>
+<li>为隐藏领域层的业务逻辑实现，所有领域方法和服务等均须通过领域服务对外暴露。</li>
+<li>为实现微服务内聚合之间的解耦，原则上禁止跨聚合的领域服务调用和跨聚合的数据相互关联。</li>
+</ul>
+<h3 id="基础层（infrastructure）"><a href="#基础层（infrastructure）" class="headerlink" title="基础层（infrastructure）"></a>基础层（infrastructure）</h3><ul>
+<li>基础服务位于基础层。为各层提供资源服务（如数据库、缓存等），实现各层的解耦，降低外部资源变化对业务逻辑的影响。</li>
+<li>基础服务主要为仓储服务，通过依赖反转的方式为各层提供基础资源服务，领域服务和应用服务调用仓储服务接口，利用仓储实现持久化数据对象或直接访问基础资源。</li>
+</ul>
+<h3 id="用户接口层（interfaces）"><a href="#用户接口层（interfaces）" class="headerlink" title="用户接口层（interfaces）"></a>用户接口层（interfaces）</h3><ul>
+<li>接口服务位于用户接口层，用于处理用户发送的Restful请求和解析用户输入的配置文件等，并将信息传递给应用层。</li>
+</ul>
 <h2 id="领域模型"><a href="#领域模型" class="headerlink" title="领域模型"></a>领域模型</h2><ul>
 <li>领域模型包含<strong>实体、值对象、聚合</strong></li>
 <li>领域模型本质是业务认知，承载核心业务逻辑，如订单状态的流转、库存扣减规则</li>
@@ -285,24 +387,66 @@
 <li><strong>定义</strong>：具有唯一标识和生命周期的对象，通过标识而非属性区分不同实例。</li>
 <li><strong>特点</strong>：<ul>
 <li>唯一性：通过唯一标识（如订单ID、用户ID）进行跟踪。</li>
-<li>可变性：状态可随时间变化，但标识不变。</li>
+<li><strong>保证实体的不变性（Invariants）</strong>，<strong>也就是说要确保无论外部怎么操作，一个实体内部的属性都不能出现相互冲突，状态不一致的情况。</strong></li>
+<li>通过聚合根对子实体进行访问,<strong>子实体的一致性交由聚合根保证;</strong></li>
 </ul>
 </li>
 </ul>
 <h3 id="值对象"><a href="#值对象" class="headerlink" title="值对象"></a>值对象</h3><ul>
-<li><strong>定义</strong>：描述领域的某个特征，没有唯一标识，通常不可变（Immutable）。</li>
+<li><strong>定义</strong>：<em><strong>描述特征的对象，不具有任何唯一性的对象称为价值对象，它们只关心自己是什么，而不关心自己是谁，值对象是多个实体的属性，可以由多个实体共享</strong></em></li>
 <li><strong>特点</strong>：<ul>
 <li>无标识：通过属性值定义，如金额（Money）包含数值和货币类型。</li>
-<li>不可变性：一旦创建，属性不可修改。</li>
+<li>不可变性：<strong>值对象必须是不可变的，当需要更新时，强制系统用新实例替换它们</strong>。</li>
+<li><strong>价值对象的创建应始终取决于用于创建它们的数据的有效性，以及它如何尊重业务不变量</strong>。</li>
 </ul>
 </li>
 </ul>
-<h3 id="聚合根-Aggregate"><a href="#聚合根-Aggregate" class="headerlink" title="聚合根(Aggregate)"></a>聚合根(Aggregate)</h3><ul>
+<h3 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h3><ul>
+<li><strong>定义</strong>：<ul>
+<li><em><strong>在许多情况下，领域模型需要某些与实体或值对象不直接相关的动作或操作，将这些动作或操作强制到它们的实现中会导致它们的定义失真</strong></em></li>
+<li>封装不归属于实体或值对象的业务逻辑，通常涉及多个聚合的协作</li>
+<li>一些业务并不是和领域对象相关，它本身代表了一种商业策略或业务处理过程</li>
+<li>服务应该精心设计，始终确保它们不会剥夺实体和价值对象的直接责任和行为。</li>
+</ul>
+</li>
+<li><strong>特点</strong>：<ul>
+<li>无状态：不持有领域对象的状态。</li>
+<li>跨聚合协调：例如支付服务需协调订单和账户聚合</li>
+</ul>
+</li>
+</ul>
+<h3 id="领域事件"><a href="#领域事件" class="headerlink" title="领域事件"></a>领域事件</h3><ul>
+<li>领域事件是<strong>领域模型内部发生的、对业务有重要意义的、值得领域专家关心的事件或状态变化的记录</strong>。它代表了过去发生的、不可更改的事实（Fact）。简单来说，它就是“<strong>领域内发生了某件重要事情</strong>”的通知</li>
+<li>关键特性<ul>
+<li>描述性<ul>
+<li>事件名称应清晰、明确地<strong>描述发生了什么业务事实</strong>。</li>
+<li>通常使用<strong>过去时态</strong>的动词短语命名，例如 <code>OrderPlaced</code>（订单已下单）、<code>PaymentReceived</code>（付款已收到）、<code>InventoryLevelAdjusted</code>（库存水平已调整）、<code>CustomerAddressUpdated</code>（客户地址已更新）。</li>
+<li>名称应使用<strong>通用语言（Ubiquitous Language）</strong>，让领域专家和开发者都能理解其含义。</li>
+</ul>
+</li>
+<li>携带信息<ul>
+<li>事件对象本身是一个数据结构，包含<strong>描述该事件所需的最小必要信息</strong>。</li>
+<li><strong>避免</strong>携带整个聚合根状态！只携带必要数据和引用。</li>
+</ul>
+</li>
+<li>不可变性<ul>
+<li>一旦事件被创建并发布，它就<strong>不能被修改</strong>。因为它代表的是<strong>已经发生的历史事实</strong>。如果业务状态需要修正，应该发布一个新的事件（如 <code>OrderCancelled</code> 来修正 <code>OrderPlaced</code> 的最终结果），而不是修改旧事件。</li>
+</ul>
+</li>
+<li>幂等性<ul>
+<li>事件处理器应设计成<strong>幂等</strong>的。因为网络问题或重试机制可能导致同一个事件被多次投递。处理器需要能够识别并安全地处理重复事件（例如，通过检查事件ID是否已处理过）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="聚合-Aggregate"><a href="#聚合-Aggregate" class="headerlink" title="聚合(Aggregate)"></a>聚合(Aggregate)</h2><ul>
 <li><strong>定义</strong>：<ul>
 <li>一组相关对象的集合，通过<strong>聚合根（Aggregate Root）</strong>统一管理，确保业务规则的一致性</li>
-<li>将实体和值对象划分为聚合并围绕着聚合定义边界</li>
+<li>将<strong>实体</strong>和<strong>值对象</strong>划分为聚合并围绕着聚合定义边界</li>
 <li>作为一个整体来定义聚合的属性和不变量，并把其执行责任赋予聚合跟或者指定的框架机制</li>
 <li>选择一个实体作为每个聚合的根，并仅允许外部对象持有聚合跟的引用</li>
+<li><em><strong>每个聚合都有一个朝外的实体，控制对边界内对象的所有访问，该实体称为聚合根，是其他对象可以交互的唯一对象</strong></em></li>
 </ul>
 </li>
 <li><strong>特点</strong>：<ul>
@@ -316,23 +460,13 @@
 </ul>
 </li>
 </ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><ul>
-<li><strong>定义</strong>：<ul>
-<li>封装不归属于实体或值对象的业务逻辑，通常涉及多个聚合的协作</li>
-<li>一些业务并不是和领域对象相关，它本身代表了一种商业策略或业务处理过程</li>
-</ul>
-</li>
-<li><strong>特点</strong>：<ul>
-<li>无状态：不持有领域对象的状态。</li>
-<li>跨聚合协调：例如支付服务需协调订单和账户聚合</li>
-</ul>
-</li>
-</ul>
-<h2 id="仓储-Repository"><a href="#仓储-Repository" class="headerlink" title="仓储(Repository)"></a>仓储(Repository)</h2><ul>
+<h2 id="资源库-Repository"><a href="#资源库-Repository" class="headerlink" title="资源库(Repository)"></a>资源库(Repository)</h2><ul>
 <li><strong>作用</strong>：<ul>
 <li>管理聚合的持久化与检索，隔离领域模型与数据库技术细节</li>
 <li>以聚合的整体管理对象，一个聚合只能有一个资源库对象，那就是以聚合根命名的资源库。除此之外的其他对象，都不应该提供资源库对象</li>
-<li><strong>资源库模式不等价于持久化，更不是数据库访问层</strong>，仓储应基于领域模型设计接口，而非直接映射数据库表结构</li>
+<li><em><strong>为了能够从持久性中检索对象，无论是在内存、文件系统还是数据库中，我们需要提供一个对客户机隐藏实现细节的接口，以便它不依赖于基础架构细节，而仅仅依赖于抽象</strong></em></li>
+<li><strong>资源库模式不等价于持久化，更不是数据库访问层</strong>，仓储应基于领域模型设计接口，而非直接映射数据库表结构,</li>
+<li><strong>所有存储库接口定义都应该位于domain层，但它们的具体实现属于基础架构层</strong>。</li>
 </ul>
 </li>
 <li><strong>特点</strong>：<ul>
@@ -390,45 +524,23 @@
 </li>
 </ul>
 <h3 id="贫血模型"><a href="#贫血模型" class="headerlink" title="贫血模型"></a>贫血模型</h3><ul>
-<li><p>贫血模型最早广泛应用源于EJB2，最强盛时期则是由Spring创造将：</p>
-<ul>
+<li>贫血模型最早广泛应用源于EJB2，最强盛时期则是由Spring创造将：<ul>
 <li>“行为”（逻辑、过程）；</li>
 <li>“状态”（数据，对应到语言就是对象成员变量）。<br>分离到不同的对象中：</li>
 <li>只有状态的对象就是所谓的“贫血对象”（常称为VO——Value Object）；</li>
 <li>只有行为的对象就是，我们常见的N层结构中的Logic&#x2F;Service&#x2F;Manager层（对应到EJB2中的Stateless Session Bean）。</li>
 </ul>
 </li>
-<li><p>优点</p>
-<ul>
+<li>优点<ul>
 <li>对于只有少量业务逻辑的应用来说，使用起来非常自然；</li>
 <li>开发迅速，易于理解；</li>
 <li>注意：也不能完全排斥这种方式。</li>
 </ul>
 </li>
-<li><p>缺点</p>
-<ul>
+<li>缺点<ul>
 <li>无法良好的应对复杂逻辑：</li>
 </ul>
 </li>
-</ul>
-<h2 id="服务架构"><a href="#服务架构" class="headerlink" title="服务架构"></a>服务架构</h2><h3 id="应用层（application）"><a href="#应用层（application）" class="headerlink" title="应用层（application）"></a>应用层（application）</h3><ul>
-<li>应用服务位于应用层。用来表述应用和用户行为，负责服务的组合、编排和转发，负责处理业务用例的执行顺序以及结果的拼装。</li>
-<li>应用层的服务包括应用服务和领域事件相关服务。</li>
-<li>应用服务可对微服务内的领域服务以及微服务外的应用服务进行组合和编排，或者对基础层如文件、缓存等数据直接操作形成应用服务，对外提供粗粒度的服务。</li>
-<li>领域事件服务包括两类：领域事件的发布和订阅。通过事件总线和消息队列实现异步数据传输，实现微服务之间的解耦。</li>
-</ul>
-<h3 id="领域层（domain）"><a href="#领域层（domain）" class="headerlink" title="领域层（domain）"></a>领域层（domain）</h3><ul>
-<li>领域服务位于领域层，为完成领域中跨实体或值对象的操作转换而封装的服务，领域服务以与实体和值对象相同的方式参与实施过程。</li>
-<li>领域服务对同一个实体的一个或多个方法进行组合和封装，或对多个不同实体的操作进行组合或编排，对外暴露成领域服务。领域服务封装了核心的业务逻辑。实体自身的行为在实体类内部实现，向上封装成领域服务暴露。</li>
-<li>为隐藏领域层的业务逻辑实现，所有领域方法和服务等均须通过领域服务对外暴露。</li>
-<li>为实现微服务内聚合之间的解耦，原则上禁止跨聚合的领域服务调用和跨聚合的数据相互关联。</li>
-</ul>
-<h3 id="基础层（infrastructure）"><a href="#基础层（infrastructure）" class="headerlink" title="基础层（infrastructure）"></a>基础层（infrastructure）</h3><ul>
-<li>基础服务位于基础层。为各层提供资源服务（如数据库、缓存等），实现各层的解耦，降低外部资源变化对业务逻辑的影响。</li>
-<li>基础服务主要为仓储服务，通过依赖反转的方式为各层提供基础资源服务，领域服务和应用服务调用仓储服务接口，利用仓储实现持久化数据对象或直接访问基础资源。</li>
-</ul>
-<h3 id="用户接口层（interfaces）"><a href="#用户接口层（interfaces）" class="headerlink" title="用户接口层（interfaces）"></a>用户接口层（interfaces）</h3><ul>
-<li>接口服务位于用户接口层，用于处理用户发送的Restful请求和解析用户输入的配置文件等，并将信息传递给应用层。</li>
 </ul>
 <h2 id="VO-View-Objec"><a href="#VO-View-Objec" class="headerlink" title="VO(View Objec)"></a>VO(View Objec)</h2><ul>
 <li>视图对象，用于展示层，它的作用是把某个指定页面（或组件）的所有数据封装起来。</li>
@@ -556,7 +668,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年11月27日</div>
+          <div>2025年6月6日</div>
         </div>
       
       
@@ -593,9 +705,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/13-%E5%88%86%E5%B8%83%E5%BC%8F%E8%BF%90%E7%BB%B4/" title="13-分布式运维">
+                      <a href="/2022/02/01/13Linux/Linux%E5%9F%BA%E6%9C%AC/" title="Linux基本">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">13-分布式运维</span>
+                        <span class="hidden-mobile">Linux基本</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -603,8 +715,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" title="软件设计原则">
-                        <span class="hidden-mobile">软件设计原则</span>
+                      <a href="/2022/02/01/13Linux/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux常用命令">
+                        <span class="hidden-mobile">Linux常用命令</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
