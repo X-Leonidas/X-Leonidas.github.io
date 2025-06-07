@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          8k 字
+          8.5k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          67 分钟
+          71 分钟
         
       </span>
     
@@ -311,70 +311,157 @@
 <h1 id="战术设计"><a href="#战术设计" class="headerlink" title="战术设计"></a>战术设计</h1><ul>
 <li>战术设计：从技术视角出发，侧重于领域模型的技术实现，完成软件开发和落地，包括：聚合根、实体、值对象、领域服务、应用服务和资源库等代码逻辑的设计和实现。</li>
 </ul>
-<h2 id="服务架构"><a href="#服务架构" class="headerlink" title="服务架构"></a>服务架构</h2><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/DDD%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="image-20250606220530060" style="zoom:60%;" />
+<h2 id="服务架构"><a href="#服务架构" class="headerlink" title="服务架构"></a>服务架构</h2><h3 id="四层架构"><a href="#四层架构" class="headerlink" title="四层架构"></a>四层架构</h3><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/DDD%E5%9B%9B%E5%B1%82%E6%9E%B6%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="image-20250606220530060" style="zoom:60%;" />
 
-<table>
+<h3 id="六层架构"><a href="#六层架构" class="headerlink" title="六层架构"></a>六层架构</h3><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/DDD%E5%85%AD%E5%B1%82%E6%9E%B6%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="image-20250607221659960" style="zoom:70%;" />
+
+<ul>
+<li><strong>四层架构和流程架构的区别</strong></li>
+<li><table>
 <thead>
 <tr>
-<th>层级</th>
-<th>名称</th>
-<th>举例</th>
+<th align="left">特性</th>
+<th align="left">四层架构 (Layered)</th>
+<th align="left">六边形架构 (Hexagonal &#x2F; Ports &amp; Adapters)</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>应用层</td>
-<td>应用服务</td>
-<td>钱包充值应用服务，该服务会编排客户校验、钱包聚合创建、主钱包扣款、子钱包充值、充值已完成领域事件发送等行为</td>
+<td align="left"><strong>核心目标</strong></td>
+<td align="left">按技术职责分层，单向依赖</td>
+<td align="left"><strong>隔离核心领域</strong>，通过端口&#x2F;适配器连接外部</td>
 </tr>
 <tr>
-<td>领域层</td>
-<td>实体</td>
-<td>主钱包&#x2F;子钱包是个实体，主钱包&#x2F;子钱包的状态随着跟进活动推进需随时变化，需要根据唯一标识来追踪变化</td>
+<td align="left"><strong>结构</strong></td>
+<td align="left"><strong>纵向分层</strong> (UI -&gt; 应用 -&gt; 领域 &lt;- 基础设施)</td>
+<td align="left"><strong>同心圆</strong> (核心领域 + 外围适配器)</td>
 </tr>
 <tr>
-<td>领域层</td>
-<td>值对象</td>
-<td>钱包上的客户联系方式信息是值对象，不需要唯一标识去追踪联系方式的变化过程</td>
+<td align="left"><strong>依赖方向</strong></td>
+<td align="left">上层依赖下层 (领域 &lt;- 基础设施实现)</td>
+<td align="left"><strong>所有依赖指向核心</strong> (适配器依赖&#x2F;实现核心端口)</td>
 </tr>
 <tr>
-<td>领域层</td>
-<td>聚合</td>
-<td>钱包是个聚合，主钱包实体是该聚合的根实体，状态信息、联系方式信息等是聚合的附属</td>
+<td align="left"><strong>关键原则</strong></td>
+<td align="left">关注点分离，依赖倒置 (领域接口)</td>
+<td align="left"><strong>依赖倒置</strong> (核心定义端口，适配器实现)</td>
 </tr>
 <tr>
-<td>领域层</td>
-<td>领域事件</td>
-<td>钱包创建后会产生钱包已创建领域事件，后续的赠送优惠券、应收应付等功能可以监听该事件启动相应操作</td>
+<td align="left"><strong>外部世界</strong></td>
+<td align="left">主要视为基础设施层的职责，UI是顶层</td>
+<td align="left"><strong>所有外部平等</strong>，通过适配器连接核心端口</td>
 </tr>
 <tr>
-<td>领域层</td>
-<td>领域服务</td>
-<td>钱包的还款行为属于领域服务，涉及到主钱包和子钱包的余额计算，单独某个钱包自身没法完成还款行为</td>
+<td align="left"><strong>领域位置</strong></td>
+<td align="left">核心层之一 (领域层)</td>
+<td align="left"><strong>绝对核心</strong>，被严格保护，无外部依赖</td>
 </tr>
 <tr>
-<td>基础层</td>
-<td>资源库</td>
-<td>钱包这个聚合的访问通过钱包资源库提供，资源库的实现因技术选型不同而不同，可以是数据库、文件等</td>
+<td align="left"><strong>可测试性</strong></td>
+<td align="left">高 (利用接口解耦)</td>
+<td align="left"><strong>极高</strong> (核心纯POJO+接口，天然易测)</td>
+</tr>
+<tr>
+<td align="left"><strong>灵活性</strong></td>
+<td align="left">基础设施实现可替换</td>
+<td align="left"><strong>任意适配器可独立替换</strong>，技术栈变更风险更低</td>
+</tr>
+<tr>
+<td align="left"><strong>DDD契合</strong></td>
+<td align="left">经典，明确领域层核心</td>
+<td align="left"><strong>极致领域核心</strong>，适应复杂外部集成</td>
+</tr>
+<tr>
+<td align="left">层级</td>
+<td align="left">名称</td>
+<td align="left">举例</td>
+</tr>
+<tr>
+<td align="left">——</td>
+<td align="left">——–</td>
+<td align="left">————————————————————</td>
+</tr>
+<tr>
+<td align="left">应用层</td>
+<td align="left">应用服务</td>
+<td align="left">钱包充值应用服务，该服务会编排客户校验、钱包聚合创建、主钱包扣款、子钱包充值、充值已完成领域事件发送等行为</td>
+</tr>
+<tr>
+<td align="left">领域层</td>
+<td align="left">实体</td>
+<td align="left">主钱包&#x2F;子钱包是个实体，主钱包&#x2F;子钱包的状态随着跟进活动推进需随时变化，需要根据唯一标识来追踪变化</td>
+</tr>
+<tr>
+<td align="left">领域层</td>
+<td align="left">值对象</td>
+<td align="left">钱包上的客户联系方式信息是值对象，不需要唯一标识去追踪联系方式的变化过程</td>
+</tr>
+<tr>
+<td align="left">领域层</td>
+<td align="left">聚合</td>
+<td align="left">钱包是个聚合，主钱包实体是该聚合的根实体，状态信息、联系方式信息等是聚合的附属</td>
+</tr>
+<tr>
+<td align="left">领域层</td>
+<td align="left">领域事件</td>
+<td align="left">钱包创建后会产生钱包已创建领域事件，后续的赠送优惠券、应收应付等功能可以监听该事件启动相应操作</td>
+</tr>
+<tr>
+<td align="left">领域层</td>
+<td align="left">领域服务</td>
+<td align="left">钱包的还款行为属于领域服务，涉及到主钱包和子钱包的余额计算，单独某个钱包自身没法完成还款行为</td>
+</tr>
+<tr>
+<td align="left">基础层</td>
+<td align="left">资源库</td>
+<td align="left">钱包这个聚合的访问通过钱包资源库提供，资源库的实现因技术选型不同而不同，可以是数据库、文件等</td>
 </tr>
 </tbody></table>
+</li>
+</ul>
 <h3 id="应用层（application）"><a href="#应用层（application）" class="headerlink" title="应用层（application）"></a>应用层（application）</h3><ul>
 <li>应用服务位于应用层。用来表述应用和用户行为，负责服务的组合、编排和转发，负责处理业务用例的执行顺序以及结果的拼装。</li>
 <li>应用层的服务包括应用服务和领域事件相关服务。</li>
 <li>应用服务可对微服务内的领域服务以及微服务外的应用服务进行组合和编排，或者对基础层如文件、缓存等数据直接操作形成应用服务，对外提供粗粒度的服务。</li>
 <li>领域事件服务包括两类：领域事件的发布和订阅。通过事件总线和消息队列实现异步数据传输，实现微服务之间的解耦。</li>
+<li>构成结构<ul>
+<li>入参: CQE对象</li>
+<li>出参：<strong>DTO对象</strong></li>
+</ul>
+</li>
 </ul>
 <h3 id="领域层（domain）"><a href="#领域层（domain）" class="headerlink" title="领域层（domain）"></a>领域层（domain）</h3><ul>
 <li>领域服务位于领域层，为完成领域中跨实体或值对象的操作转换而封装的服务，领域服务以与实体和值对象相同的方式参与实施过程。</li>
 <li>领域服务对同一个实体的一个或多个方法进行组合和封装，或对多个不同实体的操作进行组合或编排，对外暴露成领域服务。领域服务封装了核心的业务逻辑。实体自身的行为在实体类内部实现，向上封装成领域服务暴露。</li>
 <li>为隐藏领域层的业务逻辑实现，所有领域方法和服务等均须通过领域服务对外暴露。</li>
 <li>为实现微服务内聚合之间的解耦，原则上禁止跨聚合的领域服务调用和跨聚合的数据相互关联。</li>
+<li>构成结构<ul>
+<li>入参: 实体、聚合根、基础的数据结构</li>
+<li>出参：实体、聚合根、基础的数据结构</li>
+</ul>
+</li>
 </ul>
 <h3 id="基础层（infrastructure）"><a href="#基础层（infrastructure）" class="headerlink" title="基础层（infrastructure）"></a>基础层（infrastructure）</h3><ul>
 <li>基础服务位于基础层。为各层提供资源服务（如数据库、缓存等），实现各层的解耦，降低外部资源变化对业务逻辑的影响。</li>
 <li>基础服务主要为仓储服务，通过依赖反转的方式为各层提供基础资源服务，领域服务和应用服务调用仓储服务接口，利用仓储实现持久化数据对象或直接访问基础资源。</li>
+<li><em><strong>基础设施层完成资源库的实际实现，以及领域层定义的其他接口的实现如对外部服务的访问，领域事件发布到消息队列中间件等</strong></em></li>
 </ul>
 <h3 id="用户接口层（interfaces）"><a href="#用户接口层（interfaces）" class="headerlink" title="用户接口层（interfaces）"></a>用户接口层（interfaces）</h3><ul>
 <li>接口服务位于用户接口层，用于处理用户发送的Restful请求和解析用户输入的配置文件等，并将信息传递给应用层。</li>
+<li>构成结构<ul>
+<li>入参:  CQE对象;(Command,Query,Event)</li>
+<li>出参：<strong>DTO对象</strong></li>
+</ul>
+</li>
+<li>常用功能<ul>
+<li>鉴权</li>
+<li>网络协议的转化</li>
+<li>session的管理</li>
+<li>限流</li>
+<li>异常处理</li>
+<li>日志打印</li>
+<li>CQE的校验</li>
+</ul>
+</li>
 </ul>
 <h2 id="领域模型"><a href="#领域模型" class="headerlink" title="领域模型"></a>领域模型</h2><ul>
 <li>领域模型包含<strong>实体、值对象、聚合</strong></li>
@@ -668,7 +755,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年6月6日</div>
+          <div>2025年6月7日</div>
         </div>
       
       
