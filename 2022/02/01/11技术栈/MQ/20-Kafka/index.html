@@ -284,7 +284,7 @@
 <h3 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h3><ul>
 <li><p><strong>Producer（生产者）</strong>：生产者是发送消息到Broker集群。生产者将消息发送到指定的主题，Kafka根据配置的分区策略（如轮询、按键哈希等）将消息分配到不同的分区。</p>
 </li>
-<li><p><strong>Consumer（消费者）</strong>：消费者从Broker读取消息。消费者可以独立运行或分组在一起运行。分组中的消费者共享订阅的主题，Kafka平衡各个消费者的负载，确保每个分区只被组内的一个消费者读取。**</p>
+<li><p><strong>Consumer（消费者）</strong>：消费者从Broker读取消息。消费者可以独立运行或分组在一起运行。分组中的消费者共享订阅的主题，Kafka平衡各个消费者的负载，确保每个分区只被组内的一个消费者读取</p>
 </li>
 <li><p><strong>Broker（消息代理服务器）</strong>：Broker是Kafka集群中的一个服务器，负责存储数据和处理对数据的读写请求。每个Broker可以存储一个或多个主题的数据。一个Kafka集群可以包含多个Broker，以提高容量和提供容错能力。</p>
 </li>
@@ -355,6 +355,7 @@
 </ul>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7361687968518668322">MQ选型：一文详解Kafka与RocketMQ区别</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7258940299820695607">大碗宽面-Kafka一本道万事通</a></li>
 </ul>
 
                 
@@ -420,7 +421,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年5月22日</div>
+          <div>2025年6月11日</div>
         </div>
       
       
@@ -457,9 +458,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/14-RocketMQFAQ/" title="14-RocketMQFAQ">
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/12-RocketMQ%E5%AD%98%E5%82%A8/" title="12-RocketMQ存储">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">14-RocketMQFAQ</span>
+                        <span class="hidden-mobile">12-RocketMQ存储</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -467,8 +468,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/21-Kafka%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98/" title="21-Kafka扩展问题">
-                        <span class="hidden-mobile">21-Kafka扩展问题</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/01SpringBoot/" title="01SpringBoot">
+                        <span class="hidden-mobile">01SpringBoot</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

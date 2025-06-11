@@ -370,50 +370,50 @@
 <td align="left">经典，明确领域层核心</td>
 <td align="left"><strong>极致领域核心</strong>，适应复杂外部集成</td>
 </tr>
+</tbody></table>
+</li>
+<li><table>
+<thead>
 <tr>
-<td align="left">层级</td>
-<td align="left">名称</td>
-<td align="left">举例</td>
+<th>层级</th>
+<th>名称</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>应用层</td>
+<td>应用服务</td>
+<td>钱包充值应用服务，该服务会编排客户校验、钱包聚合创建、主钱包扣款、子钱包充值、充值已完成领域事件发送等行为</td>
 </tr>
 <tr>
-<td align="left">——</td>
-<td align="left">——–</td>
-<td align="left">————————————————————</td>
+<td>领域层</td>
+<td>实体</td>
+<td>主钱包&#x2F;子钱包是个实体，主钱包&#x2F;子钱包的状态随着跟进活动推进需随时变化，需要根据唯一标识来追踪变化</td>
 </tr>
 <tr>
-<td align="left">应用层</td>
-<td align="left">应用服务</td>
-<td align="left">钱包充值应用服务，该服务会编排客户校验、钱包聚合创建、主钱包扣款、子钱包充值、充值已完成领域事件发送等行为</td>
+<td>领域层</td>
+<td>值对象</td>
+<td>钱包上的客户联系方式信息是值对象，不需要唯一标识去追踪联系方式的变化过程</td>
 </tr>
 <tr>
-<td align="left">领域层</td>
-<td align="left">实体</td>
-<td align="left">主钱包&#x2F;子钱包是个实体，主钱包&#x2F;子钱包的状态随着跟进活动推进需随时变化，需要根据唯一标识来追踪变化</td>
+<td>领域层</td>
+<td>聚合</td>
+<td>钱包是个聚合，主钱包实体是该聚合的根实体，状态信息、联系方式信息等是聚合的附属</td>
 </tr>
 <tr>
-<td align="left">领域层</td>
-<td align="left">值对象</td>
-<td align="left">钱包上的客户联系方式信息是值对象，不需要唯一标识去追踪联系方式的变化过程</td>
+<td>领域层</td>
+<td>领域事件</td>
+<td>钱包创建后会产生钱包已创建领域事件，后续的赠送优惠券、应收应付等功能可以监听该事件启动相应操作</td>
 </tr>
 <tr>
-<td align="left">领域层</td>
-<td align="left">聚合</td>
-<td align="left">钱包是个聚合，主钱包实体是该聚合的根实体，状态信息、联系方式信息等是聚合的附属</td>
+<td>领域层</td>
+<td>领域服务</td>
+<td>钱包的还款行为属于领域服务，涉及到主钱包和子钱包的余额计算，单独某个钱包自身没法完成还款行为</td>
 </tr>
 <tr>
-<td align="left">领域层</td>
-<td align="left">领域事件</td>
-<td align="left">钱包创建后会产生钱包已创建领域事件，后续的赠送优惠券、应收应付等功能可以监听该事件启动相应操作</td>
-</tr>
-<tr>
-<td align="left">领域层</td>
-<td align="left">领域服务</td>
-<td align="left">钱包的还款行为属于领域服务，涉及到主钱包和子钱包的余额计算，单独某个钱包自身没法完成还款行为</td>
-</tr>
-<tr>
-<td align="left">基础层</td>
-<td align="left">资源库</td>
-<td align="left">钱包这个聚合的访问通过钱包资源库提供，资源库的实现因技术选型不同而不同，可以是数据库、文件等</td>
+<td>基础层</td>
+<td>资源库</td>
+<td>钱包这个聚合的访问通过钱包资源库提供，资源库的实现因技术选型不同而不同，可以是数据库、文件等</td>
 </tr>
 </tbody></table>
 </li>
@@ -755,7 +755,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年6月7日</div>
+          <div>2025年6月11日</div>
         </div>
       
       
@@ -802,8 +802,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/13Linux/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="Linux常用命令">
-                        <span class="hidden-mobile">Linux常用命令</span>
+                      <a href="/2022/02/01/13Linux/Vim/" title="Vim">
+                        <span class="hidden-mobile">Vim</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
