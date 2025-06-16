@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          629 字
+          640 字
         
       </span>
     
@@ -262,6 +262,7 @@
                 
                 <h2 id="Spring-Boot比Spring做了哪些改进？"><a href="#Spring-Boot比Spring做了哪些改进？" class="headerlink" title="Spring Boot比Spring做了哪些改进？"></a>Spring Boot比Spring做了哪些改进？</h2><p>1）Spring Boot可以建立独立的Spring应用程序；<br>2）内嵌了如Tomcat，Jetty和Undertow这样的容器，也就是说可以直接跑起来，用不着再做 部署工作了；<br>3）无需再像Spring那样搞一堆繁琐的xml文件的配置；<br>4）可以自动配置Spring。SpringBoot将原有的XML配置改为Java配置，将bean注入改为使 用注解注入的方式(@Autowire)，并将多个xml、properties配置浓缩在一个appliaction.yml 配置文件中。<br>5）提供了一些现有的功能，如量度工具，表单数据验证以及一些外部配置这样的一些第三方功 能；<br>6）整合常用依赖（开发库，例如spring-webmvc、jackson-json、validation-api和tomcat 等），提供的POM可以简化Maven的配置。当我们引入核心依赖时，SpringBoot会自引入其 他依赖。 </p>
 <h2 id="SpringBoot自动配置的原理"><a href="#SpringBoot自动配置的原理" class="headerlink" title="SpringBoot自动配置的原理"></a>SpringBoot自动配置的原理</h2><ul>
+<li>核心目标是”约定优于配置”  </li>
 <li>@SpringBootApplication注解下<ul>
 <li><code>@SpringBootConfiguration</code>：我们点进去以后可以发现底层是<strong>Configuration</strong>注解，说白了就是支持<strong>JavaConfig</strong>的方式来进行配置(<strong>使用Configuration配置类等同于XML文件</strong>)。</li>
 <li><code>@EnableAutoConfiguration</code>：开启<strong>自动配置</strong>功能(后文详解)</li>
@@ -363,7 +364,7 @@ public void registerBeanDefinitions(AnnotationMetadata metadata,
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2025年6月12日</div>
         </div>
       
       

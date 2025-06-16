@@ -218,7 +218,7 @@
         
         
         
-          31 分钟
+          32 分钟
         
       </span>
     
@@ -530,6 +530,14 @@
 <h3 id="AOP原理"><a href="#AOP原理" class="headerlink" title="AOP原理"></a>AOP原理</h3><ul>
 <li>使用代理设计模式是实现的，CGlib</li>
 </ul>
+<h3 id="AOP失效的情况"><a href="#AOP失效的情况" class="headerlink" title="AOP失效的情况"></a>AOP失效的情况</h3><ul>
+<li>内部方法调用<ul>
+<li>解决方案：使用 AopContext.currentProxy()：需开启 exposeProxy 配置</li>
+</ul>
+</li>
+<li>非 Spring 管理的对象</li>
+<li>异步方法</li>
+</ul>
 <h2 id="Sring容器"><a href="#Sring容器" class="headerlink" title="Sring容器"></a>Sring容器</h2><h3 id="bean工厂"><a href="#bean工厂" class="headerlink" title="bean工厂"></a>bean工厂</h3><h3 id="应用上下文"><a href="#应用上下文" class="headerlink" title="应用上下文"></a>应用上下文</h3><h2 id="Spring-profile"><a href="#Spring-profile" class="headerlink" title="Spring profile"></a>Spring profile</h2><h3 id="profile"><a href="#profile" class="headerlink" title="@profile"></a>@profile</h3><ul>
 <li>使用spring.profiles.active和spring.profiles.default来配置哪个profile被激活<ul>
 <li>作为DispatcherServlet的初始化参数；</li>
@@ -638,7 +646,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年5月29日</div>
+          <div>2025年6月17日</div>
         </div>
       
       

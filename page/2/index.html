@@ -216,15 +216,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/02/21/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
-          07-分布式Session
+        <a href="/2022/08/02/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/11-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%92%8C%E4%BB%A3%E7%90%86/" target="_self">
+          11-负载均衡和代理
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/02/21/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/02/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/11-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%92%8C%E4%BB%A3%E7%90%86/" target="_self">
         <div>
-          分布式系统中session一致性问题Redis实现 我们只需在用户首次登陆的时候将用户信息放到 Token并缓存到 Redis 中，同时设置一个过期时间。 定义一个拦截器 SessionInterceptor，当访问 web 接口的时候检验用户的 token 信息，判断用户是否登陆，未登录的情况下一些业务接口是无法访问的，以及在登陆的情况下拿到我们需要的用户信息， 式简单易用，而且Redis 在分
+          负载均衡与代理技术 LB,也可以写成SLB，Service load balance 一般来说四层LB，说的是按照ip进行负载均衡，六层SLB是按照URL进行负载均衡 职责：服务发现，健康检查，负载均衡 好处 命名抽象：客户端通过统一的访问机制（如 DNS 或内置库）连接到负载均衡器，无需关心后端服务器的拓扑结构或配置细节。 容错能力：通过健康检查和负载均衡算法，将请求分配至正常运行的后端服务器。
         </div>
       </a>
 
@@ -232,8 +232,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-02-21 23:53" pubdate>
-              2024-02-21
+            <time datetime="2022-08-02 21:19" pubdate>
+              2022-08-02
             </time>
           </div>
         
