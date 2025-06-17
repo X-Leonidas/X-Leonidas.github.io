@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          10k 字
+          11k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          88 分钟
+          92 分钟
         
       </span>
     
@@ -748,6 +748,16 @@
 </tr>
 </tbody></table>
 </li>
+<li><p>RR级别下并没有完全解决幻读问题，但通过使用Next-Key Locks（一种Gap Lock和Record Lock的组合锁）的机制，它在大多数情况下可以防止幻读的发生。</p>
+<ul>
+<li>快照读（非锁定读）：在RR隔离级别下，同一个事务内混合“快照读”和“当前读”，<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 事务 A (RR 隔离级别)<br>START TRANSACTION;<br><br>-- 快照读 (基于 Read View V1), 假设返回记录数: 5<br>SELECT * FROM users WHERE age BETWEEN 20 AND 30; <br><br>-- 此时事务 B 插入一条 age=25 的新记录并提交<br>-- COMMIT; (事务 B)<br><br>-- 当前读 (读取最新已提交数据, 获取 Next-Key Locks)<br>SELECT * FROM users WHERE age BETWEEN 20 AND 30 FOR UPDATE; <br>-- 这个 SELECT FOR UPDATE 看到了事务 B 新插入的 age=25 的记录！<br>-- 事务 A 的第二次查询比第一次查询多出了一行 (幻读发生)<br><br>COMMIT; -- 事务 A<br></code></pre></td></tr></table></figure></li>
+<li>UPDATE&#x2F;DELETE 操作“看到”幻影行并修改它们<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 事务 A (RR 隔离级别)<br>START TRANSACTION;<br><br>-- 快照读 (基于 Read View V1), 假设返回记录数: 5<br>SELECT COUNT(*) FROM users WHERE age BETWEEN 20 AND 30; -- 结果: 5<br><br>-- 此时事务 B 插入一条 age=25 的新记录并提交<br>-- COMMIT; (事务 B)<br><br>-- UPDATE 是当前读! 它会看到事务 B 提交的新记录 (age=25)<br>UPDATE users SET status = &#x27;active&#x27; WHERE age BETWEEN 20 AND 30;<br>-- 这个 UPDATE 语句实际影响了 6 行记录 (包括事务 B 插入的那一行)<br><br>-- 再次快照读 (基于 Read View V1), 仍然看不到新行<br>SELECT COUNT(*) FROM users WHERE age BETWEEN 20 AND 30; -- 结果: 5 (快照读不变)<br><br>-- 但是! 执行当前读:<br>SELECT COUNT(*) FROM users WHERE age BETWEEN 20 AND 30 FOR UPDATE; -- 结果: 6 (看到新行)<br>-- 或者提交后看数据，会发现 6 行被更新了<br><br>COMMIT; -- 事务 A<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>UPDATE</code> 和 <code>DELETE</code> 语句在 RR 级别下也是<strong>当前读</strong>。它们在查找要修改的行时，会读取数据库的最新已提交状态（并获取 Next-Key Locks）。因此，它们能“看到”并修改在事务开始之后、但在 <code>UPDATE</code>&#x2F;<code>DELETE</code> 执行之前由其他已提交事务插入的“幻影行”。</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC(多版本并发控制)"></a>MVCC(多版本并发控制)</h3><ul>
 <li>多版本并发控制（Multi-Version Concurrency Control, MVCC）是 MySQL 的 InnoDB 存储引擎实现隔离级别的一种具体方式，用于实现提交读的可重复读以及<strong>快照读的幻读问题</strong>这两种隔离级别。而未提交读隔离级别总是读取最新的数据行，要求很低，无需使用 MVCC。可串行化隔离级别需要对所有读取的行都加锁，单纯使用 MVCC 无法实现。</li>
@@ -832,7 +842,6 @@
 </tr>
 </tbody></table>
 </li>
-<li></li>
 </ul>
 <h4 id="MVCC适用的隔离级别"><a href="#MVCC适用的隔离级别" class="headerlink" title="MVCC适用的隔离级别"></a>MVCC适用的隔离级别</h4><ul>
 <li><table>
@@ -1031,7 +1040,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月25日</div>
+          <div>2025年6月17日</div>
         </div>
       
       
