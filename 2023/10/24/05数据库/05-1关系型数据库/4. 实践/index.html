@@ -21,7 +21,7 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="10亿数据如何插入Mysql，10连问，你想到了几个？ TODO">
+    <meta name="description" content="10亿数据如何插入Mysql 背景 10亿条数据，每条数据1Kb；  数据内容是非结构化的用户访问日志，需要解析后写入到数据库； 数据存放在Hdfs或S3分布式文件存储里 10亿条数据并不是1个大文件，而是被近似切分为100个文件，后缀标记顺序； 要求有序导入，尽量不重复；数据库是MySQL；     数据库单表能支持10亿吗？ 不能，单表推荐值是2000W，但是阿里规约建议500W就开始分表">
   
   
   
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          18 字
+          700 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          1 分钟
+          6 分钟
         
       </span>
     
@@ -260,8 +260,56 @@
             
               <div class="markdown-body">
                 
-                <h1 id="10亿数据如何插入Mysql，10连问，你想到了几个？"><a href="#10亿数据如何插入Mysql，10连问，你想到了几个？" class="headerlink" title="10亿数据如何插入Mysql，10连问，你想到了几个？"></a>10亿数据如何插入Mysql，10连问，你想到了几个？</h1><ul>
-<li>TODO</li>
+                <h1 id="10亿数据如何插入Mysql"><a href="#10亿数据如何插入Mysql" class="headerlink" title="10亿数据如何插入Mysql"></a>10亿数据如何插入Mysql</h1><ul>
+<li>背景<ul>
+<li>10亿条数据，每条数据1Kb； </li>
+<li>数据内容是非结构化的用户访问日志，需要解析后写入到数据库；</li>
+<li>数据存放在<code>Hdfs</code>或<code>S3</code>分布式文件存储里</li>
+<li>10亿条数据并不是1个大文件，而是被近似切分为100个文件，后缀标记顺序；</li>
+<li>要求有序导入，尽量不重复；数据库是<code>MySQL</code>；</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>数据库单表能支持10亿吗？<ul>
+<li>不能，单表推荐值是2000W，但是阿里规约建议500W就开始分表</li>
+</ul>
+</li>
+<li>如何高效的写入数据库？<ul>
+<li>单条写入数据库性能比较差，可以考虑批量写入数据库，批量数值动态可调整。每条1K，默认可先调整为100条批量写入</li>
+<li>写入时按照主键id顺序顺序写入可以达到最快的性能，而非主键索引的插入则不一定是顺序的，频繁地索引结构调整会导致插入性能下降。最好不创建非主键索引，或者在表创建完成后再创建索引，以保证最快的插入性能。</li>
+</ul>
+</li>
+<li>是否需要并发写一个表<ul>
+<li>不能，必须分库分表</li>
+<li>并发写同一个表无法保证数据写入时是有序的；</li>
+<li>提高批量插入的阈值，在一定程度上增加了插入并发度无需再并发写入单表；</li>
+</ul>
+</li>
+<li>要不要进行分库<ul>
+<li>mysql 单库的并发写入是有性能瓶颈的，一般情况5K TPS写入就很高了</li>
+<li>读文件并发度等于分表数量，有利于简化模型设计。即100个读取任务，100个写入任务，对应100张表</li>
+</ul>
+</li>
+<li>如何保证写入数据库有序？<ul>
+<li>既然文件被切分为100个10G的小文件，可以按照文件后缀+ 在文件行号 作为记录的唯一键，同时保证同一个文件的内容被写入同一个表</li>
+</ul>
+</li>
+<li>如何更快的读取文件？<ul>
+<li>JavaNIO FileChannnel更快，但是是读取固定大小的缓存区，不支持按行读取，也无法保证缓冲区正好包括整数行数据，而 BufferedReader JavaIO性能也不错，并且方式读取可以天然支持按行截断</li>
+</ul>
+</li>
+<li>如何协调文件任务和写数据任务<ul>
+<li>读取任务读一批数据，写入一批。即任务既负责读文件、又负责插入数据库。</li>
+</ul>
+</li>
+<li>如何保证任务的可靠性<ul>
+<li>Redis记录task的进度，批量写入数据库成功后，更新 task进度，如果还不放心Redis进度和数据库更新的一致性，可以考虑 消费 数据库binlog，每一条记录新增则redis +1</li>
+</ul>
+</li>
+</ol>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2352874">阿里终面：10亿数据如何快速插入MySQL？</a></li>
 </ul>
 
                 
@@ -327,7 +375,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年10月30日</div>
+          <div>2025年6月18日</div>
         </div>
       
       
@@ -364,7 +412,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
+                      <a href="/2024/02/20/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">5.mysql8新特性</span>
                         <span class="visible-mobile">上一篇</span>
