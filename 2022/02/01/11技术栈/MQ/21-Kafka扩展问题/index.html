@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="START 法则 situation: 描述问题的背景，这个问题是什么，以及你为什么需要做这个事情 task: 你具体的任务是什么，你需要做什么 action: 你做了什么事情？你的行动是什么. result: 结果如何，你得出的结论是什么? tinking： 反思，不足的地方，可以复用的地方  4W1H “4W1H”法则是一种用于分析问题和制定计划的思维工具，它帮助人们更全面地考虑问题的各个方面">
+    <meta name="description" content="Kafka为何如此之快？由于Kafka遵循了一定的策略，这也是它设计的一部分，以使得它性能更好、更快。；  顺序写IO：现代操作系统将其大不部分可用的内存分配给磁盘缓存，并且更快的用于存储和检索顺序数据； 零拷贝：由于根本没有修改数据，因此将磁盘中的数据不必要的加载到应用程序内存中，因此，它没有将其加载到应用程序中，而是通过Socket字节，缓冲区以及网络从context缓存区发送了相同的数据；s">
   
   
   
-  <title>效率沟通方法 - 夜坐听风</title>
+  <title>21-Kafka扩展问题 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="效率沟通方法"></span>
+            <span id="subtitle" data-typed-text="21-Kafka扩展问题"></span>
           
         </div>
 
@@ -195,8 +195,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-08-02 21:58" pubdate>
-          2022-08-02 21:58:03
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:09
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          809 字
+          711 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          7 分钟
+          6 分钟
         
       </span>
     
@@ -255,49 +255,50 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">效率沟通方法</h1>
+            <h1 id="seo-header">21-Kafka扩展问题</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="START-法则"><a href="#START-法则" class="headerlink" title="START 法则"></a>START 法则</h2><ul>
-<li>situation: 描述问题的背景，这个问题是什么，以及你为什么需要做这个事情</li>
-<li>task: 你具体的任务是什么，你需要做什么</li>
-<li>action: 你做了什么事情？你的行动是什么.</li>
-<li>result: 结果如何，你得出的结论是什么?</li>
-<li>tinking： 反思，不足的地方，可以复用的地方</li>
+                <h3 id="Kafka为何如此之快？"><a href="#Kafka为何如此之快？" class="headerlink" title="Kafka为何如此之快？"></a>Kafka为何如此之快？</h3><p>由于Kafka遵循了一定的策略，这也是它设计的一部分，以使得它性能更好、更快。；</p>
+<ul>
+<li>顺序写IO：现代操作系统将其大不部分可用的内存分配给磁盘缓存，并且更快的用于存储和检索顺序数据；</li>
+<li>零拷贝：由于根本没有修改数据，因此将磁盘中的数据不必要的加载到应用程序内存中，因此，它没有将其加载到应用程序中，而是通过Socket字节，缓冲区以及网络从context缓存区发送了相同的数据；sendFile</li>
+<li>消息批处理：为了避免多次网络交互，将多个消息分组在一起；</li>
+<li>消息压缩：在通过网络传输消息之前，使用gzip、snappy等压缩算法对消息进行压缩，然后在Consumer中使用API将其解压。</li>
 </ul>
-<h2 id="4W1H"><a href="#4W1H" class="headerlink" title="4W1H"></a>4W1H</h2><ul>
-<li>“4W1H”法则是一种用于分析问题和制定计划的思维工具，它帮助人们更全面地考虑问题的各个方面，从而得出更有效的解决方案</li>
-<li>What（是什么）：问题或任务的具体内容是什么？需要解决的问题是什么？</li>
-<li>Why（为什么）：为什么要解决这个问题？了解解决问题的原因和目的。</li>
-<li>Who（谁）：涉及到哪些人或群体？谁负责处理这个问题？</li>
-<li>When（何时）：什么时候需要解决这个问题？时间节点和截止日期是什么？</li>
-<li>How（如何）：如何解决这个问题？具体的解决步骤和方法是什么？</li>
+<h3 id="Kafka和其他消息队列的区别"><a href="#Kafka和其他消息队列的区别" class="headerlink" title="Kafka和其他消息队列的区别"></a>Kafka和其他消息队列的区别</h3><ul>
+<li>Kafka操作的是序列文件I &#x2F; O（序列文件的特征是按顺序写，按顺序读），为保证顺序，Kafka强制点对点的按顺序传递消息，这意味着，一个consumer在消息流（或分区）中只有一个位置。</li>
+<li>Kafka不保存消息的状态，即消息是否被“消费”。一般的消息系统需要保存消息的状态，并且还需要以随机访问的形式更新消息的状态。而Kafka 的做法是保存Consumer在Topic分区中的位置offset，在offset之前的消息是已被“消费”的，在offset之后则为未“消费”的，并且offset是可以任意移动的，这样就消除了大部分的随机IO。</li>
+<li>Kafka支持点对点的批量消息传递。</li>
+<li>Kafka的消息存储在OS pagecache（页缓存，page cache的大小为一页，通常为4K，在Linux读写文件时，它用于缓存文件的逻辑内容，从而加快对磁盘上映像和数据的访问）。</li>
 </ul>
-<h2 id="BTAR模型"><a href="#BTAR模型" class="headerlink" title="BTAR模型"></a>BTAR模型</h2><ul>
-<li><strong>B - Background (项目背景):</strong><ul>
-<li><strong>做什么：</strong> 用一两句话概括这个项目是干什么的，它解决了什么业务问题，或者满足了什么用户需求。</li>
-<li><strong>为什么重要：</strong> 简单说明当时的业务场景或技术上下文，让听众明白你接下来要讲的亮点是在什么样的大环境下产生的。</li>
+<h3 id="推拉模式的比较"><a href="#推拉模式的比较" class="headerlink" title="推拉模式的比较"></a>推拉模式的比较</h3><h4 id="推模式"><a href="#推模式" class="headerlink" title="推模式"></a>推模式</h4><ul>
+<li>推模式优点<ul>
+<li>消息实时性高</li>
+<li>对于消费者使用来说更简单</li>
 </ul>
 </li>
-<li><strong>T - Task&#x2F;Challenge (任务&#x2F;挑战):</strong><ul>
-<li><strong>遇到什么坎：</strong> 具体描述在这个项目中，你或团队面临的最棘手的技术难题或业务挑战是什么。</li>
-<li><strong>钩子在这里：</strong> 这个问题越具体、越有挑战性，就越能吸引听众的注意力，为后续你的解决方案做铺垫。避免泛泛而谈，比如“性能优化”，要具体到“某个核心接口在高并发下响应时间超过 2 秒，无法满足 SLA 要求”。</li>
+<li>推模式缺点<ul>
+<li><strong>推送速率难以适应消费速率</strong></li>
 </ul>
 </li>
-<li><strong>A - Action (行动&#x2F;方案):</strong><ul>
-<li><strong>问题分析：</strong> 你是如何定位问题根源的？用了什么工具或方法？</li>
-<li><strong>方案思考与选择：</strong> 你考虑过哪些备选方案？为什么最终选择了当前这个方案？（这里可以体现你的技术视野和权衡能力）</li>
-<li><strong>具体实施：</strong> 你的方案是如何设计的？涉及哪些关键技术点或架构调整？</li>
-<li><strong>克服困难：</strong> 在实施过程中遇到了哪些新的问题？你是如何克服的？</li>
-<li><strong>你是怎么干的：</strong> 这是展示你技术深度和解决问题能力的核心部分。详细说明：</li>
+</ul>
+<h4 id="拉模式"><a href="#拉模式" class="headerlink" title="拉模式"></a>拉模式</h4><ul>
+<li>拉模式优点<ul>
+<li><strong>拉模式下 Broker 就相对轻松了</strong></li>
+<li><strong>拉模式可以更合适的进行消息的批量发送</strong></li>
 </ul>
 </li>
-<li><strong>R - Result (结果&#x2F;成果):</strong><ul>
-<li><strong>带来了什么价值：</strong> 用具体、可量化的数据来展示你的解决方案所带来的积极成果。</li>
-<li><strong>用数据说话：</strong> 这是最有说服力的部分。比如：“接口响应时间从平均 2 秒降低到 200 毫秒”、“系统吞吐量提升了 3 倍”、“错误率降低了 80%”、“为公司节省了 XX%的服务器成本”等。</li>
-<li><strong>其他影响：</strong> 也可以提及一些非量化的积极影响，如“提升了用户体验”、“增强了系统稳定性”、“为后续业务扩展打下了基础”等。</li>
+<li>拉模式缺点<ul>
+<li><strong>消息延迟</strong></li>
+<li><strong>消息忙请求</strong>，忙请求就是比如消息隔了几个小时才有，那么在几个小时之内消费者的请求都是无效的，在做无用功。</li>
+</ul>
+</li>
+</ul>
+<h4 id="RocketMQ和Kafka对于拉模式的优化"><a href="#RocketMQ和Kafka对于拉模式的优化" class="headerlink" title="RocketMQ和Kafka对于拉模式的优化"></a>RocketMQ和Kafka对于拉模式的优化</h4><ul>
+<li>Kafka的长轮询<ul>
+<li>消费者去 Broker 拉消息，定义了一个超时时间，也就是说消费者去请求消息，如果有的话马上返回消息，如果没有的话消费者等着直到超时，然后再次发起拉消息请求。</li>
 </ul>
 </li>
 </ul>
@@ -319,8 +320,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/22tool/" class="category-chain-item">22tool</a>
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  
+  
+
   
 
       </span>
@@ -339,8 +347,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>效率沟通方法</div>
-      <div>https://x-leonidas.github.io/2022/08/02/22tool/效率沟通方法/</div>
+      <div>21-Kafka扩展问题</div>
+      <div>https://x-leonidas.github.io/2022/02/01/11技术栈/MQ/21-Kafka扩展问题/</div>
     </div>
     <div class="license-meta">
       
@@ -352,13 +360,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年8月2日</div>
+          <div>2022年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年6月17日</div>
+          <div>2024年12月23日</div>
         </div>
       
       
@@ -395,9 +403,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/16/04Java/java%E5%9F%BA%E7%A1%80/04%E5%BA%8F%E5%88%97%E5%8C%96/" title="04序列化">
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/03Dubbo/" title="03Dubbo">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">04序列化</span>
+                        <span class="hidden-mobile">03Dubbo</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -405,8 +413,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/08/02/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/11-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%92%8C%E4%BB%A3%E7%90%86/" title="11-负载均衡和代理">
-                        <span class="hidden-mobile">11-负载均衡和代理</span>
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/01SpringBoot/" title="01SpringBoot">
+                        <span class="hidden-mobile">01SpringBoot</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

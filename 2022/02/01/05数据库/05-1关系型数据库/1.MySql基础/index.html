@@ -218,7 +218,7 @@
         
         
         
-          92 分钟
+          91 分钟
         
       </span>
     
@@ -324,8 +324,7 @@
 <li>当page size为4、8、16KB时，对应一个extent的page数量同步变化，以保证extent(区&#x2F;簇)大小保持1M不变。当page size为32KB或64KB时，extent内的page数量保证不变，extent同步变为2M和4M;</li>
 <li>每个页都有一个对应的从0开始的编号，这个编号叫做页号。因为表空间的数据文件会被划分成大小相等的页，所以知道页号，再根据文件的初始位置，就可以计算出页在磁盘中的准确地址。</li>
 </ul>
-<h4 id="行-row"><a href="#行-row" class="headerlink" title="行&#x2F;row"></a>行&#x2F;row</h4><p>+ </p>
-<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><ul>
+<h4 id="行-row"><a href="#行-row" class="headerlink" title="行&#x2F;row"></a>行&#x2F;row</h4><h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><ul>
 <li>索引的优点<ul>
 <li>大大减少了服务器需要扫描的数据量</li>
 <li>帮助服务器避免排序和临时表</li>
@@ -396,7 +395,6 @@
 <li>例如：SELECT * from user where  name like ‘陈%’ and age&#x3D;20，当有多个请求时，进行最左前缀索引查询，如果age为索引列，会在遍历索引中直接处理age&#x3D;20的条件，而不用再回表查询一次来判断</li>
 </ul>
 </li>
-<li>索引只能用于查找key是否<strong>存在（相等）</strong>，遇到范围查询 (&gt;、&lt;、between、like左匹配)不能使用索引</li>
 </ul>
 </li>
 <li>全文索引（<strong>FULLTEXT</strong>）：对文本的内容分词进行搜索</li>
@@ -500,15 +498,14 @@
 </li>
 </ul>
 <h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><h3 id="按模式分类"><a href="#按模式分类" class="headerlink" title="按模式分类"></a>按模式分类</h3><h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><ul>
-<li>业务实现</li>
-<li>update value &#x3D; ${value} wher version &#x3D; ${curversion}, 如果更新失败则重新尝试</li>
+<li>业务实现<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 如果更新失败则重新尝试</span><br><span class="hljs-keyword">update</span> <span class="hljs-keyword">value</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">value</span>  <span class="hljs-keyword">where</span>  version <span class="hljs-operator">=</span> curversion<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><ul>
 <li>select…for update  注意weher条件要明确指定主键</li>
 <li>对符合 <code>WHERE</code> 条件的行加锁（默认行级锁）</li>
 <li>必须在事务中（<code>BEGIN</code> 或 <code>START TRANSACTION</code>）使用，否则锁会立即释放。</li>
 <li>如果 <code>WHERE</code> 条件未命中索引，InnoDB 会升级为 <strong>表级锁</strong>（全表扫描代价高）。</li>
-<li>例如库存扣减场景<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">START TRANSACTION;<br>-- 检查库存，计算新值<br>COMMIT;<br></code></pre></td></tr></table></figure></li>
+<li>例如库存扣减场景<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">START</span> TRANSACTION;<br><span class="hljs-comment">-- 检查库存，计算新值</span><br><span class="hljs-keyword">COMMIT</span>;<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="按加锁粒度分类"><a href="#按加锁粒度分类" class="headerlink" title="按加锁粒度分类"></a>按加锁粒度分类</h3><h4 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h4><ul>
 <li>Flush tables with read lock (FTWRL)</li>
@@ -750,8 +747,8 @@
 </li>
 <li><p>RR级别下并没有完全解决幻读问题，但通过使用Next-Key Locks（一种Gap Lock和Record Lock的组合锁）的机制，它在大多数情况下可以防止幻读的发生。以下是RR级别下，幻读会发生的情况</p>
 <ul>
-<li>快照读（非锁定读）：在RR隔离级别下，同一个事务内混合“快照读”和“当前读”，<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 事务 A (RR 隔离级别)<br>START TRANSACTION;<br><br>-- 快照读 (基于 Read View V1), 假设返回记录数: 5<br>SELECT * FROM users WHERE age BETWEEN 20 AND 30; <br><br>-- 此时事务 B 插入一条 age=25 的新记录并提交<br>-- COMMIT; (事务 B)<br><br>-- 当前读 (读取最新已提交数据, 获取 Next-Key Locks)<br>SELECT * FROM users WHERE age BETWEEN 20 AND 30 FOR UPDATE; <br>-- 这个 SELECT FOR UPDATE 看到了事务 B 新插入的 age=25 的记录！<br>-- 事务 A 的第二次查询比第一次查询多出了一行 (幻读发生)<br><br>COMMIT; -- 事务 A<br></code></pre></td></tr></table></figure></li>
-<li>UPDATE&#x2F;DELETE 操作“看到”幻影行并修改它们<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 事务 A (RR 隔离级别)<br>START TRANSACTION;<br><br>-- 快照读 (基于 Read View V1), 假设返回记录数: 5<br>SELECT COUNT(*) FROM users WHERE age BETWEEN 20 AND 30; -- 结果: 5<br><br>-- 此时事务 B 插入一条 age=25 的新记录并提交<br>-- COMMIT; (事务 B)<br><br>-- UPDATE 是当前读! 它会看到事务 B 提交的新记录 (age=25)<br>UPDATE users SET status = &#x27;active&#x27; WHERE age BETWEEN 20 AND 30;<br>-- 这个 UPDATE 语句实际影响了 6 行记录 (包括事务 B 插入的那一行)<br><br>-- 再次快照读 (基于 Read View V1), 仍然看不到新行<br>SELECT COUNT(*) FROM users WHERE age BETWEEN 20 AND 30; -- 结果: 5 (快照读不变)<br><br>-- 但是! 执行当前读:<br>SELECT COUNT(*) FROM users WHERE age BETWEEN 20 AND 30 FOR UPDATE; -- 结果: 6 (看到新行)<br>-- 或者提交后看数据，会发现 6 行被更新了<br><br>COMMIT; -- 事务 A<br></code></pre></td></tr></table></figure>
+<li>快照读（非锁定读）：在RR隔离级别下，同一个事务内混合“快照读”和“当前读”，<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 事务 A (RR 隔离级别)</span><br><span class="hljs-keyword">START</span> TRANSACTION;<br><br><span class="hljs-comment">-- 快照读 (基于 Read View V1), 假设返回记录数: 5</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> age <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">20</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">30</span>; <br><br><span class="hljs-comment">-- 此时事务 B 插入一条 age=25 的新记录并提交</span><br><span class="hljs-comment">-- COMMIT; (事务 B)</span><br><br><span class="hljs-comment">-- 当前读 (读取最新已提交数据, 获取 Next-Key Locks)</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> age <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">20</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">30</span> <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">UPDATE</span>; <br><span class="hljs-comment">-- 这个 SELECT FOR UPDATE 看到了事务 B 新插入的 age=25 的记录！</span><br><span class="hljs-comment">-- 事务 A 的第二次查询比第一次查询多出了一行 (幻读发生)</span><br><br><span class="hljs-keyword">COMMIT</span>; <span class="hljs-comment">-- 事务 A</span><br></code></pre></td></tr></table></figure></li>
+<li>UPDATE&#x2F;DELETE 操作“看到”幻影行并修改它们<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 事务 A (RR 隔离级别)</span><br><span class="hljs-keyword">START</span> TRANSACTION;<br><br><span class="hljs-comment">-- 快照读 (基于 Read View V1), 假设返回记录数: 5</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> age <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">20</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">30</span>; <span class="hljs-comment">-- 结果: 5</span><br><br><span class="hljs-comment">-- 此时事务 B 插入一条 age=25 的新记录并提交</span><br><span class="hljs-comment">-- COMMIT; (事务 B)</span><br><br><span class="hljs-comment">-- UPDATE 是当前读! 它会看到事务 B 提交的新记录 (age=25)</span><br><span class="hljs-keyword">UPDATE</span> users <span class="hljs-keyword">SET</span> status <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;active&#x27;</span> <span class="hljs-keyword">WHERE</span> age <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">20</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">30</span>;<br><span class="hljs-comment">-- 这个 UPDATE 语句实际影响了 6 行记录 (包括事务 B 插入的那一行)</span><br><br><span class="hljs-comment">-- 再次快照读 (基于 Read View V1), 仍然看不到新行</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> age <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">20</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">30</span>; <span class="hljs-comment">-- 结果: 5 (快照读不变)</span><br><br><span class="hljs-comment">-- 但是! 执行当前读:</span><br><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> age <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">20</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">30</span> <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">UPDATE</span>; <span class="hljs-comment">-- 结果: 6 (看到新行)</span><br><span class="hljs-comment">-- 或者提交后看数据，会发现 6 行被更新了</span><br><br><span class="hljs-keyword">COMMIT</span>; <span class="hljs-comment">-- 事务 A</span><br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>UPDATE</code> 和 <code>DELETE</code> 语句在 RR 级别下也是<strong>当前读</strong>。它们在查找要修改的行时，会读取数据库的最新已提交状态（并获取 Next-Key Locks）。因此，它们能“看到”并修改在事务开始之后、但在 <code>UPDATE</code>&#x2F;<code>DELETE</code> 执行之前由其他已提交事务插入的“幻影行”。</li>
 </ul>
@@ -1040,7 +1037,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年6月19日</div>
+          <div>2025年6月24日</div>
         </div>
       
       
@@ -1077,9 +1074,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/03%E7%BD%91%E7%BB%9C/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="常用命令">
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/2.MySql%E8%BF%9B%E9%98%B6/" title="2.MySql进阶">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">常用命令</span>
+                        <span class="hidden-mobile">2.MySql进阶</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -1145,12 +1142,6 @@
 
 
   
-
-
-  
-  
-
-
 
 
 
@@ -1321,49 +1312,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
 
 

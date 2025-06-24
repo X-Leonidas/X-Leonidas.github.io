@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Kafka为何如此之快？由于Kafka遵循了一定的策略，这也是它设计的一部分，以使得它性能更好、更快。；  顺序写IO：现代操作系统将其大不部分可用的内存分配给磁盘缓存，并且更快的用于存储和检索顺序数据； 零拷贝：由于根本没有修改数据，因此将磁盘中的数据不必要的加载到应用程序内存中，因此，它没有将其加载到应用程序中，而是通过Socket字节，缓冲区以及网络从context缓存区发送了相同的数据；s">
+    <meta name="description" content="单元测试 单元测试的一些原则 测试用例能验证函数的正确性（这条都通不过就……）； 测试用例尽可能涵盖边界条件（例如遍历一个链表，头指针是空，只有一个节点，链表有N个节点，N是问题描述下允许的最大节点数等等）； 一些异常和错误处理（例如往一个函数里传入空指针，传入空串，这个函数能否打印一些log，返回错误码，实现加法的Add函数如何检测和处理溢出等等）    java常用的测试工具mockito">
   
   
   
-  <title>21-Kafka扩展问题 - 夜坐听风</title>
+  <title>单元测试 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="21-Kafka扩展问题"></span>
+            <span id="subtitle" data-typed-text="单元测试"></span>
           
         </div>
 
@@ -195,8 +195,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-01 19:59" pubdate>
-          2022-03-01 19:59:32
+        <time datetime="2025-02-01 19:59" pubdate>
+          2025-02-01 19:59:31
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          711 字
+          158 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          6 分钟
+          2 分钟
         
       </span>
     
@@ -255,54 +255,20 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">21-Kafka扩展问题</h1>
+            <h1 id="seo-header">单元测试</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="Kafka为何如此之快？"><a href="#Kafka为何如此之快？" class="headerlink" title="Kafka为何如此之快？"></a>Kafka为何如此之快？</h3><p>由于Kafka遵循了一定的策略，这也是它设计的一部分，以使得它性能更好、更快。；</p>
-<ul>
-<li>顺序写IO：现代操作系统将其大不部分可用的内存分配给磁盘缓存，并且更快的用于存储和检索顺序数据；</li>
-<li>零拷贝：由于根本没有修改数据，因此将磁盘中的数据不必要的加载到应用程序内存中，因此，它没有将其加载到应用程序中，而是通过Socket字节，缓冲区以及网络从context缓存区发送了相同的数据；sendFile</li>
-<li>消息批处理：为了避免多次网络交互，将多个消息分组在一起；</li>
-<li>消息压缩：在通过网络传输消息之前，使用gzip、snappy等压缩算法对消息进行压缩，然后在Consumer中使用API将其解压。</li>
-</ul>
-<h3 id="Kafka和其他消息队列的区别"><a href="#Kafka和其他消息队列的区别" class="headerlink" title="Kafka和其他消息队列的区别"></a>Kafka和其他消息队列的区别</h3><ul>
-<li>Kafka操作的是序列文件I &#x2F; O（序列文件的特征是按顺序写，按顺序读），为保证顺序，Kafka强制点对点的按顺序传递消息，这意味着，一个consumer在消息流（或分区）中只有一个位置。</li>
-<li>Kafka不保存消息的状态，即消息是否被“消费”。一般的消息系统需要保存消息的状态，并且还需要以随机访问的形式更新消息的状态。而Kafka 的做法是保存Consumer在Topic分区中的位置offset，在offset之前的消息是已被“消费”的，在offset之后则为未“消费”的，并且offset是可以任意移动的，这样就消除了大部分的随机IO。</li>
-<li>Kafka支持点对点的批量消息传递。</li>
-<li>Kafka的消息存储在OS pagecache（页缓存，page cache的大小为一页，通常为4K，在Linux读写文件时，它用于缓存文件的逻辑内容，从而加快对磁盘上映像和数据的访问）。</li>
-</ul>
-<h3 id="推拉模式的比较"><a href="#推拉模式的比较" class="headerlink" title="推拉模式的比较"></a>推拉模式的比较</h3><h4 id="推模式"><a href="#推模式" class="headerlink" title="推模式"></a>推模式</h4><ul>
-<li>推模式优点<ul>
-<li>消息实时性高</li>
-<li>对于消费者使用来说更简单</li>
-</ul>
-</li>
-<li>推模式缺点<ul>
-<li><strong>推送速率难以适应消费速率</strong></li>
+                <h1 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h1><ul>
+<li>单元测试的一些原则<ul>
+<li>测试用例能验证函数的正确性（这条都通不过就……）；</li>
+<li>测试用例尽可能涵盖边界条件（例如遍历一个链表，头指针是空，只有一个节点，链表有N个节点，N是问题描述下允许的最大节点数等等）；</li>
+<li>一些异常和错误处理（例如往一个函数里传入空指针，传入空串，这个函数能否打印一些log，返回错误码，实现加法的Add函数如何检测和处理溢出等等）</li>
 </ul>
 </li>
 </ul>
-<h4 id="拉模式"><a href="#拉模式" class="headerlink" title="拉模式"></a>拉模式</h4><ul>
-<li>拉模式优点<ul>
-<li><strong>拉模式下 Broker 就相对轻松了</strong></li>
-<li><strong>拉模式可以更合适的进行消息的批量发送</strong></li>
-</ul>
-</li>
-<li>拉模式缺点<ul>
-<li><strong>消息延迟</strong></li>
-<li><strong>消息忙请求</strong>，忙请求就是比如消息隔了几个小时才有，那么在几个小时之内消费者的请求都是无效的，在做无用功。</li>
-</ul>
-</li>
-</ul>
-<h4 id="RocketMQ和Kafka对于拉模式的优化"><a href="#RocketMQ和Kafka对于拉模式的优化" class="headerlink" title="RocketMQ和Kafka对于拉模式的优化"></a>RocketMQ和Kafka对于拉模式的优化</h4><ul>
-<li>Kafka的长轮询<ul>
-<li>消费者去 Broker 拉消息，定义了一个超时时间，也就是说消费者去请求消息，如果有的话马上返回消息，如果没有的话消费者等着直到超时，然后再次发起拉消息请求。</li>
-</ul>
-</li>
-</ul>
-
+<h2 id="java常用的测试工具"><a href="#java常用的测试工具" class="headerlink" title="java常用的测试工具"></a>java常用的测试工具</h2><h3 id="mockito"><a href="#mockito" class="headerlink" title="mockito"></a>mockito</h3>
                 
               </div>
             
@@ -320,15 +286,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
-  
-  
-
   
 
       </span>
@@ -347,8 +306,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>21-Kafka扩展问题</div>
-      <div>https://x-leonidas.github.io/2022/03/01/11技术栈/MQ/21-Kafka扩展问题/</div>
+      <div>单元测试</div>
+      <div>https://x-leonidas.github.io/2025/02/01/14软件工程/单元测试/</div>
     </div>
     <div class="license-meta">
       
@@ -360,13 +319,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年3月1日</div>
+          <div>2025年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年9月16日</div>
+          <div>2025年5月7日</div>
         </div>
       
       
@@ -403,9 +362,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/08/02/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/11-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%92%8C%E4%BB%A3%E7%90%86/" title="11-负载均衡和代理">
+                      <a href="/2025/04/30/11%E6%8A%80%E6%9C%AF%E6%A0%88/Disruptor/" title="Disruptor">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">11-负载均衡和代理</span>
+                        <span class="hidden-mobile">Disruptor</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -413,8 +372,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/24/11%E6%8A%80%E6%9C%AF%E6%A0%88/Tomcat/" title="Tomcat">
-                        <span class="hidden-mobile">Tomcat</span>
+                      <a href="/2025/02/01/24AI/Prompt%E6%8C%87%E5%8D%97/" title="Prompt指南">
+                        <span class="hidden-mobile">Prompt指南</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

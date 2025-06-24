@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="系统设计的步骤 系统设计面试：内幕指南链接  1.系统的需求 功能性需求 系统包含哪些功能   非功能性需求 性能和QPS，TPS等    2.对系统进行抽象设计3. 考虑系统目前需要优化的点系统设计三要素 高性能架构设计：熟悉系统常见性能优化手段比如引入读写分离、缓存、负载均衡、异步等 高可用架构设计：CAP理论和BASE理论，通过集群来提高系统的稳定性、超时和重试机制、应对接口级的故障：降级、">
+    <meta name="description" content="START 法则 situation: 描述问题的背景，这个问题是什么，以及你为什么需要做这个事情 task: 你具体的任务是什么，你需要做什么 action: 你做了什么事情？你的行动是什么. result: 结果如何，你得出的结论是什么? tinking： 反思，不足的地方，可以复用的地方  4W1H “4W1H”法则是一种用于分析问题和制定计划的思维工具，它帮助人们更全面地考虑问题的各个方面">
   
   
   
-  <title>1.系统设计 - 夜坐听风</title>
+  <title>效率沟通方法 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="1.系统设计"></span>
+            <span id="subtitle" data-typed-text="效率沟通方法"></span>
           
         </div>
 
@@ -195,8 +195,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-21 23:53" pubdate>
-          2024-02-21 23:53:14
+        <time datetime="2025-02-01 19:59" pubdate>
+          2025-02-01 19:59:31
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          809 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          11 分钟
+          7 分钟
         
       </span>
     
@@ -255,114 +255,51 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">1.系统设计</h1>
+            <h1 id="seo-header">效率沟通方法</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="系统设计的步骤"><a href="#系统设计的步骤" class="headerlink" title="系统设计的步骤"></a>系统设计的步骤</h1><ul>
-<li>系统设计面试：内幕指南<a target="_blank" rel="noopener" href="https://github.com/Admol/SystemDesign">链接</a></li>
+                <h2 id="START-法则"><a href="#START-法则" class="headerlink" title="START 法则"></a>START 法则</h2><ul>
+<li>situation: 描述问题的背景，这个问题是什么，以及你为什么需要做这个事情</li>
+<li>task: 你具体的任务是什么，你需要做什么</li>
+<li>action: 你做了什么事情？你的行动是什么.</li>
+<li>result: 结果如何，你得出的结论是什么?</li>
+<li>tinking： 反思，不足的地方，可以复用的地方</li>
 </ul>
-<h2 id="1-系统的需求"><a href="#1-系统的需求" class="headerlink" title="1.系统的需求"></a>1.系统的需求</h2><ul>
-<li>功能性需求<ul>
-<li>系统包含哪些功能</li>
+<h2 id="4W1H"><a href="#4W1H" class="headerlink" title="4W1H"></a>4W1H</h2><ul>
+<li>“4W1H”法则是一种用于分析问题和制定计划的思维工具，它帮助人们更全面地考虑问题的各个方面，从而得出更有效的解决方案</li>
+<li>What（是什么）：问题或任务的具体内容是什么？需要解决的问题是什么？</li>
+<li>Why（为什么）：为什么要解决这个问题？了解解决问题的原因和目的。</li>
+<li>Who（谁）：涉及到哪些人或群体？谁负责处理这个问题？</li>
+<li>When（何时）：什么时候需要解决这个问题？时间节点和截止日期是什么？</li>
+<li>How（如何）：如何解决这个问题？具体的解决步骤和方法是什么？</li>
 </ul>
-</li>
-<li>非功能性需求<ul>
-<li>性能和QPS，TPS等</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-对系统进行抽象设计"><a href="#2-对系统进行抽象设计" class="headerlink" title="2.对系统进行抽象设计"></a>2.对系统进行抽象设计</h2><h2 id="3-考虑系统目前需要优化的点"><a href="#3-考虑系统目前需要优化的点" class="headerlink" title="3. 考虑系统目前需要优化的点"></a>3. 考虑系统目前需要优化的点</h2><h3 id="系统设计三要素"><a href="#系统设计三要素" class="headerlink" title="系统设计三要素"></a>系统设计三要素</h3><ul>
-<li>高性能架构设计：熟悉系统常见性能优化手段比如引入<strong>读写分离</strong>、<strong>缓存</strong>、<strong>负载均衡</strong>、<strong>异步</strong>等</li>
-<li>高可用架构设计：CAP理论和BASE理论，通过集群来提高系统的稳定性、超时和重试机制、应对接口级的故障：降级、熔断、限流、排队</li>
-<li>高扩展架构设计：如何拆分系统和模块，尽可能做到低耦合高内聚</li>
-</ul>
-<h3 id="一些常见软件的QPS"><a href="#一些常见软件的QPS" class="headerlink" title="一些常见软件的QPS"></a>一些常见软件的QPS</h3><ul>
-<li>Nginx： 30w+</li>
-<li>redis : 单机QPS 8W+</li>
-<li>mysql： 单机QPS 4k</li>
-<li>Tomcat： 单机 2w</li>
-</ul>
-<h2 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h2><h3 id="热点数据的处理"><a href="#热点数据的处理" class="headerlink" title="热点数据的处理"></a>热点数据的处理</h3><ul>
-<li>热点数据的分类<ul>
-<li>静态热点数据：可以提前预测到的热点数据比如要秒杀的商品</li>
-<li>动态热点数据： 不能够提前预测的热点数据，需要通过一些手段动态监测系统运行情况产生</li>
+<h2 id="BTAR模型"><a href="#BTAR模型" class="headerlink" title="BTAR模型"></a>BTAR模型</h2><ul>
+<li><strong>B - Background (项目背景):</strong><ul>
+<li><strong>做什么：</strong> 用一两句话概括这个项目是干什么的，它解决了什么业务问题，或者满足了什么用户需求。</li>
+<li><strong>为什么重要：</strong> 简单说明当时的业务场景或技术上下文，让听众明白你接下来要讲的亮点是在什么样的大环境下产生的。</li>
 </ul>
 </li>
-<li>问题的关键在于如何找到这些热点数据，然后将它们存在jvm内存中。</li>
-</ul>
-<h3 id="静态资源的处理"><a href="#静态资源的处理" class="headerlink" title="静态资源的处理"></a>静态资源的处理</h3><ul>
-<li>CND</li>
-</ul>
-<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><ul>
-<li>集群化</li>
-<li>限流<ul>
-<li>接口限流</li>
-<li>对用户、IP限流</li>
+<li><strong>T - Task&#x2F;Challenge (任务&#x2F;挑战):</strong><ul>
+<li><strong>遇到什么坎：</strong> 具体描述在这个项目中，你或团队面临的最棘手的技术难题或业务挑战是什么。</li>
+<li><strong>钩子在这里：</strong> 这个问题越具体、越有挑战性，就越能吸引听众的注意力，为后续你的解决方案做铺垫。避免泛泛而谈，比如“性能优化”，要具体到“某个核心接口在高并发下响应时间超过 2 秒，无法满足 SLA 要求”。</li>
 </ul>
 </li>
-<li>问题，验证码<ul>
-<li>降低用户的请求频率</li>
+<li><strong>A - Action (行动&#x2F;方案):</strong><ul>
+<li><strong>问题分析：</strong> 你是如何定位问题根源的？用了什么工具或方法？</li>
+<li><strong>方案思考与选择：</strong> 你考虑过哪些备选方案？为什么最终选择了当前这个方案？（这里可以体现你的技术视野和权衡能力）</li>
+<li><strong>具体实施：</strong> 你的方案是如何设计的？涉及哪些关键技术点或架构调整？</li>
+<li><strong>克服困难：</strong> 在实施过程中遇到了哪些新的问题？你是如何克服的？</li>
+<li><strong>你是怎么干的：</strong> 这是展示你技术深度和解决问题能力的核心部分。详细说明：</li>
 </ul>
 </li>
-<li>提前预约</li>
-<li>流量削峰</li>
-<li>降级<ul>
-<li>根据当前业务情况，对一些服务和页面进行有策略的降级</li>
+<li><strong>R - Result (结果&#x2F;成果):</strong><ul>
+<li><strong>带来了什么价值：</strong> 用具体、可量化的数据来展示你的解决方案所带来的积极成果。</li>
+<li><strong>用数据说话：</strong> 这是最有说服力的部分。比如：“接口响应时间从平均 2 秒降低到 200 毫秒”、“系统吞吐量提升了 3 倍”、“错误率降低了 80%”、“为公司节省了 XX%的服务器成本”等。</li>
+<li><strong>其他影响：</strong> 也可以提及一些非量化的积极影响，如“提升了用户体验”、“增强了系统稳定性”、“为后续业务扩展打下了基础”等。</li>
 </ul>
 </li>
-<li>熔断</li>
-</ul>
-<h3 id="高可用的七大原则"><a href="#高可用的七大原则" class="headerlink" title="高可用的七大原则"></a>高可用的七大原则</h3><ul>
-<li>少依赖原则：能不依赖的，尽可能不依赖，越少越好</li>
-<li>弱依赖原则： 一定要依赖的，尽可能弱依赖，越弱越好</li>
-<li>分散原则：鸡蛋不要放一个篮子，分散风险</li>
-<li>均衡原则： 均匀分散风险，避免不均衡</li>
-<li>隔离原则： 控制风险不扩散，不放大<ul>
-<li>隔离是有级别的，隔离级别越高，风险传播扩散的难度就越大，容灾能力越强</li>
-<li>是以上原则的前提，隔离没做好，上面四个原则都是收效甚若的</li>
-</ul>
-</li>
-<li>无单点原则: 要有冗余或其他版本,做到有路可退<ul>
-<li>快速止血的方式是切换，回滚，扩容等；回滚和扩容属于特殊的切换，回滚指的是切换到某个版本，扩容指的是将流量切换到新扩容的机器上。</li>
-<li>无单点原则和分散原则的区别：<ul>
-<li>当节点无状态的情况下，打散拆分成N份，每份都是相同的功能，互为冗余，即：节点无状态情况下，分散原则和无单点原则等价，满足一个即可。</li>
-<li>当节点有状态的情况下，打散拆分成N份，每份都是不相同的，每份都没有冗余，需要针对每份再做冗余，即：节点有状态情况下，既要满足分散原则又要满足单点原则</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>自我保护原则： 少流血，牺牲一部分，保护另外一部分</li>
-</ul>
-<h3 id="软件系统风险的来源"><a href="#软件系统风险的来源" class="headerlink" title="软件系统风险的来源"></a>软件系统风险的来源</h3><ul>
-<li>系统资源的变化<ul>
-<li>系统运行所依赖的服务器资源（如CPU，MEM，IO等），应用资源（RPC线程数，DB连接数等），业务资源（业务ID满了，余额不足，业务额度不够等）的负载等都会影响系统运行的风险期望。</li>
-</ul>
-</li>
-<li>存储系统变化<ul>
-<li>系统运行所依赖的服务器资源（如CPU，MEM，IO等），存储资源（并发数等），数据资源（单库容量，单表容量等）的负载和数据一致性等都会影响存储系统运行的风险期望。</li>
-</ul>
-</li>
-<li>人的变化：变更出错</li>
-<li>硬件变化：损坏</li>
-<li>上游变化：请求变化<ul>
-<li>网络流量过大会造成网络堵塞，影响网络通道中的所有网络流量请求</li>
-<li>API请求过大会造成对应服务集群过载，影响整个服务机器上的所有API请求，甚至往外传播。</li>
-<li>KEY请求过大（俗称“热点KEY”）会造成单机过载，影响单机上所有KEY请求，甚至往外传播。</li>
-</ul>
-</li>
-<li>下游变化： 响应变慢，响应错误<ul>
-<li>下游服务的数量，服务等级，服务可用率等影响下游服务的风险期望。下游响应变慢可能会拖慢上游，下游响应错误可能会影响上游运行结果。</li>
-</ul>
-</li>
-<li>时间变化：<ul>
-<li>时间到期往往被人忽视，但它往往具有突然性和全局破坏性，一旦时间到期触发故障会导致非常被动，所以要提前识别，尽早预警，如：<strong>秘钥到期，证书到期，费用到期，跨时区，跨年，跨月，跨日等</strong>。</li>
-</ul>
-</li>
-</ul>
-<h2 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h2><ul>
-<li>接口幂等</li>
 </ul>
 
                 
@@ -382,7 +319,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="category-chain-item">23系统设计</a>
+  <a href="/categories/22tool/" class="category-chain-item">22tool</a>
   
   
 
@@ -402,8 +339,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>1.系统设计</div>
-      <div>https://x-leonidas.github.io/2024/02/21/23系统设计/1.系统设计/</div>
+      <div>效率沟通方法</div>
+      <div>https://x-leonidas.github.io/2025/02/01/22tool/效率沟通方法/</div>
     </div>
     <div class="license-meta">
       
@@ -415,13 +352,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月21日</div>
+          <div>2025年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月23日</div>
+          <div>2025年5月7日</div>
         </div>
       
       
@@ -458,9 +395,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/09/22tool/%E5%8D%9A%E5%AE%A2/" title="博客">
+                      <a href="/2025/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/0.MySql%E8%AF%AD%E5%8F%A5/" title="0.MySql语句">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">博客</span>
+                        <span class="hidden-mobile">0.MySql语句</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -468,8 +405,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/20/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" title="5.mysql8新特性">
-                        <span class="hidden-mobile">5.mysql8新特性</span>
+                      <a href="/2025/02/01/23%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/1.%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" title="1.系统设计">
+                        <span class="hidden-mobile">1.系统设计</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
