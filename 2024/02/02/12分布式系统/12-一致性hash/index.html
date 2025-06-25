@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="分布式系统中session一致性问题Redis实现 我们只需在用户首次登陆的时候将用户信息放到 Token并缓存到 Redis 中，同时设置一个过期时间。 定义一个拦截器 SessionInterceptor，当访问 web 接口的时候检验用户的 token 信息，判断用户是否登陆，未登录的情况下一些业务接口是无法访问的，以及在登陆的情况下拿到我们需要的用户信息， 式简单易用，而且Redis 在分">
+    <meta name="description" content="一致性哈希 一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&amp;#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射 将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本 为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为">
   
   
   
-  <title>07-分布式Session - 夜坐听风</title>
+  <title>12-一致性hash - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="07-分布式Session"></span>
+            <span id="subtitle" data-typed-text="12-一致性hash"></span>
           
         </div>
 
@@ -195,8 +195,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-01 19:59" pubdate>
-          2022-02-01 19:59:31
+        <time datetime="2024-02-02 21:58" pubdate>
+          2024-02-02 21:58:03
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          195 字
+          362 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          2 分钟
+          4 分钟
         
       </span>
     
@@ -255,15 +255,24 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">07-分布式Session</h1>
+            <h1 id="seo-header">12-一致性hash</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="分布式系统中session一致性问题"><a href="#分布式系统中session一致性问题" class="headerlink" title="分布式系统中session一致性问题"></a>分布式系统中session一致性问题</h1><h3 id="Redis实现"><a href="#Redis实现" class="headerlink" title="Redis实现"></a>Redis实现</h3><ul>
-<li>我们只需在用户首次登陆的时候将用户信息放到 Token并缓存到 Redis 中，同时设置一个过期时间。</li>
-<li>定义一个拦截器 <code>SessionInterceptor</code>，当访问 web 接口的时候检验用户的 token 信息，判断用户是否登陆，未登录的情况下一些业务接口是无法访问的，以及在登陆的情况下拿到我们需要的用户信息，</li>
-<li>式简单易用，而且Redis 在分布式系统中的使用率也很高，所以无需额外的技术引入。可以支持水平扩展，数据库或缓存水平切分即可，服务端重启或者扩容都不会有session丢失的情况发生</li>
+                <h2 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a>一致性哈希</h2><ul>
+<li>一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射</li>
+<li>将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本</li>
+<li>为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为了避免当某个节点下线时，该节点所负责的数据不可用，通常设计为环状，几个节点为物理节点。</li>
+</ul>
+<h3 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h3><ul>
+<li>解决数据倾斜的问题（环被分的不平均）</li>
+<li>不用真实ip去分配节点，而是为每个ip分配多个虚拟节点</li>
+</ul>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>当服务器被添加或删除时，很小一部分的键被重新分配。</li>
+<li>容易水平扩展，因为数据分布更加均匀。</li>
+<li>缓解热点健问题。 对特定分片的过度访问可能会导致服务器过载。 想象一下 Katy Perry、Justin Bieber 和 Lady Gaga 的数据最终都在同一个分片上。 一致性哈希通过更均匀地分配数据来缓解这个问题。</li>
 </ul>
 
                 
@@ -303,8 +312,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>07-分布式Session</div>
-      <div>https://x-leonidas.github.io/2022/02/01/12分布式系统/07-分布式Session/</div>
+      <div>12-一致性hash</div>
+      <div>https://x-leonidas.github.io/2024/02/02/12分布式系统/12-一致性hash/</div>
     </div>
     <div class="license-meta">
       
@@ -316,13 +325,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年2月1日</div>
+          <div>2024年2月2日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2025年5月1日</div>
         </div>
       
       
@@ -359,9 +368,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/13Linux/02.Vim/" title="02.Vim">
+                      <a href="/2024/02/02/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" title="07-分布式Session">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">02.Vim</span>
+                        <span class="hidden-mobile">07-分布式Session</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -369,8 +378,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/09-%E6%9C%8D%E5%8A%A1%E5%B9%82%E7%AD%89/" title="09-服务幂等">
-                        <span class="hidden-mobile">09-服务幂等</span>
+                      <a href="/2024/02/02/24AI/Prompt%E6%8C%87%E5%8D%97/" title="Prompt指南">
+                        <span class="hidden-mobile">Prompt指南</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

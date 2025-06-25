@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="MySql调优索引 重复性较强的字段， 不适合添加索引  性能监控 show status like “handler_read%”  查看用到索引的次数 show status like ‘last_query_coat’  最后一次查询所耗费的成本 set profiling &amp;#x3D; 1; 开启监控       show profiles   （query n） 根据query id查看">
+    <meta name="description" content="RocketMQ集群broker集群模式单master模式 只有一个 Master节点​    优点：配置简单，方便部署​    缺点：这种方式风险较大，一旦Broker重启或者宕机时，会导致整个服务不可用，不建议线上环境使用  多master模式 一个集群无 Slave，全是 Master，例如 2 个 Master 或者 3 个 Master 优点：配置简单，单个Master 宕机或重启维护对">
   
   
   
-  <title>3.mysql调优 - 夜坐听风</title>
+  <title>13-RocketMQ集群 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="3.mysql调优"></span>
+            <span id="subtitle" data-typed-text="13-RocketMQ集群"></span>
           
         </div>
 
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          885 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          10 分钟
+          8 分钟
         
       </span>
     
@@ -255,132 +255,149 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">3.mysql调优</h1>
+            <h1 id="seo-header">13-RocketMQ集群</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="MySql调优"><a href="#MySql调优" class="headerlink" title="MySql调优"></a>MySql调优</h3><h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><ul>
-<li>重复性较强的字段， 不适合添加索引</li>
+                <h2 id="RocketMQ集群"><a href="#RocketMQ集群" class="headerlink" title="RocketMQ集群"></a>RocketMQ集群</h2><h3 id="broker集群模式"><a href="#broker集群模式" class="headerlink" title="broker集群模式"></a>broker集群模式</h3><h4 id="单master模式"><a href="#单master模式" class="headerlink" title="单master模式"></a>单master模式</h4><ul>
+<li>只有一个 Master节点<br>​    优点：配置简单，方便部署<br>​    缺点：这种方式风险较大，一旦Broker重启或者宕机时，会导致整个服务不可用，不建议线上环境使用</li>
 </ul>
-<h3 id="性能监控"><a href="#性能监控" class="headerlink" title="性能监控"></a>性能监控</h3><ul>
-<li>show status like “handler_read%”  查看用到索引的次数</li>
-<li>show status like ‘last_query_coat’  最后一次查询所耗费的成本</li>
-<li>set profiling &#x3D; 1; 开启监控      <ul>
-<li>show profiles   （query n） 根据query id查看sql执行时间    </li>
-<li>show profile 查看sql各阶段的执行时间</li>
-<li>show profile all  显示所有性能信息</li>
-<li>show profile block io  显示块io操作的次数</li>
-<li>show profile context switches 显示上下文切换次数，主动和被动</li>
-<li>show profile cpu  显示用户cpu时间、系统cpu时间</li>
-<li>show profile ipc  显示发送和接受的消息数量</li>
-<li>show profile page faults 显示页错误数量</li>
-<li>show profile source 显示源码中的函数名称和位置</li>
-<li>show profile swaps 显示swap的次数</li>
+<h4 id="多master模式"><a href="#多master模式" class="headerlink" title="多master模式"></a>多master模式</h4><ul>
+<li>一个集群无 Slave，全是 Master，例如 2 个 Master 或者 3 个 Master</li>
+<li>优点：配置简单，单个Master 宕机或重启维护对应用无影响，在磁盘配置为RAID10 时，即使机器宕机不可恢复情况下，由与 RAID10磁盘非常可靠，消息也不会丢（异步刷盘丢失少量消息，同步刷盘一条不丢）。性能最高。</li>
+<li>缺点：单台机器宕机期间，这台机器上未被消费的消息在机器恢复之前不可订阅，消息实时性会受到受到影响</li>
 </ul>
+<h4 id="多Master多Slave模式（异步复制）"><a href="#多Master多Slave模式（异步复制）" class="headerlink" title="多Master多Slave模式（异步复制）"></a>多Master多Slave模式（异步复制）</h4><ul>
+<li>每个 Master 配置一个 Slave，有多对Master-Slave， HA，采用异步复制方式，主备有短暂消息延迟，毫秒级。</li>
+<li>优点：即使磁盘损坏，消息丢失的非常少，且消息实时性不会受影响，因为Master 宕机后，消费者仍然可以从 Slave消费，此过程对应用透明。不需要人工干预。性能同多 Master 模式几乎一样。</li>
+<li>缺点： Master 宕机，磁盘损坏情况，会丢失少量消息。</li>
+</ul>
+<h4 id="多Master多Slave模式-同步双写"><a href="#多Master多Slave模式-同步双写" class="headerlink" title="多Master多Slave模式(同步双写)"></a>多Master多Slave模式(同步双写)</h4><ul>
+<li>每个 Master 配置一个 Slave，有多对Master-Slave， HA采用同步双写方式，主备都写成功，向应用返回成功。</li>
+<li>优点：数据与服务都无单点， Master宕机情况下，消息无延迟，服务可用性与数据可用性都非常高</li>
+<li>缺点：性能比异步复制模式略低，大约低 10%左右，发送单个消息的 RT会略高。目前主宕机后，备机不能自动切换为主机，后续会支持自动切换功能</li>
+</ul>
+<h3 id="broker配置"><a href="#broker配置" class="headerlink" title="broker配置"></a>broker配置</h3><ul>
+<li><table>
+<thead>
+<tr>
+<th align="left">Property Name</th>
+<th align="left">Default value</th>
+<th align="left">Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">listenPort</td>
+<td align="left">10911</td>
+<td align="left">listen port for client</td>
+</tr>
+<tr>
+<td align="left">namesrvAddr</td>
+<td align="left">null</td>
+<td align="left">name server address</td>
+</tr>
+<tr>
+<td align="left">brokerIP1</td>
+<td align="left">InetAddress for network interface</td>
+<td align="left">Should be configured if having multiple addresses</td>
+</tr>
+<tr>
+<td align="left">brokerName</td>
+<td align="left">null</td>
+<td align="left">broker name</td>
+</tr>
+<tr>
+<td align="left">brokerClusterName</td>
+<td align="left">DefaultCluster</td>
+<td align="left">this broker belongs to which cluster</td>
+</tr>
+<tr>
+<td align="left">brokerId</td>
+<td align="left">0</td>
+<td align="left">broker id, 0 means master, positive integers mean slave</td>
+</tr>
+<tr>
+<td align="left">storePathCommitLog</td>
+<td align="left">$HOME&#x2F;store&#x2F;commitlog&#x2F;</td>
+<td align="left">file path for commit log</td>
+</tr>
+<tr>
+<td align="left">storePathConsumerQueue</td>
+<td align="left">$HOME&#x2F;store&#x2F;consumequeue&#x2F;</td>
+<td align="left">file path for consume queue</td>
+</tr>
+<tr>
+<td align="left">mapedFileSizeCommitLog</td>
+<td align="left">1024 * 1024 * 1024(1G)</td>
+<td align="left">mapped file size for commit log</td>
+</tr>
+<tr>
+<td align="left">deleteWhen</td>
+<td align="left">04</td>
+<td align="left">When to delete the commitlog which is out of the reserve time</td>
+</tr>
+<tr>
+<td align="left">fileReserverdTime</td>
+<td align="left">72</td>
+<td align="left">The number of hours to keep a commitlog before deleting it</td>
+</tr>
+<tr>
+<td align="left">brokerRole</td>
+<td align="left">ASYNC_MASTER</td>
+<td align="left">SYNC_MASTER&#x2F;ASYNC_MASTER&#x2F;SLAVE</td>
+</tr>
+<tr>
+<td align="left">flushDiskType</td>
+<td align="left">ASYNC_FLUSH</td>
+<td align="left">{SYNC_FLUSH&#x2F;ASYNC_FLUSH}. Broker of SYNC_FLUSH mode flushes each message onto disk before acknowledging producer. Broker of ASYNC_FLUSH mode, on the other hand, takes advantage of group-committing, achieving better performance</td>
+</tr>
+</tbody></table>
 </li>
-<li>show processlist;查看当前数据库有多少个连接</li>
+<li><strong>brokerClusterName：</strong>同一个集群中，brokerClusterName需一致<br><strong>brokerId：</strong>0 表示 Master，&gt;0 表示 Slave<br><strong>namesrvAddr：</strong>配置多个用分号分隔<br><strong>brokerIP1</strong>：默认系统自动识别，但是某些多网卡机器会存在识别错误的情况，建议都手工指定<br><strong>brokerRole：</strong>选择Broker的角色<br><strong>flushDiskType：</strong>选择刷盘方式<br><strong>deleteWhen：</strong> 过期文件真正删除时间<br><strong>fileReservedTime：</strong>Commitlog、ConsumeQueue文件，如果非当前写文件在一定时间间隔内没有再次被更新，则认为是过期文件，可以被删除，RocketMQ不会管这个这个文件上的消息是否被全部消费</li>
 </ul>
-<h4 id="schema与数据类型的优化"><a href="#schema与数据类型的优化" class="headerlink" title="schema与数据类型的优化"></a>schema与数据类型的优化</h4><ul>
-<li>数据类型的优化<ul>
-<li>更小的通常更好<ul>
-<li>应该尽量使用可以正确存储的最小数据类型。因为更快，占用更少的磁盘，内存和CPU缓存并且处理时需要的CPU周期更少</li>
+<h1 id="DLedger主备切换"><a href="#DLedger主备切换" class="headerlink" title="DLedger主备切换"></a>DLedger主备切换</h1><ul>
+<li>一组<strong>相同名称</strong>的 Broker，至少需要 3 个节点，通过 Raft 自动选举出一个 Leader，其余节点 作为 Follower，并在 Leader 和 Follower 之间复制数据以保证高可用。</li>
+<li>RocketMQ-on-DLedger Group 能自动容灾切换，并保证数据一致。</li>
+<li>RocketMQ-on-DLedger Group 是可以水平扩展的，也即可以部署任意多个 RocketMQ-on-DLedger Group 同时对外提供服务。</li>
 </ul>
+<h4 id="Dleger配置"><a href="#Dleger配置" class="headerlink" title="Dleger配置"></a>Dleger配置</h4><ul>
+<li><table>
+<thead>
+<tr>
+<th>name</th>
+<th>含义</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>enableDLegerCommitLog</td>
+<td>是否启动 DLedger</td>
+<td>true</td>
+</tr>
+<tr>
+<td>dLegerGroup</td>
+<td>DLedger Raft Group的名字，建议和 brokerName 保持一致</td>
+<td>RaftNode00</td>
+</tr>
+<tr>
+<td>dLegerPeers</td>
+<td>DLedger Group 内各节点的端口信息，同一个 Group 内的各个节点配置必须要保证一致</td>
+<td>n0-127.0.0.1:40911;n1-127.0.0.1:40912;n2-127.0.0.1:40913</td>
+</tr>
+<tr>
+<td>dLegerSelfId</td>
+<td>节点 id, 必须属于 dLegerPeers 中的一个；同 Group 内各个节点要唯一</td>
+<td>n0</td>
+</tr>
+<tr>
+<td>sendMessageThreadPoolNums</td>
+<td>发送线程个数，建议配置成 Cpu 核数</td>
+<td>16</td>
+</tr>
+</tbody></table>
 </li>
-<li>简单就好</li>
-<li>尽量避免null</li>
-<li>实际细则<ul>
-<li>datetime和timestamp及date</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="范式和反范式"><a href="#范式和反范式" class="headerlink" title="范式和反范式"></a>范式和反范式</h4><ul>
-<li>范式<ul>
-<li>优点<ul>
-<li>范式化的更新通常比反范式块</li>
-<li>当数据较好的范式化后，很少或者没有重复的数据</li>
-<li>范式化的数据比较小,可以放在内存中，操作比较快</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>通常需要进行关联</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>反范式<ul>
-<li>优点<ul>
-<li>数据都在一张表中，可以避免关联</li>
-<li>可以设计有效的索引</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>表格内冗余较多，删除数据时会造成表有些有用的信息丢失</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>主键：代理主键 自然主键</li>
-<li>单表索引限制在5个以内</li>
-<li>单索引字段不允许超过五个</li>
-</ul>
-<h3 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h3><h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><ul>
-<li>网络</li>
-<li>CPU</li>
-<li>IO</li>
-<li>上下文切换</li>
-<li>系统调用</li>
-<li>生成统计信息</li>
-<li>锁等待时间</li>
-</ul>
-<h3 id="服务器参数设置"><a href="#服务器参数设置" class="headerlink" title="服务器参数设置"></a>服务器参数设置</h3><ul>
-<li>datadir&#x3D;&#x2F;var&#x2F;lib&#x2F;mysql     数据文件存放的目录</li>
-<li>socket&#x3D;&#x2F;var&#x2F;lib&#x2F;mysql&#x2F;mysql.sock  mysql.socket表示server和client在同一台服务器，并且使用localhost进行连接，就会使用socket进行连接</li>
-<li>pid_file&#x3D;&#x2F;var&#x2F;lib&#x2F;mysql&#x2F;mysql.pid   存储mysql的pid</li>
-<li>port&#x3D;3306   mysql服务的端口号</li>
-<li>default_storage_engine&#x3D;InnoDB  mysql存储引擎</li>
-<li>skip-grant-tables  当忘记mysql的用户名密码的时候，可以在mysql配置文件中配置该参数，跳过权限表验证，不需要密码即可登录mysql</li>
-</ul>
-<h3 id="调优技巧"><a href="#调优技巧" class="headerlink" title="调优技巧"></a>调优技巧</h3><h4 id="设计表时要考虑的问题"><a href="#设计表时要考虑的问题" class="headerlink" title="设计表时要考虑的问题"></a>设计表时要考虑的问题</h4><ul>
-<li><strong>设计表时要注意：</strong><ul>
-<li>表字段避免null值出现，null值很难查询优化且占用额外的索引空间，推荐默认数字0代替null。</li>
-<li>尽量使用INT而非BIGINT，如果非负则加上UNSIGNED（这样数值容量会扩大一倍），当然能使用TINYINT、SMALLINT、MEDIUM_INT更好。</li>
-<li>使用枚举或整数代替字符串类型</li>
-<li>尽量使用TIMESTAMP而非DATETIME</li>
-<li>单表不要有太多字段，建议在20以内</li>
-<li>用整型来存IP</li>
-</ul>
-</li>
-</ul>
-<h4 id="在表中使用null值的影响"><a href="#在表中使用null值的影响" class="headerlink" title="在表中使用null值的影响"></a>在表中使用null值的影响</h4><ul>
-<li>（1）<strong>负向比较</strong>（例如：!&#x3D;）会引发<strong>全表扫描</strong>；</li>
-<li>（2）如果允许空值，<strong>不等于 (!&#x3D;) 的查询，不会将空值行 (row) 包含进来</strong>，此时的结果集往往是不符合预期的，此时往往要加上<br>一个 or 条件，把空值 (is null) 结果包含进来；但这样会引发全表扫描，此时可以优化为 union 查询；</li>
-<li>（4）建表时加上<strong>默认 (default) 值</strong>，这样能避免空值的坑；</li>
-</ul>
-<h4 id="翻页查询"><a href="#翻页查询" class="headerlink" title="翻页查询"></a>翻页查询</h4><ul>
-<li>对于limit m, n分页查询，越往后面翻页即m越大的情况下SQL的耗时会越来越长，对于这种应该先取出主键id，然后通过主键id跟原表进行Join关联查询。</li>
-</ul>
-<h3 id="慢Sql查询与优化"><a href="#慢Sql查询与优化" class="headerlink" title="慢Sql查询与优化"></a>慢Sql查询与优化</h3><ul>
-<li>启用慢查询日志</li>
-<li>分析慢查询日志<ul>
-<li><strong>工具推荐：</strong><ul>
-<li><strong>内置工具</strong>：<code>mysqldumpslow</code><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs excel">mysqldumpslow -s <span class="hljs-built_in">t</span> -<span class="hljs-built_in">t</span> <span class="hljs-number">10</span> /<span class="hljs-built_in">var</span>/<span class="hljs-built_in">log</span>/mysql/mysql-slow.log  # 按耗时排序，显示前<span class="hljs-number">10</span>条<br></code></pre></td></tr></table></figure></li>
-<li><strong>高级工具</strong>：<code>pt-query-digest</code>（Percona Toolkit）<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata">pt-<span class="hljs-keyword">query</span>-digest /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/mysql/mysql-slow.<span class="hljs-keyword">log</span> &gt; slow_report.txt<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>使用EXPLAIN分析执行计划</li>
-<li>索引优化</li>
-<li>表结构与参数调优</li>
-<li>监控和持续优化</li>
-</ul>
-<h3 id="为什么不建议使用UUID作为数据库主键"><a href="#为什么不建议使用UUID作为数据库主键" class="headerlink" title="为什么不建议使用UUID作为数据库主键"></a>为什么不建议使用UUID作为数据库主键</h3><ul>
-<li>写入的目标页很可能已经刷新到磁盘上并且从缓存上移除，或者还没有被加载到缓存中，innodb在插入之前不得不先找到并从磁盘读取目标页到内存中，这将导致大量的随机IO</li>
-<li>因为写入是乱序的,innodb不得不频繁的做页分裂操作,以便为新的行分配空间,页分裂导致移动大量的数据，一次插入最少需要修改三个页以上</li>
-<li>由于频繁的页分裂，页会变得稀疏并被不规则的填充，最终会导致数据会有碎片</li>
+<li><h1 id="dleger"><a href="#dleger" class="headerlink" title="dleger"></a>dleger</h1>enableDLegerCommitLog &#x3D; true<br>dLegerGroup &#x3D; broker-a<br>dLegerPeers &#x3D; n0-192.168.150.210:40911;n1-192.168.150.211:40911<br>dLegerSelfId &#x3D; n0<br>sendMessageThreadPoolNums &#x3D; 4</li>
 </ul>
 
                 
@@ -400,12 +417,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
   
   
     <span>></span>
     
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-1%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-1关系型数据库</a>
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
   
   
 
@@ -427,8 +444,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>3.mysql调优</div>
-      <div>https://x-leonidas.github.io/2022/02/01/05数据库/05-1关系型数据库/3.mysql调优/</div>
+      <div>13-RocketMQ集群</div>
+      <div>https://x-leonidas.github.io/2022/02/01/11技术栈/MQ/13-RocketMQ集群/</div>
     </div>
     <div class="license-meta">
       
@@ -483,9 +500,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/02SpringCloud/" title="02SpringCloud">
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/11-RocketMQ/" title="11-RocketMQ">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">02SpringCloud</span>
+                        <span class="hidden-mobile">11-RocketMQ</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -493,8 +510,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/1redis%E5%9F%BA%E7%A1%80/" title="1redis基础">
-                        <span class="hidden-mobile">1redis基础</span>
+                      <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/4Redis%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="4Redis常见问题">
+                        <span class="hidden-mobile">4Redis常见问题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

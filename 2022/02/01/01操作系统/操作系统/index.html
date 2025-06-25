@@ -218,7 +218,7 @@
         
         
         
-          118 分钟
+          120 分钟
         
       </span>
     
@@ -803,7 +803,22 @@
 </li>
 </ol>
 <h2 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h2><h3 id="四次拷贝的情况"><a href="#四次拷贝的情况" class="headerlink" title="四次拷贝的情况"></a>四次拷贝的情况</h3><ul>
-<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%9B%9B%E6%AC%A1%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="img"></li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%9B%9B%E6%AC%A1%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p>用户应用进程调用read函数，向操作系统发起IO调用，<strong>上下文从用户态转为内核态（切换1）</strong></p>
+</li>
+<li><p>DMA控制器把数据从磁盘中，读取到内核缓冲区。</p>
+</li>
+<li><p>CPU把内核缓冲区数据，拷贝到用户应用缓冲区，<strong>上下文从内核态转为用户态（切换2）</strong>，read函数返回</p>
+</li>
+<li><p>用户应用进程通过write函数，发起IO调用，<strong>上下文从用户态转为内核态（切换3）</strong></p>
+</li>
+<li><p>CPU将用户缓冲区中的数据，拷贝到socket缓冲区</p>
+</li>
+<li><p>DMA控制器把数据从socket缓冲区，拷贝到网卡设备，<strong>上下文从内核态切换回用户态（切换4）</strong>，write函数返回</p>
+</li>
+<li><p><strong>传统IO的读写流程</strong>，包括了4次上下文切换（4次用户态和内核态的切换），4次数据拷贝（<strong>两次CPU拷贝以及两次的DMA拷贝</strong>)</p>
+</li>
 </ul>
 <h3 id="零拷贝的两种实现方式"><a href="#零拷贝的两种实现方式" class="headerlink" title="零拷贝的两种实现方式"></a>零拷贝的两种实现方式</h3><h4 id="mmap-write"><a href="#mmap-write" class="headerlink" title="mmap+write"></a>mmap+write</h4><ul>
 <li>mmap<ul>
@@ -847,7 +862,7 @@
 </li>
 <li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/sendfile%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E6%B5%81%E7%A8%8B2.png" srcset="/img/loading.gif" lazyload></p>
 </li>
-<li><p><strong>零拷贝（*Zero-copy*）技术，因为我们没有在内存层面去拷贝数据，也就是说全程没有通过 CPU 来搬运数据，所有的数据都是通过 DMA 来进行传输的。</strong></p>
+<li><p><strong>零拷贝（Zero-copy）技术，因为我们没有在内存层面去拷贝数据，也就是说全程没有通过 CPU 来搬运数据，所有的数据都是通过 DMA 来进行传输的。</strong></p>
 </li>
 <li><p>零拷贝技术的文件传输方式相比传统文件传输的方式，减少了 2 次上下文切换和数据拷贝次数，<strong>只需要 2 次上下文切换和数据拷贝次数，就可以完成文件的传输，而且 2 次的数据拷贝过程，都不需要通过 CPU，2 次都是由 DMA 来搬运。</strong><br>所以，总体来看，<strong>零拷贝技术可以把文件传输的性能提高至少一倍以上</strong>。</p>
 </li>
@@ -913,7 +928,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年3月25日</div>
+          <div>2025年6月26日</div>
         </div>
       
       
