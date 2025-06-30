@@ -1,0 +1,1125 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis基础Redis和Memchched 数据类型：Memcached 仅支持字符串类型，而 Redis 支持五种不同的数据类型，可以更灵活地解决问题。 数据持久化：Redis 支持两种持久化策略：RDB 快照和 AOF 日志，而 Memcached 不支持持久化。 分布式：Memcached 不支持分布式，只能通过在客户端使用一致性哈希来实现分布式存储，这种方式在存储和查询时都需要先在客户端">
+  
+  
+  
+  <title>1redis基础 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1redis基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-02-01 20:00" pubdate>
+          2022-02-01 20:00:09
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1redis基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Redis基础"><a href="#Redis基础" class="headerlink" title="Redis基础"></a>Redis基础</h1><h2 id="Redis和Memchched"><a href="#Redis和Memchched" class="headerlink" title="Redis和Memchched"></a>Redis和Memchched</h2><ul>
+<li>数据类型：Memcached 仅支持字符串类型，而 Redis 支持五种不同的数据类型，可以更灵活地解决问题。</li>
+<li>数据持久化：Redis 支持两种持久化策略：RDB 快照和 AOF 日志，而 Memcached 不支持持久化。</li>
+<li>分布式：Memcached 不支持分布式，只能通过在客户端使用一致性哈希来实现分布式存储，这种方式在存储和查询时都需要先在客户端计算一次数据所在的节点。</li>
+<li>内存管理机制<ul>
+<li>在 Redis 中，并不是所有数据都一直存储在内存中，可以将一些很久没用的 value 交换到磁盘，而 Memcached 的数据则会一直在内存中。</li>
+<li>Memcached 将内存分割成特定长度的块来存储数据，以完全解决内存碎片的问题。但是这种方式会使得内存的利用率不高，例如块的大小为 128 bytes，只存储 100 bytes 的数据，那么剩下的 28 bytes 就浪费掉了</li>
+</ul>
+</li>
+</ul>
+<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><ul>
+<li>Redis默认有六个数据库，从0-5，每个数据库单例能处理key：2.5亿个，一个key或是value大小最大是512M；Redis性能还是极高的，读的速度是110000次&#x2F;s,写的速度是81000次&#x2F;s 。</li>
+</ul>
+<p>	</p>
+<h2 id="通用命令"><a href="#通用命令" class="headerlink" title="通用命令"></a>通用命令</h2><ul>
+<li>仅当不存在时赋值，两种写法<ul>
+<li>set key value   nx</li>
+<li>SETNX</li>
+<li>SETXX ： 只有键已经存在时，才对键进行色赋值操作</li>
+</ul>
+</li>
+<li>setex  key timeout  value<ul>
+<li>为指定的 key 设置值及其过期时间。如果 key 已经存在， SETEX 命令将会替换旧的值。</li>
+<li>setpx  设置键的过期时间为毫秒</li>
+</ul>
+</li>
+<li>keys *  获取所有的key  <strong>*</strong> 号可以匹配正则</li>
+<li>type key  获取该key的数据类型</li>
+<li>del  key  删除指定的key value</li>
+<li>exists key 确认一个key是否存在</li>
+<li>expire key seconds  设置一个key的生存时间   ttl key  : 返回一个key的剩余过期事件。</li>
+<li>rename oldkeyname  newkeyname  重命名key</li>
+<li>SCAN<ul>
+<li>SACN 命令每次被调用之后， 都会向用户返回一个新的游标， 用户在下次迭代时需要使用这个新游标作为 <a target="_blank" rel="noopener" href="http://doc.redisfans.com/key/scan.html#scan"><em>SCAN</em></a> 命令的游标参数， 以此来延续之前的迭代过程。当 SCAN命令的游标参数被设置为 <code>0</code> 时， 服务器将开始一次新的迭代， 而当服务器向用户返回值为 <code>0</code> 的游标时， 表示迭代已结束。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><ul>
+<li><strong>包含三种字符串、数值、bitmap</strong></li>
+<li>存储：set key value</li>
+<li>获取：get key</li>
+<li>删除：del key</li>
+<li>追加：APPEND</li>
+<li>用指定的字符串覆盖给定 key 所储存的字符串值，覆盖的位置从偏移量 offset 开始<ul>
+<li>setrange k1 6 v2</li>
+</ul>
+</li>
+<li>获取存储在指定 key 中字符串的子字符串。字符串的截取范围由 start 和 end 两个偏移量决定(包括 start 和 end 在内)。<ul>
+<li>getrange  k1  start end （支持反向索引）</li>
+</ul>
+</li>
+<li>重新赋值并返回原值：  getset k1 v2</li>
+<li>获取字符串长度： STRLEN key</li>
+<li>同时赋值或获取： mset  mget</li>
+</ul>
+<h4 id="二进制安全"><a href="#二进制安全" class="headerlink" title="二进制安全"></a>二进制安全</h4><ul>
+<li>空字符’\0‘，C语言是判断空字符去判断一个字符的长度的，但是有很多数据结构经常会穿插空字符在中间，比如图片，音频，视频，压缩文件的二进制数据。</li>
+<li>Redis的String使用长度去校验是否到了字符的结尾</li>
+</ul>
+<h4 id="数值增减"><a href="#数值增减" class="headerlink" title="数值增减"></a>数值增减</h4><ul>
+<li>整数才能进行数值增减</li>
+<li>原子性操作</li>
+<li>自增命令  incr</li>
+<li>制定步长自增  incrby key  increment(步长）</li>
+<li>递减   decr   decrby</li>
+</ul>
+<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><ul>
+<li>存储： hset key filed1 value1  filed2 value2</li>
+<li>获取： hget key filed1</li>
+<li>全部获取：hgetall key</li>
+<li>删除： hdel key filed1</li>
+<li>判断字段是否存在：HEXISTS key filed</li>
+<li>只获取字段名或字段数量： hkeys key   、hvalues key</li>
+<li>获取字段数量 ： HLEN key</li>
+<li>哈希表中的字段值加上指定增量值： Hincrby key filed1 INCR_BY_NUMBER </li>
+<li>应用场景<ul>
+<li>哈希支持单独修改字段，存储那些对象数据，特别是对象属性经常发生增删改操作的数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><ul>
+<li><strong>双向链表实现，有序重复，按照出入顺序排序</strong>，可以添加元素到头部和尾部</li>
+<li>赋值：lpush key value1    |  rpush  key value1<ul>
+<li>取值和赋值使用相同方向的命令可以模拟队列，使用方向相反的命令可以模拟栈</li>
+</ul>
+</li>
+<li>获取元素个数：llen key</li>
+<li>获取<ul>
+<li>范围获取：lrange  key start end    (0 -1):取出全部</li>
+</ul>
+</li>
+<li>获取或设置指定索引的元素值<ul>
+<li>LINDEX key index LSET key index value</li>
+</ul>
+</li>
+<li>只保留区间指定的元素<ul>
+<li>LTRIM key start stop</li>
+</ul>
+</li>
+<li>向列表中插入元素<ul>
+<li>LINSERT key BEFORE|AFTER pivot value<ul>
+<li>该命令首先会在列表中从左到右查找值为pivot的元素，然后根据第二个参数是BEFORE还是AFTER来决定将value插入到该元素的前面还是后面。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>将元素从一个列表转移到另一个列表<ul>
+<li>RPOPLPUSH source destination</li>
+</ul>
+</li>
+<li>删除<ul>
+<li>lpop key ： 删除一个元素并返回   rpop key</li>
+<li>删除类表中指定个数的指定值<ul>
+<li>LREM key count value<ul>
+<li>当count&gt;0时， LREM会从列表左边开始删除。 </li>
+<li>当count&lt;0时， LREM会从列表后边开始删除。 </li>
+<li>当count&#x3D;0时， LREM删除所有值为value的元素。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>阻塞查找<ul>
+<li>blpop</li>
+</ul>
+</li>
+<li>应用场景<ul>
+<li><strong>消息队列</strong></li>
+<li>时间线</li>
+<li>文章列表或者数据分页展示的应用。<ul>
+<li>比如，我们常用的博客网站的文章列表，当用户量越来越多时，而且每一个用户都有自己的文章列表，而且当文章多时，都需要分页展示，这时可以考虑使用<strong>Redis</strong>的列表，列表不但有序同时还支持按照范围内获取元素，可以完美解决分页查询功能。大大提高查询效率。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><ul>
+<li>无序，不允许重复元素，内部是hash实现，支持交集操作</li>
+<li>添加<ul>
+<li>sadd key value</li>
+</ul>
+</li>
+<li>获取<ul>
+<li>smembers key ： 获取所有元素</li>
+</ul>
+</li>
+<li>删除<ul>
+<li>srem key value :   删除集合中的某个元素</li>
+</ul>
+</li>
+<li>判断元素是否在集合中<ul>
+<li>SISMEMBER key member</li>
+</ul>
+</li>
+<li>获取集合中的元素个数<ul>
+<li>SCARD key</li>
+</ul>
+</li>
+<li>从集合中弹出某个元素<ul>
+<li>SPOP key</li>
+</ul>
+</li>
+<li>SRANDMEMBER key  count<ul>
+<li>用于返回集合中的一个随机元素 </li>
+<li>如果countcount 为正数，且小于集合基数，那么命令返回一个包含 count 个元素的数组，数组中的元素各不相同。如果 count 大于等于集合基数，那么返回整个集合。 </li>
+<li>如果count 为负数，那么命令返回一个数组，数组中的元素可能会重复出现多次，而数组的长度为 count 的绝对值。</li>
+</ul>
+</li>
+<li>SPOP  key count<ul>
+<li>用于<strong>移除</strong>集合中的指定 key 的count个随机元素，移除后会返回移除的元素。</li>
+</ul>
+</li>
+</ul>
+<h4 id="运算指令"><a href="#运算指令" class="headerlink" title="运算指令"></a>运算指令</h4><ul>
+<li>差集运算<ul>
+<li>SDIFF key1 [key …]<ul>
+<li>获得key1与其他集合的差集</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>交集运算<ul>
+<li>SINTER key [key …]</li>
+</ul>
+</li>
+<li>并集运算<ul>
+<li>SUNION key [key …]</li>
+</ul>
+</li>
+</ul>
+<h3 id="Sortedset"><a href="#Sortedset" class="headerlink" title="Sortedset"></a>Sortedset</h3><ul>
+<li>有序,不允许重复元素，通过哈希表实现，排序后的集合中的每个元素都与一个称为得分的浮点值相关联,按照分数进行排序</li>
+<li>存储<ul>
+<li>zadd key score value</li>
+</ul>
+</li>
+<li>获取<ul>
+<li>zrange key  start end   (0 -1):取出全部   withsores(获取全部分数)</li>
+<li>zrevrange  从大到小</li>
+</ul>
+</li>
+<li>获取元素的分数<ul>
+<li>ZSCORE key member</li>
+</ul>
+</li>
+<li>获得集合中元素的数量<ul>
+<li>ZCARD key</li>
+</ul>
+</li>
+<li>获得指定分数范围的元素<ul>
+<li>ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]</li>
+</ul>
+</li>
+<li>增加某个元素的分数<ul>
+<li>ZINCRBY  key increment member</li>
+</ul>
+</li>
+<li>删除<ul>
+<li>zrem key value</li>
+</ul>
+</li>
+<li>获得指定范围内的元素个数<ul>
+<li>ZCOUNT key min max</li>
+</ul>
+</li>
+<li>按照排名范围删除元素<ul>
+<li>ZREMRANGEBYRANK key start stop</li>
+</ul>
+</li>
+<li>按照分数范围删除元素<ul>
+<li>ZREMRANGEBYSCORE key min max</li>
+</ul>
+</li>
+<li>获取元素的排名<ul>
+<li>ZRANK | ZREVRANK key member</li>
+</ul>
+</li>
+<li>取交集<ul>
+<li>ZUNIONSTORE destination numkeys key [key …] [WEIGHTS weight [weight …]] [AGGREGATE SUM|MIN|MAX]</li>
+<li>numkeys  为key的数量 WEIGHTS 为各个key的权重，合并时会按照权重计算分数  AGGREGATE 为当value值相同，对于相同的value值的source的处理</li>
+</ul>
+</li>
+</ul>
+<h4 id="排序的数据结构"><a href="#排序的数据结构" class="headerlink" title="排序的数据结构"></a>排序的数据结构</h4><ul>
+<li>元素唯一且按<strong>分数（score）</strong>排序，结合哈希表（快速查找）和跳跃表（范围查询）。</li>
+<li>skip list，类似于数据库的B+树，区别是skip  list是随机选层</li>
+</ul>
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
+<li>排行榜：有序集合经典使用场景。例如视频网站需要对用户上传的视频做排行榜，榜单维护可能是多方面：按照时间、按照播放量、按照获得的赞数等</li>
+<li>用<strong>Sorted Sets</strong>来做带权重的队列，比如普通消息的score为1，重要消息的score为2，然后工作线程可以选择按score的倒序来获取工作任务。让重要的任务优先执行。</li>
+</ul>
+<h3 id="bitMap"><a href="#bitMap" class="headerlink" title="bitMap"></a>bitMap</h3><ul>
+<li>基于 String 的位操作，每个 bit 表示 0&#x2F;1。</li>
+<li>setbit k1 1 1 :将第一个字节的第二位变为1，默认为0， 0000 0000 -&gt; 0100 0000</li>
+<li>bitcount  k  start end:  统计start end中1出现的次数</li>
+<li>bitpos k  bit start end :  返回位图中第一个值为bit的位置</li>
+<li>bitop  operation  destkey  key1 key2…:对一个或多个保存二进制位的字符串key进行位元操作,并将结果保存到destksy上<ul>
+<li>operation可以是AND、OR、NOT、XOR</li>
+</ul>
+</li>
+</ul>
+<h3 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a><strong>HyperLogLog</strong></h3><ul>
+<li>基数统计（估算集合中不重复元素数量），误差率约 **0.81%**。</li>
+<li>在 Redis 中实现的 <strong>HyperLoglog</strong> 也只需要 <strong>12 K</strong> 内存，在 <strong>标准误差 0.81%</strong> 的前提下，<strong>能够统计 2的64 次方数据</strong>！</li>
+<li>应用场景<ul>
+<li>统计独立 IP 访问量。</li>
+<li>大型数据集的去重计数（如搜索关键词去重）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Geospatial"><a href="#Geospatial" class="headerlink" title="Geospatial"></a><strong>Geospatial</strong></h3><ul>
+<li>基于 Sorted Set 存储经纬度，使用 GeoHash 编码。</li>
+<li>应用场景<ul>
+<li>配送距离计算</li>
+<li>附近的人&#x2F;地点</li>
+</ul>
+</li>
+</ul>
+<h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><ul>
+<li>Redis 5.0 引入，用于消息队列，支持多消费者组和消息持久化。</li>
+<li>应用场景<ul>
+<li>异步通信系统（类似 Kafka）</li>
+<li>日志收集（支持回溯消费）</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><h3 id="SDS"><a href="#SDS" class="headerlink" title="SDS"></a>SDS</h3><ul>
+<li>String键的底层实现 还被用作缓冲区</li>
+<li>原生C语言字符串采用遍历拿到字符串长度，效率太低，SDS自己维护了长度信息</li>
+<li>底层是char数组</li>
+<li>还减少了修改字符串时带来的内存重新分配次数<ul>
+<li>空间预分配：当我们对SDS进行扩展操作的时候，Redis会为SDS分配好内存，并且根据特定的公式，分配多余的free空间，还有多余的1byte空间（这1byte也是为了存空字符）</li>
+<li>惰性空间释放：当我们执行完一个字符串缩减的操作，redis并不会马上收回我们的空间，因为可以预防你继续添加的操作，这样可以减少分配空间带来的消耗，但是当你再次操作还是没用到多余空间的时候，Redis也还是会收回对于的空间，防止内存的浪费的。</li>
+</ul>
+</li>
+</ul>
+<h3 id="dict-字典"><a href="#dict-字典" class="headerlink" title="dict(字典)"></a>dict(字典)</h3><ul>
+<li>是哈希键的底层实现</li>
+<li>字典内部包含两个hashtable</li>
+</ul>
+<h4 id="渐进式rehash"><a href="#渐进式rehash" class="headerlink" title="渐进式rehash"></a>渐进式rehash</h4><ul>
+<li>渐进式 rehash 会在 rehash 的同时，保留新旧两个 hash 结构，查询时会同时查询两个 hash 结构，然后在后续的定时任务以及 hash 操作指令中，循序渐进的把旧字典的内容迁移到新字典中。当搬迁完成了，就会使用新的 hash 结构取而代之。</li>
+</ul>
+<h4 id="扩缩容的阈值"><a href="#扩缩容的阈值" class="headerlink" title="扩缩容的阈值"></a>扩缩容的阈值</h4><ul>
+<li>hash 表中 <strong>元素的个数等于第一维数组的长度时</strong>，就会开始扩容，扩容的新数组是 <strong>原数组大小的 2 倍</strong>，如果在进行持久化则尽量不去扩容，如果达到了数组长度的五倍，会强制扩容</li>
+<li>**元素个数低于数组长度的 10%**，缩容不会考虑 Redis 是否在做 <code>bgsave</code>。</li>
+</ul>
+<h3 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h3><ul>
+<li>有序集合的底层实现</li>
+</ul>
+<h2 id="发布订阅模式-Pub-Sub"><a href="#发布订阅模式-Pub-Sub" class="headerlink" title="发布订阅模式(Pub&#x2F;Sub)"></a>发布订阅模式(Pub&#x2F;Sub)</h2><ul>
+<li>PUBLISH   channel message<ul>
+<li>推送message到channel</li>
+</ul>
+</li>
+<li>SUBSCRIBE channel</li>
+<li>订阅某个channel</li>
+</ul>
+<h2 id="redis事务"><a href="#redis事务" class="headerlink" title="redis事务"></a>redis事务</h2><ul>
+<li>   Redis的事务是通过MULTI，EXEC，DISCARD和WATCH这四个命令来完成的。</li>
+<li>   Redis的单个命令都是原子性的，所以这里确保事务性的对象是命令集合。</li>
+<li>   Redis将命令集合序列化并确保处于同一事务的命令集合连续且不被打断的执行</li>
+<li>   Redis不支持回滚操作<ul>
+<li>   大多数事务失败都是因为语法错误或者类型错误，这两种错误都是开发过程中可以预见的。</li>
+<li>性能问题</li>
+</ul>
+</li>
+</ul>
+<h3 id="相关语句"><a href="#相关语句" class="headerlink" title="相关语句"></a>相关语句</h3><ul>
+<li>MULIT<ul>
+<li>用于标记事务块的开始，将后续的命令压入FIFO队列中，最终使用EXEC来执行这个队列</li>
+</ul>
+</li>
+<li>EXEC<ul>
+<li>在一个事务中执行所有先前放入队列的命令，然后恢复正常的连接状态</li>
+</ul>
+</li>
+<li>DISCARD<ul>
+<li>清除所有先前在一个事务中放入队列的命令，然后恢复正常的连接状态。</li>
+</ul>
+</li>
+<li>WATCH<ul>
+<li>当某个事务需要按条件执行时，就要使用这个命令将给定的键设置为受监控的状态。</li>
+<li>通过CAS的乐观锁，当监控数据发生变化，事务不执行</li>
+</ul>
+</li>
+<li>UNWATCH<ul>
+<li>清除所有先前为一个事务监控的键。</li>
+</ul>
+</li>
+</ul>
+<h3 id="事务失败处理"><a href="#事务失败处理" class="headerlink" title="事务失败处理"></a>事务失败处理</h3><ul>
+<li>redis语法错误(编译器错误)<ul>
+<li>语法错误，所有的执行均不提交</li>
+</ul>
+</li>
+<li>redis类型错误(运行起错误)<ul>
+<li>不回滚，执行错误语句前的所有语句并提交</li>
+</ul>
+</li>
+<li></li>
+</ul>
+<h3 id="key的过期策略"><a href="#key的过期策略" class="headerlink" title="key的过期策略"></a>key的过期策略</h3><ul>
+<li>定时策略：在设置key的过期时间的同时，为该key创建一个定时器，让定时器在key的过期时间来临时，对key进行删除。<ul>
+<li>优点：保证内存被尽快释放，减少无效的缓存暂用内存。</li>
+<li>缺点：若过期key很多，删除这些key会占用很多的CPU时间，在CPU时间紧张的情况下，CPU不能把所有的时间用来做要紧的事儿，还需要去花时间删除这些key。定时器的创建耗时，若为每一个设置过期时间的key创建一个定时器（将会有大量的定时器产生），性能影响严重。一般来说，是不会选择该策略模式。</li>
+</ul>
+</li>
+<li>惰性策略：key过期的时候不删除，每次从数据库获取key的时候去检查是否过期，若过期，则删除，返回null。<ul>
+<li>优点：删除操作只发生在从数据库取出key的时候发生，而且只删除当前key，所以对CPU时间的占用是比较少的，而且此时的删除是已经到了非做不可的地步</li>
+<li>缺点：若大量的key在超出超时时间后，很久一段时间内，都没有被获取过，此时的无效缓存是永久暂用在内存中的，那么可能发生内存泄露（无用的垃圾占用了大量的内存）</li>
+</ul>
+</li>
+<li>定期策略：每隔一段时间对设置了缓存时间的key进行检测，如果可以已经失效，则从内存中删除，如果未失效，则不作任何处理。<ul>
+<li>优点：通过限制删除操作的时长和频率，来减少删除操作对CPU时间的占用–处理”定时删除”的缺点 定期删除过期key–处理”惰性删除”的缺点。</li>
+<li>缺点：在内存友好方面，不如”定时删除”，因为是随机遍历一些key，因此存在部分key过期，但遍历key时，没有被遍历到，过期的key仍在内存中。在CPU时间友好方面，不如”惰性删除”，定期删除也会暂用CPU性能消耗。</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据淘汰策略"><a href="#数据淘汰策略" class="headerlink" title="数据淘汰策略"></a>数据淘汰策略</h3><ul>
+<li>可以设置内存最大使用量，当内存使用量超出时，会实行数据淘汰策略。</li>
+<li>6 种淘汰策略</li>
+<li><table>
+<thead>
+<tr>
+<th align="center">策略</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">volatile-lru</td>
+<td align="center">从已设置过期时间的数据集中挑选最近最少使用的数据淘汰</td>
+</tr>
+<tr>
+<td align="center">volatile-ttl</td>
+<td align="center">从已设置过期时间的数据集中挑选将要过期的数据淘汰</td>
+</tr>
+<tr>
+<td align="center">volatile-random</td>
+<td align="center">从已设置过期时间的数据集中任意选择数据淘汰</td>
+</tr>
+<tr>
+<td align="center">allkeys-lru</td>
+<td align="center">从所有数据集中挑选最近最少使用的数据淘汰</td>
+</tr>
+<tr>
+<td align="center">allkeys-random</td>
+<td align="center">从所有数据集中任意选择数据进行淘汰</td>
+</tr>
+<tr>
+<td align="center">noeviction</td>
+<td align="center">禁止驱逐数</td>
+</tr>
+</tbody></table>
+</li>
+<li>作为内存数据库，出于对性能和内存消耗的考虑，Redis 的淘汰算法实际实现上并非针对所有 key，而是抽样一小部分并且从中选出被淘汰的 key。</li>
+<li>使用 Redis 缓存数据时，为了提高缓存命中率，需要保证缓存数据都是热点数据。可以将内存最大使用量设置为热点数据占用的内存量，然后启用 allkeys-lru 淘汰策略，将最近最少使用的数据淘汰。</li>
+<li>Redis 4.0 引入了 volatile-lfu 和 allkeys-lfu 淘汰策略，LFU 策略通过统计访问频率，将访问频率最少的键值对淘汰</li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><ul>
+<li>下载&amp;解压<a target="_blank" rel="noopener" href="https://redis.io/download">https://redis.io/download</a></li>
+<li>make</li>
+<li>make PREFIX&#x3D;&#x2F;usr&#x2F;local&#x2F;redis install  指定路径安装<ul>
+<li>安装失败，安装gcc， yum install gcc   ，安装后，要先make disclean</li>
+</ul>
+</li>
+<li>安装后，将实例的配置文件移动到启动文件夹</li>
+<li>redis配置文件<ul>
+<li>daemonize   后台运行</li>
+<li>maxmemory  设置最大内存</li>
+</ul>
+</li>
+<li>使用服务启动<ul>
+<li>vim &#x2F;etc&#x2F;profile   <ul>
+<li>export   REDIS_PATH&#x3D;redisLocal</li>
+<li>export   PATH&#x3D;$PATH:$REDIS_PATH&#x2F;bin</li>
+</ul>
+</li>
+<li>cd utils</li>
+<li>.&#x2F;install_server.sh</li>
+<li>启动：service redis_6379 start</li>
+</ul>
+</li>
+<li>&#x2F;启动 redis-server  .&#x2F;etc&#x2F;redis.config   指定配置文件启动</li>
+<li>关闭 redis-cli shutdown</li>
+</ul>
+<h3 id="WIN"><a href="#WIN" class="headerlink" title="WIN"></a>WIN</h3><ul>
+<li>win下运行的下载地址：<br><a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100">https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100</a></li>
+<li>配置文件：redis.windows.conf</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05-2非关系型数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/05-2%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/redis/" class="category-chain-item">redis</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1redis基础</div>
+      <div>https://x-leonidas.github.io/2022/02/01/05数据库/05-2非关系型数据库/redis/1redis基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年2月1日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年4月29日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/02SpringCloud/" title="02SpringCloud">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">02SpringCloud</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/11-RocketMQ/" title="11-RocketMQ">
+                        <span class="hidden-mobile">11-RocketMQ</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -216,6 +216,114 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/01-%E6%A6%82%E5%BF%B5/" target="_self">
+          01-概念
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/01-%E6%A6%82%E5%BF%B5/" target="_self">
+        <div>
+          AKF扩展立方体基本概念 一种系统化的可扩展性方法论，旨在通过三个正交维度（X、Y、Z轴）解决性能瓶颈问题。该理论由《The Art of Scalability》提出，广泛应用于分布式系统设计，帮助架构师以最低成本实现高效扩展  简单来说就是通过加机器就可以解决容量和可用性问题   X轴 —— 通过复制无状态服务或数据副本来分担负载，提升吞吐量和可用性Y轴 —— 按业务功能或数据模型拆分系统，形
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">12分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/02-%E5%88%86%E5%B8%83%E5%BC%8F%E7%AE%97%E6%B3%95/" target="_self">
+          02-分布式算法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/02-%E5%88%86%E5%B8%83%E5%BC%8F%E7%AE%97%E6%B3%95/" target="_self">
+        <div>
+          日志和复制状态机 这里“日志”并不是常见的通过 log4j 或 syslog 输出的文本。而是 MySQL 中的 binlog（Binary Log）、MongoDB 中的 Oplog（Operations Log）、Redis 中的 AOF（Append Only File）、PostgreSQL 中的 WAL（Write-Ahead Log）…。它们虽然名称不同，但共同特点是只能追加、完全有序
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">12分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/03-%E9%AB%98%E5%B9%B6%E5%8F%91/" target="_self">
           03-高并发
         </a>
@@ -432,6 +540,60 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
+          07-分布式Session
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/07-%E5%88%86%E5%B8%83%E5%BC%8FSession/" target="_self">
+        <div>
+          分布式系统中session一致性问题Redis实现 我们只需在用户首次登陆的时候将用户信息放到 Token并缓存到 Redis 中，同时设置一个过期时间。 定义一个拦截器 SessionInterceptor，当访问 web 接口的时候检验用户的 token 信息，判断用户是否登陆，未登录的情况下一些业务接口是无法访问的，以及在登陆的情况下拿到我们需要的用户信息， 式简单易用，而且Redis 在分
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 19:59" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">12分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/2022/02/01/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/09-%E6%9C%8D%E5%8A%A1%E5%B9%82%E7%AD%89/" target="_self">
           09-服务幂等
         </a>
@@ -573,168 +735,6 @@
       <span class="category-chain">
         
   <a href="/categories/13Linux/" class="category-chain-item">13Linux</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/13Linux/04.Linux%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/" target="_self">
-          04.Linux问题排查步骤
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/13Linux/04.Linux%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4/" target="_self">
-        <div>
-          CPU100%排查 top -c ：查看所有的进程 看cpu使用率  P排序 top  -Hp [pid]   查看使用cpi最高的进程下的线程  十六进制转换：printf “0x%x\n”   使用jstack -l  [pid] 查看堆栈日志文件,然后根据线程的十六进制查看栈日志文件中的信息  CPU负载和CPU利用率的区别是什么？ 负载：Load Average，他代表的是当前系统正在运行
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/13Linux/" class="category-chain-item">13Linux</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/DDD/" target="_self">
-          DDD
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/DDD/" target="_self">
-        <div>
-          领域驱动设计 DDD是一种通过领域模型驱动复杂系统设计的软件方法论。其核心在于将业务逻辑与技术实现紧密结合，确保软件系统能够准确反映业务需求 目的是为了对软件设计的领域进行建模，以应对系统规模过大引起的软件复杂性问题。 什么是领域建模？ 领域模型跟技术毫无关系，而是为了更有结构化的拆解和表达业务逻辑。业务逻辑来自现实世界里的具体场景，涉及可视画面、操作动作和流程。要准确表达业务逻辑需要先讲清楚每个
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" target="_self">
-          单元测试
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" target="_self">
-        <div>
-          单元测试 单元测试的一些原则 测试用例能验证函数的正确性（这条都通不过就……）； 测试用例尽可能涵盖边界条件（例如遍历一个链表，头指针是空，只有一个节点，链表有N个节点，N是问题描述下允许的最大节点数等等）； 一些异常和错误处理（例如往一个函数里传入空指针，传入空串，这个函数能否打印一些log，返回错误码，实现加法的Add函数如何检测和处理溢出等等）    java常用的测试工具mockito
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="category-chain-item">14软件工程</a>
   
   
 

@@ -704,7 +704,7 @@
 <li>是为了修正并发标记期间因用户程序继续运作而导致标记产生变动的那一部分标记记录，虚拟机将这段时间对象变化记录在线程Remembered Set Logs里面，最终标记阶段需要把Remembered Set Logs的数据合并到Remembered Set中，(处理少量的STAB记录)</li>
 </ul>
 </li>
-<li>筛选回收(Live Data Counting and Evacuation)—-STW<ul>
+<li>筛选回收(Live Data Counting and Evacuation)—-<strong>STW</strong><ul>
 <li>首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划</li>
 </ul>
 </li>
@@ -912,7 +912,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月3日</div>
+          <div>2025年6月27日</div>
         </div>
       
       
