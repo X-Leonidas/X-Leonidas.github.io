@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.3k 字
+          5.4k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          45 分钟
+          46 分钟
         
       </span>
     
@@ -351,14 +351,19 @@
 <li>仅锁定单行，不涉及范围。</li>
 </ul>
 <h4 id="临键锁-Next-Key-Lock"><a href="#临键锁-Next-Key-Lock" class="headerlink" title="临键锁(Next-Key Lock)"></a>临键锁(<strong>Next-Key Lock</strong>)</h4><ul>
-<li><strong>临键锁</strong> 是 <strong>记录锁（Record Lock） + 间隙锁（Gap Lock）</strong> 的组合，锁定索引记录及其前面的间隙</li>
-<li>例如：如果表中存在 <code>id=3</code> 和 <code>id=7</code> 的记录，临键锁可能锁定区间 <code>(3, 7]</code>(左开右闭区间)。</li>
-<li>目的<ul>
+<li><p><strong>临键锁</strong> 是 <strong>记录锁（Record Lock） + 间隙锁（Gap Lock）</strong> 的组合，锁定索引记录及其前面的间隙</p>
+</li>
+<li><p>例如：如果表中存在 <code>id=3</code> 和 <code>id=7</code> 的记录，临键锁可能锁定区间 <code>(3, 7]</code>(左开右闭区间)。</p>
+</li>
+<li><p>目的</p>
+<ul>
 <li>防止其他事务在锁定范围内插入新记录（避免幻读）。</li>
 <li>阻止其他事务修改或删除锁定范围内的记录。</li>
+<li>左开右闭是为了避免双重锁定，如果采用闭区间（如 <code>[10,20]</code>），则记录 <code>10</code> 和 <code>20</code> 会被相邻的锁重复锁定（<code>[10,20]</code> 和 <code>[20,30]</code> 会重叠锁定 <code>20</code>）。左开右闭确保了边界值（如 <code>20</code>）只被右侧的临键锁锁定一次，避免冲突。</li>
 </ul>
 </li>
-<li>MVCC 不能解决幻影读问题，Next-Key Locks 就是为了解决这个问题而存在的。在可重复读（REPEATABLE READ）隔离级别下，使用 MVCC + Next-Key Locks 可以解决幻读问题。</li>
+<li><p>MVCC 不能解决幻影读问题，Next-Key Locks 就是为了解决这个问题而存在的。在可重复读（REPEATABLE READ）隔离级别下，使用 MVCC + Next-Key Locks 可以解决幻读问题。</p>
+</li>
 </ul>
 <h3 id="封锁协议"><a href="#封锁协议" class="headerlink" title="封锁协议"></a>封锁协议</h3><h4 id="三级封锁协议"><a href="#三级封锁协议" class="headerlink" title="三级封锁协议"></a>三级封锁协议</h4><ul>
 <li><p>一级封锁协议</p>
@@ -703,7 +708,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年6月30日</div>
+          <div>2025年7月1日</div>
         </div>
       
       
