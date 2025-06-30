@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          8.6k 字
+          10k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          73 分钟
+          85 分钟
         
       </span>
     
@@ -404,8 +404,91 @@
 </ul>
 </li>
 </ul>
-<h3 id="对象分配过程图"><a href="#对象分配过程图" class="headerlink" title="对象分配过程图"></a>对象分配过程图</h3><ul>
+<h3 id="对象分配机制"><a href="#对象分配机制" class="headerlink" title="对象分配机制"></a>对象分配机制</h3><ul>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3.png" srcset="/img/loading.gif" lazyload alt="对象分配过程详解" style="zoom:80%;" /></li>
+</ul>
+<h4 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h4><ul>
+<li>在编译期间（主要是 JIT 编译器，如 C1&#x2F;C2）分析一个新建对象的<strong>作用域和生命周期</strong>，判断它是否会“逃逸”出创建它的方法或线程</li>
+<li>分析维度<ul>
+<li><strong>方法逃逸（Method Escape）：</strong> 对象被作为参数传递给其他方法，或者作为方法的返回值返回。这意味着对象在创建它的方法执行结束后，可能还被其他方法引用。</li>
+<li>对象被赋值给类变量（静态变量）或可以在其他线程中访问的实例变量（例如，放入<code>ConcurrentHashMap</code>）。这意味着对象可能被其他线程访问。</li>
+</ul>
+</li>
+<li>如果一个对象被分析为<strong>没有逃逸（No Escape）</strong>，即它仅在创建它的方法内部使用，且不会被其他线程访问，那么这个对象就成为了进行栈上分配和标量替换的<strong>候选者</strong>。</li>
+<li><strong>标量替换</strong><ul>
+<li>对于被判定为<strong>没有逃逸</strong>的对象，JIT 编译器会尝试<strong>不真正地在堆或栈上分配这个完整的对象实例</strong>。相反，它会将这个对象的成员变量（字段）分解成一个个独立的<strong>标量（Scalar）</strong>（即基本数据类型 <code>int</code>, <code>long</code>, <code>char</code>, <code>boolean</code> 等 或 对象引用 <code>reference</code>），并将这些标量直接存储在<strong>方法的局部变量表（Local Variable Table）</strong> 或 <strong>CPU 寄存器（CPU Registers）</strong> 中。<strong>也就是说这个对象不会占用堆空间</strong></li>
+<li>工作步骤<ul>
+<li><strong>分析对象：</strong> 编译器识别出一个<strong>没有逃逸的临时小对象</strong>。</li>
+<li><strong>分解字段：</strong> 将这个对象的所有字段视为独立的局部变量。</li>
+<li><strong>替换访问：</strong> 将代码中所有通过对象引用访问这些字段的地方（如 <code>obj.fieldA</code>, <code>obj.fieldB</code>），直接替换为访问对应的局部变量或寄存器。</li>
+<li><strong>消除分配：</strong> <strong>完全避免</strong>为该对象分配内存（无论是在堆上还是栈上）。主要是消除了对象创建所带来的成本</li>
+</ul>
+</li>
+<li>优点<ul>
+<li><strong>零分配开销：</strong> 彻底避免了在堆上分配内存（<code>new</code> 操作）和在栈上分配空间的开销。</li>
+<li><strong>零GC开销：</strong> 因为对象根本不存在，自然不需要垃圾回收器来回收它。</li>
+<li><strong>提升执行效率：</strong> 访问局部变量&#x2F;寄存器比访问堆内存或栈帧中的对象快得多，减少了内存访问延迟。寄存器分配还能让编译器做更多的优化（如循环展开、常量传播）。</li>
+<li><strong>减少内存占用：</strong> 避免了对象头的开销（Mark Word, Klass Pointer）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>栈上分配</strong><ul>
+<li>对于被判定为<strong>没有逃逸</strong>的对象，JVM 可以选择在<strong>当前线程的Java虚拟机栈（Java Virtual Machine Stack）</strong> 上为该对象分配内存，而不是在共享的堆（Heap）上分配</li>
+<li>工作步骤<ul>
+<li><strong>分析对象：</strong> 编译器识别出一个没有逃逸的对象。</li>
+<li><strong>栈帧分配：</strong> 在创建该对象的方法对应的栈帧内部，开辟一块空间来存储这个对象的实例数据（包括对象头和数据字段）。</li>
+<li><strong>生命周期绑定：</strong> 该对象的内存空间的生命周期与栈帧完全绑定。当方法调用结束，栈帧被弹出销毁时，这块内存空间也<strong>自动、立即</strong>被释放，不需要垃圾回收器介入。</li>
+</ul>
+</li>
+<li>优点<ul>
+<li><strong>快速分配&#x2F;释放：</strong> 栈上分配（移动栈指针）通常比在堆上分配（需要处理空闲列表、同步等）快得多。释放更是瞬间完成（栈帧弹出）。</li>
+<li><strong>零GC开销：</strong> 对象随栈帧销毁而自动回收，完全避开了垃圾回收机制（Minor GC &#x2F; Full GC），避免了GC停顿。</li>
+<li><strong>局部性好：</strong> 对象内存和方法调用的局部变量在同一个栈帧内，访问速度快。</li>
+</ul>
+</li>
+<li>与标量替换的关系<ul>
+<li>在 <strong>HotSpot JVM 的实现中，栈上分配并不是一个独立于标量替换的常用优化</strong></li>
+<li><strong>标量替换是更彻底的优化：</strong> 它完全消除了对象分配。栈上分配虽然比堆分配快，但依然需要在栈帧上分配空间、初始化对象头、写入字段等操作</li>
+<li>HotSpot JVM 的逃逸分析优化会<strong>优先尝试标量替换</strong>。只有当对象的结构<strong>无法被有效分解</strong>（例如，对象需要作为一个整体被传递，尽管它没有逃逸出方法，比如被同步块锁定 <code>synchronized(obj)</code>，或者其字段被以对象引用的形式使用），或者标量替换的收益不高时，才会退而求其次选择<strong>栈上分配</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="从eden到servivor"><a href="#从eden到servivor" class="headerlink" title="从eden到servivor"></a>从eden到servivor</h4><ul>
+<li>绝大多数新创建的对象都在新生代的 Eden 区分配,当 Eden 区被填满时，会触发一次 <strong>Minor GC</strong>（也称为 Young GC）</li>
+<li>STW<ul>
+<li>标记 Eden 区和 <strong>其中一个</strong> Survivor 区（假设是 SurvivorFrom，比如 Survivor0）中的存活对象。</li>
+<li>将 Eden 区和 SurvivorFrom 区中所有存活的对象，复制到 <strong>另一个</strong> Survivor 区（SurvivorTo，比如 Survivor1）。</li>
+<li>清理 Eden 区和刚刚使用过的 SurvivorFrom 区（Survivor0），使其变为空闲状态</li>
+</ul>
+</li>
+<li>对象每在新生代中“熬过”一次 Minor GC（即被复制一次），它的“年龄”（Age）就会增加 1</li>
+</ul>
+<h4 id="从新生代到老年代"><a href="#从新生代到老年代" class="headerlink" title="从新生代到老年代"></a>从新生代到老年代</h4><ul>
+<li>年龄阈值达到 (<code>MaxTenuringThreshold</code>)<ul>
+<li>JVM 有一个参数 <code>-XX:MaxTenuringThreshold=&lt;n&gt;</code>（默认值在 JVM 8 中是 <strong>15</strong>）来控制这个阈值</li>
+</ul>
+</li>
+<li>Survivor 空间不足<ul>
+<li>在 Minor GC 过程中，当尝试将 Eden 区和 SurvivorFrom 区的存活对象复制到 SurvivorTo 区时，<strong>如果 SurvivorTo 区的剩余空间不足以容纳所有存活对象</strong>，那些无法放入 SurvivorTo 区的存活对象（无论年龄大小）会被<strong>提前晋升（Premature Promotion）</strong> 到老年代</li>
+</ul>
+</li>
+<li>动态年龄判断<ul>
+<li>这是 HotSpot JVM 的一个优化策略，目的是<strong>避免固定阈值导致 Survivor 区空间浪费</strong></li>
+<li>JVM 会计算 Survivor 区中<strong>相同年龄的所有对象大小的总和</strong>，如果发现<strong>某个年龄的所有对象大小的总和超过了 Survivor 区空间的一半</strong> (<code>TargetSurvivorRatio</code>，默认 50%，可通过 <code>-XX:TargetSurvivorRatio=&lt;percent&gt;</code> 调整)，那么<strong>所有年龄大于或等于这个年龄的对象</strong>，都会在下一次 Minor GC 中被晋升到老年代，而无需等待达到 <code>MaxTenuringThreshold</code></li>
+</ul>
+</li>
+<li>大对象直接进入老年代<ul>
+<li>非常大的对象（比如长数组、大字符串）可能会直接在老年代分配，而不是在 Eden 区</li>
+<li>由参数 <code>-XX:PretenureSizeThreshold=&lt;size&gt;</code> 控制（如 <code>-XX:PretenureSizeThreshold=3M</code>）。大于等于指定大小的对象直接在老年代分配</li>
+</ul>
+</li>
+<li>空间分配担保<ul>
+<li>JVM 会检查一个关键条件：<strong>老年代的剩余连续空间是否大于 *历次* 晋升到老年代对象的平均大小</strong>,如果大于，则认为这次 Minor GC 是安全的，可以尝试进行。如果小于，此时，<strong>JVM 可能会先进行一次 Full GC</strong> 来腾出足够的老年代空间，然后再进行 Minor GC。Full GC 后如果老年代空间仍然不足，则抛出 <code>OutOfMemoryError</code>。</li>
+</ul>
+</li>
 </ul>
 <h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="标记-清除算法-Mark-Sweep"><a href="#标记-清除算法-Mark-Sweep" class="headerlink" title="标记-清除算法(Mark-Sweep)"></a>标记-清除算法(Mark-Sweep)</h3><ul>
 <li><p>一般作用于老年代</p>
@@ -431,27 +514,7 @@
 </li>
 <li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95.png" srcset="/img/loading.gif" lazyload style="zoom:60%;" />
 </li>
-<li><p>将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。当回收时，将Eden和刚才使用过的Survivor还存活的对象一次性复制到另外一个Survivor空间上，最后清理掉Eden和刚才使用过的Survivor空间。比例是Eden:Survivor0:Survivor  &#x3D; 8:1:1,但是无法保证每次回收都只有不多于10%的对象存活，当Survivor空间不够用时，需要依赖其他内存(老年代)进行分配担保(<strong>Handle Promotion</strong>)</p>
-</li>
-<li><p>分配担保</p>
-<ul>
-<li>先检查老年代的可用空间是否能够兜底，有以下两种方案<ul>
-<li>乐观策略：老年代的<strong>最大连续可用空间</strong> &gt; <strong>新生代所有对象总大小</strong>（包括存活对象和未回收的垃圾）<ul>
-<li>若成立：认为Minor GC是安全的，直接触发Minor GC。</li>
-<li>若不成立：进一步判断是否允许担保失败（需启用<code>-XX:+HandlePromotionFailure</code>参数，但该参数在JDK 6之后已逐渐废弃）。<ul>
-<li>若允许，则继续检查老年代最大连续空间是否 &gt; <strong>历次晋升到老年代对象的平均大小</strong>。<ul>
-<li>是：尝试Minor GC（但存在风险，可能导致Full GC）。</li>
-<li>否：直接触发Full GC（回收整个堆）。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>保守策略：若未启用担保失败（或老年代空间不足），直接触发Full GC，确保老年代有足够空间接收晋升对象。</li>
-</ul>
-</li>
-</ul>
+<li><p>将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor。当回收时，将Eden和刚才使用过的Survivor还存活的对象一次性复制到另外一个Survivor空间上，最后清理掉Eden和刚才使用过的Survivor空间。</p>
 </li>
 </ul>
 <h3 id="标记整理算法-Mark-Compact"><a href="#标记整理算法-Mark-Compact" class="headerlink" title="标记整理算法(Mark-Compact)"></a>标记整理算法(Mark-Compact)</h3><ul>
@@ -604,7 +667,7 @@
 <li>CPU资源敏感<ul>
 <li><p>默认启动的回收线程数是  (CPU数量+3)&#x2F;4</p>
 <ul>
-<li>隐含：当处理器核心不足4个时，CMS对用户程序的印象可能会很大</li>
+<li>隐含：当处理器核心不足4个时，CMS对用户程序的影响可能会很大</li>
 </ul>
 </li>
 <li><p>无法处理浮动垃圾，可能出现Concurrent Mode Failure </p>
@@ -912,7 +975,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年6月27日</div>
+          <div>2025年7月1日</div>
         </div>
       
       

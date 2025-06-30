@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          1.4k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          11 分钟
+          12 分钟
         
       </span>
     
@@ -290,7 +290,9 @@
 </ul>
 <h3 id="undolog"><a href="#undolog" class="headerlink" title="undolog"></a>undolog</h3><ul>
 <li><strong>undo log是回滚日志</strong>，提供回滚操作。<ul>
-<li>也是innodb层产生的。</li>
+<li>为了修改某行数据，InnoDB 会先<strong>将该行数据的旧版本拷贝到 undo log</strong> 中</li>
+<li>Undo log 记录本身的产生<strong>也会产生 redo log</strong>！因为 undo log 需要持久化，也需要 WAL 保护</li>
+<li>如果事务<strong>提交</strong>：该事务的 undo log <strong>不会立即删除</strong>！它需要为 MVCC 服务。只有在<strong>没有任何活动事务（或快照读）还需要访问该 undo log 记录所代表的历史版本时</strong>，该记录才会被后台的 <code>purge</code> 线程清理掉</li>
 <li>核心作用<ul>
 <li><strong>事务回滚</strong>：<br>  记录事务修改前的旧值，用于回滚未提交的事务（保证原子性）。</li>
 <li><strong>MVCC支持</strong>：<br>  为其他事务提供旧版本数据，实现非锁定读（读不阻塞写，写不阻塞读）。</li>
