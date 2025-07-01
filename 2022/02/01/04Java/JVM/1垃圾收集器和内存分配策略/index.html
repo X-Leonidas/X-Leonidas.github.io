@@ -637,7 +637,7 @@
 <h3 id="CMS收集器-Concurrent-Mark-Sweep"><a href="#CMS收集器-Concurrent-Mark-Sweep" class="headerlink" title="CMS收集器(Concurrent Mark Sweep)"></a>CMS收集器(Concurrent Mark Sweep)</h3><ul>
 <li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/CMS.png" srcset="/img/loading.gif" lazyload></p>
 </li>
-<li><p>并发低停顿收集器，以实现最短 STW 时间为目标的收集器</p>
+<li><p>专注于老年代回收，并发低停顿收集器，以实现最短 STW 时间为目标的收集器</p>
 </li>
 <li><p>收集步骤</p>
 <ul>
@@ -679,7 +679,7 @@
 </li>
 </ul>
 </li>
-<li>CMS 采用的是标记清除法，上文我们已经提到这种方法会产生大量的内存碎片，这样会给大内存分配带来很大的麻烦，如果无法找到足够大的连续空间来分配对象，将会触发 Full GC，这会影响应用的性能。当然我们可以开启 -XX:+UseCMSCompactAtFullCollection（默认是开启的），用于在 CMS 收集器顶不住要进行 FullGC 时开启内存碎片的合并整理过程，内存整理会导致 STW，停顿时间会变长，还可以用另一个参数 -XX:CMSFullGCsBeforeCompation 用来设置执行多少次不压缩的 Full GC 后跟着带来一次带压缩的。</li>
+<li>CMS 采用的是<strong>标记清除法</strong>，上文我们已经提到这种方法会产生大量的内存碎片，这样会给大内存分配带来很大的麻烦，如果无法找到足够大的连续空间来分配对象，将会触发 Full GC，这会影响应用的性能。当然我们可以开启 -XX:+UseCMSCompactAtFullCollection（默认是开启的），用于在 CMS 收集器顶不住要进行 FullGC 时开启内存碎片的合并整理过程，内存整理会导致 STW，停顿时间会变长，还可以用另一个参数 -XX:CMSFullGCsBeforeCompation 用来设置执行多少次不压缩的 Full GC 后跟着带来一次带压缩的。</li>
 </ul>
 </li>
 <li><p>ParNew + CMS如何让系统基本不产生FGC？</p>
@@ -751,6 +751,7 @@
 <li>专门用来存储大对象，只要大小超过了一个Region容量一半的对象即判定为大对象</li>
 </ul>
 </li>
+<li>从整体看是使用的标记-清除算法，到那时从局部看是基于标记-复制算法实现</li>
 </ul>
 </li>
 <li><p>详细步骤</p>
@@ -873,7 +874,6 @@
 <li>GC记录在指针上，不是记录在头部</li>
 <li>42位指针 寻址空间4T</li>
 <li>使用Region（又叫Page或者Zpage),与G1不同的是具有动态性-动态创建和销毁以及动态的区域容量大小<ul>
-<li>以下实在x64硬件平台</li>
 <li>小型Region（Small Region） ： 容量固定为2MB， 用于放置小于256KB的小对象。</li>
 <li>中型Region（Medium Region） ： 容量固定为32MB， 用于放置大于等于256KB但小于4MB的对象。</li>
 <li>大型Region（Large Region） ： 容量不固定， 可以动态变化， 但必须为2MB的整数倍， 用于放置4MB或以上的大对象。 每个大型Region中只会存放一个大对象， 这也预示着虽然名字叫作“大型Region”， 但它的实际容量完全有可能小于中型Region， 最小容量可低至4MB。 大型Region在ZGC的实现中是不会被重分配（重分配是ZGC的一种处理动作， 用于复制对象的收集器阶段， 稍后会介绍到）的， 因为复制一个大对象的代价非常高昂</li>
@@ -1022,8 +1022,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" title="单元测试">
-                        <span class="hidden-mobile">单元测试</span>
+                      <a href="/2022/02/01/04Java/JVM/5%20JVM%E8%B0%83%E4%BC%98/" title="5 JVM调优">
+                        <span class="hidden-mobile">5 JVM调优</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
