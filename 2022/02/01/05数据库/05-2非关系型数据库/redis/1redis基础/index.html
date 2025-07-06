@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.5k 字
+          4.6k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          38 分钟
+          39 分钟
         
       </span>
     
@@ -603,9 +603,23 @@
 <h3 id="quicklist"><a href="#quicklist" class="headerlink" title="quicklist"></a>quicklist</h3><ul>
 <li>在 Redis 3.0 之前，List 对象的底层数据结构是双向链表或者压缩列表。然后在 Redis 3.2 的时候，List 对象的底层改由 quicklist 数据结构实现。</li>
 <li>quicklist 就是「双向链表 + 压缩列表」组合，因为一个 quicklist 就是一个链表，而链表中的每个元素又是一个压缩列表。</li>
+<li>压缩列表是 Redis 为了节约内存而开发的，它是<strong>由连续内存块组成的顺序型数据结构</strong></li>
 <li>解决压缩列表的不足<ul>
 <li><strong>通过控制每个链表节点中的压缩列表的大小或者元素个数，来规避连锁更新的问题</strong></li>
 <li></li>
+</ul>
+</li>
+</ul>
+<h4 id="list-park"><a href="#list-park" class="headerlink" title="list park"></a>list park</h4><ul>
+<li><p>quicklist 虽然通过控制 quicklistNode 结构里的压缩列表的大小或者元素个数，来减少连锁更新带来的性能影响，但是并没有完全解决连锁更新的问题。</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis-listpark%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="listpark"></p>
+</li>
+<li><p>节点的数据结构</p>
+<ul>
+<li>encoding，定义该元素的编码类型，会对不同长度的整数和字符串进行编码；</li>
+<li>data，实际存放的数据；</li>
+<li>len，encoding+data的总长度；</li>
 </ul>
 </li>
 </ul>
@@ -792,7 +806,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年7月6日</div>
+          <div>2025年7月7日</div>
         </div>
       
       
