@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.7k 字
+          5.6k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          39 分钟
+          47 分钟
         
       </span>
     
@@ -337,8 +337,10 @@
 </ul>
 </li>
 <li>线程本地分配TLAB<ul>
+<li>TLAB（Thread-Local Allocation Buffer，线程本地分配缓冲区）是 <strong>JVM 在堆内存（尤其是新生代的 Eden 区）中为每个线程分配的一块私有内存区域</strong>。它的核心目的是<strong>显著提升对象分配的速度并减少同步开销</strong>。</li>
+<li>如果空间足够，直接在 TLAB 的当前指针位置“撞针”分配（移动指针），<strong>整个过程完全无锁</strong>，因为 TLAB 是线程私有的。</li>
 <li>占用eden,默认1%</li>
-<li>多线程的时候不用竞争eden就可以申请空间，提高效率</li>
+<li><strong>线程私有的</strong>，多线程的时候不用竞争eden就可以申请空间，提高效率</li>
 <li>小对象</li>
 <li>无需调整</li>
 </ul>
@@ -456,7 +458,58 @@
 </ul>
 </li>
 </ul>
-<h4 id="从eden到servivor"><a href="#从eden到servivor" class="headerlink" title="从eden到servivor"></a>从eden到servivor</h4><ul>
+<h4 id="TLAB"><a href="#TLAB" class="headerlink" title="TLAB"></a>TLAB</h4><ul>
+<li>当应用程序线程需要分配一个新对象时并且TLAB已经启用，默认是启用的：<ul>
+<li>JVM 首先尝试在该线程的 <strong>TLAB</strong> 内进行分配。</li>
+<li>TLAB 主要针对<strong>小型、短生命周期</strong>对象的分配进行优化。</li>
+</ul>
+</li>
+<li>JVM 会首先判断对象的大小是否超过了某个阈值（通常与 TLAB 的最大可能大小、Eden 区剩余空间或特定的大对象阈值 <code>-XX:PretenureSizeThreshold</code> 相关）。</li>
+<li><strong>如果对象非常大（“Humongous Object”，在 G1 收集器中尤其有明确定义），</strong> JVM 会<strong>绕过 TLAB 和 Eden 区</strong>，尝试直接在老年代分配（可能需要同步）。这种对象根本不适合在 TLAB 中分配。<strong>决策结束。</strong></li>
+<li><strong>如果对象不是“巨大”对象，</strong> 进入下一步。</li>
+<li><strong>当前线程是否有有效的 TLAB？</strong><ul>
+<li>每个线程在创建时或需要时会被分配一个 TLAB。线程会记录其当前使用的 TLAB 的起始地址、当前分配指针和结束地址。</li>
+<li><strong>如果当前线程还没有 TLAB 或者之前的 TLAB 已经完全用尽（或因为其他原因被废弃）：</strong><ul>
+<li>线程会向内存管理器<strong>申请一个新的 TLAB</strong>。这个申请过程<strong>需要同步</strong>（因为要从共享的 Eden 区划一块连续内存出来）。</li>
+<li>如果申请成功，线程就有了一个新的、空的 TLAB。</li>
+<li><strong>对象将分配到这个新申请的 TLAB 中（无锁）。</strong></li>
+</ul>
+</li>
+<li><strong>如果当前线程已经有一个有效的 TLAB，</strong> 进入下一步。</li>
+</ul>
+</li>
+<li><strong>当前 TLAB 的剩余空间是否足够容纳该对象？</strong><ul>
+<li>线程检查其当前 TLAB 的剩余空间（<code>current_ptr</code> 到 <code>end</code> 的距离）。</li>
+<li><strong>如果剩余空间 &gt;&#x3D; 对象大小 + 可能的填充（对齐）：</strong><ul>
+<li><strong>对象直接在 TLAB 内分配（无锁）。</strong> 这是最快、最高效的路径。线程只需将 TLAB 的当前指针 <code>bump</code>（推进）对象大小的距离。</li>
+</ul>
+</li>
+<li><strong>如果剩余空间 &lt; 对象大小：</strong><ul>
+<li>当前 TLAB 的剩余空间不足以容纳该对象。线程有两个选择：<ul>
+<li><strong>a) 废弃当前 TLAB，申请一个新 TLAB：</strong><ul>
+<li>线程将当前 TLAB 标记为“已满”或废弃（其剩余空间将被浪费，直到下次 GC 回收整个 Eden 区）。</li>
+<li>线程<strong>申请一个新的 TLAB</strong>（需要同步）。</li>
+<li>然后尝试将对象分配到<strong>新申请的 TLAB</strong> 中。</li>
+<li>如果新 TLAB 足够大（通常新申请的 TLAB 大小是动态计算的，大概率能容纳该对象），则分配成功（无锁）。</li>
+</ul>
+</li>
+<li><strong>b) 直接在 Eden 区的共享区域分配（慢路径）：</strong><ul>
+<li>线程可能会选择<strong>不申请新 TLAB</strong>，而是直接将对象分配到 Eden 区的共享部分。这通常发生在：<ul>
+<li>对象大小虽然大于当前 TLAB 剩余空间，但小于某个“浪费阈值”（<code>-XX:TLABRefillWasteFraction</code> 控制）。申请一个全新的 TLAB 来放这个不大的对象，会导致当前 TLAB 的剩余空间被浪费，而新 TLAB 可能只用了一小部分。JVM 认为直接去 Eden 共享区分配（需要同步）可能比浪费一个 TLAB 的大部分空间更划算。</li>
+<li>JVM 的实现策略或特定启发式算法认为此时直接分配更合适。</li>
+</ul>
+</li>
+<li><strong>这种分配需要同步（锁）</strong>，因为多个线程可能同时竞争更新 Eden 区的全局分配指针 (<code>bump-the-pointer</code>)。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="从eden到survivor"><a href="#从eden到survivor" class="headerlink" title="从eden到survivor"></a>从eden到survivor</h4><ul>
 <li>绝大多数新创建的对象都在新生代的 Eden 区分配,当 Eden 区被填满时，会触发一次 <strong>Minor GC</strong>（也称为 Young GC）</li>
 <li>STW<ul>
 <li>标记 Eden 区和 <strong>其中一个</strong> Survivor 区（假设是 SurvivorFrom，比如 Survivor0）中的存活对象。</li>
@@ -621,7 +674,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年7月2日</div>
+          <div>2025年7月6日</div>
         </div>
       
       

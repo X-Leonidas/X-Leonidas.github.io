@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.1k 字
+          4.5k 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          35 分钟
+          38 分钟
         
       </span>
     
@@ -339,9 +339,11 @@
 <li>哈希支持单独修改字段，存储那些对象数据，特别是对象属性经常发生增删改操作的数据</li>
 </ul>
 </li>
+<li>Redis 7.0 中，压缩列表数据结构已经废弃了，交由 listpack 数据结构来实现了。</li>
 </ul>
 <h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><ul>
 <li><strong>双向链表实现，有序重复，按照出入顺序排序</strong>，可以添加元素到头部和尾部</li>
+<li>在 Redis 3.2 版本之后，List 数据类型底层数据结构就只由 quicklist 实现了，替代了双向链表和压缩列表</li>
 <li>赋值：lpush key value1    |  rpush  key value1<ul>
 <li>取值和赋值使用相同方向的命令可以模拟队列，使用方向相反的命令可以模拟栈</li>
 </ul>
@@ -512,7 +514,8 @@
 <li>排行榜：有序集合经典使用场景。例如视频网站需要对用户上传的视频做排行榜，榜单维护可能是多方面：按照时间、按照播放量、按照获得的赞数等</li>
 <li>用<strong>Sorted Sets</strong>来做带权重的队列，比如普通消息的score为1，重要消息的score为2，然后工作线程可以选择按score的倒序来获取工作任务。让重要的任务优先执行。</li>
 </ul>
-<h3 id="bitMap"><a href="#bitMap" class="headerlink" title="bitMap"></a>bitMap</h3><ul>
+<h3 id="bitMap"><a href="#bitMap" class="headerlink" title="bitMap"></a>bitMap</h3><p>+ </p>
+<ul>
 <li>基于 String 的位操作，每个 bit 表示 0&#x2F;1。</li>
 <li>setbit k1 1 1 :将第一个字节的第二位变为1，默认为0， 0000 0000 -&gt; 0100 0000</li>
 <li>bitcount  k  start end:  统计start end中1出现的次数</li>
@@ -547,15 +550,36 @@
 </ul>
 </li>
 </ul>
-<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><h3 id="SDS"><a href="#SDS" class="headerlink" title="SDS"></a>SDS</h3><ul>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="image-20250706230757299"></p>
+<h3 id="键值对"><a href="#键值对" class="headerlink" title="键值对"></a>键值对</h3><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis%E5%AE%9E%E9%99%85%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload alt="image-20250706231124951"></p>
+</li>
+<li><p>redisDb 结构，表示 Redis 数据库的结构，结构体里存放了指向了 dict 结构的指针；</p>
+</li>
+<li><p>dict 结构，结构体里存放了 2 个哈希表，正常情况下都是用「哈希表1」，「哈希表2」只有在 rehash 的时候才用</p>
+</li>
+<li><p>ditctht 结构，表示哈希表的结构，结构里存放了哈希表数组，数组中的每个元素都是指向一个哈希表节点结构（dictEntry）的指针；</p>
+</li>
+<li><p>数组中的每个元素都是指向一个哈希表节点结构（dictEntry）的指针；key 指向的是 String 对象，而 \value 则可以指向 String 对象，也可以指向集合类型的对象，比如 List 对象、Hash 对象、Set 对象和 Zset 对象。</p>
+</li>
+</ul>
+<h3 id="SDS"><a href="#SDS" class="headerlink" title="SDS"></a>SDS</h3><ul>
 <li>String键的底层实现 还被用作缓冲区</li>
-<li>原生C语言字符串采用遍历拿到字符串长度，效率太低，SDS自己维护了长度信息</li>
+<li>不使用原生的字符串的原因<ul>
+<li>原生C语言字符串采用遍历拿到字符串长度，效率太低</li>
+<li>无法识别\0,因此不能保存二进制数据</li>
+</ul>
+</li>
 <li>底层是char数组</li>
 <li>还减少了修改字符串时带来的内存重新分配次数<ul>
 <li>空间预分配：当我们对SDS进行扩展操作的时候，Redis会为SDS分配好内存，并且根据特定的公式，分配多余的free空间，还有多余的1byte空间（这1byte也是为了存空字符）</li>
 <li>惰性空间释放：当我们执行完一个字符串缩减的操作，redis并不会马上收回我们的空间，因为可以预防你继续添加的操作，这样可以减少分配空间带来的消耗，但是当你再次操作还是没用到多余空间的时候，Redis也还是会收回对于的空间，防止内存的浪费的。</li>
 </ul>
 </li>
+</ul>
+<h3 id="intest"><a href="#intest" class="headerlink" title="intest"></a>intest</h3><ul>
+<li>整数集合（intset）是集合键的底层实现之一，当一个集合只包含整数值元素，并且这个集合的元素数量不多时，Ｒedis就会使用整数集合作为集合键的底层实现</li>
+<li>整数集合（intset）是 Redis 用于保存整数值的集合抽象数据结构， 它可以保存类型为 int16_t 、 int32_t 或者 int64_t 的整数值， 并且保证集合中不会出现重复元素</li>
 </ul>
 <h3 id="dict-字典"><a href="#dict-字典" class="headerlink" title="dict(字典)"></a>dict(字典)</h3><ul>
 <li>是哈希键的底层实现</li>
@@ -568,8 +592,22 @@
 <li>hash 表中 <strong>元素的个数等于第一维数组的长度时</strong>，就会开始扩容，扩容的新数组是 <strong>原数组大小的 2 倍</strong>，如果在进行持久化则尽量不去扩容，如果达到了数组长度的五倍，会强制扩容</li>
 <li>**元素个数低于数组长度的 10%**，缩容不会考虑 Redis 是否在做 <code>bgsave</code>。</li>
 </ul>
-<h3 id="跳跃表"><a href="#跳跃表" class="headerlink" title="跳跃表"></a>跳跃表</h3><ul>
-<li>有序集合的底层实现</li>
+<h3 id="跳表"><a href="#跳表" class="headerlink" title="跳表"></a>跳表</h3><ul>
+<li><p>有序集合的底层实现</p>
+</li>
+<li><p><strong>O(log n)</strong></p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/redis-skip_table.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<h3 id="quicklist"><a href="#quicklist" class="headerlink" title="quicklist"></a>quicklist</h3><ul>
+<li>在 Redis 3.0 之前，List 对象的底层数据结构是双向链表或者压缩列表。然后在 Redis 3.2 的时候，List 对象的底层改由 quicklist 数据结构实现。</li>
+<li>quicklist 就是「双向链表 + 压缩列表」组合，因为一个 quicklist 就是一个链表，而链表中的每个元素又是一个压缩列表。</li>
+<li>解决压缩列表的不足<ul>
+<li><strong>通过控制每个链表节点中的压缩列表的大小或者元素个数，来规避连锁更新的问题</strong></li>
+<li></li>
+</ul>
+</li>
 </ul>
 <h2 id="发布订阅模式-Pub-Sub"><a href="#发布订阅模式-Pub-Sub" class="headerlink" title="发布订阅模式(Pub&#x2F;Sub)"></a>发布订阅模式(Pub&#x2F;Sub)</h2><ul>
 <li>PUBLISH   channel message<ul>
@@ -680,36 +718,8 @@
 <li>使用 Redis 缓存数据时，为了提高缓存命中率，需要保证缓存数据都是热点数据。可以将内存最大使用量设置为热点数据占用的内存量，然后启用 allkeys-lru 淘汰策略，将最近最少使用的数据淘汰。</li>
 <li>Redis 4.0 引入了 volatile-lfu 和 allkeys-lfu 淘汰策略，LFU 策略通过统计访问频率，将访问频率最少的键值对淘汰</li>
 </ul>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><ul>
-<li>下载&amp;解压<a target="_blank" rel="noopener" href="https://redis.io/download">https://redis.io/download</a></li>
-<li>make</li>
-<li>make PREFIX&#x3D;&#x2F;usr&#x2F;local&#x2F;redis install  指定路径安装<ul>
-<li>安装失败，安装gcc， yum install gcc   ，安装后，要先make disclean</li>
-</ul>
-</li>
-<li>安装后，将实例的配置文件移动到启动文件夹</li>
-<li>redis配置文件<ul>
-<li>daemonize   后台运行</li>
-<li>maxmemory  设置最大内存</li>
-</ul>
-</li>
-<li>使用服务启动<ul>
-<li>vim &#x2F;etc&#x2F;profile   <ul>
-<li>export   REDIS_PATH&#x3D;redisLocal</li>
-<li>export   PATH&#x3D;$PATH:$REDIS_PATH&#x2F;bin</li>
-</ul>
-</li>
-<li>cd utils</li>
-<li>.&#x2F;install_server.sh</li>
-<li>启动：service redis_6379 start</li>
-</ul>
-</li>
-<li>&#x2F;启动 redis-server  .&#x2F;etc&#x2F;redis.config   指定配置文件启动</li>
-<li>关闭 redis-cli shutdown</li>
-</ul>
-<h3 id="WIN"><a href="#WIN" class="headerlink" title="WIN"></a>WIN</h3><ul>
-<li>win下运行的下载地址：<br><a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100">https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100</a></li>
-<li>配置文件：redis.windows.conf</li>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.xiaolincoding.com/redis/data_struct/data_struct.html#%E9%94%AE%E5%80%BC%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84">小林coding</a></li>
 </ul>
 
                 
@@ -782,7 +792,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月29日</div>
+          <div>2025年7月6日</div>
         </div>
       
       
@@ -887,12 +897,6 @@
 
 
   
-
-
-  
-  
-
-
 
 
 
@@ -1063,49 +1067,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
 
 
