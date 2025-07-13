@@ -21,11 +21,11 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一致性哈希 一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&amp;#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射 将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本 为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为">
+    <meta name="description" content="错误 error from sender: open System Volume Information: Access is denied. 获取Dockerfile所在文件夹的System Volume Information的访问权限 cacls “D:&amp;#x2F;System Volume Information” &amp;#x2F;E &amp;#x2F;G  用户名:F D:&amp;#x2F; 构建Doc">
   
   
   
-  <title>12-一致性hash - 夜坐听风</title>
+  <title>win11ForDocker问题 - 夜坐听风</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -184,7 +184,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="12-一致性hash"></span>
+            <span id="subtitle" data-typed-text="win11ForDocker问题"></span>
           
         </div>
 
@@ -195,8 +195,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-12-03 00:07" pubdate>
-          2024-12-03 00:07:07
+        <time datetime="2023-02-01 19:59" pubdate>
+          2023-02-01 19:59:29
         </time>
       </span>
     
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          362 字
+          95 字
         
       </span>
     
@@ -218,7 +218,7 @@
         
         
         
-          4 分钟
+          1 分钟
         
       </span>
     
@@ -255,24 +255,36 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">12-一致性hash</h1>
+            <h1 id="seo-header">win11ForDocker问题</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a>一致性哈希</h2><ul>
-<li>一致性哈希是一种特殊的哈希，当重新调整哈希表的大小并使用一致性哈希时，平均只需要重新映射 k&#x2F;n 个键，其中 k 是键的数量，n 是槽的数量。 相比之下，在大多数传统的哈希表中，数组槽数量的变化导致几乎所有键都被重新映射</li>
-<li>将hash结构做成环状，为了减少扩容哈希桶时，数据迁移的成本</li>
-<li>为了解决哈希算法中，取模为固定的数，无法扩展的缺点，采用一致性哈希算法，在一致性哈希算法中，为了避免当某个节点下线时，该节点所负责的数据不可用，通常设计为环状，几个节点为物理节点。</li>
+                <h3 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h3><ul>
+<li>error from sender: open System Volume Information: Access is denied.<ul>
+<li>获取Dockerfile所在文件夹的System Volume Information的访问权限<ul>
+<li>cacls “D:&#x2F;System Volume Information” &#x2F;E &#x2F;G  用户名:F<ul>
+<li>D:&#x2F; 构建Dockerfile所在的文件夹</li>
 </ul>
-<h3 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h3><ul>
-<li>解决数据倾斜的问题（环被分的不平均）</li>
-<li>不用真实ip去分配节点，而是为每个ip分配多个虚拟节点</li>
+</li>
 </ul>
-<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
-<li>当服务器被添加或删除时，很小一部分的键被重新分配。</li>
-<li>容易水平扩展，因为数据分布更加均匀。</li>
-<li>缓解热点健问题。 对特定分片的过度访问可能会导致服务器过载。 想象一下 Katy Perry、Justin Bieber 和 Lady Gaga 的数据最终都在同一个分片上。 一致性哈希通过更均匀地分配数据来缓解这个问题。</li>
+</li>
+</ul>
+</li>
+<li>open Config.Msi: Access is denied.<ul>
+<li>控制台用管理员身份启动</li>
+</ul>
+</li>
+<li>failed to compute cache key: “&#x2F;jdk-8u181-linux-x64.tar.gz” not found: not found<ul>
+<li>去Dockerfile目录下执行命令</li>
+</ul>
+</li>
+<li>Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:3306 -&gt; 0.0.0.0:0: listen tcp 0.0.0.0:3306: bind: An attempt was made to access a socket in a way forbidden by its access permissions.<ul>
+<li>重启网络</li>
+<li>net stop winnat </li>
+<li>net start winnat</li>
+</ul>
+</li>
 </ul>
 
                 
@@ -292,7 +304,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">12分布式系统</a>
+  <a href="/categories/15%E4%BA%91%E5%92%8C%E5%AE%B9%E5%99%A8/" class="category-chain-item">15云和容器</a>
   
   
 
@@ -312,8 +324,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>12-一致性hash</div>
-      <div>https://x-leonidas.github.io/2024/12/03/12分布式系统/12-一致性hash/</div>
+      <div>win11ForDocker问题</div>
+      <div>https://x-leonidas.github.io/2023/02/01/15云和容器/win11ForDocker问题/</div>
     </div>
     <div class="license-meta">
       
@@ -325,13 +337,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年12月3日</div>
+          <div>2023年2月1日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2024年12月3日</div>
+          <div>2025年4月10日</div>
         </div>
       
       
@@ -368,9 +380,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/04/30/11%E6%8A%80%E6%9C%AF%E6%A0%88/Disruptor/" title="Disruptor">
+                      <a href="/2023/02/01/14%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" title="软件设计原则">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Disruptor</span>
+                        <span class="hidden-mobile">软件设计原则</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -378,8 +390,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/09/22tool/%E5%8D%9A%E5%AE%A2/" title="博客">
-                        <span class="hidden-mobile">博客</span>
+                      <a href="/2023/01/16/04Java/java%E5%9F%BA%E7%A1%80/04%E5%BA%8F%E5%88%97%E5%8C%96/" title="04序列化">
+                        <span class="hidden-mobile">04序列化</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
