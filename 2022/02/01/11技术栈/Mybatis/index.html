@@ -21,7 +21,7 @@
   <meta name="author" content="听风">
   <meta name="keywords" content="">
   
-    <meta name="description" content="零散的一些知识  mybatis中生成对应的映射接口对象使用了java原生的动态代理实现的 mybatis执行sql的过程  缓存 一级缓存 一级缓存位于SqlSession中，每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成MappedStatement，在Local Cache进行查询，如">
+    <meta name="description" content="缓存 一级缓存 一级缓存位于SqlSession中，每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成MappedStatement，在Local Cache进行查询，如果缓存命中的话，直接返回结果给用户，如果缓存没有命中的话，查询数据库，结果写入Local Cache，最后返回结果给用户。 对">
   
   
   
@@ -207,7 +207,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          904 字
+          865 字
         
       </span>
     
@@ -260,12 +260,7 @@
             
               <div class="markdown-body">
                 
-                <p>零散的一些知识</p>
-<ul>
-<li>mybatis中生成对应的映射接口对象使用了java原生的动态代理实现的</li>
-<li>mybatis执行sql的过程</li>
-</ul>
-<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><ul>
+                <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><ul>
 <li>一级缓存<ul>
 <li>一级缓存位于SqlSession中，每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成<code>MappedStatement</code>，在Local Cache进行查询，如果缓存命中的话，直接返回结果给用户，如果缓存没有命中的话，查询数据库，结果写入<code>Local Cache</code>，最后返回结果给用户。</li>
 <li>对一级缓存的操作其实就是对一个hashMap进行操作，key是由<code>MappedStatement</code>的Id、SQL的offset、SQL的limit、SQL本身以及SQL中的参数构成</li>
@@ -282,7 +277,7 @@
 </li>
 <li><p>配置：</p>
 <ul>
-<li>&lt;****setting**** name&#x3D;”cacheEnabled” value&#x3D;”true”&#x2F;&gt;</li>
+<li>&lt;setting name&#x3D;”cacheEnabled” value&#x3D;”true”&gt;</li>
 <li>在MyBatis的映射XML中配置cache或者 cache-ref 。cache标签用于声明这个namespace使用二级缓存，并且可以自定义配置。<ul>
 <li><code>type</code>：cache使用的类型，默认是<code>PerpetualCache</code>，这在一级缓存中提到过。</li>
 <li><code>eviction</code>： 定义回收的策略，常见的有FIFO，LRU。</li>
@@ -366,7 +361,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2022年5月5日</div>
+          <div>2025年7月23日</div>
         </div>
       
       

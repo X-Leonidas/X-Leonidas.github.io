@@ -468,7 +468,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Mybatis/" target="_self">
         <div>
-          零散的一些知识  mybatis中生成对应的映射接口对象使用了java原生的动态代理实现的 mybatis执行sql的过程  缓存 一级缓存 一级缓存位于SqlSession中，每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成MappedStatement，在Local Cache进行查询，如
+          缓存 一级缓存 一级缓存位于SqlSession中，每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成MappedStatement，在Local Cache进行查询，如果缓存命中的话，直接返回结果给用户，如果缓存没有命中的话，查询数据库，结果写入Local Cache，最后返回结果给用户。 对
         </div>
       </a>
 
@@ -523,60 +523,6 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Netty/" target="_self">
         <div>
           Netty Netty提供异步的、事件驱动的网络应用程序框架和工具，用以快速开发高性能、高可靠性的网络服务器和客户端程序。  Netty 是一个基于NIO的客户、服务器端编程框架，使用Netty 可以确保你快速和简单的开发出一个网络应用，例如实现了某种协议的客户，服务端应用。Netty相当简化和流线化了网络应用的编程开发过程，例如，TCP和UDP的socket服务开发。    Pipeline是一
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Nginx/" target="_self">
-          Nginx
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Nginx/" target="_self">
-        <div>
-          主要功能 正向、反向代理 负载均衡、分流  虚拟主机（绑定host）  常见配置try_files 按照指定格式进行匹配 try_files $uri   $uri&#x2F;  &#x2F;images&#x2F;default.gif;  请求 127.0.0.1&#x2F;images&#x2F;test.gif 会依次查找 文件&#x2F;opt&#x2F;html&#x2F;images
         </div>
       </a>
 
@@ -739,6 +685,67 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/00Spring/" target="_self">
         <div>
           Spring 基于POJO的轻量级和最小侵入性编程； 通过依赖注入和面向接口实现松耦合； 基于切面和惯例进行声明式编程； 通过切面和模板减少样板式代码。  BeanBean的装配 xml中进行显示装配 java中进行显式装配  @Bean 在java显式装配中，默认情况下bean的id与方法名一致，可以通过name进行重命名 @Import和@ImportResource： 第一个在java中引入
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/" class="category-chain-item">spring</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/01SpringBoot/" target="_self">
+          01SpringBoot
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/01SpringBoot/" target="_self">
+        <div>
+          Spring Boot比Spring做了哪些改进？1）Spring Boot可以建立独立的Spring应用程序；2）内嵌了如Tomcat，Jetty和Undertow这样的容器，也就是说可以直接跑起来，用不着再做 部署工作了；3）无需再像Spring那样搞一堆繁琐的xml文件的配置；4）可以自动配置Spring。SpringBoot将原有的XML配置改为Java配置，将bean注入改为使 用注解注
         </div>
       </a>
 
