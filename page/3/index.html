@@ -582,67 +582,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" target="_self">
-          5.mysql8新特性
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/5.mysql8%E6%96%B0%E7%89%B9%E6%80%A7/" target="_self">
-        <div>
-          跳跃索引 MySQL 8.0.13 版本对于range查询，引入了索引跳跃扫描（Index Skip Scan）优化，支持不符合组合索引最左前缀原则条件下的SQL，依然能够使用组合索引，减少不必要的扫描。 MySQL 8.0推出的适合联合索引左边列唯一值较少的情况的一种优化策略。 限制条件 查询只能涉及一张表，多表关联无法使用该特性 查询SQL不能使用 GROUP BY 或者 DISTINCT子句
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/" class="category-chain-item">MySQL</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
         <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/6.mysql%E8%B0%83%E4%BC%98/" target="_self">
           6.mysql调优
         </a>
@@ -774,6 +713,67 @@
       <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/Redis/1redis%E5%9F%BA%E7%A1%80/" target="_self">
         <div>
           Redis基础Redis和Memchched 数据类型：Memcached 仅支持字符串类型，而 Redis 支持五种不同的数据类型，可以更灵活地解决问题。 数据持久化：Redis 支持两种持久化策略：RDB 快照和 AOF 日志，而 Memcached 不支持持久化。 分布式：Memcached 不支持分布式，只能通过在客户端使用一致性哈希来实现分布式存储，这种方式在存储和查询时都需要先在客户端
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-02-01 20:00" pubdate>
+              2022-02-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/Redis/" class="category-chain-item">Redis</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/Redis/2redis%E8%BF%9B%E9%98%B6/" target="_self">
+          2redis进阶
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/05%E6%95%B0%E6%8D%AE%E5%BA%93/Redis/2redis%E8%BF%9B%E9%98%B6/" target="_self">
+        <div>
+          Redis进阶Redis单线程模型 redis 会将每个客户端都关联一个指令队列。客户端的指令通过队列来按顺序处理，先到先服务。 在一个客户端的指令队列中的指令是顺序执行的，但是多个指令队列中的指令是无法保证顺序的，例如执行完 client-0 的队列中的 command-0 后，接下去是执行哪个队列中的第一个指令是无法确定的，但是肯定不会同时执行两个指令。 redis 同样也会为每个客户端关联一
         </div>
       </a>
 
