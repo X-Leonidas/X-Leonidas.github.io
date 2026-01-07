@@ -1,0 +1,865 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="ZooKeeper 前身是Google的Chubby ZooKeeper 是一个开源的分布式协调服务器，为分布式提供一致性服务。其一致性是通过基于Paxos算法的ZAB协议完成的，分布式应用程序可以基于 ZooKeeper 实现诸如数据发布&amp;#x2F;订阅、负载均衡、命名服务、分布式协调&amp;#x2F;通知、集群管理、Master 选举、配置维护，域名服务、分布式同步、分布式锁和分布式队列等功能。">
+  
+  
+  
+  <title>Zookeeper - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Zookeeper"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-26 17:39" pubdate>
+          2025-10-26 17:39:58
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Zookeeper</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h2><ul>
+<li>前身是Google的Chubby</li>
+<li><strong>ZooKeeper 是一个开源的分布式协调服务器，为分布式提供一致性服务。其一致性是通过基于Paxos算法的ZAB协议完成的，分布式应用程序可以基于 ZooKeeper 实现诸如数据发布&#x2F;订阅、负载均衡、命名服务、分布式协调&#x2F;通知、集群管理、Master 选举、配置维护，域名服务、分布式同步、分布式锁和分布式队列等功能。</strong>    <ul>
+<li>配置维护</li>
+<li>域名服务</li>
+<li>分布式同步</li>
+<li>集群管理</li>
+</ul>
+</li>
+</ul>
+<h3 id="一致性的要求"><a href="#一致性的要求" class="headerlink" title="一致性的要求"></a>一致性的要求</h3><ul>
+<li>顺序一致性</li>
+<li>原子性</li>
+<li>单一视图</li>
+<li>可靠性</li>
+<li>实时性</li>
+</ul>
+<h3 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h3><h4 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h4><ul>
+<li>客户端会话，客户端启动，首先会与zk服务器建立一个TCP长连接，通过该长连接，客户端能够通过心跳检测保持与服务端的有效会话，也能够向zookeeper服务端发送请求并接收响应。同时还能通过该连接的接收来自服务端的Watcher时间通知。</li>
+<li>Session的SessionTimeOut值用来设置一个客户端会话的超时时间。当服务端由于压力、网络故障或者客户端主动断开连接等各种原因导致客户端连接断开时，只要在SessionTimeout的规定的时间内重新连接上服务端中的任意一台服务器，那么之前创建的会话仍然有效。</li>
+</ul>
+<h4 id="ZNode"><a href="#ZNode" class="headerlink" title="ZNode"></a>ZNode</h4><ul>
+<li>zookeeper的文件系统采用的是树形层次化的目录结构，每个目录在zookeeper中叫做一个ZNode,每个ZNode拥有一个唯一的路径标识，即名称。ZNode可以包含数据和子ZNode（临时节点不能有子ZNode）.ZNnde中的数据可以有多个版本，所以查询某路径下的数据需要带上版本号。客户端可以在ZNnode上设置监视器（Watcher）</li>
+<li>可以分为临时节点和持久节点，持久节点一旦被创建，除非主动移除，否则将一直保存在ZooKeeper上。临时节点的生命周期和Session保持一致。还有就是临时顺序节点和持久顺序节点，除了基本的特性之外，子节点的名称还具有有序性。</li>
+</ul>
+<h5 id="stat"><a href="#stat" class="headerlink" title="stat"></a>stat</h5><ul>
+<li>每个Znode都会维护一个Stat的数据结构。该数据结构记录着ZNode的三个版本号<ul>
+<li>version:当前Znode的版本</li>
+<li>cversion:当前ZNode子节点的版本</li>
+<li>aversion:当前ZNode的ACL版本</li>
+</ul>
+</li>
+</ul>
+<h4 id="Watcher-事件监听器"><a href="#Watcher-事件监听器" class="headerlink" title="Watcher(事件监听器)"></a>Watcher(事件监听器)</h4><ul>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20210211170936100.png" srcset="/img/loading.gif" lazyload alt="image-20210211170936100"></p>
+<p>客户端首先将Watcher注册到服务端，同时将Watcher对象保存到客户端的Watch管理器中。当ZooKeeper服务端监听的数据状态发生变化时，服务端会主动通知客户端，接着客户端的Watch管理器会触发相关Watcher来回调相应处理逻辑，从而完成整体的数据发布&#x2F;订阅流程。</p>
+</li>
+<li><p>zk通过Watcher机制实现了发布&#x2F;订阅模式。zk提供了分布式数据的发布订阅功能，一个发布者能够让多个订阅者同时监听某一个主题对象，当这个对象的状态发生变化时，会通知所有的订阅者，使他们能够做出相应的处理。zk引入了Watcher机制来实现这种模式的通知功能。zk允许客户端向服务端注册一个Watcher监听，当服务端的一些指定事件触发这个Watcher，那么就会向指定客户端发送一个通知。这个时间通知是通过TCP长连接的Session完成的</p>
+</li>
+<li><p>watcher的特性</p>
+<ul>
+<li>一次性 ：Watcher是一次性的，一旦被触发就会移除，再次使用时需要重新注册 </li>
+<li>客户端顺序回调 ：Watcher回调是顺序串行化执行的，只有回调后客户端才能看到最新的数据状态。一个Watcher回调逻辑不应该太多，以免影响别的watcher执行  </li>
+<li>轻量级： WatchEvent是最小的通信单元，结构上只包含通知状态、事件类型和节点路径，并不会告诉数据节点变化前后的具体内容； </li>
+<li>时效性： Watcher只有在当前session彻底失效时才会无效，若在session有效期内快速重连成功，则watcher依然存在，仍可接收到通知；</li>
+</ul>
+</li>
+</ul>
+<h4 id="ACL"><a href="#ACL" class="headerlink" title="ACL"></a>ACL</h4><ul>
+<li>(Access Control List)访问控制列表 用于控制资源的访问权限，是zk数据的安全保障，zk利用ACL策略控制znode的访问权限，如节点数据读写、节点创建、节点删除、读取子节点列表、设置节点权限等</li>
+<li>在传统的文件系统中，ACL分为两个维度：组和权限，一个组可以包含多种权限，一个文件或目录拥有了某个组的权限即拥有了组里所有的权限。子目录和文件会默认继承其父目录的ACl。而在zk中，znode的ACL是没有继承关系的，每个znode的权限都是独立控制的，只有客户端满足Znode设置的权限要求时，才能完成相应的操作。zookeeper的ACL分为三个维度：<strong>授权策略 scheme、用户 id 、用户权限 permisson</strong></li>
+<li>五种权限<ul>
+<li>CREATE:创建子节点的权限</li>
+<li>DELETE:删除子节点的权限</li>
+<li>READ:获取节点数据和子节点列表的权限</li>
+<li>WRITE:更新更点数据的权限</li>
+<li>ADMIN:设置节点ACl的权限</li>
+</ul>
+</li>
+</ul>
+<h3 id="监听器"><a href="#监听器" class="headerlink" title="监听器"></a>监听器</h3><ul>
+<li>监听Znode节点的<strong>数据变化</strong></li>
+<li>监听子节点的<strong>增减变化</strong></li>
+</ul>
+<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><ul>
+<li>创建顺序临时节点，如果是最小的节点就返回加锁成功如果不是就监听了自己的前一个节点，当自己的前一个节点删除时，自己开始执行</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li><strong>Zk性能上没有redis分布式锁好</strong>，因为每次在创建锁和释放锁的过程中，都要动态创建、销毁瞬时节点来实现锁功能。ZK中创建和删除节点只能通过Leader服务器来执行，然后将数据同步到所有的Follower机器上</li>
+<li><strong>网络抖动并发问题</strong><ul>
+<li>由于网络抖动，客户端可ZK集群的session连接断了，那么zk以为客户端挂了，就会删除临时节点，这时候其他客户端就可以获取到分布式锁了。<br>就可能产生并发问题了，这个问题不常见是因为zk有重试机制，一旦zk集群检测不到客户端的心跳，就会重试，Curator客户端支持多种重试策略。<br>多次重试之后还不行的话才会删除临时节点。</li>
+</ul>
+</li>
+</ul>
+<h3 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h3><ul>
+<li><p>使用一个单一进程来接收并处理客户端的所有事务请求，并采用ZAB的原子广播协议，将服务器数据的状态变更为以事务Proposal的形式广播到所有的副本进程上去。</p>
+</li>
+<li><p>ZAB协议必须能够保证一个全局的变更序列被顺序应用。</p>
+</li>
+<li><p>ZAB协议还需要在当前主线程出现上述异常情况的时候可以正常工作。</p>
+</li>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20201024000742050.png" srcset="/img/loading.gif" lazyload alt="image-20201024000742050" style="zoom:80%;" /></li>
+</ul>
+<h4 id="三类角色"><a href="#三类角色" class="headerlink" title="三类角色"></a>三类角色</h4><ul>
+<li>Leader<ul>
+<li>zk写请求的唯一处理者，并负责进行投票的发起和决议，更新系统状态；Leander的写请求需要经过半数以上zkServer同意</li>
+</ul>
+</li>
+<li>Follower<ul>
+<li>接收客户端请求，处理读请求，并向客户端返回结果；将写请求转给Leader，在选Leader的过程中参与投票</li>
+</ul>
+</li>
+<li>Observer<ul>
+<li>无选主权和写操作投票权的Flollower,其不属于法定人数范围，主要是为了协助Follower处理更多的读请求</li>
+</ul>
+</li>
+</ul>
+<h4 id="两种模式"><a href="#两种模式" class="headerlink" title="两种模式"></a>两种模式</h4><ul>
+<li>崩溃恢复<ul>
+<li>恢复模式<ul>
+<li>在服务重启过程中，或者Leader崩溃后，就进入了恢复模式并选举出新的Leader，来恢复到zk集群正常的工作状态</li>
+</ul>
+</li>
+<li>同步模式<ul>
+<li>当所有的zkServer启动完毕，或者Leader崩溃后又被选举出来，就进入到同步模式，各个Follower需要马上将Leader中的数据同步到自己的主机中。当大多数(超过半数)zkServer完成了与Leader的状态同步后，崩溃恢复就结束了。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>消息广播<ul>
+<li>当Leader的提议被大多数zkServer同意后，Leader会修改自身数据然后会将修改后的数据广播给其他Follower或新加入的Follower</li>
+</ul>
+</li>
+</ul>
+<h4 id="zxid"><a href="#zxid" class="headerlink" title="zxid"></a>zxid</h4><ul>
+<li>zxid为事务编号。是一个64位长度的Long类型，由两部分组成，其中高32位表示纪元epoch,低32位表示事务标识xid，是一个单调递增的计数器。</li>
+<li>每个Leader都会具有一个不同的epoch值，表示一个时期、时代。每一个新的选举开启时都会生成一个新的epoch，新的Leader产生，则会更新所有zkServer的zxid中epoch。</li>
+<li>xid为zk事务的id，每一个写操作都是一个事务。xid为一个依次递增的流水号。每一个写操作都需要由Leader发起一个提案，由所有Follower表决是否同意本次写操作，而每个提案都具有一个zxid</li>
+</ul>
+<h4 id="消息广播算法"><a href="#消息广播算法" class="headerlink" title="消息广播算法"></a>消息广播算法</h4><h4 id="恢复模式的两个原则"><a href="#恢复模式的两个原则" class="headerlink" title="恢复模式的两个原则"></a>恢复模式的两个原则</h4><ul>
+<li>已被处理过的消息不能丢</li>
+<li>被丢弃的消息不能再现</li>
+</ul>
+<h4 id="Leader选举"><a href="#Leader选举" class="headerlink" title="Leader选举"></a>Leader选举</h4><ul>
+<li><p>时机</p>
+<ul>
+<li>集群启动的Leader选举<ul>
+<li>一个是服务启动的时候当整个集群都没有leader节点会进入选举状态，如果leader已经存在就会告诉该节点leader的信息，自己连接上leader，整个集群不用进入选举状态。</li>
+</ul>
+</li>
+<li>断连后的Leader选举<ul>
+<li>在服务运行中，可能会出现各种情况，服务宕机、断电、网络延迟很高的时候leader都不能再对外提供服务了，所有当其他几点通过心跳检测到leader失联之后，集群也会进入选举状态。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>规则</p>
+<ul>
+<li>当其他节点的纪元比自身高选纪元高的那个，如果纪元相同比较自身的zxid的大小，选举zxid大的节点，这里的zxid代表节点所提交事务最大的id，zxid越大代表该节点的数据越完整。<br>最后如果epoch和zxid都相等，则比较服务的serverId，这个Id是配置zookeeper集群所配置的，</li>
+</ul>
+</li>
+<li><p>流程</p>
+<ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/zk%E9%80%89%E4%B8%BE%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="zk选举流程" style="zoom:50%;" />
+</li>
+<li><p>所有节点第一票先选举自己当leader，将投票信息广播出去；</p>
+</li>
+<li><p>从队列中接受投票信息；</p>
+</li>
+<li><p>按照规则判断是否需要更改投票信息，将更改后的投票信息再次广播出去；</p>
+</li>
+<li><p>判断是否有超过一半的投票选举同一个节点，如果是选举结束根据投票结果设置自己的服务状态，选举结束，否则继续进入投票流程。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h3><ul>
+<li><h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
+<li>Leader收到请求之后，将它转换为一个proposal提议，并且为每个提议分配一个全局唯一递增的事务ID：zxid，然后把提议放入到一个FIFO的队列中，按照FIFO的策略发送给所有的Follower</li>
+<li>Follower收到提议之后，以事务日志的形式写入到本地磁盘中，写入成功后返回ACK给Leader</li>
+<li>Leader在收到超过半数的Follower的ACK之后，即可认为数据写入成功，就会发送commit命令给Follower告诉他们可以提交proposal了</li>
+</ol>
+</li>
+</ul>
+<h4 id="选举后的数据同步"><a href="#选举后的数据同步" class="headerlink" title="选举后的数据同步"></a>选举后的数据同步</h4><ul>
+<li>数据同步包含3个主要值和4种形式。<ul>
+<li>PeerLastZxid：Learner服务器最后处理的ZXID</li>
+<li>minCommittedLog：Leader提议缓存队列中最小ZXID</li>
+<li>maxCommittedLog：Leader提议缓存队列中最大ZXID</li>
+</ul>
+</li>
+</ul>
+<h5 id="直接差异化同步-DIFF同步"><a href="#直接差异化同步-DIFF同步" class="headerlink" title="直接差异化同步 DIFF同步"></a>直接差异化同步 DIFF同步</h5><ul>
+<li>表现<ul>
+<li>如果PeerLastZxid在minCommittedLog和maxCommittedLog之间，那么则说明Learner服务器还没有完全同步最新的数据。</li>
+</ul>
+</li>
+<li>首先Leader向Learner发送DIFF指令，代表开始差异化同步，然后把差异数据（从PeerLastZxid到maxCommittedLog之间的数据）提议proposal发送给Learner</li>
+<li>发送完成之后发送一个NEWLEADER命令给Learner，同时Learner返回ACK表示已经完成了同步</li>
+<li>接着等待集群中过半的Learner响应了ACK之后，就发送一个UPTODATE命令，Learner返回ACK，同步流程结束</li>
+</ul>
+<h5 id="先回滚再差异化同步-TRUNC-DIFF同步"><a href="#先回滚再差异化同步-TRUNC-DIFF同步" class="headerlink" title="先回滚再差异化同步 TRUNC+DIFF同步"></a>先回滚再差异化同步 TRUNC+DIFF同步</h5><ul>
+<li>针对的是一个<strong>异常的场景</strong></li>
+<li>举例<ul>
+<li>假设现在的Leader是A，minCommittedLog&#x3D;1，maxCommittedLog&#x3D;3，刚好生成的一个proposal的ZXID&#x3D;4，然后挂了。</li>
+<li>重新选举出来的Leader是B，B之后又处理了2个提议，然后minCommittedLog&#x3D;1，maxCommittedLog&#x3D;5。这时候A的PeerLastZxid&#x3D;4，在(1,5)之间。这一条只存在于A的提议如何处理</li>
+</ul>
+</li>
+<li>A要进行事务回滚，相当于抛弃这条数据，并且回滚到最接近于PeerLastZxid的事务，对于A来说，也就是PeerLastZxid&#x3D;3。<br>流程和DIFF一致，只是会先发送一个TRUNC命令，然后再执行差异化DIFF同步。</li>
+</ul>
+<h5 id="仅回滚同步-TRUNC同步"><a href="#仅回滚同步-TRUNC同步" class="headerlink" title="仅回滚同步 TRUNC同步"></a>仅回滚同步 TRUNC同步</h5><ul>
+<li>针对PeerLastZxid大于maxCommittedLog的场景，流程和上述一致，事务将会被回滚到maxCommittedLog的记录。<br>这个其实就更简单了，也就是你可以认为TRUNC+DIFF中的例子，新的Leader B没有处理提议，所以B中minCommittedLog&#x3D;1，maxCommittedLog&#x3D;3。<br>所以A的PeerLastZxid&#x3D;4就会大于maxCommittedLog了，也就是A只需要回滚就行了，不需要执行差异化同步DIFF了。</li>
+</ul>
+<h5 id="全量同步-SNAP同步"><a href="#全量同步-SNAP同步" class="headerlink" title="全量同步 SNAP同步"></a>全量同步 SNAP同步</h5><ul>
+<li>适用于两个场景：<ol>
+<li>PeerLastZxid小于minCommittedLog</li>
+<li>Leader服务器上没有提议缓存队列，并且PeerLastZxid不等于Leader的最大ZXID<br>这两种场景下，Leader将会发送SNAP命令，把全量的数据都发送给Learner进行同步。</li>
+</ol>
+</li>
+</ul>
+<h4 id="数据不一致的情况"><a href="#数据不一致的情况" class="headerlink" title="数据不一致的情况"></a>数据不一致的情况</h4><h5 id="查询不一致"><a href="#查询不一致" class="headerlink" title="查询不一致"></a>查询不一致</h5><ul>
+<li>因为Zookeeper是过半成功即代表成功，假设我们有5个节点，如果123节点写入成功，如果这时候请求访问到4或者5节点，那么有可能读取不到数据，因为可能数据还没有同步到4、5节点中，也可以认为这算是数据不一致的问题。<br>解决方案可以在读取前使用sync命令。</li>
+</ul>
+<h5 id="leader未发送proposal宕机"><a href="#leader未发送proposal宕机" class="headerlink" title="leader未发送proposal宕机"></a>leader<strong>未发送</strong>proposal宕机</h5><ul>
+<li>leader刚生成一个proposal，还没有来得及发送出去，此时leader宕机，重新选举之后作为follower，但是新的leader没有这个proposal。<br>这种场景下的日志将会被丢弃。</li>
+</ul>
+<h5 id="leader发送proposal成功，发送commit前宕机"><a href="#leader发送proposal成功，发送commit前宕机" class="headerlink" title="leader发送proposal成功，发送commit前宕机"></a>leader发送proposal成功，发送commit前宕机</h5><ul>
+<li>如果发送proposal成功了，但是在将要发送commit命令前宕机了，如果重新进行选举，还是会选择zxid最大的节点作为leader，因此，这个日志并不会被丢弃，会在选举出leader之后重新同步到其他节点当中。</li>
+</ul>
+<h3 id="zkui的部署"><a href="#zkui的部署" class="headerlink" title="zkui的部署"></a>zkui的部署</h3><ul>
+<li>nohup java -jar .&#x2F;zkui-2.0-SNAPSHOT-jar-with-dependencies.jar &amp;</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>配置环境变量 </li>
+<li>配置文件说明<ul>
+<li>tickTime: 心跳频率</li>
+<li>initLimit: 初始化心跳时间</li>
+<li>syncLimit: 同步时间</li>
+<li>maxClientCnxns:  允许的客户端最大连接数</li>
+<li>集群配置<ul>
+<li>server.1&#x3D;ip:2888:3888   通过server.x的格式来配置所有的zk主机 ，    3888接口用来通信投票选举leader，2888用来leader与各个salves通信</li>
+<li>在linux中data目录下，创建myid文件给当前zk设置id    选举leader靠id决定（最大的当选leader），id要与配置文件一致</li>
+<li>observer的配置<ul>
+<li>peerType&#x3D;observer</li>
+<li>server.1:localhost:2181:3181**:observer**  追加这一行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基本命令<ul>
+<li>create  path  value   创建节点，例如  create  &#x2F;ooxx   “”   -e  创建临时节点  -s 多个节点同时对同一个节点修改，使用序列来避免覆盖数据的问题 </li>
+<li>get   set   获取和修改节点数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="ZK的配置"><a href="#ZK的配置" class="headerlink" title="ZK的配置"></a>ZK的配置</h3><h4 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h4><ul>
+<li>zoo.cfg<ul>
+<li>集群上所有机器上zoo.cfg都应该是一致的<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># The number of milliseconds of each tick                                     </span><br><span class="hljs-attr">tickTime</span>=<span class="hljs-number">2000</span>                                                                 <br><span class="hljs-comment"># The number of ticks that the initial                                        </span><br><span class="hljs-comment"># synchronization phase can take                                              </span><br><span class="hljs-attr">initLimit</span>=<span class="hljs-number">10</span>                                                                  <br><span class="hljs-comment"># The number of ticks that can pass between                                   </span><br><span class="hljs-comment"># sending a request and getting an acknowledgement                            </span><br><span class="hljs-attr">syncLimit</span>=<span class="hljs-number">5</span>                                                                   <br><span class="hljs-comment"># the directory where the snapshot is stored.                                 </span><br><span class="hljs-comment"># do not use /tmp for storage, /tmp here is just                              </span><br><span class="hljs-comment"># example sakes.                                                              </span><br><span class="hljs-attr">dataDir</span>=/home/zk/zookeeper-<span class="hljs-number">3.4</span>.<span class="hljs-number">14</span>/data                                        <br><span class="hljs-comment"># the port at which the clients will connect                                  </span><br><span class="hljs-attr">clientPort</span>=<span class="hljs-number">2181</span>                                                               <br><span class="hljs-comment"># the maximum number of client connections.                                   </span><br><span class="hljs-comment"># increase this if you need to handle more clients                            </span><br><span class="hljs-comment">#maxClientCnxns=60                                                            </span><br><span class="hljs-comment">#                                                                             </span><br><span class="hljs-comment"># Be sure to read the maintenance section of the                              </span><br><span class="hljs-comment"># administrator guide before turning on autopurge.                            </span><br><span class="hljs-comment">#                                                                             </span><br><span class="hljs-comment"># http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance  </span><br><span class="hljs-comment">#                                                                             </span><br><span class="hljs-comment"># The number of snapshots to retain in dataDir                                </span><br><span class="hljs-comment">#autopurge.snapRetainCount=3                                                  </span><br><span class="hljs-comment"># Purge task interval in hours                                                </span><br><span class="hljs-comment"># Set to &quot;0&quot; to disable auto purge feature                                    </span><br><span class="hljs-comment">#autopurge.purgeInterval=1   </span><br><span class="hljs-comment"># 集群模式下配置：server.id=host:port:port</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>myid<ul>
+<li>位于dataDir中的.pid文件，是给</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/" class="category-chain-item">注册中心</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Zookeeper</div>
+      <div>https://x-leonidas.github.io/2025/10/26/11技术栈/注册中心/Zookeeper/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月26日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2022年5月5日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/10/26/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/" title="注册中心">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">注册中心</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/10/26/11%E6%8A%80%E6%9C%AF%E6%A0%88/%E6%B5%8B%E8%AF%95/jmh/" title="jmh">
+                        <span class="hidden-mobile">jmh</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

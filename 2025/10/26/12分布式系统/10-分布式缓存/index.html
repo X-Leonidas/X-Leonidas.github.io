@@ -1,0 +1,738 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="缓存常见的缓存更新策略Cache Aside Pattern（旁路缓存模式） 应用直接管理缓存，缓存层独立于数据库 比较适合读请求比较多的场景  写 先更新DB 直接删除cache  读 先从cache中读取数据，读取到就直接返回 cache读取不到的话，就从DB中读取返回 再把DB中读取到的数据放到cache中  写操作为什么是删除cache而不是更新cache？ 对服务端资源造成浪费，因为ca">
+  
+  
+  
+  <title>10-分布式缓存 - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="10-分布式缓存"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-26 17:39" pubdate>
+          2025-10-26 17:39:56
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">10-分布式缓存</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><h2 id="常见的缓存更新策略"><a href="#常见的缓存更新策略" class="headerlink" title="常见的缓存更新策略"></a>常见的缓存更新策略</h2><h3 id="Cache-Aside-Pattern（旁路缓存模式）"><a href="#Cache-Aside-Pattern（旁路缓存模式）" class="headerlink" title="Cache Aside Pattern（旁路缓存模式）"></a>Cache Aside Pattern（旁路缓存模式）</h3><ul>
+<li>应用直接管理缓存，缓存层独立于数据库</li>
+<li>比较适合<strong>读请求比较多的场景</strong></li>
+</ul>
+<h4 id="写"><a href="#写" class="headerlink" title="写"></a>写</h4><ul>
+<li>先更新DB</li>
+<li>直接删除cache</li>
+</ul>
+<h4 id="读"><a href="#读" class="headerlink" title="读"></a>读</h4><ul>
+<li>先从cache中读取数据，读取到就直接返回</li>
+<li>cache读取不到的话，就从DB中读取返回</li>
+<li>再把DB中读取到的数据放到cache中</li>
+</ul>
+<h4 id="写操作为什么是删除cache而不是更新cache？"><a href="#写操作为什么是删除cache而不是更新cache？" class="headerlink" title="写操作为什么是删除cache而不是更新cache？"></a>写操作为什么是删除cache而不是更新cache？</h4><ul>
+<li>对服务端资源造成浪费，因为cache中的数据可能需要经过服务端大量的计算才能拿到，对于服务端来说更新cache是一笔开销，如果频繁修改DB，而需要频繁计算，但是并不能保证计算出来的cache一定被使用，造成资源的浪费<ul>
+<li>举例： cache A： 需要数据 DATA  B 和 DATA C 计算得出，DATA B 每天一个时间段内更新一万次，但是cacha A 每天均匀的读取100次，</li>
+</ul>
+</li>
+<li>产生数据不一致的问题，并发场景下，更新cache产生数据不一致的概率会更大。</li>
+</ul>
+<h4 id="写操作为什么不先删除cache在更新DB？"><a href="#写操作为什么不先删除cache在更新DB？" class="headerlink" title="写操作为什么不先删除cache在更新DB？"></a>写操作为什么不先删除cache在更新DB？</h4><ul>
+<li>会造成数据库和缓存不一致的情况</li>
+<li>先写DB在删除cache不会出现数据不一致的问题嘛？<ul>
+<li>会的，但是因为写入缓存的速度比写入DB的速度快很多，所以概率比较小</li>
+</ul>
+</li>
+</ul>
+<h4 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h4><ul>
+<li>首次请求数据一定不在cache中的问题，缓存穿透的问题<ul>
+<li>缓存热点数据</li>
+</ul>
+</li>
+<li>写操作比较频繁的话导致cache中删除的频率也比较频繁，会影响缓存的命中率。<ul>
+<li>缓存和数据库强一致的场景：更新DB的同时更新cache，加锁保证cache更新时不会出现线程安全问题</li>
+<li>可以短暂的允许不一致的场景：更新DB的同时更新cache，给缓存加一个较短的过期时间，</li>
+</ul>
+</li>
+</ul>
+<h4 id="强一致性的保证"><a href="#强一致性的保证" class="headerlink" title="强一致性的保证"></a>强一致性的保证</h4><ul>
+<li>查询操作： 当key不存在时， 查询DB和更新缓存 两个操作加锁</li>
+<li>写操作： 写DB 和 删除缓存 两个操作加锁</li>
+<li>如果锁存在则直接查询DB</li>
+</ul>
+<h3 id="Read-Write-Through-Pattern（读写穿透）"><a href="#Read-Write-Through-Pattern（读写穿透）" class="headerlink" title="Read&#x2F;Write Through Pattern（读写穿透）"></a>Read&#x2F;Write Through Pattern（读写穿透）</h3><ul>
+<li>把Cache视为主要数据存储，从中读取数据并将数据写入其中，cache服务负责将此数据读取和写入DB中</li>
+</ul>
+<h4 id="写-1"><a href="#写-1" class="headerlink" title="写"></a>写</h4><ul>
+<li><p>先查cache，cache中不存在，直接更新DB</p>
+</li>
+<li><p>cache中存在，先更新cache，然后由cache服务自己更新DB</p>
+</li>
+<li><p><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/%E7%BC%93%E5%AD%98%E8%AF%BB%E5%86%99%E7%A9%BF%E9%80%8F%E5%86%99.png" srcset="/img/loading.gif" lazyload alt="image-20240225215037444"></p>
+</li>
+</ul>
+<h4 id="读-1"><a href="#读-1" class="headerlink" title="读"></a>读</h4><ul>
+<li>从cache中读取数据，读取到就直接返回</li>
+<li>读取不到的话，先从DB加载，写入到cache后返回响应(高并发下数据不一致问题？ 加锁和版本号)</li>
+</ul>
+<h3 id="Write-Behind-pattern-异步缓存写入"><a href="#Write-Behind-pattern-异步缓存写入" class="headerlink" title="Write Behind pattern (异步缓存写入)"></a>Write Behind pattern (异步缓存写入)</h3><ul>
+<li>和Read&#x2F;Write Through Pattern 很相似，都是cache服务来负责cache和DB的读写</li>
+<li>不同的是 Read&#x2F;Write Through Pattern 是同步更新cache和db，而Write Behind 则是只更新缓存，不直接更新DB，而是改为<strong>异步批量</strong>的方式来更新DB</li>
+<li>应用场景<ul>
+<li>消息队列中消息的异步写入磁盘</li>
+<li>MySql的Innodb buffer  Pool机制</li>
+</ul>
+</li>
+<li>写性能非常高，非常适合数据经常变化但是对数据一致性要求没那么高的场景</li>
+</ul>
+<h3 id="Refresh-Ahead（预刷新）"><a href="#Refresh-Ahead（预刷新）" class="headerlink" title="Refresh-Ahead（预刷新）"></a><strong>Refresh-Ahead（预刷新）</strong></h3><ul>
+<li>在缓存过期前自动刷新数据。</li>
+</ul>
+<h3 id="基于事件的更新（如-Binlog-消息队列）"><a href="#基于事件的更新（如-Binlog-消息队列）" class="headerlink" title="基于事件的更新（如 Binlog + 消息队列）"></a><strong>基于事件的更新（如 Binlog + 消息队列）</strong></h3><ul>
+<li>通过数据库变更事件触发缓存更新。</li>
+</ul>
+<h3 id="选择策略的考量因素"><a href="#选择策略的考量因素" class="headerlink" title="选择策略的考量因素"></a><strong>选择策略的考量因素</strong></h3><ol>
+<li><strong>一致性需求</strong>：强一致性选 Write-Through，最终一致性可选 Write-Behind。</li>
+<li><strong>性能要求</strong>：高并发写入场景适合 Write-Behind。</li>
+<li><strong>实现复杂度</strong>：Cache-Aside 最简单，Write-Behind 最复杂。</li>
+<li><strong>数据冷热</strong>：热点数据适合预加载（Refresh-Ahead）。</li>
+</ol>
+<h2 id="缓存属性"><a href="#缓存属性" class="headerlink" title="缓存属性"></a>缓存属性</h2><ul>
+<li>吞吐量</li>
+<li>命中率</li>
+<li>扩展功能</li>
+<li>分布式支持</li>
+</ul>
+<h2 id="缓存算法"><a href="#缓存算法" class="headerlink" title="缓存算法"></a>缓存算法</h2><ul>
+<li>FIFO</li>
+<li>LRU<ul>
+<li>优先淘汰最久未被使用访问过的数据。</li>
+</ul>
+</li>
+<li>LFU<ul>
+<li>优先淘汰最不经常使用的数据</li>
+</ul>
+</li>
+<li>Tiny LFU<ul>
+<li>为了缓解 LFU 每次访问都要修改计数器所带来的性能负担,inyLFU 会首先采用 Sketch 对访问数据进行分析，所谓 Sketch 是统计学上的概念，指用少量的样本数据来估计全体数据的特征，这种做法显然牺牲了一定程度的准确性，但是只要样本数据与全体数据具有相同的概率分布，Sketch 得出的结论仍不失为一种高效与准确之间权衡的有效结论。借助<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Count%E2%80%93min_sketch">Count–Min Sketch</a>算法（可视为<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bloom_filter">布隆过滤器</a>的一种等价变种结构），TinyLFU 可以用相对小得多的记录频率和空间来近似地找出缓存中的低价值数据。为了解决 LFU 不便于处理随时间变化的热度变化问题，TinyLFU 采用了基于“滑动时间窗”（在“<a target="_blank" rel="noopener" href="https://icyfenix.cn/distribution/traffic-management/traffic-control.html">流量控制</a>”中我们会更详细地分析这种算法）的热度衰减算法，简单理解就是每隔一段时间，便会把计数器的数值减半，以此解决“旧热点”数据难以清除的问题。</li>
+</ul>
+</li>
+<li>W-Tiny LFU<ul>
+<li>为了改善Tiny LFU无法很好应对稀疏突发访问的问题，所谓稀疏突发访问是指由一些绝对频率较小但是突发访问频率很高的数据。譬如某些运维性质的任务，也许一天、一周只会在特定时间运行一次，其余时间都不会用到，此时 TinyLFU 就很难让这类元素通过 Sketch 的过滤，因为它们无法在运行期间积累到足够高的频率。</li>
+<li>应对短时间的突发访问是 LRU 的强项，具体做法是将新记录暂时放入一个名为 Window Cache 的前端 LRU 缓存里面，让这些对象可以在 Window Cache 中累积热度，如果能通过 TinyLFU 的过滤器，再进入名为 Main Cache 的主缓存中存储，主缓存根据数据的访问频繁程度分为不同的段（LFU 策略，实际上 W-TinyLFU 只分了两段），但单独某一段局部来看又是基于 LRU 策略去实现的（称为 Segmented LRU）。每当前一段缓存满了之后，会将低价值数据淘汰到后一段中去存储，直至最后一段也满了之后，该数据就彻底清理出缓存。TODO:原理</li>
+</ul>
+</li>
+</ul>
+<h2 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h2><ul>
+<li>复制式缓存<ul>
+<li>复制式缓存可以看作是“能够支持分布式的进程内缓存”，它的工作原理与 Session 复制类似。缓存中所有数据在分布式集群的每个节点里面都存在有一份副本，读取数据时无须网络访问，直接从当前节点的进程内存中返回，理论上可以做到与进程内缓存一样高的读取性能；当数据发生变化时，就必须遵循复制协议，将变更同步到集群的每个节点中，复制性能随着节点的增加呈现平方级下降，变更数据的代价十分高昂。</li>
+</ul>
+</li>
+<li>集中式缓存<ul>
+<li>分布式缓存的主流形式</li>
+<li>集中式缓存的读、写都需要网络访问，其好处是不会随着集群节点数量的增加而产生额外的负担，其坏处自然是读、写都不再可能达到进程内缓存那样的高性能</li>
+<li>它与使用缓存的应用分处在独立的进程空间中，这么做的好处是能够为异构语言提供服务，达成语言解耦的目的。坏处是如果要缓存对象等复杂类型的话，基本上就只能靠序列化来支撑具体语言的类型系统（支持 Hash 类型的缓存，可以部分模拟对象类型）不仅有序列化的成本，还很容易导致传输成本也显著增加。</li>
+</ul>
+</li>
+</ul>
+<h2 id="分布式缓存一致性"><a href="#分布式缓存一致性" class="headerlink" title="分布式缓存一致性"></a>分布式缓存一致性</h2><ul>
+<li>保证缓存一致性的设计模式：Cache Aside、Read&#x2F;Write Through、Write Behind Caching </li>
+<li>保证缓存一致性的基本手段：定时任务扫描，业务系统MQ，binlog变更MQ</li>
+<li>缓存更新时，为了防止产生脏数据，需要加锁，但是还不能保证当前更新的数据就是最新的数据，需要比较数据的产生时间。</li>
+<li>对于时间相同的数据，更新时发现时同一秒的数据，但是值不相等，通过消息触发二次更新来保证缓存中的数据是最新的</li>
+</ul>
+<h2 id="优秀文章"><a href="#优秀文章" class="headerlink" title="优秀文章"></a>优秀文章</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/383885558">https://zhuanlan.zhihu.com/p/383885558</a>   携程分布式缓存方案</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" class="category-chain-item">12分布式系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>10-分布式缓存</div>
+      <div>https://x-leonidas.github.io/2025/10/26/12分布式系统/10-分布式缓存/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月26日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年5月12日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/10/26/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/05-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="05-分布式锁">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">05-分布式锁</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/10/26/12%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/12-%E4%B8%80%E8%87%B4%E6%80%A7hash/" title="12-一致性hash">
+                        <span class="hidden-mobile">12-一致性hash</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

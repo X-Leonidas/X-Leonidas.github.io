@@ -216,15 +216,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/13-RocketMQ%E9%9B%86%E7%BE%A4/" target="_self">
-          13-RocketMQ集群
+        <a href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/7.10%E4%BA%BF%E6%95%B0%E6%8D%AE%E5%A6%82%E4%BD%95%E6%8F%92%E5%85%A5Mysql/" target="_self">
+          7.10亿数据如何插入Mysql
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/13-RocketMQ%E9%9B%86%E7%BE%A4/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/7.10%E4%BA%BF%E6%95%B0%E6%8D%AE%E5%A6%82%E4%BD%95%E6%8F%92%E5%85%A5Mysql/" target="_self">
         <div>
-          RocketMQ集群broker集群模式单master模式 只有一个 Master节点​    优点：配置简单，方便部署​    缺点：这种方式风险较大，一旦Broker重启或者宕机时，会导致整个服务不可用，不建议线上环境使用  多master模式 一个集群无 Slave，全是 Master，例如 2 个 Master 或者 3 个 Master 优点：配置简单，单个Master 宕机或重启维护对
+          10亿数据如何插入Mysql 背景 10亿条数据，每条数据1Kb；  数据内容是非结构化的用户访问日志，需要解析后写入到数据库； 数据存放在Hdfs或S3分布式文件存储里 10亿条数据并不是1个大文件，而是被近似切分为100个文件，后缀标记顺序； 要求有序导入，尽量不重复；数据库是MySQL；     数据库单表能支持10亿吗？ 不能，单表推荐值是2000W，但是阿里规约建议500W就开始分表
         </div>
       </a>
 
@@ -232,8 +232,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 20:00" pubdate>
-              2022-02-01
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
             </time>
           </div>
         
@@ -248,12 +248,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
   
     <span>></span>
     
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/" class="category-chain-item">MySQL</a>
   
   
 
@@ -277,15 +277,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/14-RocketMQFAQ/" target="_self">
-          14-RocketMQFAQ
+        <a href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/EXPLAIN/" target="_self">
+          EXPLAIN
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/14-RocketMQFAQ/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/EXPLAIN/" target="_self">
         <div>
-          为什么要使用MQ？因为项目比较大，做了分布式系统，所有远程服务调用请求都是同步执行经常出问题，所以引入了mq解耦系统耦合度降低，没有强依赖关系异步不需要同步执行的远程调用可以有效提高响应时间削峰请求达到峰值后，后端service还可以保持固定消费速率消费，不会被压垮 多个mq如何选型？RabbitMQerlang开发，延迟比较低RocketMQjava开发，面向互联网集群化功能丰富kafkaSca
+          EXPLAIN ID:执行编号，标识select所属的行。如果在语句中没子查询或关联查询，只有唯一的select，每行都将显示1。否则，内层的select语句一般会顺序编号，对应于其在原始语句中的位置  select_type:显示本行是简单或复杂select。如果查询有任何复杂的子查询，则最外层标记为PRIMARY（DERIVED、UNION、UNION RESUlT）  simple 简单子查
         </div>
       </a>
 
@@ -293,8 +293,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 20:00" pubdate>
-              2022-02-01
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
             </time>
           </div>
         
@@ -309,12 +309,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
   
     <span>></span>
     
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/" class="category-chain-item">MySQL</a>
   
   
 
@@ -338,15 +338,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/20-Kafka/" target="_self">
-          20-Kafka
+        <a href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/1redis%E5%9F%BA%E7%A1%80/" target="_self">
+          1redis基础
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/20-Kafka/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/1redis%E5%9F%BA%E7%A1%80/" target="_self">
         <div>
-          Kafka 是一个一个分布式流处理平台，高吞吐量、分布式、持久性、可伸缩性  Kafka不支持在Broker层面进行消息过滤  Kafka 3.3之后已经可以不依赖zookeeper了  特性  可以让你发布和订阅流式的记录。这一方面与消息队列或者企业消息系统类似 可以储存流式的记录，并且有较好的容错性。 可以在流式记录产生时就进行处理。   应用场景  构造实时流数据管道，它可以在系统或应用之间
+          Redis基础Redis和Memchched 数据类型：Memcached 仅支持字符串类型，而 Redis 支持五种不同的数据类型，可以更灵活地解决问题。 数据持久化：Redis 支持两种持久化策略：RDB 快照和 AOF 日志，而 Memcached 不支持持久化。 分布式：Memcached 不支持分布式，只能通过在客户端使用一致性哈希来实现分布式存储，这种方式在存储和查询时都需要先在客户端
         </div>
       </a>
 
@@ -354,8 +354,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 20:00" pubdate>
-              2022-02-01
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
             </time>
           </div>
         
@@ -370,12 +370,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
   
     <span>></span>
     
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/" class="category-chain-item">redis</a>
   
   
 
@@ -399,15 +399,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/21-Kafka%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98/" target="_self">
-          21-Kafka扩展问题
+        <a href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/2redis%E8%BF%9B%E9%98%B6/" target="_self">
+          2redis进阶
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/21-Kafka%E6%89%A9%E5%B1%95%E9%97%AE%E9%A2%98/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/2redis%E8%BF%9B%E9%98%B6/" target="_self">
         <div>
-          Kafka为何如此之快？由于Kafka遵循了一定的策略，这也是它设计的一部分，以使得它性能更好、更快。；  顺序写IO：现代操作系统将其大不部分可用的内存分配给磁盘缓存，并且更快的用于存储和检索顺序数据； 零拷贝：由于根本没有修改数据，因此将磁盘中的数据不必要的加载到应用程序内存中，因此，它没有将其加载到应用程序中，而是通过Socket字节，缓冲区以及网络从context缓存区发送了相同的数据；s
+          Redis进阶Redis单线程模型 redis 会将每个客户端都关联一个指令队列。客户端的指令通过队列来按顺序处理，先到先服务。 在一个客户端的指令队列中的指令是顺序执行的，但是多个指令队列中的指令是无法保证顺序的，例如执行完 client-0 的队列中的 command-0 后，接下去是执行哪个队列中的第一个指令是无法确定的，但是肯定不会同时执行两个指令。 redis 同样也会为每个客户端关联一
         </div>
       </a>
 
@@ -415,8 +415,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 20:00" pubdate>
-              2022-02-01
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
             </time>
           </div>
         
@@ -431,12 +431,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
   
     <span>></span>
     
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/MQ/" class="category-chain-item">MQ</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/" class="category-chain-item">redis</a>
   
   
 
@@ -460,15 +460,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Mybatis/" target="_self">
-          Mybatis
+        <a href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/3redis%E9%9B%86%E7%BE%A4/" target="_self">
+          3redis集群
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Mybatis/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/3redis%E9%9B%86%E7%BE%A4/" target="_self">
         <div>
-          缓存 一级缓存 一级缓存位于SqlSession中，每个SqlSession中持有了Executor，每个Executor中有一个LocalCache。当用户发起查询时，MyBatis根据当前执行的语句生成MappedStatement，在Local Cache进行查询，如果缓存命中的话，直接返回结果给用户，如果缓存没有命中的话，查询数据库，结果写入Local Cache，最后返回结果给用户。 对
+          Redis集群Redis Sentinel哨兵机制简介 Sentinel(哨兵)进程是用于监控redis集群中Master主服务器工作的状态 在Master主服务器发生故障的时候，可以实现Master和Slave服务器的切换，保证系统的高可用（HA）  哨兵进程的作用 监控(Monitoring): 哨兵(sentinel) 会不断地检查你的Master和Slave是否运作正常。 提醒(Notif
         </div>
       </a>
 
@@ -476,8 +476,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
             </time>
           </div>
         
@@ -492,228 +492,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Netty/" target="_self">
-          Netty
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Netty/" target="_self">
-        <div>
-          Netty Netty提供异步的、事件驱动的网络应用程序框架和工具，用以快速开发高性能、高可靠性的网络服务器和客户端程序。  Netty 是一个基于NIO的客户、服务器端编程框架，使用Netty 可以确保你快速和简单的开发出一个网络应用，例如实现了某种协议的客户，服务端应用。Netty相当简化和流线化了网络应用的编程开发过程，例如，TCP和UDP的socket服务开发。    Pipeline是一
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Reactor/" target="_self">
-          Reactor
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Reactor/" target="_self">
-        <div>
-          ReactorWeb请求的两种体系结构thread-based architecture（基于线程） 基于线程的体系结构通常会使用多线程来处理客户端的请求，每当接收到一个请求，便开启一个独立的线程来处理。这种方式虽然是直观的，但是仅适用于并发访问量不大的场景，因为线程需要占用一定的内存资源，且操作系统在线程之间的切换也需要一定的开销，当线程数过多时显然会降低web服务器的性能。并且，当线程在处理I
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Tomcat/" target="_self">
-          Tomcat
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/Tomcat/" target="_self">
-        <div>
-          Tomcat TODO: https://www.bilibili.com/video/BV1ZK411z7WH?vd_source=c3707fe4351e3f56c773e3786dd31268&amp;p=13&amp;spm_id_from=333.788.player.switch  连接器（Connector）容器（Container）tomcat类加载  类加载目录 放置在&#x2F
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 19:59" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/00Spring/" target="_self">
-          00Spring
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/00Spring/" target="_self">
-        <div>
-          Spring 基于POJO的轻量级和最小侵入性编程； 通过依赖注入和面向接口实现松耦合； 基于切面和惯例进行声明式编程； 通过切面和模板减少样板式代码。  BeanBean的装配 xml中进行显示装配 java中进行显式装配  @Bean 在java显式装配中，默认情况下bean的id与方法名一致，可以通过name进行重命名 @Import和@ImportResource： 第一个在java中引入
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 20:00" pubdate>
-              2022-02-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
   
   
     <span>></span>
     
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/" class="category-chain-item">spring</a>
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/" class="category-chain-item">redis</a>
   
   
 
@@ -737,15 +521,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/01SpringBoot/" target="_self">
-          01SpringBoot
+        <a href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/4Redis%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" target="_self">
+          4Redis常见问题
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/02/01/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/01SpringBoot/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/4Redis%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" target="_self">
         <div>
-          Spring Boot比Spring做了哪些改进？1）Spring Boot可以建立独立的Spring应用程序；2）内嵌了如Tomcat，Jetty和Undertow这样的容器，也就是说可以直接跑起来，用不着再做 部署工作了；3）无需再像Spring那样搞一堆繁琐的xml文件的配置；4）可以自动配置Spring。SpringBoot将原有的XML配置改为Java配置，将bean注入改为使 用注解注
+          redis热点key的一些问题热点检测 凭借经验，进行预估：例如提前知道了某个活动的开启，那么就将此Key作为热点Key 客户端收集：在操作Redis之前对数据进行统计，记录每个请求，定时把收集到的数据上报，然后由一个统一的服务进行聚合计算。方案简单但是无法适应多语言架构 抓包进行评估：Redis使用TCP协议与客户端进行通信，通信协议采用的是RESP，所以能进行拦截包进行解析 在proxy层，对
         </div>
       </a>
 
@@ -753,8 +537,177 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2022-02-01 20:00" pubdate>
-              2022-02-01
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/redis/" class="category-chain-item">redis</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0/" target="_self">
+          数据库概述
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/05%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0/" target="_self">
+        <div>
+          数据库分类 关系型数据库：数据以表的形式存储，表由行和列组成，通过 SQL 语言进行操作，支持 ACID 事务，具有强一致性。适合金融交易、ERP 系统、电商订单管理等需要高可靠性和事务支持的场景，常见的有 MySQL、PostgreSQL、Oracle、SQL Server 等。 非关系型数据库  ：用于存储非结构化或半结构化数据，采用更灵活的数据模型，适合大规模数据存储和高性能应用场景。可进一
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/05%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">05数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/10/26/06%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" target="_self">
+          设计模式
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/06%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" target="_self">
+        <div>
+          设计模式设计原则单一职责原则 一个类应该只有一个发生变化的原因(业务需求)  开闭原则 软件中的对象,类,模块和函数对扩展应该是开放的,但对于修改是封闭的.这意味着应该用抽象定义结构,用具体实现扩展细节,以此确保软件系统开发和维护过程的可靠性 面向抽象编程  里氏替换原则 如果S是T的子类型,那么所有的T类型对象都可以在不破坏程序的情况下被S类型的对象替换 当子类继承父类时,除添加新的方法且完成新
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/06%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">06设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/10/26/11%E6%8A%80%E6%9C%AF%E6%A0%88/Caffeine/" target="_self">
+          Caffeine
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/11%E6%8A%80%E6%9C%AF%E6%A0%88/Caffeine/" target="_self">
+        <div>
+          Caffeine 将对数据的读写看到是日志的提交过程，设由专门的环形缓冲区来记录由于数据读取而产生的状态变动日志。为进一步减少竞争，caffeine对每条线程（对线程取hash，哈希值相同的使用同一个缓冲区）都设置一个专用的环形缓冲 环形缓冲：它是一种拥有读、写两个指针的数据复用结构，在计算机科学中有非常广泛的应用。举个具体例子，譬如一台计算机通过键盘输入，并通过 CPU 读取“HELLO WIK
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
             </time>
           </div>
         
@@ -772,12 +725,59 @@
   <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
   
   
-    <span>></span>
-    
-  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/" class="category-chain-item">spring</a>
-  
-  
 
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2025/10/26/11%E6%8A%80%E6%9C%AF%E6%A0%88/Disruptor/" target="_self">
+          Disruptor
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/10/26/11%E6%8A%80%E6%9C%AF%E6%A0%88/Disruptor/" target="_self">
+        <div>
+          Disruptor简介 Disruptor是英国外汇交易公司LMAX开发的一个高性能队列，研发的初衷是解决内存队列的延迟问题（在性能测试中发现竟然与I&#x2F;O操作处于同样的数量级）。基于Disruptor开发的系统单线程能支撑每秒600万订单，2010年在QCon演讲后，获得了业界关注。2011年，企业应用软件专家Martin Fowler专门撰写长文介绍。同年它还获得了Oracle官方的D
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-10-26 17:39" pubdate>
+              2025-10-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/11%E6%8A%80%E6%9C%AF%E6%A0%88/" class="category-chain-item">11技术栈</a>
+  
   
 
       </span>

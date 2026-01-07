@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/terminal.png">
+  <link rel="icon" href="/img/terminal.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="听风">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Vim三个模式   指令列模式    命令 作用    :w 写入磁盘   :w! 当文件为只读时，强制写入磁盘。到底能不能写入，与用户对该文件的权限有关   :q 离开   :q! 强制离开不保存   :wq 写入磁盘后离开   :wq! 强制写入磁盘后离开   :行号 跳转到某一行             一般命令模式移动光标 l or 右箭头 ： 向右移动一个字符 h or 左箭头 ：向左移">
+  
+  
+  
+  <title>02.Vim - 夜坐听风</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"x-leonidas.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"JAVA"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>夜坐听风</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/post_index.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="02.Vim"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-26 16:21" pubdate>
+          2025-10-26 16:21:23
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          895 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">02.Vim</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h1><h2 id="三个模式"><a href="#三个模式" class="headerlink" title="三个模式"></a>三个模式</h2><ul>
+<li><img src="https://xy-note-pic.oss-cn-beijing.aliyuncs.com/image-20191209002818626.png" srcset="/img/loading.gif" lazyload alt="img" style="zoom:80%;" /></li>
+</ul>
+<h3 id="指令列模式"><a href="#指令列模式" class="headerlink" title="指令列模式"></a>指令列模式</h3><ul>
+<li><table>
+<thead>
+<tr>
+<th align="center">命令</th>
+<th align="center">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">:w</td>
+<td align="center">写入磁盘</td>
+</tr>
+<tr>
+<td align="center">:w!</td>
+<td align="center">当文件为只读时，强制写入磁盘。到底能不能写入，与用户对该文件的权限有关</td>
+</tr>
+<tr>
+<td align="center">:q</td>
+<td align="center">离开</td>
+</tr>
+<tr>
+<td align="center">:q!</td>
+<td align="center">强制离开不保存</td>
+</tr>
+<tr>
+<td align="center">:wq</td>
+<td align="center">写入磁盘后离开</td>
+</tr>
+<tr>
+<td align="center">:wq!</td>
+<td align="center">强制写入磁盘后离开</td>
+</tr>
+<tr>
+<td align="center">:行号</td>
+<td align="center">跳转到某一行</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="一般命令模式"><a href="#一般命令模式" class="headerlink" title="一般命令模式"></a>一般命令模式</h2><h5 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h5><ul>
+<li>l or 右箭头 ： 向右移动一个字符</li>
+<li>h or 左箭头 ：向左移动一个字符</li>
+<li>j or 下箭头 ：向下移动一行</li>
+<li>k or 上箭头 ：向上移动一行</li>
+<li>0 (零按键)：移动到当前行的行首。</li>
+<li>^：移动到当前行的第一个非空字符。</li>
+<li>$：移动到当前行的末尾。</li>
+<li>w：移动到下一个单词或标点符号的开头。</li>
+<li>W：移动到下一个单词的开头，忽略标点符号。</li>
+<li>b：移动到上一个单词或标点符号的开头。</li>
+<li>B：移动到上一个单词的开头，忽略标点符号。</li>
+<li>e: 跳到本单词或下一个单词的结尾</li>
+</ul>
+<h5 id="翻页"><a href="#翻页" class="headerlink" title="翻页"></a>翻页</h5><ul>
+<li>Ctrl-f or Page Down：向下翻一页</li>
+<li>Ctrl-b or Page Up ： 向上翻一页</li>
+</ul>
+<h4 id="光标搜索跳转可以用在增删改查"><a href="#光标搜索跳转可以用在增删改查" class="headerlink" title="光标搜索跳转可以用在增删改查"></a>光标搜索跳转可以用在增删改查</h4><ul>
+<li>f [char] : 光标跳到当前行下一char所在的位置，F:跳到上一个</li>
+<li>t[char] : 光标跳到d当前行下一char的前一个所在的位置，T:跳到后一个所在的位置</li>
+<li>， ：反向查找上次的查找命令</li>
+<li>；：重复上次的字符查找操作</li>
+<li>numberG ：移动到第 number 行。例如，1G 移动到文件的第一行。</li>
+<li>G : 移动到文件末尾。</li>
+</ul>
+<h5 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h5><ul>
+<li>i:在光标前插入</li>
+<li>I:在行首插入</li>
+<li>a:在光标后插入 </li>
+<li>A:在行尾追加字符</li>
+<li>o ：当前行的下方打开一行。</li>
+<li>O ：当前行的上方打开一行。</li>
+</ul>
+<h5 id="复制粘贴查找撤销"><a href="#复制粘贴查找撤销" class="headerlink" title="复制粘贴查找撤销"></a>复制粘贴查找撤销</h5><ul>
+<li>撤销：u</li>
+<li>剪切：d</li>
+<li>删除并进入写入：c</li>
+<li>复制：y</li>
+<li>粘贴：p</li>
+</ul>
+<h5 id="文本删除"><a href="#文本删除" class="headerlink" title="文本删除"></a>文本删除</h5><ul>
+<li>x：当前字符</li>
+<li>3x：当前字符及其后的两个字符。</li>
+<li>dd： 当前行。</li>
+<li>5dd：当前行及随后的四行文本。</li>
+<li>dW：从光标位置开始到下一个单词的开头。</li>
+<li>d$： 从光标位置开始到当前行的行尾。</li>
+<li>d0：从光标位置开始到当前行的行首。</li>
+<li>d^：从光标位置开始到文本行的第一个非空字符。</li>
+<li>dG：从当前行到文件的末尾。</li>
+<li>d20G：从当前行到文件的第20行</li>
+<li></li>
+</ul>
+<h4 id="动作：快速选中一些字符"><a href="#动作：快速选中一些字符" class="headerlink" title="动作：快速选中一些字符"></a>动作：快速选中一些字符</h4><ul>
+<li>i ”  ： 选中两个”之间的字符，不包含“</li>
+<li>a “ :  选中两个“ 之间的字符，包含”</li>
+<li>iw：选中当前光标所在的单词，不包含单词前后的空格</li>
+<li>aw：选中当前光标所在的单词，包含单词前后的空格</li>
+<li>i ( : 选中()之间的字符,不包含(</li>
+<li>a( : 选中()之间的字符,包含(</li>
+<li>类似的还有：&lt;  {   ‘  &#96;  [    t(tag)</li>
+</ul>
+<h4 id="切换大小写"><a href="#切换大小写" class="headerlink" title="切换大小写"></a>切换大小写</h4><ul>
+<li>~ 切换当前光标下的大小写</li>
+<li>3~ ： 从光标位置开始的三个字母改变其大小写</li>
+<li>g ~~: 改变当前行的大小写</li>
+<li>gUU : 将当前行改为大写</li>
+<li>guu ：将当前行改为小写</li>
+<li>gUaw  : 将光标下的单词改为大写</li>
+<li>guaw ：将光标下的单词改为小写</li>
+</ul>
+<h4 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h4><ul>
+<li>进入函数 ： gd</li>
+<li>查看函数签名：gh</li>
+<li>跳回到上一个函数： ctrl + o</li>
+<li>切换标签页： g T&#x2F;t</li>
+<li>跳到文件区域：ctrl + 0 （零）</li>
+<li>分屏跳转：ctrl + 2</li>
+<li>ds [char]  : 删除当前行左右两侧的char</li>
+<li>cs [char1] [char2] : 将当前行的左右两侧的char1 替换为char2</li>
+<li>ys 动作 [char]  在动作两边添加char</li>
+</ul>
+<h2 id="指令列模式："><a href="#指令列模式：" class="headerlink" title="指令列模式："></a>指令列模式：</h2><ul>
+<li>显示行号： set nu</li>
+<li></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/13Linux/" class="category-chain-item">13Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>02.Vim</div>
+      <div>https://x-leonidas.github.io/2025/10/26/13Linux/02.Vim/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>听风</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月26日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2024年10月24日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-cc-nc"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/10/26/11%E6%8A%80%E6%9C%AF%E6%A0%88/spring/%E7%89%88%E6%9C%AC%E5%AF%B9%E5%BA%94/" title="版本对应">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">版本对应</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
